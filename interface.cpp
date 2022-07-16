@@ -2,6 +2,9 @@
 #include <math.h>
 #include "portaudio.h"
 
+#pragma once
+#include "sine.cpp"
+
 #define NUM_SECONDS   (5)
 #define SAMPLE_RATE   (48000)
 #define FRAMES_PER_BUFFER  (64)
@@ -117,9 +120,12 @@ private:
 
         for( i=0; i<framesPerBuffer; i++ )
         {
-            currentSample++;
+            float left, right;
+            left = right = rootNode->tick(currentSample++);
+            printf("%f - %f - %d\n", left, right, currentSample);
 
-            printf("%d\n", currentSample);
+            *out++ = left; 
+            *out++ = right;
         }
 
         return paContinue;
@@ -161,4 +167,6 @@ private:
     PaStream *stream;
     char message[20];
     int currentSample = 0;
+public:
+    Sine *rootNode; // TODO: Sine is just a stand-in signal source for now
 };
