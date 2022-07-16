@@ -44,6 +44,7 @@
 #include <stdio.h>
 #include <math.h>
 #include "portaudio.h"
+#include "interface.cpp"
 
 #define NUM_SECONDS   (5)
 #define SAMPLE_RATE   (48000)
@@ -249,24 +250,24 @@ private:
 int main(void);
 int main(void)
 {
-    Sine sine;
+    Interface interface;
 
     printf("PortAudio Test: output sine wave. SR = %d, BufSize = %d\n", SAMPLE_RATE, FRAMES_PER_BUFFER);
 
     ScopedPaHandler paInit;
     if( paInit.result() != paNoError ) goto error;
 
-    if (sine.open(Pa_GetDefaultOutputDevice()))
+    if (interface.open(Pa_GetDefaultOutputDevice()))
     {
-        if (sine.start())
+        if (interface.start())
         {
             printf("Play for %d seconds.\n", NUM_SECONDS );
             Pa_Sleep( NUM_SECONDS * 1000 );
 
-            sine.stop();
+            interface.stop();
         }
 
-        sine.close();
+        interface.close();
     }
 
     printf("Test finished.\n");
