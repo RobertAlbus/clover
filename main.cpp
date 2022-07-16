@@ -152,6 +152,7 @@ public:
     }
 
 private:
+    int currentSample = 0;
     /* The instance callback, where we have access to every method/variable in object of class Sine */
     int paCallbackMethod(const void *inputBuffer, void *outputBuffer,
         unsigned long framesPerBuffer,
@@ -167,6 +168,10 @@ private:
 
         for( i=0; i<framesPerBuffer; i++ )
         {
+            currentSample++;
+
+            printf("%d\n", currentSample);
+
             *out++ = sine[left_phase];  /* left */
             *out++ = sine[right_phase];  /* right */
             left_phase += 1;
