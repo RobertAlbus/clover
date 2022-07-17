@@ -2,7 +2,9 @@
 #include <stdio.h>
 #include <math.h>
 #include "portaudio.h"
-#include "interface.cpp"
+
+#include "interface.h"
+#include "sine.h"
 
 #define NUM_SECONDS   (5)
 #define SAMPLE_RATE   (48000)
