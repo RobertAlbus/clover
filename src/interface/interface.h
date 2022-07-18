@@ -1,13 +1,7 @@
 #pragma once
 
-#include <stdio.h>
-#include <math.h>
 #include "portaudio.h"
-
 #include "sine.h"
-
-#ifndef INTERFACE_H
-#define INTERFACE_H
 
 class Interface
 {
@@ -40,5 +34,3 @@ private:
 public:
     Sine *rootNode; // TODO: Sine is just a stand-in signal source for now
 };
-
-#endif

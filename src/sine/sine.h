@@ -2,9 +2,6 @@
 
 #define TABLE_SIZE   (200)
 
-#ifndef SINE_H
-#define SINE_H
-
 class Sine
 {
 public:
@@ -17,4 +14,3 @@ public:
     float phase;
 };
 
-#endif
