@@ -22,8 +22,8 @@ file(GLOB_RECURSE SOURCES
 add_executable(${PROJECT_NAME} 
     src/main.cpp
     src/interface/interface.cpp    
+    src/node/node.cpp
     src/sine/sine.cpp
-    src/time/time.h
     src/time/time.cpp
     
 )
@@ -33,4 +33,5 @@ target_include_directories(${PROJECT_NAME}
         src
         src/sine
         src/interface
+        src/node
 )
