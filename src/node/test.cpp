@@ -16,13 +16,6 @@ public:
     Arity1() : Node(1) {
 
     }
-    Frame tick(Frame input) {
-        auto f = Frame(arity);
-
-        f.setSampleAtIndex(0, 1. + input.getSampleAtIndex(0));
-        return f;
-    }
-
     /// expose protected members for testing
     void _tick(int currentTime) {
         Node::_tick(currentTime);
@@ -30,6 +23,15 @@ public:
     int getInputNodesSize() {
         return inputNodes.size();
     }
+private:
+    Frame tick(Frame input) {
+        auto f = Frame(arity);
+
+        f.setSampleAtIndex(0, 1. + input.getSampleAtIndex(0));
+        return f;
+    }
+
+
 };
 
 int main() {
@@ -81,4 +83,31 @@ int main() {
     assert(a.current().getSampleAtIndex(0) == 4.);
     assert(root.current().getSampleAtIndex(0) == 5.);
 
+
+    Arity1 cycle_a;
+    Arity1 cycle_b;
+    cycle_a >> cycle_b;
+    cycle_b >> cycle_a;
+
+    cout << "cycle_a " << &cycle_a << endl; 
+    cout << "cycle_b " << &cycle_b << endl; 
+
+    assert(cycle_a.getInputNodesSize() == 1);
+    assert(cycle_b.getInputNodesSize() == 1);
+
+    cycle_a._tick(0);
+    assert(cycle_b.current().getSampleAtIndex(0) == 1);
+    assert(cycle_a.current().getSampleAtIndex(0) == 2);
+
+    cycle_a._tick(1);
+    assert(cycle_b.current().getSampleAtIndex(0) == 3);
+    assert(cycle_a.current().getSampleAtIndex(0) == 4);
+
+    cycle_a._tick(1);
+    assert(cycle_b.current().getSampleAtIndex(0) == 3);
+    assert(cycle_a.current().getSampleAtIndex(0) == 4);
+
+    cycle_a._tick(2);
+    assert(cycle_b.current().getSampleAtIndex(0) == 5);
+    assert(cycle_a.current().getSampleAtIndex(0) == 6);
 }
