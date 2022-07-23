@@ -33,7 +33,5 @@ private:
     char message[20];
     int currentSample = 0;
 public:
-    Sine *rootNode; // TODO: Sine is just a stand-in signal source for now
-    Node<2> blackHole;
-    Node<1> dac;
+    Node& rootNode; 
 };

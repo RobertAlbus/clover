@@ -5,8 +5,7 @@
 #include <stdio.h>
 #include <vector>
 
-#include "arity.h"
-#include "node.h"
+#include "graph.h"
 
 using namespace std;
 
