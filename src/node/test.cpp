@@ -1,45 +1,84 @@
-// // g++ arity.cpp frame.cpp frameArity.cpp node.cpp nodeArity.cpp test.cpp -o out && ./out && rm ./out
+// g++ test.cpp -o out && ./out && rm ./out 
 
 #include <assert.h>
+#include <iostream>
 #include <stdio.h>
 #include <vector>
 
 #include "arity.h"
 #include "node.h"
-#include "nodeArity.h"
+
+using namespace std;
 
 
-
-class Arity1 : public NodeArity<1> {
+class Arity1 : public Node {
 public:
-    Arity1() {
+    Arity1() : Node(1) {
 
     }
-    FrameArity<1> tick(FrameArity<1> input) {
-        FrameArity<1> f;
+    Frame tick(Frame input) {
+        auto f = Frame(arity);
 
-        f.samples[0] = 999.;
+        f.setSampleAtIndex(0, 1. + input.getSampleAtIndex(0));
         return f;
     }
 
-    /// expose protecteds for testing
+    /// expose protected members for testing
     void _tick(int currentTime) {
-        NodeArity<1>::_tick(currentTime);
+        Node::_tick(currentTime);
     }
-    std::vector<Node*> getInputNodes() {
-        return inputNodes;
+    int getInputNodesSize() {
+        return inputNodes.size();
     }
 };
 
 int main() {
-    Arity1 a1a;
-    Arity1 a1b;
+    /*
+    █───┐
+    │   │
+    ▼   │
+    █   │
+    │   │
+    ▼   │
+    █◀─┘
+    │
+    ▼
+    █
+    */
+ 
+    Arity1 root;
+    assert(root.getArity() == 1);
 
-    a1b >> a1a;
+    Arity1 a;
+    Arity1 b;
+    Arity1 c;
 
-    assert(a1a.getArity() == 1);
-    assert(a1a.getInputNodes().size() == 1);
+    // addresses for debugging
+    cout << "root " << &root << endl; 
+    cout << "a    " << &a << endl; 
+    cout << "b    " << &b << endl; 
+    cout << "c    " << &c << endl; 
 
-    a1a._tick(1);
+    c >> b >> a >> root;
+    c >> a;
+
+    assert(a.getInputNodesSize() == 2);
+    assert(b.getInputNodesSize() == 1);
+    assert(c.getInputNodesSize() == 0);
+    assert(root.getInputNodesSize() == 1);
+
+    root._tick(0);
+    
+    assert(c.current().getSampleAtIndex(0) == 1);
+    assert(b.current().getSampleAtIndex(0) == 2.);
+    assert(a.current().getSampleAtIndex(0) == 4.);
+    assert(root.current().getSampleAtIndex(0) == 5.);
+
+    root._tick(1);
+
+    assert(c.current().getSampleAtIndex(0) == 1);
+    assert(b.current().getSampleAtIndex(0) == 2.);
+    assert(a.current().getSampleAtIndex(0) == 4.);
+    assert(root.current().getSampleAtIndex(0) == 5.);
 
 }

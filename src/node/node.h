@@ -3,39 +3,106 @@
 #include "frame.h"
 
 /// Base class for all N channel nodes of the audio graph.
-/// ATTENTION: If you inherit from this class you must also inherit from Arity.
-class Node
+class Node : public Arity
 {
 public:
+    Node() : Arity() {
 
-    Node() {}
+    }
+    Node(int _arity) : 
+        Arity(_arity),
+        _last(Frame(_arity)),
+        _current(Frame(_arity)),
+        _next(Frame(_arity)),
+        _hasNext(false),
+        lastComputedClockTime(-1)
+    {
+        
+    }
+
     /// Add left Node to the right Node.inputNodes
     ///
     Node& operator>> (Node &destinationNode)
     {
-        addInputNode(this);
+        destinationNode.addInputNode(this);
         return destinationNode;
     }
 
-    /// Add left Node to the right Node.inputNodes
-    ///
-    Node& operator> (Node &destinationNode)
-    {
-        return (*this) >> destinationNode;
+    /// User-defined sample processing method
+    /// with fallback implementation
+    virtual Frame tick(Frame input) = 0;
+
+    /// Manually assign the next value of the Node, overriding
+    /// the value received from upstream Nodes
+    void next(Frame next) {
+        // TODO: if arity doesn't match, convert and log? or throw? 
+        if (getArity() != next.getArity()) {
+            throw std::domain_error("cannot call Node::next(Frame) with mismatched arities");
+        }
+        _hasNext = true;
+        _next = next;
     }
 
-    /// Get current Frame from this Node
-    ///
-    virtual Frame current()=0; // pure virtual
-
-    virtual void _tick(int currentClockTime)=0;
+    /// Implements Node::current()
+    Frame current() {
+        return _current;
+    }
 
 protected:
-    void addInputNode(Node *inputNode)
+    void addInputNode(Node* inputNode)
     {
         inputNodes.emplace_back(inputNode);
     }
 
+    /// Programmatic tick function that gathers the various Frames
+    /// from the input Nodes and passes them to implementation-defined tick()
+    void _tick(int currentClockTime)
+    {
+        // Short-circuit graph cycles
+        if (currentClockTime == lastComputedClockTime) return;
+
+        lastComputedClockTime = currentClockTime;
+        if (_hasNext)
+        {   
+            tickInputs(currentClockTime);
+            _last    = _current;
+            _current = _next;
+            _hasNext = false;
+            return;
+        };
+
+        tickInputs(currentClockTime);
+        Frame inputFrame = sumInputs();
+        _last    = _current;
+        _current = tick(inputFrame);
+    }
+
+    /// Advance time for all input nodes
+    ///
+    void tickInputs(int currentClockTime) {
+        for(auto& inputNode : inputNodes) {
+            inputNode->_tick(currentClockTime);
+        }
+    }
+
+    /// Get a Frame that is arity-matched to this Node
+    ///
+    Frame sumInputs() {
+        Frame accumulationFrame(getArity());
+        for(auto& inputNode : inputNodes) {
+            Frame inputNodeFrame = inputNode->current();
+            Frame arityMatchedFrame = inputNodeFrame.convertArity(getArity());
+
+            accumulationFrame += arityMatchedFrame;
+        }
+
+        return accumulationFrame;
+    }
+
+    Frame _current;
+    Frame _last;
+    Frame _next;
+    bool _hasNext;
     int lastComputedClockTime;
     std::vector<Node*> inputNodes;
 };

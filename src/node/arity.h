@@ -6,31 +6,12 @@
 class Arity
 {
 public:
-    Arity() {};
-    Arity(int arity) : arity(arity) {};
-    int getArity() {
+    Arity(): Arity(0) {};
+    Arity(int _arity) : arity(_arity) {};
+    int getArity() const {
         return arity;
     }
-    bool isSupportedConversion(int targetArity) {
-        int supportedSourceArities[] = {1, 2};
-        int supportedTargetArities[] = {1, 2};
-        
-        return
-            std::any_of(
-                std::begin(supportedSourceArities),
-                std::end(supportedSourceArities),
-                [&](int i) { 
-                    return targetArity  == i; 
-                }
-            ) &&
-            std::any_of(
-                std::begin(supportedTargetArities),
-                std::end(supportedTargetArities),
-                [&](int i) { 
-                    return arity  == i; 
-                }
-            );
-    }
-private:
+    
+protected:
     int arity;
 };
