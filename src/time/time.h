@@ -9,7 +9,7 @@ public:
     Sample currentSample();
     Sample tick();
 
-    const int sampleRate;
+    static const int sampleRate;
 
     double currentQuat();
     double currentTrip();

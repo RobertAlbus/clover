@@ -6,8 +6,6 @@ class Sine
 {
 public:
     Sine();
-
-public:
     float tick(const int sample);
 
     float sine[TABLE_SIZE];

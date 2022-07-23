@@ -2,6 +2,7 @@
 
 #include "portaudio.h"
 #include "sine.h"
+#include "node.h"
 
 class Interface
 {
@@ -33,4 +34,6 @@ private:
     int currentSample = 0;
 public:
     Sine *rootNode; // TODO: Sine is just a stand-in signal source for now
+    Node<2> blackHole;
+    Node<1> dac;
 };

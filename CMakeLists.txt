@@ -34,4 +34,6 @@ target_include_directories(${PROJECT_NAME}
         src/sine
         src/interface
         src/node
+        src/sine
+        src/time
 )
