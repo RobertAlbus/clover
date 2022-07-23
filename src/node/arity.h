@@ -6,7 +6,9 @@
 class Arity
 {
 public:
-    Arity(): Arity(0) {};
+    Arity() {
+        throw std::domain_error("must instantiate an Arity with a value");
+    };
     Arity(int _arity) : arity(_arity) {};
     int getArity() const {
         return arity;
