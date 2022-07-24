@@ -39,6 +39,7 @@ int main(void)
 {
     Interface interface;
     Sine sine;
+    Time time(120);
 
     sine >> interface.rootNode;
 
@@ -48,19 +49,18 @@ int main(void)
     ScopedPaHandler paInit;
     if( paInit.result() != paNoError ) goto error;
 
-    if (interface.open(Pa_GetDefaultOutputDevice()))
-    {
-        if (interface.start())
-        {
-            printf("Play for %d seconds.\n", NUM_SECONDS );
-            Pa_Sleep( NUM_SECONDS * 1000 );
+    if (!interface.open(Pa_GetDefaultOutputDevice())) goto done;
+    if (!interface.start()) goto close;
 
-            interface.stop();
-        }
+    printf("Play for %d seconds.\n", NUM_SECONDS );
+    Pa_Sleep( NUM_SECONDS * 1000 );
+    interface.stop();
 
-        interface.close();
-    }
+close:
+    interface.close();
+    goto done;
 
+done:
     printf("Test finished.\n");
     return paNoError;
 
