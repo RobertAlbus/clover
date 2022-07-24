@@ -9,10 +9,9 @@
 
 using namespace std;
 
-
 class Arity1 : public Node {
 public:
-    Arity1() : Node(1) {
+    Arity1() : Node(1, 1) {
 
     }
     /// expose protected members for testing
@@ -24,7 +23,7 @@ public:
     }
 private:
     Frame tick(Frame input) {
-        auto f = Frame(arity());
+        auto f = Frame(arityIn());
 
         f.setSampleAtIndex(0, 1. + input.getSampleAtIndex(0));
         return f;
@@ -48,7 +47,9 @@ int main() {
     */
  
     Arity1 root;
-    assert(root.arity() == 1);
+    assert(root.arityIn() == 1);
+    assert(root.arityOut() == 1);
+    assert(root.current().arity() == 1);
 
     Arity1 a;
     Arity1 b;

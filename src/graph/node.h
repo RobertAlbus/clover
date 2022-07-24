@@ -1,19 +1,26 @@
+
 #pragma once
+#include <vector>
+#include "arity.h"
+
+
 #include <vector>
 #include "frame.h"
 
 /// Base class for all N channel nodes of the audio graph.
-class Node : public Arity
+class Node
 {
 public:
-    Node() : Arity() {
+    Node() {
+        throw std::domain_error("Node must be instantiated with IO arity. \n Try Node(arityIn, arityOut)");
 
     }
-    Node(int _arity) : 
-        Arity(_arity),
-        _last(Frame(_arity)),
-        _current(Frame(_arity)),
-        _next(Frame(_arity)),
+    Node(int _arityIn, int _arityOut) : 
+        _arityIn(_arityIn),
+        _arityOut(_arityOut),
+        _last(Frame(_arityOut)),
+        _current(Frame(_arityOut)),
+        _next(Frame(_arityOut)),
         _hasNext(false),
         lastComputedClockTime(-1)
     {
@@ -36,7 +43,7 @@ public:
     /// the value received from upstream Nodes
     void next(Frame next) {
         // TODO: if arity doesn't match, convert and log? or throw? 
-        if (arity() != next.arity()) {
+        if (arityOut() != next.arity()) {
             throw std::domain_error("cannot call Node::next(Frame) with mismatched arities");
         }
         _hasNext = true;
@@ -46,6 +53,12 @@ public:
     /// Implements Node::current()
     Frame current() {
         return _current;
+    }
+    int arityIn() {
+        return _arityIn.arity();
+    }
+    int arityOut() {
+        return _arityOut.arity();
     }
 
 protected:
@@ -88,10 +101,10 @@ protected:
     /// Get a Frame that is arity-matched to this Node
     ///
     Frame sumInputs() {
-        Frame accumulationFrame(arity());
+        Frame accumulationFrame(arityIn());
         for(auto& inputNode : inputNodes) {
             Frame inputNodeFrame = inputNode->current();
-            Frame arityMatchedFrame = inputNodeFrame.convertArity(arity());
+            Frame arityMatchedFrame = inputNodeFrame.convertArity(arityIn());
 
             accumulationFrame += arityMatchedFrame;
         }
@@ -105,4 +118,6 @@ protected:
     bool _hasNext;
     int lastComputedClockTime;
     std::vector<Node*> inputNodes;
+    Arity _arityIn;
+    Arity _arityOut;
 };
