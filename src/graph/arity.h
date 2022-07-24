@@ -1,15 +1,7 @@
 #pragma once
 
 #include <stdexcept>
-
-
-#ifndef MAX_ARITY
-#define MAX_ARITY 2
-#endif
-
-#ifndef MIN_ARITY
-#define MIN_ARITY 0
-#endif
+#include "constants.h"
 
 /// A base class for objects with channal arity.
 /// It may be useful to cast a Node with unknown arity to this class to read it's arity;
