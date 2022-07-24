@@ -24,7 +24,7 @@ public:
     }
 private:
     Frame tick(Frame input) {
-        auto f = Frame(arity);
+        auto f = Frame(arity());
 
         f.setSampleAtIndex(0, 1. + input.getSampleAtIndex(0));
         return f;
@@ -48,7 +48,7 @@ int main() {
     */
  
     Arity1 root;
-    assert(root.getArity() == 1);
+    assert(root.arity() == 1);
 
     Arity1 a;
     Arity1 b;

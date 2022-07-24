@@ -36,7 +36,7 @@ public:
     /// the value received from upstream Nodes
     void next(Frame next) {
         // TODO: if arity doesn't match, convert and log? or throw? 
-        if (getArity() != next.getArity()) {
+        if (arity() != next.arity()) {
             throw std::domain_error("cannot call Node::next(Frame) with mismatched arities");
         }
         _hasNext = true;
@@ -88,10 +88,10 @@ protected:
     /// Get a Frame that is arity-matched to this Node
     ///
     Frame sumInputs() {
-        Frame accumulationFrame(getArity());
+        Frame accumulationFrame(arity());
         for(auto& inputNode : inputNodes) {
             Frame inputNodeFrame = inputNode->current();
-            Frame arityMatchedFrame = inputNodeFrame.convertArity(getArity());
+            Frame arityMatchedFrame = inputNodeFrame.convertArity(arity());
 
             accumulationFrame += arityMatchedFrame;
         }

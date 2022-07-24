@@ -9,11 +9,11 @@ public:
     Arity() {
         throw std::domain_error("must instantiate an Arity with a value");
     };
-    Arity(int _arity) : arity(_arity) {};
-    int getArity() const {
-        return arity;
+    Arity(int _arity) : _arity(_arity) {};
+    int arity() const {
+        return _arity;
     }
     
 protected:
-    int arity;
+    int _arity;
 };

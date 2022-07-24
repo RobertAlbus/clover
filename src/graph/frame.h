@@ -13,15 +13,15 @@ class Frame : public Arity
 public:
     Frame() : Arity() {}
     Frame(int _arity) : Arity(_arity) {}
-    Frame(const Frame& frame) : Arity(frame.arity) {
-        arity = frame.arity;
-        for (int i = 0; i < arity; i++) {
+    Frame(const Frame& frame) : Arity(frame.arity()) {
+        _arity = frame.arity();
+        for (int i = 0; i < arity(); i++) {
             setSampleAtIndex(i, frame.getSampleAtIndex(i));
         }
     }
 
     Sample getSampleAtIndex(int i) const {
-        if (i >= arity) {
+        if (i >= arity()) {
             throw std::domain_error("index out of bounds");
         }
 
@@ -29,7 +29,7 @@ public:
     }
 
     void setSampleAtIndex(int i, Sample s) {
-        if (i >= arity) {
+        if (i >= arity()) {
             throw std::domain_error("index out of bounds");
         }
 
@@ -38,9 +38,8 @@ public:
 
     /// Convert a frame to a new arity.
     /// The only supported conversion at this time is between arities 1 and 2.
-    Frame convertArity(int arity) const {
-        int targetArity = arity;
-        int sourceArity = getArity();
+    Frame convertArity(int targetArity) const {
+        int sourceArity = arity();
         
         if (targetArity == sourceArity) return Frame((*this));
 
@@ -91,7 +90,7 @@ private:
                 std::begin(supportedTargetArities),
                 std::end(supportedTargetArities),
                 [&](int i) { 
-                    return arity  == i; 
+                    return arity() == i; 
                 }
             );
     }
@@ -103,11 +102,11 @@ private:
 ///
 Frame& operator+= (Frame& frame1, const Frame& frame2) {
     // arity pairity
-    if (frame1.getArity() != frame2.getArity()) {
-        int targetArity = (static_cast<const Frame>(frame1)).getArity();
-        Frame frame2 = frame2.convertArity(frame1.getArity());
+    if (frame1.arity() != frame2.arity()) {
+        int targetArity = (static_cast<const Frame>(frame1)).arity();
+        Frame frame2 = frame2.convertArity(frame1.arity());
     }
-    for (int i = 0; i < frame1.getArity(); i++) {
+    for (int i = 0; i < frame1.arity(); i++) {
         Sample newValue = frame1.getSampleAtIndex(i) + frame2.getSampleAtIndex(i);
         frame1.setSampleAtIndex(i, newValue);
     }
