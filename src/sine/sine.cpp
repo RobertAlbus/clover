@@ -18,7 +18,10 @@ Sine::Sine() : Node(0,2), phase(0)
 Frame Sine::tick(Frame input)
 {
     Sample value = sine[(int)phase++];
-    phase = phase % TABLE_SIZE;
+
+    if (phase >= TABLE_SIZE) {
+        phase -= TABLE_SIZE;
+    }
 
     Frame f = Frame(2);
     f.setSampleAtIndex(0, value);
