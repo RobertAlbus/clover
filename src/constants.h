@@ -12,4 +12,8 @@
 #define MIN_ARITY 0
 #endif
 
+#ifndef M_PI
+#define M_PI  (3.14159265)
+#endif
+
 typedef double Sample;

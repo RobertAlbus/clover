@@ -1,10 +1,7 @@
 #include <stdio.h>
 #include <math.h>
+#include "constants.h"
 #include "sine.h"
-
-#ifndef M_PI
-#define M_PI  (3.14159265)
-#endif
 
 #define TABLE_SIZE   (200)
 
