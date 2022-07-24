@@ -29,6 +29,8 @@ add_executable(${PROJECT_NAME}
     src/graph/frame.cpp
     src/graph/node.cpp
 
+    src/sine/sine.cpp
+
     src/time/musicTime.cpp
     src/time/sampleClock.cpp
 )
@@ -36,7 +38,6 @@ add_executable(${PROJECT_NAME}
 target_include_directories(${PROJECT_NAME}
     PRIVATE
         src
-        src/sine
         src/interface
         src/graph
         src/sine

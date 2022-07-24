@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <math.h>
 #include "constants.h"
+#include "node.h"
 #include "sine.h"
 
 #define TABLE_SIZE   (200)
 
-
-Sine::Sine() : phase(0)
+Sine::Sine() : Node(0,2), phase(0)
 {
     /* initialise sinusoidal wavetable */
     for( int i=0; i<TABLE_SIZE; i++ )
@@ -15,12 +15,14 @@ Sine::Sine() : phase(0)
     }
 }
 
-float Sine::tick(const int sample)
+Frame Sine::tick(Frame input)
 {
     float value = sine[(int)phase++];
-    if( phase >= TABLE_SIZE ) {
-        phase -= TABLE_SIZE;
-    }
+    phase = phase % TABLE_SIZE;
 
-    return value;
+    Frame f = Frame(2);
+    f.setSampleAtIndex(0, value);
+    f.setSampleAtIndex(1, value);
+
+    return f;
 }

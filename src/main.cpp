@@ -8,6 +8,7 @@
 
 #include "constants.h"
 #include "interface.h"
+#include "sine.h"
 #include "time.h"
 
 class ScopedPaHandler
@@ -37,6 +38,10 @@ int main(void);
 int main(void)
 {
     Interface interface;
+    Sine sine;
+
+    sine >> interface.rootNode;
+
 
     printf("PortAudio Test: output sine wave. SR = %d, BufSize = %d\n", SAMPLE_RATE, FRAMES_PER_BUFFER);
 

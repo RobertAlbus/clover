@@ -2,13 +2,15 @@
 
 #define TABLE_SIZE   (200)
 
-class Sine
+class Sine : public Node
 {
 public:
     Sine();
-    float tick(const int sample);
 
-    float sine[TABLE_SIZE];
-    float phase;
+protected:
+    Frame tick(Frame input);
+
+    Sample sine[TABLE_SIZE];
+    int phase;
 };
 
