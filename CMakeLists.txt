@@ -21,11 +21,14 @@ file(GLOB_RECURSE SOURCES
 
 add_executable(${PROJECT_NAME} 
     src/main.cpp
+
     src/interface/interface.cpp    
+    src/interface/rootNode.cpp    
+
     src/graph/arity.cpp
     src/graph/frame.cpp
     src/graph/node.cpp
-    
+
     src/time/musicTime.cpp
     src/time/sampleClock.cpp
 )

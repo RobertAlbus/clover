@@ -4,7 +4,6 @@
 
 #include "constants.h"
 #include "interface.h"
-#include "sine.h"
 
 #define NUM_SECONDS   (5)
 #define FRAMES_PER_BUFFER  (64)
@@ -116,11 +115,14 @@ int Interface::paCallbackMethod(const void *inputBuffer, void *outputBuffer,
     for( i=0; i<framesPerBuffer; i++ )
     {
         float left, right;
-        left = right = rootNode->tick(currentSample++);
+        
+        rootNode._tick(currentSample++);
+        Frame frame = rootNode.current();
+
         printf("%f - %f - %d\n", left, right, currentSample);
 
-        *out++ = left; 
-        *out++ = right;
+        *out++ = frame.getSampleAtIndex(0); 
+        *out++ = frame.getSampleAtIndex(1);
     }
 
     return paContinue;

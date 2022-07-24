@@ -37,7 +37,6 @@ int main(void);
 int main(void)
 {
     Interface interface;
-    interface.rootNode = new Node();
 
     printf("PortAudio Test: output sine wave. SR = %d, BufSize = %d\n", SAMPLE_RATE, FRAMES_PER_BUFFER);
 

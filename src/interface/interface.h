@@ -1,8 +1,8 @@
 #pragma once
 
 #include "portaudio.h"
-#include "sine.h"
 #include "node.h"
+#include "rootNode.h"
 
 class Interface
 {
@@ -33,5 +33,5 @@ private:
     char message[20];
     int currentSample = 0;
 public:
-    Node& rootNode; 
+    RootNode rootNode; 
 };
