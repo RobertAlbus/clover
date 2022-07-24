@@ -1,4 +1,4 @@
-// g++ test.cpp -o out && ./out && rm ./out 
+// g++ src/graph/test.cpp -o out && ./out && rm ./out 
 
 #include <assert.h>
 #include <iostream>
