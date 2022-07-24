@@ -21,5 +21,5 @@ public:
 
 private:
     void initMusicTime();
-    SampleClock clock;
+    SampleClock sampleClock;
 };

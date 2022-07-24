@@ -1,5 +1,5 @@
 #include "constants.h"
-#include "time.h"
+#include "musicTime.h"
 
 Time::Time(double bpm) :
     bpm(bpm),
@@ -10,7 +10,7 @@ Time::Time(double bpm) :
 
 double Time::currentUnit(int unitInSamples)
 {
-    return clock.currentSample() / unitInSamples;
+    return sampleClock.currentSample() / unitInSamples;
 }
 
 double Time::currentQuat()
