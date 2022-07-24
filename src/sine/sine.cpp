@@ -17,7 +17,7 @@ Sine::Sine() : Node(0,2), phase(0)
 
 Frame Sine::tick(Frame input)
 {
-    float value = sine[(int)phase++];
+    Sample value = sine[(int)phase++];
     phase = phase % TABLE_SIZE;
 
     Frame f = Frame(2);

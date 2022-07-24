@@ -16,4 +16,4 @@
 #define M_PI  (3.14159265)
 #endif
 
-typedef double Sample;
+typedef float Sample;
