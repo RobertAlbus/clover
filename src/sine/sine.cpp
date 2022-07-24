@@ -31,6 +31,7 @@ Frame Sine::tick(Frame input)
 }
 
 void Sine::freq(float freq) {
+    _readonlyFreq = freq;
     _phaseIncrement = freq * ((float)TABLE_SIZE) / ((float)SAMPLE_RATE);
 }
 
