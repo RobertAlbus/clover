@@ -26,7 +26,7 @@ public:
 private:
     bool supportsConversionTo(int targetArity) const;
 
-    Sample samples[10] = {0,0,0,0,0,0,0,0,0,0};
+    Sample samples[MAX_ARITY];
 };
 
 /// combine two frames additively.

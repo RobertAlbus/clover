@@ -12,7 +12,11 @@ Frame::Frame() : Arity() {
     throw std::domain_error("Frame must be instantiated with arity. \n Try Frame(arity)");
 }
 
-Frame::Frame(int _arity) : Arity(_arity) {}
+Frame::Frame(int _arity) : Arity(_arity) {
+    for (int i; i < MAX_ARITY; i++) {
+        samples[i] = 0.;
+    }
+}
 
 Frame::Frame(const Frame& frame) : Arity(frame.arity()) {
     _arity = frame.arity();
