@@ -11,7 +11,10 @@ typedef double Sample;
 class Frame : public Arity
 {
 public:
-    Frame() : Arity() {}
+    Frame() : Arity() {
+        throw std::domain_error("Frame must be instantiated with arity. \n Try Frame(arity)");
+    }
+    
     Frame(int _arity) : Arity(_arity) {}
     Frame(const Frame& frame) : Arity(frame.arity()) {
         _arity = frame.arity();

@@ -15,12 +15,12 @@ public:
         throw std::domain_error("Node must be instantiated with IO arity. \n Try Node(arityIn, arityOut)");
 
     }
-    Node(int _arityIn, int _arityOut) : 
-        _arityIn(_arityIn),
-        _arityOut(_arityOut),
-        _last(Frame(_arityOut)),
-        _current(Frame(_arityOut)),
-        _next(Frame(_arityOut)),
+    Node(int arityIn, int arityOut) : 
+        _arityIn(Arity(arityIn)),
+        _arityOut(Arity(arityOut)),
+        _last(Frame(arityOut)),
+        _current(Frame(arityOut)),
+        _next(Frame(arityOut)),
         _hasNext(false),
         lastComputedClockTime(-1)
     {
