@@ -2,11 +2,11 @@
 #include <math.h>
 #include "portaudio.h"
 
+#include "constants.h"
 #include "interface.h"
 #include "sine.h"
 
 #define NUM_SECONDS   (5)
-#define SAMPLE_RATE   (48000)
 #define FRAMES_PER_BUFFER  (64)
 
 #ifndef M_PI

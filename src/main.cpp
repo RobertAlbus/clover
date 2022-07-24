@@ -1,14 +1,14 @@
 
+#define NUM_SECONDS   (5)
+#define FRAMES_PER_BUFFER  (64)
+
 #include <stdio.h>
 #include <math.h>
 #include "portaudio.h"
 
+#include "constants.h"
 #include "interface.h"
-#include "sine.h"
-
-#define NUM_SECONDS   (5)
-#define SAMPLE_RATE   (48000)
-#define FRAMES_PER_BUFFER  (64)
+#include "time.h"
 
 class ScopedPaHandler
 {
@@ -37,7 +37,7 @@ int main(void);
 int main(void)
 {
     Interface interface;
-    interface.rootNode = new Sine();
+    interface.rootNode = new Node();
 
     printf("PortAudio Test: output sine wave. SR = %d, BufSize = %d\n", SAMPLE_RATE, FRAMES_PER_BUFFER);
 

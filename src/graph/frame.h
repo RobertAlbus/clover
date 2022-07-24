@@ -5,8 +5,8 @@
 #include <string>
 
 #include "arity.h"
+#include "constants.h"
 
-typedef double Sample;
 
 class Frame : public Arity
 {
