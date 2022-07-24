@@ -3,6 +3,8 @@
 #include "portaudio.h"
 #include "node.h"
 #include "rootNode.h"
+#include "sampleClock.h"
+#include "musicTime.h"
 
 class Interface
 {
@@ -31,7 +33,7 @@ private:
 
     PaStream *stream;
     char message[20];
-    int currentSample = 0;
+    SampleClock clock;
 public:
     RootNode rootNode; 
 };
