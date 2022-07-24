@@ -1,5 +1,8 @@
 #pragma once
 
+#include <stdexcept>
+
+
 #ifndef MAX_ARITY
 #define MAX_ARITY 2
 #endif

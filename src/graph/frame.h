@@ -1,4 +1,5 @@
 #pragma once
+
 #include <algorithm> // for std::find
 #include <iterator> // for std::begin, std::end
 #include <stdexcept>

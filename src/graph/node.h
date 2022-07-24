@@ -1,10 +1,10 @@
 
 #pragma once
+
+#include <stdexcept>
 #include <vector>
+
 #include "arity.h"
-
-
-#include <vector>
 #include "frame.h"
 
 /// Base class for all N channel nodes of the audio graph.
