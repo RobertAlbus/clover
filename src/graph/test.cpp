@@ -28,8 +28,6 @@ private:
         f.setSampleAtIndex(0, 1. + input.getSampleAtIndex(0));
         return f;
     }
-
-
 };
 
 int main() {
