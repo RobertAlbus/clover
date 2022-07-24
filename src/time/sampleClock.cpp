@@ -15,3 +15,5 @@ int SampleClock::currentSample()
 {
     return _currentSample;
 }
+
+int SampleClock::_currentSample;
