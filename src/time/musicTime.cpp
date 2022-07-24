@@ -10,7 +10,7 @@ Time::Time(double bpm) :
 
 double Time::currentUnit(int unitInSamples)
 {
-    return sampleClock.currentSample() / unitInSamples;
+    return (double)sampleClock.currentSample() / (double)unitInSamples;
 }
 
 double Time::currentQuat()
