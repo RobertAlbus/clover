@@ -1,27 +1,16 @@
+#include "constants.h"
 #include "time.h"
 
-Time::Time(int sampleRate, double bpm) :
-    sampleRate(sampleRate),
+Time::Time(double bpm) :
     bpm(bpm),
-    bps(bpm/60.),
-    _currentSample(0) 
+    bps(bpm/60.)
 {
     initMusicTime();
 };
 
-Sample Time::tick()
-{
-    return ++_currentSample;
-}
-
-Sample Time::currentSample()
-{
-    return _currentSample;
-}
-
 double Time::currentUnit(int unitInSamples)
 {
-    return currentSample() / unitInSamples;
+    return clock.currentSample() / unitInSamples;
 }
 
 double Time::currentQuat()
@@ -48,7 +37,7 @@ double Time::currentBar()
 void Time::initMusicTime() {
     double beatsPerSecond = bpm/60;
 
-    beat = int((double)sampleRate / beatsPerSecond);
+    beat = int((double)SAMPLE_RATE / beatsPerSecond);
     quat = beat / 4;
     trip = beat / 3;
     bar  = beat * 4;

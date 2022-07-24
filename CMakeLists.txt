@@ -25,8 +25,9 @@ add_executable(${PROJECT_NAME}
     src/graph/arity.cpp
     src/graph/frame.cpp
     src/graph/node.cpp
-    src/time/time.cpp
     
+    src/time/musicTime.cpp
+    src/time/sampleClock.cpp
 )
 
 target_include_directories(${PROJECT_NAME}

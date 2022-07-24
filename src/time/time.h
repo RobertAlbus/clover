@@ -1,15 +1,10 @@
 #pragma once
-
-typedef int Sample;
+#include "sampleClock.h"
 
 class Time
 {
 public:
-    Time(int sampleRate, double bpm);
-    Sample currentSample();
-    Sample tick();
-
-    static const int sampleRate;
+    Time(double bpm);
 
     double currentQuat();
     double currentTrip();
@@ -25,7 +20,6 @@ public:
     int bar;
 
 private:
-    Sample _currentSample;
     void initMusicTime();
-
+    SampleClock clock;
 };
