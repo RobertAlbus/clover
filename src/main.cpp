@@ -39,6 +39,8 @@ int main(void)
 {
     Interface interface;
     Sine sine;
+    sine.freq(100);
+    sine.phase(0.);
     Time time(120);
 
     sine >> interface.rootNode;
@@ -52,8 +54,22 @@ int main(void)
     if (!interface.open(Pa_GetDefaultOutputDevice())) goto done;
     if (!interface.start()) goto close;
 
-    printf("Play for %d seconds.\n", NUM_SECONDS );
-    Pa_Sleep( NUM_SECONDS * 1000 );
+    printf("\n\n%f\n", 0);
+
+    while (time.currentUnit(SAMPLE_RATE) <= 5.) {
+        float currentSecond = time.currentUnit(SAMPLE_RATE);
+        if (fmod((double)currentSecond,0.5) == 0.) {
+            sine.freq(sine.freq() * 1.1);
+            printf("%f\n", currentSecond);
+        }
+
+        // printf("%f - %f - %d\n", 
+        //     interface.rootNode.current().getSampleAtIndex(0),
+        //     interface.rootNode.current().getSampleAtIndex(1),
+        //     time.currentUnit(1)
+        // );
+    }
+
     interface.stop();
 
 close:
