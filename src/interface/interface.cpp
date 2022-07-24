@@ -120,8 +120,6 @@ int Interface::paCallbackMethod(const void *inputBuffer, void *outputBuffer,
         Sample left = frame.getSampleAtIndex(0);
         Sample right = frame.getSampleAtIndex(1);
         
-        printf("%f - %f - %d\n", left, right, clock.currentSample());
-
         *out++ = left; 
         *out++ = right; 
     }
