@@ -8,17 +8,9 @@
 class Arity
 {
 public:
-    Arity() {
-        throw std::domain_error("must instantiate an Arity with a value");
-    };
-    Arity(int _arity) : _arity(_arity) {
-        if (MIN_ARITY > _arity || _arity > MAX_ARITY ) {
-            throw std::domain_error("Arity(int) must be instantiated with a value between MIN_ARITY and MAX_ARITY. See arity.h");
-        }
-    };
-    int arity() const {
-        return _arity;
-    }
+    Arity();
+    Arity(int _arity);
+    int arity() const;
     
 protected:
     int _arity;
