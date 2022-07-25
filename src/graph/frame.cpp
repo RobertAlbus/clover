@@ -9,14 +9,16 @@
 
 
 Frame::Frame(int _arity) : Arity(_arity) {
-    for (int i; i < MAX_ARITY; i++) {
+    for (int i = 0; i < MAX_ARITY; i++) {
         samples[i] = 0.;
     }
 }
 
 Frame::Frame(const Frame& frame) : Arity(frame.arity()) {
     _arity = frame.arity();
-    for (int i = 0; i < arity(); i++) {
+    
+    for (int i = 0, end = arity(); i < end; ++i)
+    {
         setSampleAtIndex(i, frame.getSampleAtIndex(i));
     }
 }
@@ -101,7 +103,7 @@ Frame& operator+= (Frame& frame1, const Frame& frame2) {
         int targetArity = (static_cast<const Frame>(frame1)).arity();
         Frame frame2 = frame2.convertArity(frame1.arity());
     }
-    for (int i = 0; i < frame1.arity(); i++) {
+    for (int i = 0, end = frame1.arity(); i < end; i++) {
         Sample newValue = frame1.getSampleAtIndex(i) + frame2.getSampleAtIndex(i);
         frame1.setSampleAtIndex(i, newValue);
     }
