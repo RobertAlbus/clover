@@ -8,7 +8,6 @@
 class Arity
 {
 public:
-    Arity();
     Arity(int _arity);
     int arity() const;
     

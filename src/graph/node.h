@@ -11,9 +11,6 @@
 class Node
 {
 public:
-    /// Use Node(int arityIn, int arityOut)
-    //
-    Node();
     Node(int arityIn, int arityOut);
 
     /// Add left Node to the right Node.inputNodes

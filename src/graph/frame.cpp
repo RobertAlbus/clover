@@ -8,10 +8,6 @@
 #include "frame.h"
 
 
-Frame::Frame() : Arity() {
-    throw std::domain_error("Frame must be instantiated with arity. \n Try Frame(arity)");
-}
-
 Frame::Frame(int _arity) : Arity(_arity) {
     for (int i; i < MAX_ARITY; i++) {
         samples[i] = 0.;

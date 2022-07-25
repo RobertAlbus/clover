@@ -6,9 +6,6 @@
 #include "frame.h"
 #include "node.h"
 
-Node::Node() {
-    throw std::domain_error("Node must be instantiated with IO arity. \n Try Node(arityIn, arityOut)");
-}
 
 Node::Node(int arityIn, int arityOut) : 
     _arityIn(Arity(arityIn)),
