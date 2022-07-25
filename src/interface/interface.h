@@ -35,5 +35,6 @@ private:
     char message[20];
     SampleClock clock;
 public:
-    RootNode rootNode; 
+    RootNode rootNode;
+    RootNode blackHole;
 };

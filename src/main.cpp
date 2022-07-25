@@ -37,14 +37,20 @@ private:
 int main(void);
 int main(void)
 {
+    Time time(120);
+
     Interface interface;
     Sine sine;
     sine.freq(100);
     sine.phase(0.);
-    Time time(120);
 
     sine >> interface.rootNode;
 
+    Sine lfo;
+    lfo.freq(700);
+    lfo.phase(0.);
+    
+    lfo >> interface.blackHole;
 
     printf("PortAudio Test: output sine wave. SR = %d, BufSize = %d\n", SAMPLE_RATE, FRAMES_PER_BUFFER);
 
@@ -56,18 +62,29 @@ int main(void)
 
     printf("\n\n%f\n", 0);
 
-    while (time.currentUnit(SAMPLE_RATE) <= 5.) {
+    while (time.currentUnit(SAMPLE_RATE) <= 10.) {
+        float baseSineFreq = 500.;
         float currentSecond = time.currentUnit(SAMPLE_RATE);
-        if (fmod((double)currentSecond,0.5) == 0.) {
-            sine.freq(sine.freq() * 1.1);
+
+        if (fmod((double)currentSecond,1.) == 0.0) {
             printf("%f\n", currentSecond);
+            lfo.freq(700.);
+        } else if (fmod((double)currentSecond,1.) == 0.5) {
+            printf("%f\n", currentSecond);
+            lfo.freq(600.);
         }
 
-        // printf("%f - %f - %d\n", 
-        //     interface.rootNode.current().getSampleAtIndex(0),
-        //     interface.rootNode.current().getSampleAtIndex(1),
-        //     time.currentUnit(1)
-        // );
+        sine.freq(
+            baseSineFreq + ( fmul(100., lfo.current().getSampleAtIndex(0)) )
+        );
+
+        if (DEBUG_PRINT) {
+            printf("%f - %f - %d\n", 
+                interface.rootNode.current().getSampleAtIndex(0),
+                interface.rootNode.current().getSampleAtIndex(1),
+                (int)time.currentUnit(1)
+            );
+        }
     }
 
     interface.stop();

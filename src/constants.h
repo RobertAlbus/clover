@@ -16,4 +16,10 @@
 #define M_PI  (3.14159265)
 #endif
 
+#ifndef DEBUG_PRINT
+#define DEBUG_PRINT  false
+#endif
+
+
+
 typedef float Sample;
