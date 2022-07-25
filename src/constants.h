@@ -1,25 +1,10 @@
 #pragma once
+#include <cstddef>
 
-#ifndef SAMPLE_RATE
-#define SAMPLE_RATE 48000
-#endif
-
-#ifndef MAX_ARITY
-#define MAX_ARITY 2
-#endif
-
-#ifndef MIN_ARITY
-#define MIN_ARITY 0
-#endif
-
-#ifndef M_PI
-#define M_PI  (3.14159265)
-#endif
-
-#ifndef DEBUG_PRINT
-#define DEBUG_PRINT  false
-#endif
-
-
+constexpr size_t SAMPLE_RATE = 48000;
+constexpr size_t MAX_ARITY = 2;
+constexpr size_t MIN_ARITY = 0;
+constexpr double PI = 3.14159265;
+constexpr bool DEBUG_PRINT = false;
 
 typedef float Sample;
