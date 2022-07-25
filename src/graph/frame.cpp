@@ -70,6 +70,7 @@ Frame Frame::convertArity(int targetArity) const {
     }
     else if (sourceArity == 1 && targetArity == 2) {
         // halve the power of each channel to maintain total signal power parity
+        // TODO: this might be annoying and confusing though! fix it.
         newFrame.setSampleAtIndex(0, getSampleAtIndex(0) * 0.5);
         newFrame.setSampleAtIndex(1, getSampleAtIndex(0) * 0.5);
     }
