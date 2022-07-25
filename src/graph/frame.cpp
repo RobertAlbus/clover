@@ -58,7 +58,7 @@ Frame Frame::convertArity(int targetArity) const {
         throw std::domain_error(errorMsg);
     }
 
-    Frame newFrame = Frame(targetArity);
+    Frame newFrame(targetArity);
     
     if (sourceArity == 2 && targetArity == 1) {
         newFrame.setSampleAtIndex(
@@ -69,8 +69,9 @@ Frame Frame::convertArity(int targetArity) const {
         );
     }
     else if (sourceArity == 1 && targetArity == 2) {
-        newFrame.setSampleAtIndex(0, getSampleAtIndex(0));
-        newFrame.setSampleAtIndex(1, getSampleAtIndex(0));
+        // halve the power of each channel to maintain total signal power parity
+        newFrame.setSampleAtIndex(0, getSampleAtIndex(0) * 0.5);
+        newFrame.setSampleAtIndex(1, getSampleAtIndex(0) * 0.5);
     }
 
     return newFrame;
