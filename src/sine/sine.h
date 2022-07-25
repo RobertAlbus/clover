@@ -7,16 +7,10 @@ class Sine : public Node
 public:
     Sine();
 
-    /// Set frequency
     void freq(float freq);
-
-    /// Get frequency
     float freq();
 
-    /// set phase
     void phase(float phase);
-    
-    // Get phase
     float phase();
 
 protected:
