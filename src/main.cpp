@@ -11,6 +11,7 @@
 #include "sine.h"
 #include "time.h"
 
+
 class ScopedPaHandler
 {
 public:
@@ -36,11 +37,9 @@ private:
 int main(void)
 {
     Time time(120);
-
+    SampleClock clock;
     Interface interface;
     Sine sine;
-    sine.freq(100);
-    sine.phase(0.);
 
     sine >> interface.rootNode;
 
@@ -50,40 +49,50 @@ int main(void)
     
     lfo >> interface.blackHole;
 
-    printf("PortAudio Test: output sine wave. SR = %d, BufSize = %d\n", SAMPLE_RATE, FRAMES_PER_BUFFER);
+
+    clock.registerTickCallback([&](int currentTime)->void
+    {   
+
+        if (time.currentUnit(SAMPLE_RATE) <= 10) {
+            float baseSineFreq = 500.;
+            float currentSecond = time.currentUnit(SAMPLE_RATE);
+            if (time.currentUnit(1) == 1) {
+                printf("\n\n%f\n", 0);
+            }
+            if (fmod((double)currentSecond,1.) == 0.0) {
+                printf("%f\n", currentSecond);
+                lfo.freq(700.);
+            } else if (fmod((double)currentSecond,1.) == 0.5) {
+                printf("%f\n", currentSecond);
+                lfo.freq(600.);
+            }
+
+            sine.freq(
+                baseSineFreq + ( fmul(100., lfo.current().getSampleAtIndex(0)) )
+            );
+
+            if (DEBUG_PRINT) {
+                printf("%f - %f - %d\n", 
+                    interface.rootNode.current().getSampleAtIndex(0),
+                    interface.rootNode.current().getSampleAtIndex(1),
+                    (int)time.currentUnit(1)
+                );
+            }
+        }
+
+    });
+
 
     ScopedPaHandler paInit;
     if( paInit.result() != paNoError ) goto error;
 
     if (!interface.open(Pa_GetDefaultOutputDevice())) goto done;
     if (!interface.start()) goto close;
-
-    printf("\n\n%f\n", 0);
-
-    while (time.currentUnit(SAMPLE_RATE) <= 10.) {
-        float baseSineFreq = 500.;
-        float currentSecond = time.currentUnit(SAMPLE_RATE);
-
-        if (fmod((double)currentSecond,1.) == 0.0) {
-            printf("%f\n", currentSecond);
-            lfo.freq(700.);
-        } else if (fmod((double)currentSecond,1.) == 0.5) {
-            printf("%f\n", currentSecond);
-            lfo.freq(600.);
-        }
-
-        sine.freq(
-            baseSineFreq + ( fmul(100., lfo.current().getSampleAtIndex(0)) )
-        );
-
-        if (DEBUG_PRINT) {
-            printf("%f - %f - %d\n", 
-                interface.rootNode.current().getSampleAtIndex(0),
-                interface.rootNode.current().getSampleAtIndex(1),
-                (int)time.currentUnit(1)
-            );
-        }
-    }
+    
+    // TODO: need a way to determine the composition length but this will do for now.
+    // I should be able to compute this value once I have composition-level utilities.
+    Pa_Sleep(NUM_SECONDS * 1000);
+    
 
     interface.stop();
 
