@@ -21,7 +21,7 @@ Frame Sine::tick(Frame input)
 {
     Sample value = lerp();
 
-    phase(_phase + _phaseIncrement);
+    _phase = fmod(_phase + _phaseIncrement, TABLE_SIZE);
 
     Frame f = Frame(2);
     f.setSampleAtIndex(0, value);
@@ -40,14 +40,12 @@ float Sine::freq() {
 }
 
 void Sine::phase(float p) {
-    while (p >= static_cast<float>(TABLE_SIZE)) {
-        p -= static_cast<float>(TABLE_SIZE);
-    }
-    _phase = p;
+    p = fmod(p, 1.);
+    _phase = p * TABLE_SIZE *_phaseIncrement;
 }
 
 float Sine::phase() {
-    return _phase;
+    return _phase / TABLE_SIZE;
 }
 
 float Sine::lerp() {
