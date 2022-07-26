@@ -5,12 +5,6 @@
 #include "constants.h"
 #include "interface.h"
 
-#define NUM_SECONDS   (5)
-#define FRAMES_PER_BUFFER  (64)
-
-#ifndef M_PI
-#define M_PI  (3.14159265)
-#endif
 
 Interface::Interface() : stream(0)
 {
