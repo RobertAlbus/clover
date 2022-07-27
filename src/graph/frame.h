@@ -12,7 +12,6 @@
 class Frame : public Arity
 {
 public:
-    Frame();
     Frame(int _arity);
     Frame(const Frame& frame);
 
