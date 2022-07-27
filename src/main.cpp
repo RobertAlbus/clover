@@ -50,7 +50,7 @@ int main(void)
     
     lfo >> interface.blackHole;
 
-    int testQuantity = 250;
+    int testQuantity = 290;
     testQuantity -= 1; // 0 based indexing har har
     Sine* sineTest[testQuantity];
     for (int i = 0; i < testQuantity; i++)
