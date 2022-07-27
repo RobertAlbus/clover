@@ -1,5 +1,3 @@
-#include <algorithm> // for std::find
-#include <iterator> // for std::begin, std::end
 #include <stdexcept>
 #include <string>
 
@@ -49,63 +47,10 @@ void Frame::setSampleAtIndex(int i, Sample s)
     samples[i] = s;
 }
 
-Frame Frame::convertArity(int targetArity) const
-{
-    int sourceArity = arity;
-    
-    if (targetArity == sourceArity) return (*this);
-
-    // if (sourceArity == 2 && targetArity == 1)
-    // {
-    //     return Frame(getSampleAtIndex(0) + getSampleAtIndex(1));
-    // }
-    // else if (sourceArity == 1 && targetArity == 2)
-    // {
-    //     // halve the power of each channel to maintain total signal power value
-    //     return Frame(
-    //         getSampleAtIndex(0) * .5,
-    //         getSampleAtIndex(1) * .5
-    //     );
-    // }
-
-    Frame newFrame(targetArity);
-    
-    if (sourceArity == 2 && targetArity == 1)
-    {
-        newFrame.setSampleAtIndex(
-            0,
-            getSampleAtIndex(0)
-                        +
-            getSampleAtIndex(1)
-        );
-    }
-    else if (sourceArity == 1 && targetArity == 2)
-    {
-        // halve the power of each channel to maintain total signal power parity
-        // TODO: this might be annoying and confusing though! fix it.
-        newFrame.setSampleAtIndex(0, getSampleAtIndex(0) * 0.5);
-        newFrame.setSampleAtIndex(1, getSampleAtIndex(0) * 0.5);
-    }
-
-    return newFrame;
-
-    
-    std::string errorMsg;
-
-    errorMsg.append("no implementation for converting from Frame arity ");
-    errorMsg.append(std::to_string(sourceArity));
-    errorMsg.append(" to Frame arity ");
-    errorMsg.append(std::to_string(targetArity));
-
-    throw std::domain_error(errorMsg);
-}
-
 Frame& operator+= (Frame& frame1, const Frame& frame2)
 {
-    // arity pairity
     if (frame1.arity != frame2.arity) {
-        int targetArity = (static_cast<const Frame>(frame1)).arity;
-        Frame frame2 = frame2.convertArity(frame1.arity);
+        throw std::domain_error("cannot add frames with mistmatched arities");
     }
     for (int i = 0, end = frame1.arity; i < end; i++) {
         Sample newValue = frame1.getSampleAtIndex(i) + frame2.getSampleAtIndex(i);

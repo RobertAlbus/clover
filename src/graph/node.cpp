@@ -17,6 +17,9 @@ Node::Node(int arityIn, int arityOut) :
 
 Node& Node::operator>> (Node &destinationNode)
 {
+    if (arityOut() != destinationNode.arityIn()) {
+        throw std::domain_error("cannot connect nodes with mismatched input and output arities");
+    }
     destinationNode.addInputNode(this);
     return destinationNode;
 }
@@ -74,10 +77,7 @@ Frame Node::sumInputs() {
     Frame accumulationFrame(arityIn());
     for(int i = 0, end = inputNodes.size(); i < end; i++) {
         Node* inputNode = inputNodes.getAt(i); 
-        Frame inputNodeFrame = inputNode->current();
-        Frame arityMatchedFrame = inputNodeFrame.convertArity(arityIn());
-
-        accumulationFrame += arityMatchedFrame;
+        accumulationFrame += inputNode->current();
     }
 
     return accumulationFrame;
