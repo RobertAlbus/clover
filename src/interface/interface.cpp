@@ -1,5 +1,6 @@
-#include <stdio.h>
+#include <algorithm>
 #include <math.h>
+#include <stdio.h>
 #include "portaudio.h"
 
 #include "constants.h"
@@ -113,8 +114,8 @@ int Interface::paCallbackMethod(const void *inputBuffer, void *outputBuffer,
         
         Frame frame = rootNode.current();
 
-        Sample left = frame.getSampleAtIndex(0);
-        Sample right = frame.getSampleAtIndex(1);
+        Sample left = std::clamp((double)frame.getSampleAtIndex(0), -1., 1.);
+        Sample right = std::clamp((double)frame.getSampleAtIndex(1), -1., 1.);
         
         *out++ = left; 
         *out++ = right; 

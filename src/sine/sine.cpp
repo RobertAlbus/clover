@@ -1,5 +1,6 @@
-#include <stdio.h>
+#include <algorithm>
 #include <math.h>
+#include <stdio.h>
 #include "constants.h"
 #include "node.h"
 #include "sine.h"
@@ -31,6 +32,7 @@ Frame Sine::tick(Frame input)
 }
 
 void Sine::freq(float freq) {
+    freq = std::max(freq, (float)0.);
     _readonlyFreq = freq;
     _phaseIncrement = freq * ((float)TABLE_SIZE) / ((float)SAMPLE_RATE);
 }
@@ -40,7 +42,7 @@ float Sine::freq() {
 }
 
 void Sine::phase(float p) {
-    p = fmod(p, 1.);
+    p = fmod(fabs(p), 1.);
     _phase = p * TABLE_SIZE *_phaseIncrement;
 }
 
