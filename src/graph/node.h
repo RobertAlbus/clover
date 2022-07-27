@@ -50,7 +50,7 @@ protected:
     Frame _next;
     bool _hasNext;
     int lastComputedClockTime;
-    Container<Node, 500> inputNodes;
+    Container<Node*, 500> inputNodes;
     Arity _arityIn;
     Arity _arityOut;
 };

@@ -14,11 +14,12 @@ class Container
 public:
     Container();
 
-    void operator<< (__T* objectPointer);
-    void pushBack(__T* objectPointer);
+    void operator<< (__T objectPointer);
+    void pushBack(__T objectPointer);
 
-    __T* operator[] (int index);
-    __T* getAt(int index);
+    __T& operator[] (int index);
+    __T& getAt(int index);
+    // __T* setAt(int index, T);
 
     void forEach(List_ForEachFn<__T> fn);
 
@@ -26,7 +27,7 @@ public:
     int size();
 
 private:
-    __T* _array[__count];
+    __T _array[__count];
     int _nextAvailable;
     int _capacity;
 
@@ -42,13 +43,13 @@ Container<__T, __count>::Container() :
 }
 
 template <class __T, int __count>
-void Container<__T, __count>::operator<<(__T* objectPointer)
+void Container<__T, __count>::operator<<(__T objectPointer)
 {
     pushBack(objectPointer);
 }
 
 template <class __T, int __count>
-void Container<__T, __count>::pushBack(__T* objectPointer)
+void Container<__T, __count>::pushBack(__T objectPointer)
 {
     bool hasCapacity = size() < cap();
     if (!hasCapacity) throw;
@@ -56,13 +57,13 @@ void Container<__T, __count>::pushBack(__T* objectPointer)
 }
 
 template <class __T, int __count>
-__T* Container<__T, __count>::operator[](int index)
+__T& Container<__T, __count>::operator[](int index)
 {
     return getAt(index);
 }
 
 template <class __T, int __count>
-__T* Container<__T, __count>::getAt(int index)
+__T& Container<__T, __count>::getAt(int index)
 {
     if (index >= size()) throw;
     return _array[index];
