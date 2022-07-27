@@ -1,7 +1,6 @@
 #pragma once
 
 #include <stdexcept>
-#include <vector>
 
 #include "arity.h"
 #include "container.h"
