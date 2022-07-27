@@ -27,6 +27,7 @@ add_executable(${PROJECT_NAME}
 
     src/graph/arity.cpp
     src/graph/frame.cpp
+    src/graph/frameHistory.cpp
     src/graph/node.cpp
 
     src/sine/sine.cpp

@@ -6,6 +6,7 @@
 #include "arity.h"
 #include "container.h"
 #include "frame.h"
+#include "frameHistory.h"
 
 /// Base class for all N channel nodes of the audio graph.
 class Node
@@ -45,10 +46,7 @@ protected:
     ///
     Frame sumInputs();
 
-    Frame _current;
-    Frame _last;
-    Frame _next;
-    bool _hasNext;
+    FrameHistory frames;
     int lastComputedClockTime;
     Container<Node*, 500> inputNodes;
     Arity _arityIn;

@@ -9,11 +9,8 @@
 Node::Node(int arityIn, int arityOut) : 
     _arityIn(Arity(arityIn)),
     _arityOut(Arity(arityOut)),
-    _last(Frame(arityOut)),
-    _current(Frame(arityOut)),
-    _next(Frame(arityOut)),
-    _hasNext(false),
-    lastComputedClockTime(-1)
+    lastComputedClockTime(-1),
+    frames(FrameHistory(arityOut))
 {
     
 }
@@ -24,17 +21,17 @@ Node& Node::operator>> (Node &destinationNode)
     return destinationNode;
 }
 
-void Node::next(Frame next) {
-    if (arityOut() != next.arity) {
+void Node::next(Frame n) {
+    if (arityOut() != n.arity) {
         throw std::domain_error("cannot call Node::next(Frame) with mismatched arities");
     }
-    _hasNext = true;
-    _next = next;
+    frames.next(n);
 }
 
 Frame Node::current() {
-    return _current;
+    return frames.current();
 }
+
 int Node::arityIn() {
     return _arityIn.arity;
 }
@@ -53,19 +50,17 @@ void Node::_tick(int currentClockTime)
     if (currentClockTime == lastComputedClockTime) return;
 
     lastComputedClockTime = currentClockTime;
-    if (_hasNext)
+    if (frames.hasNext())
     {   
         tickInputs(currentClockTime);
-        _last    = _current;
-        _current = _next;
-        _hasNext = false;
+        frames.tick();
         return;
     };
 
     tickInputs(currentClockTime);
-    Frame inputFrame = sumInputs();
-    _last    = _current;
-    _current = tick(inputFrame);
+    frames.current(
+        tick( sumInputs() )
+    );
 }
 
 void Node::tickInputs(int currentClockTime) {
