@@ -25,7 +25,7 @@ Node& Node::operator>> (Node &destinationNode)
 }
 
 void Node::next(Frame next) {
-    if (arityOut() != next.arity()) {
+    if (arityOut() != next.arity) {
         throw std::domain_error("cannot call Node::next(Frame) with mismatched arities");
     }
     _hasNext = true;
@@ -36,10 +36,10 @@ Frame Node::current() {
     return _current;
 }
 int Node::arityIn() {
-    return _arityIn.arity();
+    return _arityIn.arity;
 }
 int Node::arityOut() {
-    return _arityOut.arity();
+    return _arityOut.arity;
 }
 
 void Node::addInputNode(Node* inputNode)

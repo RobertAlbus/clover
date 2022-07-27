@@ -14,17 +14,15 @@ Frame::Frame(int _arity) : Arity(_arity) {
     }
 }
 
-Frame::Frame(const Frame& frame) : Arity(frame.arity()) {
-    _arity = frame.arity();
-    
-    for (int i = 0, end = arity(); i < end; ++i)
+Frame::Frame(const Frame& frame) : Arity(frame.arity)  {
+    for (int i = 0; i < arity; ++i)
     {
-        setSampleAtIndex(i, frame.getSampleAtIndex(i));
+        samples[i] = frame.samples[i];
     }
 }
 
 Sample Frame::getSampleAtIndex(int i) const {
-    if (i >= arity()) {
+    if (i >= arity) {
         throw std::domain_error("index out of bounds");
     }
 
@@ -32,7 +30,7 @@ Sample Frame::getSampleAtIndex(int i) const {
 }
 
 void Frame::setSampleAtIndex(int i, Sample s) {
-    if (i >= arity()) {
+    if (i >= arity) {
         throw std::domain_error("index out of bounds");
     }
 
@@ -40,7 +38,7 @@ void Frame::setSampleAtIndex(int i, Sample s) {
 }
 
 Frame Frame::convertArity(int targetArity) const {
-    int sourceArity = arity();
+    int sourceArity = arity;
     
     if (targetArity == sourceArity) return Frame((*this));
 
@@ -92,18 +90,18 @@ bool Frame::supportsConversionTo(int targetArity) const {
             std::begin(supportedTargetArities),
             std::end(supportedTargetArities),
             [&](int i) { 
-                return arity() == i; 
+                return arity == i; 
             }
         );
 }
 
 Frame& operator+= (Frame& frame1, const Frame& frame2) {
     // arity pairity
-    if (frame1.arity() != frame2.arity()) {
-        int targetArity = (static_cast<const Frame>(frame1)).arity();
-        Frame frame2 = frame2.convertArity(frame1.arity());
+    if (frame1.arity != frame2.arity) {
+        int targetArity = (static_cast<const Frame>(frame1)).arity;
+        Frame frame2 = frame2.convertArity(frame1.arity);
     }
-    for (int i = 0, end = frame1.arity(); i < end; i++) {
+    for (int i = 0, end = frame1.arity; i < end; i++) {
         Sample newValue = frame1.getSampleAtIndex(i) + frame2.getSampleAtIndex(i);
         frame1.setSampleAtIndex(i, newValue);
     }

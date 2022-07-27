@@ -3,13 +3,8 @@
 #include "constants.h"
 
 
-Arity::Arity(int _arity) : _arity(_arity) {
+Arity::Arity(int _arity) : arity(_arity) {
     if (MIN_ARITY > _arity || _arity > MAX_ARITY ) {
         throw std::domain_error("Arity(int) must be instantiated with a value between MIN_ARITY and MAX_ARITY. See arity.h");
     }
 };
-
-int Arity::arity() const {
-    return _arity;
-}
-

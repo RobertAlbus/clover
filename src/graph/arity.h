@@ -8,8 +8,5 @@ class Arity
 {
 public:
     Arity(int _arity);
-    int arity() const;
-    
-protected:
-    int _arity;
+    int arity;
 };
