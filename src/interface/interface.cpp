@@ -111,11 +111,11 @@ int Interface::paCallbackMethod(const void *inputBuffer, void *outputBuffer,
     {
         rootNode._tick(clock.tick());
         blackHole._tick(clock.tick());
-        
+
         Frame frame = rootNode.current();
 
-        Sample left = std::clamp((double)frame.getSampleAtIndex(0), -1., 1.);
-        Sample right = std::clamp((double)frame.getSampleAtIndex(1), -1., 1.);
+        Sample left = frame.getSampleAtIndex(0);
+        Sample right = frame.getSampleAtIndex(1);
         
         *out++ = left; 
         *out++ = right; 
