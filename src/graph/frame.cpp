@@ -13,14 +13,16 @@ Frame::Frame(int _arity) : Arity(_arity), samples {0,0}
 
 }
 
-Frame::Frame(const Frame& frame) : Arity(frame.arity)  {
+Frame::Frame(const Frame& frame) : Arity(frame.arity)
+{
     for (int i = 0; i < arity; ++i)
     {
         samples[i] = frame.samples[i];
     }
 }
 
-Sample Frame::getSampleAtIndex(int i) const {
+Sample Frame::getSampleAtIndex(int i) const
+{
     if (i >= arity) {
         throw std::domain_error("index out of bounds");
     }
@@ -28,7 +30,8 @@ Sample Frame::getSampleAtIndex(int i) const {
     return samples[i];
 }
 
-void Frame::setSampleAtIndex(int i, Sample s) {
+void Frame::setSampleAtIndex(int i, Sample s)
+{
     if (i >= arity) {
         throw std::domain_error("index out of bounds");
     }
@@ -36,7 +39,8 @@ void Frame::setSampleAtIndex(int i, Sample s) {
     samples[i] = s;
 }
 
-Frame Frame::convertArity(int targetArity) const {
+Frame Frame::convertArity(int targetArity) const
+{
     int sourceArity = arity;
     
     if (targetArity == sourceArity) return Frame((*this));
@@ -55,7 +59,8 @@ Frame Frame::convertArity(int targetArity) const {
 
     Frame newFrame(targetArity);
     
-    if (sourceArity == 2 && targetArity == 1) {
+    if (sourceArity == 2 && targetArity == 1)
+    {
         newFrame.setSampleAtIndex(
             0,
             getSampleAtIndex(0)
@@ -63,7 +68,8 @@ Frame Frame::convertArity(int targetArity) const {
             getSampleAtIndex(1)
         );
     }
-    else if (sourceArity == 1 && targetArity == 2) {
+    else if (sourceArity == 1 && targetArity == 2)
+    {
         // halve the power of each channel to maintain total signal power parity
         // TODO: this might be annoying and confusing though! fix it.
         newFrame.setSampleAtIndex(0, getSampleAtIndex(0) * 0.5);
@@ -73,7 +79,8 @@ Frame Frame::convertArity(int targetArity) const {
     return newFrame;
 }
 
-bool Frame::supportsConversionTo(int targetArity) const {
+bool Frame::supportsConversionTo(int targetArity) const
+{
     int supportedSourceArities[] = {1, 2};
     int supportedTargetArities[] = {1, 2};
     
@@ -94,7 +101,8 @@ bool Frame::supportsConversionTo(int targetArity) const {
         );
 }
 
-Frame& operator+= (Frame& frame1, const Frame& frame2) {
+Frame& operator+= (Frame& frame1, const Frame& frame2)
+{
     // arity pairity
     if (frame1.arity != frame2.arity) {
         int targetArity = (static_cast<const Frame>(frame1)).arity;
