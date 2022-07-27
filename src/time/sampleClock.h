@@ -1,6 +1,7 @@
 #pragma once
-#include <vector>
 #include <functional>
+
+#include "container.h"
 
 typedef std::function<void(int)> ClockCallbackFn;
 
@@ -14,5 +15,5 @@ public:
 
 private:
     static int _currentSample;
-    static std::vector<ClockCallbackFn> callbacks;
+    static Container<ClockCallbackFn, 10> callbacks;
 };

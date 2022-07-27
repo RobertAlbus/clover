@@ -1,6 +1,8 @@
-#include "constants.h"
-#include "sampleClock.h"
 #include <stdio.h>
+
+#include "constants.h"
+#include "container.h"
+#include "sampleClock.h"
 
 
 SampleClock::SampleClock()
@@ -10,11 +12,10 @@ SampleClock::SampleClock()
 
 int SampleClock::tick()
 {
-
     _currentSample++;
-    for (auto& callback : callbacks)
+    for (int i = 0, end = callbacks.size(); i < end; i++)
     {
-        callback(_currentSample);
+        callbacks[i](_currentSample);
     }
     return _currentSample;
 }
@@ -26,8 +27,8 @@ int SampleClock::currentSample()
 
 void SampleClock::registerTickCallback(ClockCallbackFn fn)
 {
-    callbacks.emplace_back(fn);
+    callbacks << fn;
 }
 
 int SampleClock::_currentSample;
-std::vector<ClockCallbackFn> SampleClock::callbacks;
+Container<ClockCallbackFn, 10> SampleClock::callbacks;
