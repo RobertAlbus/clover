@@ -50,6 +50,15 @@ int main(void)
     
     lfo >> interface.blackHole;
 
+    int testQuantity = 250;
+    testQuantity -= 1; // 0 based indexing har har
+    Sine* sineTest[testQuantity];
+    for (int i = 0; i < testQuantity; i++)
+    {
+        sineTest[i] = new Sine();
+        *(sineTest[i]) >> interface.blackHole;
+    }
+
 
     clock.registerTickCallback([&](int currentTime)->void
     {   
