@@ -36,7 +36,7 @@ template <class __T, int __count>
 Container<__T, __count>::Container() : 
     _capacity(__count),
     _nextAvailable(0),
-    _array({})
+    _array {}
 {
 
 }
