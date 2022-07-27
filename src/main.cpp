@@ -40,17 +40,23 @@ int main(void)
     SampleClock clock;
     Interface interface;
     Sine sine;
+    float baseSineFreq = 50.;
+
 
     sine >> interface.rootNode;
 
+    Sine lfoModulator;
+    lfoModulator >> interface.blackHole;
+    lfoModulator.freq(120.4);
+    float lfoModAmount = 2130;
+
     Sine lfo;
-    lfo.freq(700);
-    lfo.phase(0.);
+    float lfoBaseFreq = 666;
     float lfoAmount = 300;
     
     lfo >> interface.blackHole;
 
-    int testQuantity = 290;
+    int testQuantity = 250;
     testQuantity -= 1; // 0 based indexing har har
     Sine* sineTest[testQuantity];
     for (int i = 0; i < testQuantity; i++)
@@ -63,7 +69,6 @@ int main(void)
     clock.registerTickCallback([&](int currentTime)->void
     {   
 
-        float baseSineFreq = 500.;
         float currentSecond = time.currentUnit(SAMPLE_RATE);
         if (time.currentUnit(1) == 1) {
             printf("\n\n%f\n", 0);
@@ -72,13 +77,11 @@ int main(void)
         if (fmod((double)currentSecond,1.) == 0.0) {
             printf("%f\n", currentSecond);
             lfo.freq(837.);
-        } else if (fmod((double)currentSecond,1.) == 0.5) {
-            printf("%f\n", currentSecond);
-            lfo.freq(655.);
         }
 
+        lfo.freq( (lfoModulator.current().getSampleAtIndex(0) * lfoModAmount) + lfoBaseFreq);
         sine.freq(
-            baseSineFreq + ( fmul(lfoAmount, lfo.current().getSampleAtIndex(0)) )
+            baseSineFreq + ( lfoAmount * lfo.current().getSampleAtIndex(0) )
         );
 
         if (DEBUG_PRINT) {
