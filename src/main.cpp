@@ -46,6 +46,7 @@ int main(void)
     Sine lfo;
     lfo.freq(700);
     lfo.phase(0.);
+    float lfoAmount = 300;
     
     lfo >> interface.blackHole;
 
@@ -58,17 +59,18 @@ int main(void)
             float currentSecond = time.currentUnit(SAMPLE_RATE);
             if (time.currentUnit(1) == 1) {
                 printf("\n\n%f\n", 0);
+                lfo.freq(837.);
             }
             if (fmod((double)currentSecond,1.) == 0.0) {
                 printf("%f\n", currentSecond);
-                lfo.freq(700.);
+                lfo.freq(837.);
             } else if (fmod((double)currentSecond,1.) == 0.5) {
                 printf("%f\n", currentSecond);
-                lfo.freq(600.);
+                lfo.freq(655.);
             }
 
             sine.freq(
-                baseSineFreq + ( fmul(100., lfo.current().getSampleAtIndex(0)) )
+                baseSineFreq + ( fmul(lfoAmount, lfo.current().getSampleAtIndex(0)) )
             );
 
             if (DEBUG_PRINT) {
