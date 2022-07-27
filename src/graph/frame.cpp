@@ -23,18 +23,18 @@ Frame::Frame(const Frame& frame) : Arity(frame.arity)
 
 Sample Frame::getSampleAtIndex(int i) const
 {
-    if (i >= arity) {
-        throw std::domain_error("index out of bounds");
-    }
+    // if (i >= arity) {
+    //     throw std::domain_error("index out of bounds");
+    // }
 
     return samples[i];
 }
 
 void Frame::setSampleAtIndex(int i, Sample s)
 {
-    if (i >= arity) {
-        throw std::domain_error("index out of bounds");
-    }
+    // if (i >= arity) {
+    //     throw std::domain_error("index out of bounds");
+    // }
 
     samples[i] = s;
 }
