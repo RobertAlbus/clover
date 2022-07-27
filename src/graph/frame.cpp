@@ -13,6 +13,16 @@ Frame::Frame(int _arity) : Arity(_arity), samples {0,0}
 
 }
 
+Frame::Frame(Sample s1, Sample s2) : Arity(2), samples {s1, s2}
+{
+
+}
+
+Frame::Frame(Sample s) : Arity(1), samples {s, 0.}
+{
+
+}
+
 Frame::Frame(const Frame& frame) : Arity(frame.arity)
 {
     for (int i = 0; i < arity; ++i)
@@ -43,19 +53,20 @@ Frame Frame::convertArity(int targetArity) const
 {
     int sourceArity = arity;
     
-    if (targetArity == sourceArity) return Frame((*this));
+    if (targetArity == sourceArity) return (*this);
 
-    if (!supportsConversionTo(targetArity)) 
-    {
-        std::string errorMsg;
-
-        errorMsg.append("no implementation for converting from Frame arity ");
-        errorMsg.append(std::to_string(sourceArity));
-        errorMsg.append(" to Frame arity ");
-        errorMsg.append(std::to_string(targetArity));
-
-        throw std::domain_error(errorMsg);
-    }
+    // if (sourceArity == 2 && targetArity == 1)
+    // {
+    //     return Frame(getSampleAtIndex(0) + getSampleAtIndex(1));
+    // }
+    // else if (sourceArity == 1 && targetArity == 2)
+    // {
+    //     // halve the power of each channel to maintain total signal power value
+    //     return Frame(
+    //         getSampleAtIndex(0) * .5,
+    //         getSampleAtIndex(1) * .5
+    //     );
+    // }
 
     Frame newFrame(targetArity);
     
@@ -77,28 +88,16 @@ Frame Frame::convertArity(int targetArity) const
     }
 
     return newFrame;
-}
 
-bool Frame::supportsConversionTo(int targetArity) const
-{
-    int supportedSourceArities[] = {1, 2};
-    int supportedTargetArities[] = {1, 2};
     
-    return
-        std::any_of(
-            std::begin(supportedSourceArities),
-            std::end(supportedSourceArities),
-            [&](int i) { 
-                return targetArity  == i; 
-            }
-        ) &&
-        std::any_of(
-            std::begin(supportedTargetArities),
-            std::end(supportedTargetArities),
-            [&](int i) { 
-                return arity == i; 
-            }
-        );
+    std::string errorMsg;
+
+    errorMsg.append("no implementation for converting from Frame arity ");
+    errorMsg.append(std::to_string(sourceArity));
+    errorMsg.append(" to Frame arity ");
+    errorMsg.append(std::to_string(targetArity));
+
+    throw std::domain_error(errorMsg);
 }
 
 Frame& operator+= (Frame& frame1, const Frame& frame2)

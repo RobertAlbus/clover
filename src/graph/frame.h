@@ -13,6 +13,8 @@ class Frame : public Arity
 {
 public:
     Frame(int _arity);
+    Frame(Sample s1, Sample s2);
+    Frame(Sample s);
     Frame(const Frame& frame);
 
     Sample getSampleAtIndex(int i) const;
@@ -23,8 +25,6 @@ public:
     Frame convertArity(int targetArity) const;
 
 private:
-    bool supportsConversionTo(int targetArity) const;
-
     Sample samples[MAX_ARITY];
 };
 
