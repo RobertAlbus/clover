@@ -8,10 +8,9 @@
 #include "frame.h"
 
 
-Frame::Frame(int _arity) : Arity(_arity) {
-    for (int i = 0; i < MAX_ARITY; i++) {
-        samples[i] = 0.;
-    }
+Frame::Frame(int _arity) : Arity(_arity), samples {0,0}
+{
+
 }
 
 Frame::Frame(const Frame& frame) : Arity(frame.arity)  {
