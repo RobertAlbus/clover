@@ -1,10 +1,10 @@
-
 #pragma once
 
 #include <stdexcept>
 #include <vector>
 
 #include "arity.h"
+#include "container.h"
 #include "frame.h"
 
 /// Base class for all N channel nodes of the audio graph.
@@ -50,7 +50,7 @@ protected:
     Frame _next;
     bool _hasNext;
     int lastComputedClockTime;
-    std::vector<Node*> inputNodes;
+    Container<Node, 300> inputNodes;
     Arity _arityIn;
     Arity _arityOut;
 };

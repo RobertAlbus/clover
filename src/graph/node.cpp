@@ -1,6 +1,5 @@
 
 #include <stdexcept>
-#include <vector>
 
 #include "arity.h"
 #include "frame.h"
@@ -45,7 +44,7 @@ int Node::arityOut() {
 
 void Node::addInputNode(Node* inputNode)
 {
-    inputNodes.emplace_back(inputNode);
+    inputNodes << inputNode;
 }
 
 void Node::_tick(int currentClockTime)
@@ -70,14 +69,16 @@ void Node::_tick(int currentClockTime)
 }
 
 void Node::tickInputs(int currentClockTime) {
-    for(auto& inputNode : inputNodes) {
+    for(int i = 0, end = inputNodes.size(); i < end; i++) {
+        Node* inputNode = inputNodes[i]; 
         inputNode->_tick(currentClockTime);
     }
 }
 
 Frame Node::sumInputs() {
     Frame accumulationFrame(arityIn());
-    for(auto& inputNode : inputNodes) {
+    for(int i = 0, end = inputNodes.size(); i < end; i++) {
+        Node* inputNode = inputNodes.getAt(i); 
         Frame inputNodeFrame = inputNode->current();
         Frame arityMatchedFrame = inputNodeFrame.convertArity(arityIn());
 
