@@ -52,9 +52,9 @@ float Sine::phase() {
 
 float Sine::lerp() {
     int truncatedIndex = static_cast<int>(_phase);
-    int nextIndex = truncatedIndex + 1;
+    int nextIndex = (truncatedIndex + 1);
     if (nextIndex >= TABLE_SIZE) {
-        nextIndex -= TABLE_SIZE;
+        nextIndex %= TABLE_SIZE;
     }
 
     float nextIndexWeight = _phase - static_cast<float>(truncatedIndex);
