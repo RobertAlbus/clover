@@ -9,6 +9,7 @@
 #include "constants.h"
 #include "interface.h"
 #include "sine.h"
+#include "square.h"
 #include "time.h"
 
 
@@ -42,6 +43,8 @@ int main(void)
     Sine sine;
     float baseSineFreq = 50.;
 
+    Square sq;
+    // sq >> sine; // doesn't work, output and input arities are not matched
 
     sine >> interface.rootNode;
 
