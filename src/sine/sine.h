@@ -20,7 +20,7 @@ protected:
 
     float lerp();
 
-    Sample wavetable[TABLE_SIZE];
+    std::array<Sample, TABLE_SIZE> wavetable;
 private:
     float _phase;
     float _phaseIncrement;

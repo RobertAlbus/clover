@@ -4,6 +4,7 @@
 #include "constants.h"
 #include "node.h"
 #include "sine.h"
+#include "wavetable.h"
 
 #define TABLE_SIZE   (200)
 
@@ -12,6 +13,8 @@ Sine::Sine() : Node(0,2)
     freq(100);
     phase(0);
     /* initialise sinusoidal wavetable */
+    auto wt = Wavetable::Generate::Sine<TABLE_SIZE>();
+    std::swap(wt, wavetable); 
     for( int i=0; i<TABLE_SIZE; i++ )
     {
         wavetable[i] = (float) sin( ((double)i/(double)TABLE_SIZE) * M_PI * 2. );
