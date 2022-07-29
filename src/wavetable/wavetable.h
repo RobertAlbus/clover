@@ -33,7 +33,7 @@ namespace Wavetable {
 
         // Generate a wavetable for a square wave.
         template <int __tableSize = default_table_size>
-        std::array<Sample, __tableSize> Square(int tableSize) {
+        std::array<Sample, __tableSize> Square() {
             return Pulse<__tableSize>(0.5);
         }
 
