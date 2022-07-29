@@ -1,24 +1,70 @@
 #pragma once
 
+#include "wavetable.h"
+
 #define TABLE_SIZE   (200)
 
-class Sine : public Node
+class Sine : public Node<0,2>
 {
 public:
-    Sine();
-
-    void freq(float freq);
-    float freq();
+    Sine() : Node<0,2>()
+    {
+        freq(100);
+        phase(0);
+        /* initialise sinusoidal wavetable */
+        auto wt = Wavetable::Generate::Sine<TABLE_SIZE>();
+        std::swap(wt, wavetable); 
+    }
 
     // Assign waveform phase with value between 0.0 and 1.0
-    void phase(float phase);
-    // Get waveform phase as value between 0.0 and 1.0
-    float phase();
+    void phase(float p) {
+        p = fmod(fabs(p), 1.);
+        _phase = p * TABLE_SIZE *_phaseIncrement;
+    }
+
+    // Set waveform phase as value between 0.0 and 1.0
+    float phase() {
+        return _phase / TABLE_SIZE;
+    }
+
+    void freq(float freq) {
+        freq = std::max(freq, (float)0.);
+        _readonlyFreq = freq;
+        _phaseIncrement = freq * ((float)TABLE_SIZE) / ((float)SAMPLE_RATE);
+    }
+
+    float freq() {
+        return _readonlyFreq;
+    }
+
+    float lerp() {
+        int truncatedIndex = static_cast<int>(_phase);
+        int nextIndex = (truncatedIndex + 1);
+        if (nextIndex >= TABLE_SIZE) {
+            nextIndex %= TABLE_SIZE;
+        }
+
+        float nextIndexWeight = _phase - static_cast<float>(truncatedIndex);
+        float truncatedIndexWeight = 1. - nextIndexWeight;
+
+        return truncatedIndexWeight * wavetable[truncatedIndex] + 
+            nextIndexWeight * wavetable[nextIndex];
+    }
 
 protected:
-    Frame tick(Frame input);
+    Frame<2> tick(Frame<0> input)
+    {
+        Sample value = lerp();
 
-    float lerp();
+        _phase = fmod(_phase + _phaseIncrement, TABLE_SIZE);
+
+        Frame<2> f;
+
+        f.setSampleAtIndex(0, value);
+        f.setSampleAtIndex(1, value);
+
+        return f;
+    }
 
     std::array<Sample, TABLE_SIZE> wavetable;
 private:

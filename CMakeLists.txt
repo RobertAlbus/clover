@@ -27,14 +27,6 @@ add_executable(${PROJECT_NAME}
     src/main.cpp
 
     src/interface/interface.cpp    
-    src/interface/rootNode.cpp    
-
-    src/graph/arity.cpp
-    src/graph/frame.cpp
-    src/graph/frameHistory.cpp
-    src/graph/node.cpp
-
-    src/sine/sine.cpp
 
     src/time/musicTime.cpp
     src/time/sampleClock.cpp

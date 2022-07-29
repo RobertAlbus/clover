@@ -2,23 +2,40 @@
 
 #include "frame.h"
 
+template<int __arity>
 class FrameHistory
 {
 public:
-    FrameHistory(int arity);
-    Frame& last();
-    Frame& current();
+    FrameHistory() :
+        _lastIndex(0),
+        _currentIndex(1)
+    {
 
-    void current(Frame f);
-    void next(Frame f);
+    }
 
-    void tick();
-    bool hasNext();
+    Frame<__arity>& last()
+    {
+        return frames[_lastIndex];
+    }
+
+    Frame<__arity>& current()
+    {
+        return frames[_currentIndex];
+    }
+
+    void current(Frame<__arity> f)
+    {
+        tick();
+        frames[_currentIndex] = f;
+    }
+
+    void tick()
+    {
+        _lastIndex++;    _lastIndex    %= 2;
+    }
 
 private:
-    Frame frames[3];
-    bool _hasNext;
+    std::array<Frame<__arity>, 2> frames;
     int _lastIndex;
     int _currentIndex;
-    int _nextIndex; 
 };
