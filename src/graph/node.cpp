@@ -7,10 +7,10 @@
 
 
 Node::Node(int arityIn, int arityOut) : 
-    _arityIn(Arity(arityIn)),
-    _arityOut(Arity(arityOut)),
+    _arityIn(arityIn),
+    _arityOut(arityOut),
     lastComputedClockTime(-1),
-    frames(FrameHistory(arityOut))
+    frames(arityOut)
 {
     
 }
