@@ -5,10 +5,10 @@
 
 #define TABLE_SIZE   (200)
 
-class Square : public Node<0,1>
+class Square : public Node<0,2>
 {
 public:
-    Square() : Node<0,1>()
+    Square() : Node<0,2>()
     {
         freq(100);
         phase(0);
@@ -53,13 +53,13 @@ public:
     }
 
 protected:
-    Frame<1> tick(Frame<0> input)
+    Frame<2> tick(Frame<0> input)
     {
         Sample value = lerp();
 
         _phase = fmod(_phase + _phaseIncrement, TABLE_SIZE);
 
-        Frame<1> f;
+        Frame<2> f;
 
         f.setSampleAtIndex(0, value);
         f.setSampleAtIndex(1, value);
