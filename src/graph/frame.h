@@ -59,3 +59,14 @@ Frame<__arity>& operator+= (Frame<__arity>& frame1, const Frame<__arity>& frame2
 
     return frame1;
 }
+
+template <int __arity>
+Frame<__arity>& operator*= (Frame<__arity>& frame, float gain)
+{
+
+    for (int i = 0, end = frame.arity; i < end; i++) {
+        frame.setSampleAtIndex(i, frame.getSampleAtIndex(i) * gain);
+    }
+
+    return frame;
+}

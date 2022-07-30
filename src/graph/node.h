@@ -48,11 +48,13 @@ template<int __arityInput, int __arityOutput>
 class Node : public ArityInput<__arityInput>, public ArityOutput<__arityOutput>
 {
 public:
+    float gain;
     Node() :
         ArityInput<__arityInput>(),
         ArityOutput<__arityOutput>(),
         lastComputedClockTime(-1),
-        frames()
+        frames(),
+        gain(1.)
     {
 
     }
@@ -84,7 +86,7 @@ public:
 
         tickInputs(currentClockTime);
         frames.current(
-            tick( sumInputs() )
+            tick( sumInputs() ) 
         );
     }
 protected:
@@ -111,7 +113,7 @@ protected:
             auto inputNode = (Node<0,__arityInput>*) inputNodes.getAt(i); 
             accumulationFrame += inputNode->current();
         }
-
+        accumulationFrame *= gain;
         return accumulationFrame;
     }
 
