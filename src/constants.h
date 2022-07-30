@@ -6,5 +6,6 @@ constexpr size_t MAX_ARITY = 2;
 constexpr size_t MIN_ARITY = 0;
 constexpr double PI = 3.14159265;
 constexpr bool DEBUG_PRINT = false;
+constexpr int default_table_size = 200;
 
 typedef float Sample;

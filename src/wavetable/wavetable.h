@@ -1,10 +1,10 @@
+#pragma once
 #include <array>
 #include <cmath>
 #include <math.h>
 
 namespace Wavetable {
     namespace Generate {
-        constexpr int default_table_size = 200;
         // Generate a wavetable for a sine wave.
 
         template <int __tableSize = default_table_size>
