@@ -77,9 +77,6 @@ int main(void)
 
         float currentSecond = time.currentUnit(SAMPLE_RATE);
         
-        // it seems that we're counting twice as fast as we should be
-        printf("%f\n", currentSecond); 
-
         if (time.currentUnit(1) == 1) {
             printf("\n\n%f\n", 0);
         }

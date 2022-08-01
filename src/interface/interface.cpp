@@ -109,8 +109,9 @@ int Interface::paCallbackMethod(const void *inputBuffer, void *outputBuffer,
 
     for( i=0; i<framesPerBuffer; i++ )
     {
-        rootNode._tick(clock.tick());
-        blackHole._tick(clock.tick());
+        int currentSample = clock.tick();
+        rootNode._tick(currentSample);
+        blackHole._tick(currentSample);
 
         *out++ = rootNode.frames.current[0];; 
         *out++ = rootNode.frames.current[1];; 
