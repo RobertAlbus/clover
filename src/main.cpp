@@ -75,11 +75,9 @@ int main(void)
         float currentSecond = time.currentUnit(SAMPLE_RATE);
         if (time.currentUnit(1) == 1) {
             printf("\n\n%f\n", 0);
-            lfo.freq(837.);
         }
         if (fmod((double)currentSecond,1.) == 0.0) {
             printf("%f\n", currentSecond);
-            lfo.freq(837.);
         }
 
 
