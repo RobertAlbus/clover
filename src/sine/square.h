@@ -1,18 +1,19 @@
 #pragma once
 
+#include "node.h"
 #include "wavetable.h"
 
 #define TABLE_SIZE   (200)
 
-class Sine : public Node<0,2>
+class Square : public Node<0,2>
 {
 public:
-    Sine() : Node<0,2>()
+    Square() : Node<0,2>()
     {
         freq(100);
         phase(0);
         /* initialise sinusoidal wavetable */
-        auto wt = Wavetable::Generate::Sine<TABLE_SIZE>();
+        auto wt = Wavetable::Generate::Square<TABLE_SIZE>();
         std::swap(wt, wavetable); 
     }
 

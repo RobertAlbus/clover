@@ -1,5 +1,5 @@
 
-#define NUM_SECONDS   (5)
+#define NUM_SECONDS   (90)
 #define FRAMES_PER_BUFFER  (64)
 
 #include <stdio.h>
@@ -9,6 +9,7 @@
 #include "constants.h"
 #include "interface.h"
 #include "sine.h"
+#include "square.h"
 #include "time.h"
 
 
@@ -40,14 +41,17 @@ int main(void)
     SampleClock clock;
     Interface interface;
     Sine sine;
-    float baseSineFreq = 50.;
+    float baseSineFreq = 202.;
 
+    Square sq;
+    // sq >> sine; // doesn't work, output and input arities are not matched
 
     sine >> interface.rootNode;
 
     Sine lfoModulator;
     lfoModulator >> interface.blackHole;
-    lfoModulator.freq(120.4);
+    float lfoModFreqBase = 238.4;
+    lfoModulator.freq(lfoModFreqBase);
     float lfoModAmount = 2130;
 
     Sine lfo;
@@ -56,8 +60,7 @@ int main(void)
     
     lfo >> interface.blackHole;
 
-    int testQuantity = 250;
-    testQuantity -= 1; // 0 based indexing har har
+    int testQuantity = 0;
     Sine* sineTest[testQuantity];
     for (int i = 0; i < testQuantity; i++)
     {
@@ -79,10 +82,17 @@ int main(void)
             lfo.freq(837.);
         }
 
-        lfo.freq( (lfoModulator.current().getSampleAtIndex(0) * lfoModAmount) + lfoBaseFreq);
+
+        lfoModulator.freq(lfoModFreqBase * (sine.current().getSampleAtIndex(0) * -0.15));
+
+        // WOAHJ
+        // lfoModulator.freq(lfoModFreqBase * (sine.current().getSampleAtIndex(0) * -0.15) * lfoModulator.current().getSampleAtIndex(0));
+        
+        lfo.freq( (lfoModulator.current().getSampleAtIndex(0) * lfoModAmount) + lfoBaseFreq );
         sine.freq(
             baseSineFreq + ( lfoAmount * lfo.current().getSampleAtIndex(0) )
         );
+
 
         if (DEBUG_PRINT) {
             printf("%f - %f - %d\n", 
@@ -92,6 +102,25 @@ int main(void)
             );
         }
 
+        if (fmod((double)currentSecond,10.) == 0.0) {
+            lfoModFreqBase = 238.4; 
+            lfoModAmount = 2130;
+
+            lfoBaseFreq = 666;
+            lfoAmount = 300;
+        } else if (fmod((double)currentSecond,10.) == 7.0)
+        {
+            lfoModFreqBase = 119.4;
+            lfoModAmount  = (lfoModAmount / 5.) * 6.;
+            lfoBaseFreq = (lfoBaseFreq / 5.) * 6.;
+            lfoAmount = (lfoAmount / 5.) * 6.;
+        } else if (fmod((double)currentSecond,10.) == 4.5)
+        {
+            lfoModFreqBase = lfoModFreqBase * 1.1;
+            lfoModAmount  = (lfoModAmount / 6.) * 13.;
+            lfoBaseFreq = (lfoBaseFreq / 6.) * 7.;
+            lfoAmount = ((lfoAmount / 5.) * 7.) + lfoModAmount * 0.25;
+        }
     });
 
 
