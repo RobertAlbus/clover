@@ -112,13 +112,8 @@ int Interface::paCallbackMethod(const void *inputBuffer, void *outputBuffer,
         rootNode._tick(clock.tick());
         blackHole._tick(clock.tick());
 
-        Frame frame = rootNode.current();
-
-        Sample left = frame.getSampleAtIndex(0);
-        Sample right = frame.getSampleAtIndex(1);
-        
-        *out++ = left; 
-        *out++ = right; 
+        *out++ = rootNode.frames.current[0];; 
+        *out++ = rootNode.frames.current[1];; 
     }
 
     return paContinue;

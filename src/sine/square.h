@@ -59,10 +59,7 @@ protected:
 
         _phase = fmod(_phase + _phaseIncrement, TABLE_SIZE);
 
-        Frame<2> f;
-
-        f.setSampleAtIndex(0, value);
-        f.setSampleAtIndex(1, value);
+        Frame<2> f {value, value};
 
         return f;
     }

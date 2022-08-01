@@ -7,7 +7,7 @@ namespace Wavetable {
     namespace Generate {
         // Generate a wavetable for a sine wave.
 
-        template <int __tableSize = default_table_size>
+        template<size_t __tableSize = default_table_size>
         std::array<Sample, __tableSize> Sine() {
             std::array<Sample, __tableSize> wavetable;
             for( int i=0; i<__tableSize; i++ )
@@ -20,7 +20,7 @@ namespace Wavetable {
 
         // Generate a wavetable for a pulse wave.
         // pulseWidth 0..1 inclusive
-        template <int __tableSize = default_table_size>
+        template<size_t __tableSize = default_table_size>
         std::array<Sample, __tableSize> Pulse(float pulseWidth) {
             std::array<Sample, __tableSize> wavetable;
             for( int i=0; i < __tableSize; i++ )
@@ -32,13 +32,13 @@ namespace Wavetable {
         }
 
         // Generate a wavetable for a square wave.
-        template <int __tableSize = default_table_size>
+        template<size_t __tableSize = default_table_size>
         std::array<Sample, __tableSize> Square() {
             return Pulse<__tableSize>(0.5);
         }
 
         // Generate a wavetable for a saw wave.
-        template <int __tableSize = default_table_size>
+        template<size_t __tableSize = default_table_size>
         std::array<Sample, __tableSize> Saw() {
             std::array<Sample, __tableSize> wavetable;
             double increment = 2. / (double) __tableSize;
@@ -51,14 +51,14 @@ namespace Wavetable {
         }
 
         // Generate a wavetable for a triangle wave.
-        template <int __tableSize = default_table_size>
+        template<size_t __tableSize = default_table_size>
         std::array<Sample, __tableSize> Tri(int tableSize) {
             std::array<Sample, 5> lerpTable = {0,1,0,-1,0};
             return LerpTable<__tableSize, 5>(tableSize, lerpTable);
         }
 
 
-        template <int __tableSize = default_table_size, int __lerpTableSize>
+        template<size_t __tableSize = default_table_size, int __lerpTableSize>
         std::array<Sample, __tableSize> LerpTable(int tableSize, std::array<float, __lerpTableSize> rawTable) {
             double scaleFactor = (double)__tableSize / (double)__lerpTableSize;
 
