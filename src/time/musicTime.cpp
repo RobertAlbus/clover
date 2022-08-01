@@ -1,43 +1,43 @@
 #include "constants.h"
 #include "musicTime.h"
 
-Time::Time(double bpm) :
+Time::Time(float bpm) :
     bpm(bpm),
     bps(bpm/60.)
 {
     initMusicTime();
 };
 
-double Time::currentUnit(int samplesPerUnit)
+float Time::currentUnit(int samplesPerUnit)
 {
-    return (double)sampleClock.currentSample() / (double)samplesPerUnit;
+    return (float)sampleClock.currentSample() / (float)samplesPerUnit;
 }
 
-double Time::currentQuat()
+float Time::currentQuat()
 {
     return currentUnit(quat);
 }
 
-double Time::currentTrip()
+float Time::currentTrip()
 {
     return currentUnit(trip);
 }
 
-double Time::currentBeat()
+float Time::currentBeat()
 {
     return currentUnit(beat);
 }
 
-double Time::currentBar()
+float Time::currentBar()
 {
     return currentUnit(bar);
 }
 
 
 void Time::initMusicTime() {
-    double beatsPerSecond = bpm/60;
+    float beatsPerSecond = bpm/60;
 
-    beat = int((double)SAMPLE_RATE / beatsPerSecond);
+    beat = int((float)SAMPLE_RATE / beatsPerSecond);
     quat = beat / 4;
     trip = beat / 3;
     bar  = beat * 4;

@@ -4,16 +4,16 @@
 class Time
 {
 public:
-    Time(double bpm);
+    Time(float bpm);
 
-    double currentQuat();
-    double currentTrip();
-    double currentBeat();
-    double currentBar();
-    double currentUnit(int unitInSamples);
+    float currentQuat();
+    float currentTrip();
+    float currentBeat();
+    float currentBar();
+    float currentUnit(int unitInSamples);
 
-    double bpm;
-    double bps;
+    float bpm;
+    float bps;
     int quat;
     int trip;
     int beat;

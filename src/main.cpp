@@ -80,7 +80,7 @@ int main(void)
         if (time.currentUnit(1) == 1) {
             printf("\n\n%f\n", 0);
         }
-        if (fmod((double)currentSecond,1.) == 0.0) {
+        if (fmod(currentSecond,1.) == 0.0) {
             printf("%f\n", currentSecond);
         }
 
