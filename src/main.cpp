@@ -1,9 +1,12 @@
 
-#define NUM_SECONDS   (90)
+#define NUM_SECONDS (10)
 #define FRAMES_PER_BUFFER  (64)
 
-#include <stdio.h>
+#include <chrono>
 #include <math.h>
+#include <stdio.h>
+#include <thread>
+
 #include "portaudio.h"
 
 #include "constants.h"
@@ -73,6 +76,10 @@ int main(void)
     {   
 
         float currentSecond = time.currentUnit(SAMPLE_RATE);
+        
+        // it seems that we're counting twice as fast as we should be
+        printf("%f\n", currentSecond); 
+
         if (time.currentUnit(1) == 1) {
             printf("\n\n%f\n", 0);
         }
@@ -130,8 +137,7 @@ int main(void)
     
     // TODO: need a way to determine the composition length but this will do for now.
     // I should be able to compute this value once I have composition-level utilities.
-    // WEIRD for some reason it is running twice as long as specified
-    Pa_Sleep(NUM_SECONDS * 1000);
+    std::this_thread::sleep_for(std::chrono::seconds(NUM_SECONDS));
 
 
     interface.stop();
