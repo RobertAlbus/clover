@@ -83,21 +83,21 @@ int main(void)
         }
 
 
-        lfoModulator.freq(lfoModFreqBase * (sine.current().getSampleAtIndex(0) * -0.15));
+        lfoModulator.freq(lfoModFreqBase * (sine.frames.current[0] * -0.15));
 
         // WOAHJ
-        // lfoModulator.freq(lfoModFreqBase * (sine.current().getSampleAtIndex(0) * -0.15) * lfoModulator.current().getSampleAtIndex(0));
+        // lfoModulator.freq(lfoModFreqBase * (sine.frames.current[0] * -0.15) * lfoModulator.frames.current[0]);
         
-        lfo.freq( (lfoModulator.current().getSampleAtIndex(0) * lfoModAmount) + lfoBaseFreq );
+        lfo.freq( (lfoModulator.frames.current[0] * lfoModAmount) + lfoBaseFreq );
         sine.freq(
-            baseSineFreq + ( lfoAmount * lfo.current().getSampleAtIndex(0) )
+            baseSineFreq + ( lfoAmount * lfo.frames.current[0] )
         );
 
 
         if (DEBUG_PRINT) {
             printf("%f - %f - %d\n", 
-                interface.rootNode.current().getSampleAtIndex(0),
-                interface.rootNode.current().getSampleAtIndex(1),
+                interface.rootNode.frames.current[0],
+                interface.rootNode.frames.current[1],
                 (int)time.currentUnit(1)
             );
         }

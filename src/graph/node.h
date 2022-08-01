@@ -2,73 +2,51 @@
 
 #include <stdexcept>
 
-#include "arity.h"
 #include "container.h"
 #include "frame.h"
 #include "frameHistory.h"
 
 
-template<int __arityInput>
+template<size_t __arity>
 class ArityInput
 {
 public:
-    ArityInput()
-    {
-
-    }
-
-    int arity()
-    {
-        return _arityIn.arity;
-    }
-    Arity<__arityInput> _arityIn;
-
+    ArityInput() : arity(__arity) { }
+    const size_t arity;
 };
 
-template<int __arityOutput>
+template<size_t __arity>
 class ArityOutput
 {
 public:
-    ArityOutput()
-    {
-        
-    }
-    int arity()
-    {
-        return _arityOut.arity;
-    }
-    Arity<__arityOutput> _arityOut;
-
+    ArityOutput() : arity(__arity) { }
+    const size_t arity;
 };
 
 
 
 /// Base class for all N channel nodes of the audio graph.
-template<int __arityInput, int __arityOutput>
+template<size_t __arityInput, size_t __arityOutput>
 class Node : public ArityInput<__arityInput>, public ArityOutput<__arityOutput>
 {
 public:
     float gain;
+    FrameHistory<__arityOutput> frames;
+
     Node() :
         ArityInput<__arityInput>(),
         ArityOutput<__arityOutput>(),
         lastComputedClockTime(-1),
-        frames(),
         gain(1.)
     {
 
     }
 
 
-
     /// User-defined sample processing method with fallback implementation
     //
     virtual Frame<__arityOutput> tick(Frame<__arityInput> input) = 0;
 
-    Frame<__arityOutput> current()
-    {
-        return frames.current();
-    }
 
     void addInputNode(ArityOutput<__arityInput>* inputNode)
     {
@@ -85,8 +63,8 @@ public:
         lastComputedClockTime = currentClockTime;
 
         tickInputs(currentClockTime);
-        frames.current(
-            tick( sumInputs() ) 
+        frames.push(
+            tick( sumInputs() ) *= gain
         );
     }
 protected:
@@ -107,27 +85,24 @@ protected:
     ///
     Frame<__arityInput> sumInputs()
     {
-        Frame<__arityInput> accumulationFrame;
+        Frame<__arityInput> accumulationFrame = {};
         for(int i = 0, end = inputNodes.size(); i < end; i++) {
             // cast to arity <0,__arityInput> because we we only care about the output arity of the input nodes.
             auto inputNode = (Node<0,__arityInput>*) inputNodes.getAt(i); 
-            accumulationFrame += inputNode->current();
+            accumulationFrame += (*inputNode).frames.current;
         }
-        accumulationFrame *= gain;
+        accumulationFrame;
         return accumulationFrame;
     }
 
     Container<ArityOutput<__arityInput>*, 500> inputNodes;
-    FrameHistory<__arityOutput> frames;
     int lastComputedClockTime;
-    Arity<__arityInput> _arityIn;
-    Arity<__arityOutput> _arityOut;
 
 };
 
 /// Add left Node to the right Node.inputNodes
 ///
-template <int X, int Y, int Z>
+template<size_t X, size_t Y, size_t Z>
 Node<Y,Z>& operator>> (Node<X,Y> &sourceNode, Node<Y,Z> &destinationNode)
 {
     destinationNode.addInputNode(&sourceNode);
