@@ -8,9 +8,9 @@ Time::Time(double bpm) :
     initMusicTime();
 };
 
-double Time::currentUnit(int unitInSamples)
+double Time::currentUnit(int samplesPerUnit)
 {
-    return (double)sampleClock.currentSample() / (double)unitInSamples;
+    return (double)sampleClock.currentSample() / (double)samplesPerUnit;
 }
 
 double Time::currentQuat()
