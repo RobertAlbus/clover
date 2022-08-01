@@ -1,6 +1,5 @@
 
 #define NUM_SECONDS (10)
-#define FRAMES_PER_BUFFER  (64)
 
 #include <chrono>
 #include <math.h>
