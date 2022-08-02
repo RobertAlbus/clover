@@ -9,16 +9,32 @@
 
 Interface::Interface() : stream(0)
 {
-
+    
 }
 
-bool Interface::open(PaDeviceIndex index)
+PaError Interface::initialize()
+{
+    return resultValidation(Pa_Initialize());
+}
+
+PaError Interface::resultValidation(PaError error)
+{
+    if (error != paNoError) {
+        fprintf( stderr, "An error occurred while using the portaudio stream\n" );
+        fprintf( stderr, "Error number: %d\n", error );
+        fprintf( stderr, "Error message: %s\n", Pa_GetErrorText( error ) );
+
+    }
+    return error;
+}
+
+PaError Interface::open(PaDeviceIndex index)
 {
     PaStreamParameters outputParameters;
 
     outputParameters.device = index;
     if (outputParameters.device == paNoDevice) {
-        return false;
+        return resultValidation(paNoDevice);
     }
 
     const PaDeviceInfo* pInfo = Pa_GetDeviceInfo(index);
@@ -46,7 +62,7 @@ bool Interface::open(PaDeviceIndex index)
     if (err != paNoError)
     {
         /* Failed to open stream to device !!! */
-        return false;
+        return resultValidation(err);
     }
 
     err = Pa_SetStreamFinishedCallback( stream, &Interface::paStreamFinished );
@@ -56,13 +72,13 @@ bool Interface::open(PaDeviceIndex index)
         Pa_CloseStream( stream );
         stream = 0;
 
-        return false;
+        return resultValidation(err);
     }
 
-    return true;
+    return paNoError;
 }
 
-bool Interface::close()
+PaError Interface::close()
 {
     if (stream == 0)
         return false;
@@ -70,28 +86,18 @@ bool Interface::close()
     PaError err = Pa_CloseStream( stream );
     stream = 0;
 
-    return (err == paNoError);
+    return resultValidation(err);
 }
 
 
-bool Interface::start()
+PaError Interface::start()
 {
-    if (stream == 0)
-        return false;
-
-    PaError err = Pa_StartStream( stream );
-
-    return (err == paNoError);
+    return resultValidation(Pa_StartStream( stream ));
 }
 
-bool Interface::stop()
+PaError Interface::stop()
 {
-    if (stream == 0)
-        return false;
-
-    PaError err = Pa_StopStream( stream );
-
-    return (err == paNoError);
+    return resultValidation(Pa_StopStream( stream ));
 }
 
 /* The instance callback, where we have access to every method/variable in object of class Interface */

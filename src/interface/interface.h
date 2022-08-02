@@ -10,12 +10,14 @@ class Interface
 {
 public:
     Interface();
-    bool open(PaDeviceIndex index);
-    bool close();
-    bool start();
-    bool stop();
+    PaError initialize();
+    PaError open(PaDeviceIndex index);
+    PaError close();
+    PaError start();
+    PaError stop();
 
 private:
+    PaError resultValidation(PaError error);
 /* The instance callback, where we have access to every method/variable in object of class Interface */
     int paCallbackMethod(   const void *inputBuffer, void *outputBuffer,
                         unsigned long framesPerBuffer,

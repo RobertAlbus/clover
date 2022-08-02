@@ -15,33 +15,12 @@
 #include "time.h"
 
 
-class ScopedPaHandler
-{
-public:
-    ScopedPaHandler()
-        : _result(Pa_Initialize())
-    {
-    }
-    ~ScopedPaHandler()
-    {
-        if (_result == paNoError)
-        {
-            Pa_Terminate();
-        }
-    }
-
-    PaError result() const { return _result; }
-
-private:
-    PaError _result;
-};
-
-
 int main(void)
 {
     Time time(120);
     SampleClock clock;
     Interface interface;
+
     Sine sine;
     float baseSineFreq = 202.;
 
@@ -125,30 +104,14 @@ int main(void)
     });
 
 
-    ScopedPaHandler paInit;
-    if( paInit.result() != paNoError ) goto error;
-
-    if (!interface.open(Pa_GetDefaultOutputDevice())) goto done;
-    if (!interface.start()) goto close;
+    if (interface.initialize() != paNoError) return 1;
+    if (interface.open(Pa_GetDefaultOutputDevice()) != paNoError ) return 1;
+    if (interface.start() != paNoError ) {interface.close(); return 1;}
     
     // TODO: need a way to determine the composition length but this will do for now.
     // I should be able to compute this value once I have composition-level utilities.
     std::this_thread::sleep_for(std::chrono::seconds(NUM_SECONDS));
 
-
     interface.stop();
-
-close:
-    interface.close();
-    goto done;
-
-done:
-    printf("Test finished.\n");
     return paNoError;
-
-error:
-    fprintf( stderr, "An error occurred while using the portaudio stream\n" );
-    fprintf( stderr, "Error number: %d\n", paInit.result() );
-    fprintf( stderr, "Error message: %s\n", Pa_GetErrorText( paInit.result() ) );
-    return 1;
 }
