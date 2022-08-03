@@ -17,7 +17,7 @@ int SampleClock::tick()
     {
         callbacks[i](_currentSample);
     }
-    return _currentSample;
+    return currentSample();
 }
 
 int SampleClock::currentSample()

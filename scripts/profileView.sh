@@ -1,3 +1,3 @@
 #!/bin/bash
 
-pprof -gv ./build/TryPort test.prof;
+pprof -gv ./build/Clover test.prof;
