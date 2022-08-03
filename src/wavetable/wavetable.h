@@ -7,8 +7,31 @@
 
 namespace Wavetable {
     namespace Generate {
-        // Generate a wavetable for a sine wave.
 
+        // linear interpolation to create a larger wavetable from a smaller wavetable
+        // check Wavetable::Generate::Tri to see it in use
+        template<size_t __tableSize, size_t __lerpTableSize>
+        std::array<Sample, __tableSize> LerpTable(std::array<float, __lerpTableSize> rawTable) {
+            double scaleFactor = (double)__tableSize / (double)__lerpTableSize;
+
+            std::array<Sample, __tableSize> wavetable;
+            for( int i=0; i < __tableSize; i++ )
+            {
+                double scaledIndex = i/scaleFactor;
+                int truncatedIndex = (int)scaledIndex;
+                int nextIndex = truncatedIndex + 1;
+                double weight =  scaledIndex - truncatedIndex;
+
+                wavetable[i] = std::lerp(
+                    rawTable[truncatedIndex],
+                    rawTable[nextIndex],
+                    weight
+                );
+            }
+            return wavetable;
+        }
+
+        // Generate a wavetable for a sine wave.
         template<size_t __tableSize = DEFAULT_WAVETABLE_SIZE>
         std::array<Sample, __tableSize> Sine() {
             std::array<Sample, __tableSize> wavetable;
@@ -56,29 +79,7 @@ namespace Wavetable {
         template<size_t __tableSize = DEFAULT_WAVETABLE_SIZE>
         std::array<Sample, __tableSize> Tri(int tableSize) {
             std::array<Sample, 5> lerpTable = {0,1,0,-1,0};
-            return LerpTable<__tableSize, 5>(tableSize, lerpTable);
-        }
-
-
-        template<size_t __tableSize = DEFAULT_WAVETABLE_SIZE, int __lerpTableSize>
-        std::array<Sample, __tableSize> LerpTable(int tableSize, std::array<float, __lerpTableSize> rawTable) {
-            double scaleFactor = (double)__tableSize / (double)__lerpTableSize;
-
-            std::array<Sample, __tableSize> wavetable;
-            for( int i=0; i < __tableSize; i++ )
-            {
-                double scaledIndex = i/scaleFactor;
-                int truncatedIndex = (int)scaledIndex;
-                int nextIndex = truncatedIndex + 1;
-                double weight =  scaledIndex - truncatedIndex;
-
-                wavetable[i] = std::lerp(
-                    rawTable[truncatedIndex],
-                    rawTable[nextIndex],
-                    weight
-                );
-            }
-            return wavetable;
+            return LerpTable<__tableSize, 5UL>(lerpTable);
         }
     }
 }

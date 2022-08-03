@@ -82,3 +82,15 @@ class SquareSized : public WavetableOsc<__tableSize, Wavetable::Generate::Square
 { };
 
 class Square : public SquareSized<DEFAULT_WAVETABLE_SIZE> {};
+
+template <size_t __tableSize>
+class SawSized : public WavetableOsc<__tableSize, Wavetable::Generate::Saw<__tableSize>>
+{ };
+
+class Saw : public SawSized<DEFAULT_WAVETABLE_SIZE> {};
+
+template <size_t __tableSize>
+class TriSized : public WavetableOsc<__tableSize, Wavetable::Generate::Tri<__tableSize>>
+{ };
+
+class Tri : public TriSized<DEFAULT_WAVETABLE_SIZE> {};
