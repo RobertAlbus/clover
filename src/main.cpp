@@ -10,9 +10,8 @@
 
 #include "constants.h"
 #include "interface.h"
-#include "sine.h"
-#include "square.h"
 #include "time.h"
+#include "wavetableOsc.h"
 
 
 int main(void)

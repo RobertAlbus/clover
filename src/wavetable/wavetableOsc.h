@@ -1,37 +1,37 @@
 #pragma once
+#include <functional>
 
-#include "node.h"
+#include "constants.h"
 #include "wavetable.h"
 
-#define TABLE_SIZE   (200)
-
-class Square : public Node<0,2>
+template <size_t __tableSize, auto __wtFunct>
+class WavetableOsc : public Node<0,2>
 {
 public:
-    Square() : Node<0,2>()
+    WavetableOsc() : Node<0,2>()
     {
         freq(100);
         phase(0);
         /* initialise sinusoidal wavetable */
-        auto wt = Wavetable::Generate::Square<TABLE_SIZE>();
+        auto wt = __wtFunct();
         std::swap(wt, wavetable); 
     }
 
     // Assign waveform phase with value between 0.0 and 1.0
     void phase(float p) {
         p = fmod(fabs(p), 1.);
-        _phase = p * TABLE_SIZE *_phaseIncrement;
+        _phase = p * __tableSize *_phaseIncrement;
     }
 
     // Set waveform phase as value between 0.0 and 1.0
     float phase() {
-        return _phase / TABLE_SIZE;
+        return _phase / __tableSize;
     }
 
     void freq(float freq) {
         freq = std::max(freq, (float)0.);
         _readonlyFreq = freq;
-        _phaseIncrement = freq * ((float)TABLE_SIZE) / ((float)SAMPLE_RATE);
+        _phaseIncrement = freq * ((float)__tableSize) / ((float)SAMPLE_RATE);
     }
 
     float freq() {
@@ -41,8 +41,8 @@ public:
     float lerp() {
         int truncatedIndex = static_cast<int>(_phase);
         int nextIndex = (truncatedIndex + 1);
-        if (nextIndex >= TABLE_SIZE) {
-            nextIndex %= TABLE_SIZE;
+        if (nextIndex >= __tableSize) {
+            nextIndex %= __tableSize;
         }
 
         float nextIndexWeight = _phase - static_cast<float>(truncatedIndex);
@@ -57,17 +57,28 @@ protected:
     {
         Sample value = lerp();
 
-        _phase = fmod(_phase + _phaseIncrement, TABLE_SIZE);
+        _phase = fmod(_phase + _phaseIncrement, __tableSize);
 
         Frame<2> f {value, value};
 
         return f;
     }
 
-    std::array<Sample, TABLE_SIZE> wavetable;
+    std::array<Sample, __tableSize> wavetable;
 private:
     float _phase;
     float _phaseIncrement;
     float _readonlyFreq;
 };
 
+template <size_t __tableSize>
+class SineSized : public WavetableOsc<__tableSize, Wavetable::Generate::Sine<__tableSize>>
+{ };
+
+class Sine : public SineSized<DEFAULT_WAVETABLE_SIZE> {};
+
+template <size_t __tableSize>
+class SquareSized : public WavetableOsc<__tableSize, Wavetable::Generate::Square<__tableSize>>
+{ };
+
+class Square : public SquareSized<DEFAULT_WAVETABLE_SIZE> {};
