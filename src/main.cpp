@@ -28,13 +28,13 @@ int main(void)
 
     sine >> interface.rootNode;
 
-    Sine lfoModulator;
+    Tri lfoModulator;
     lfoModulator >> interface.blackHole;
     float lfoModFreqBase = 238.4;
     lfoModulator.freq(lfoModFreqBase);
     float lfoModAmount = 2130;
 
-    Sine lfo;
+    Saw lfo;
     float lfoBaseFreq = 666;
     float lfoAmount = 300;
     

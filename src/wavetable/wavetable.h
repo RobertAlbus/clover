@@ -77,7 +77,7 @@ namespace Wavetable {
 
         // Generate a wavetable for a triangle wave.
         template<size_t __tableSize = DEFAULT_WAVETABLE_SIZE>
-        std::array<Sample, __tableSize> Tri(int tableSize) {
+        std::array<Sample, __tableSize> Tri() {
             std::array<Sample, 5> lerpTable = {0,1,0,-1,0};
             return LerpTable<__tableSize, 5UL>(lerpTable);
         }
