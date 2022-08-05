@@ -1,13 +1,13 @@
 #include <stdio.h>
+#include <vector>
 
 #include "constants.h"
-#include "container.h"
 #include "sampleClock.h"
 
 
 SampleClock::SampleClock()
 {
-
+    callbacks.reserve(10);
 };
 
 int SampleClock::tick()
@@ -27,8 +27,8 @@ int SampleClock::currentSample()
 
 void SampleClock::registerTickCallback(ClockCallbackFn fn)
 {
-    callbacks << fn;
+    callbacks.emplace_back(fn);
 }
 
 int SampleClock::_currentSample;
-Container<ClockCallbackFn, 10> SampleClock::callbacks;
+std::vector<ClockCallbackFn> SampleClock::callbacks;

@@ -2,7 +2,8 @@
 
 #include <stdexcept>
 
-#include "container.h"
+#include <functional>
+#include <vector>
 #include "frame.h"
 #include "frameHistory.h"
 
@@ -50,7 +51,7 @@ public:
 
     void addInputNode(ArityOutput<__arityInput>* inputNode)
     {
-        inputNodes << inputNode;
+        inputNodes.emplace_back(inputNode);
     }
 
     /// Programmatic tick function that gathers the various Frames
@@ -59,6 +60,7 @@ public:
     {
         // Short-circuit any graph cycles
         if (currentClockTime == lastComputedClockTime) return;
+        // printf("\n%p  <======================== \n", this);
 
         lastComputedClockTime = currentClockTime;
 
@@ -75,7 +77,7 @@ protected:
     void tickInputs(int currentClockTime) {
     for(int i = 0, end = inputNodes.size(); i < end; i++) {
         // we don't care about the arity of the input node for this operation
-        auto inputNode = (Node<0,__arityOutput>*) inputNodes[i]; 
+        auto inputNode = (Node<0,__arityOutput>*) inputNodes.at(i); 
         inputNode->_tick(currentClockTime);
     }
 }
@@ -88,14 +90,14 @@ protected:
         Frame<__arityInput> accumulationFrame = {};
         for(int i = 0, end = inputNodes.size(); i < end; i++) {
             // cast to arity <0,__arityInput> because we we only care about the output arity of the input nodes.
-            auto inputNode = (Node<0,__arityInput>*) inputNodes.getAt(i); 
+            auto inputNode = (Node<0,__arityInput>*) inputNodes.at(i); 
             accumulationFrame += (*inputNode).frames.current;
         }
         accumulationFrame;
         return accumulationFrame;
     }
-
-    Container<ArityOutput<__arityInput>*, 500> inputNodes;
+public:
+    std::vector<ArityOutput<__arityInput>*> inputNodes;
     int lastComputedClockTime;
 
 };
@@ -105,6 +107,7 @@ protected:
 template<size_t X, size_t Y, size_t Z>
 Node<Y,Z>& operator>> (Node<X,Y> &sourceNode, Node<Y,Z> &destinationNode)
 {
+    printf("\n%p >> %p", &sourceNode, &destinationNode);
     destinationNode.addInputNode(&sourceNode);
     return destinationNode;
 }
