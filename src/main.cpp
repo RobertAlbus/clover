@@ -1,4 +1,3 @@
-
 #define NUM_SECONDS (10)
 
 #include <chrono>
@@ -10,6 +9,7 @@
 
 #include "constants.h"
 #include "interface.h"
+#include "pan1.h"
 #include "time.h"
 #include "wavetableOsc.h"
 
@@ -23,13 +23,15 @@ int main(void)
     Sine sine;
     float baseSineFreq = 202.;
 
-    Square sq;
-    // sq >> sine; // doesn't work, output and input arities are not matched
 
-    sine >> interface.rootNode;
+    Pan1 p;
+    sine >> p;
+    p >> interface.rootNode;
 
+
+    Pan1 bhMono;
     Tri lfoModulator;
-    lfoModulator >> interface.blackHole;
+    lfoModulator >> bhMono >> interface.blackHole;
     float lfoModFreqBase = 238.4;
     lfoModulator.freq(lfoModFreqBase);
     float lfoModAmount = 2130;
@@ -38,14 +40,14 @@ int main(void)
     float lfoBaseFreq = 666;
     float lfoAmount = 300;
     
-    lfo >> interface.blackHole;
+    lfo >> bhMono >> interface.blackHole;
 
     int testQuantity = 0;
     Sine* sineTest[testQuantity];
     for (int i = 0; i < testQuantity; i++)
     {
         sineTest[i] = new Sine();
-        *(sineTest[i]) >> interface.blackHole;
+        *(sineTest[i]) >> bhMono >> interface.blackHole;
     }
 
 
@@ -102,11 +104,10 @@ int main(void)
         }
     });
 
-
     if (interface.initialize() != paNoError) return 1;
     if (interface.open(Pa_GetDefaultOutputDevice()) != paNoError ) return 1;
     if (interface.start() != paNoError ) {interface.close(); return 1;}
-    
+
     // TODO: need a way to determine the composition length but this will do for now.
     // I should be able to compute this value once I have composition-level utilities.
     std::this_thread::sleep_for(std::chrono::seconds(NUM_SECONDS));
