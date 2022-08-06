@@ -5,10 +5,10 @@
 #include "wavetable.h"
 
 template <size_t __tableSize, auto __wtFunct>
-class WavetableOsc : public Node<0,2>
+class WavetableOsc : public Node<0,1>
 {
 public:
-    WavetableOsc() : Node<0,2>()
+    WavetableOsc() : Node<0,1>()
     {
         freq(100);
         phase(0);
@@ -48,18 +48,20 @@ public:
         float nextIndexWeight = _phase - static_cast<float>(truncatedIndex);
         float truncatedIndexWeight = 1. - nextIndexWeight;
 
-        return truncatedIndexWeight * wavetable[truncatedIndex] + 
+        Sample value = truncatedIndexWeight * wavetable[truncatedIndex] + 
             nextIndexWeight * wavetable[nextIndex];
+
+        return value;
     }
 
 protected:
-    Frame<2> tick(Frame<0> input)
+    Frame<1> tick(Frame<0> input)
     {
         Sample value = lerp();
 
         _phase = fmod(_phase + _phaseIncrement, __tableSize);
 
-        Frame<2> f {value, value};
+        Frame<1> f {value};
 
         return f;
     }
