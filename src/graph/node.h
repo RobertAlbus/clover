@@ -1,57 +1,46 @@
 #pragma once
 
 #include <stdexcept>
-
 #include <functional>
 #include <vector>
+
 #include "frame.h"
 #include "frameHistory.h"
 
-
-template<size_t __arity>
-class ArityInput
+template <size_t __arityOutput>
+class INode
 {
 public:
-    ArityInput() : arity(__arity) { }
-    const size_t arity;
+    virtual void _tick(int currentClockTime) = 0;
+    virtual Frame<__arityOutput> getCurrentFrame() = 0;
 };
-
-template<size_t __arity>
-class ArityOutput
-{
-public:
-    ArityOutput() : arity(__arity) { }
-    const size_t arity;
-};
-
-
 
 /// Base class for all N channel nodes of the audio graph.
 template<size_t __arityInput, size_t __arityOutput>
-class Node : public ArityInput<__arityInput>, public ArityOutput<__arityOutput>
+class Node : public INode<__arityOutput>
 {
 public:
     float gain;
+    const size_t arityInput;
+    const size_t arityOutput;
     FrameHistory<__arityOutput> frames;
 
     Node() :
-        ArityInput<__arityInput>(),
-        ArityOutput<__arityOutput>(),
+        arityInput(__arityInput),
+        arityOutput(__arityOutput),
         lastComputedClockTime(-1),
         gain(1.)
     {
-
     }
-
 
     /// User-defined sample processing method with fallback implementation
     //
     virtual Frame<__arityOutput> tick(Frame<__arityInput> input) = 0;
 
-
-    void addInputNode(ArityOutput<__arityInput>* inputNode)
+    template<size_t X>
+    void addInputNode(Node<X,__arityInput> &inputNode)
     {
-        inputNodes.emplace_back(inputNode);
+        inputNodes.emplace_back(&inputNode);
     }
 
     /// Programmatic tick function that gathers the various Frames
@@ -60,7 +49,6 @@ public:
     {
         // Short-circuit any graph cycles
         if (currentClockTime == lastComputedClockTime) return;
-        // printf("\n%p  <======================== \n", this);
 
         lastComputedClockTime = currentClockTime;
 
@@ -69,6 +57,11 @@ public:
             tick( sumInputs() ) *= gain
         );
     }
+
+    Frame<__arityOutput> getCurrentFrame()
+    {
+        return frames.current;
+    }
 protected:
 
 
@@ -76,9 +69,7 @@ protected:
     ///
     void tickInputs(int currentClockTime) {
     for(int i = 0, end = inputNodes.size(); i < end; i++) {
-        // we don't care about the arity of the input node for this operation
-        auto inputNode = (Node<0,__arityOutput>*) inputNodes.at(i); 
-        inputNode->_tick(currentClockTime);
+        (inputNodes.at(i))->_tick(currentClockTime);
     }
 }
     
@@ -89,15 +80,13 @@ protected:
     {
         Frame<__arityInput> accumulationFrame = {};
         for(int i = 0, end = inputNodes.size(); i < end; i++) {
-            // cast to arity <0,__arityInput> because we we only care about the output arity of the input nodes.
-            auto inputNode = (Node<0,__arityInput>*) inputNodes.at(i); 
-            accumulationFrame += (*inputNode).frames.current;
+            accumulationFrame += (inputNodes.at(i))->getCurrentFrame();
         }
         accumulationFrame;
         return accumulationFrame;
     }
 public:
-    std::vector<ArityOutput<__arityInput>*> inputNodes;
+    std::vector<INode<__arityInput>*> inputNodes;
     int lastComputedClockTime;
 
 };
@@ -107,7 +96,9 @@ public:
 template<size_t X, size_t Y, size_t Z>
 Node<Y,Z>& operator>> (Node<X,Y> &sourceNode, Node<Y,Z> &destinationNode)
 {
-    printf("\n%p >> %p", &sourceNode, &destinationNode);
-    destinationNode.addInputNode(&sourceNode);
+    printf("\n%p   >> %p", &sourceNode, &destinationNode);
+    auto destinationNodeAddress = &destinationNode;
+    auto sourceNodeAddress = &sourceNode;
+    destinationNode.addInputNode(sourceNode);
     return destinationNode;
 }
