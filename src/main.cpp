@@ -42,7 +42,7 @@ int main(void)
     
     lfo >> bhMono >> interface.blackHole;
 
-    int testQuantity = 0;
+    int testQuantity = NODE_MAX_INPUT_CAPACITY;
     Sine* sineTest[testQuantity];
     for (int i = 0; i < testQuantity; i++)
     {

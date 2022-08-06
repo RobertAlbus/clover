@@ -31,6 +31,7 @@ public:
         lastComputedClockTime(-1),
         gain(1.)
     {
+        inputNodes.reserve(NODE_MAX_INPUT_CAPACITY);
     }
 
     /// User-defined sample processing method with fallback implementation
