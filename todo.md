@@ -14,3 +14,10 @@
 * L1 Wavetable Osc
 * L3 NxOsc
 * L3 FMN (FM8ish) or DXN (Dx7ish)
+
+## Ops
+* Conan C++ - package manager
+* JFrog Artifactory Community Edition - package repo
+
+https://conan.io/
+
