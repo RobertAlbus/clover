@@ -26,7 +26,7 @@ int main(void)
     float baseSineFreq = 202.;
 
 
-    sine >> outputPan >> *(new Sum()) >> *(new Pan1()) >> interface.rootNode;
+    sine >> outputPan >> *(new Sum1()) >> *(new Pan1()) >> interface.rootNode;
 
 
     Pan1 bhMono;
