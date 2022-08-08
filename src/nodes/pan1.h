@@ -10,8 +10,9 @@ using namespace calc;
 class Pan1 : public Node<1,2>
 {
 public:
-    Pan1() : Node<1,2>(), _pan(0)
+    Pan1() : Node<1,2>()
     {
+        pan(0);
     }
 
     Pan1(float p) : Node<1,2>(), _pan(0)
