@@ -9,7 +9,7 @@
 
 #include "constants.h"
 #include "interface.h"
-#include "pan1.h"
+#include "pan.h"
 #include "time.h"
 #include "wavetableOsc.h"
 
@@ -21,10 +21,11 @@ int main(void)
     Interface interface;
 
     Sine sine;
+    Pan1 outputPan;
     float baseSineFreq = 202.;
 
 
-    sine >> *(new Pan1(0.2)) >> interface.rootNode;
+    sine >> outputPan >> interface.rootNode;
 
 
     Pan1 bhMono;
