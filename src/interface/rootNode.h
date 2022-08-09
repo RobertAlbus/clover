@@ -1,21 +1,18 @@
 #pragma once
-#include "node.h"
+#include "gain.h"
 
-class RootNode : public Node<2,2>
+template <size_t __arity>
+class RootNode : public Node<__arity,__arity>
 {
 public:
-    RootNode() : Node<2,2>()
-    {
 
-    }
-
-    Frame<2> tick(Frame<2> input) 
+    Frame<__arity> tick(Frame<__arity> input) 
     {
         return input;
     }
 
     /// RootNode exposes _tick publicly as the starting point of the signal graph
     void _tick(int currentTime) {
-        Node::_tick(currentTime);
+        Node<__arity,__arity>::_tick(currentTime);
     }
 };

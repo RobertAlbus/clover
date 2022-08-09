@@ -29,9 +29,8 @@ int main(void)
     sine >> outputPan >> *(new Sum1()) >> *(new Pan1()) >> interface.rootNode;
 
 
-    Pan1 bhMono;
     Tri lfoModulator;
-    lfoModulator >> bhMono >> interface.blackHole;
+    lfoModulator >> interface.blackhole1;
     float lfoModFreqBase = 238.4;
     lfoModulator.freq(lfoModFreqBase);
     float lfoModAmount = 2130;
@@ -40,14 +39,14 @@ int main(void)
     float lfoBaseFreq = 666;
     float lfoAmount = 300;
     
-    lfo >> bhMono >> interface.blackHole;
+    lfo >> interface.blackhole1;
 
     int testQuantity = NODE_MAX_INPUT_CAPACITY;
     Sine* sineTest[testQuantity];
     for (int i = 0; i < testQuantity; i++)
     {
         sineTest[i] = new Sine();
-        *(sineTest[i]) >> bhMono >> interface.blackHole;
+        *(sineTest[i]) >> interface.blackhole1;
     }
 
 

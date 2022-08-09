@@ -117,7 +117,8 @@ int Interface::paCallbackMethod(const void *inputBuffer, void *outputBuffer,
     {
         int currentSample = clock.tick();
         rootNode._tick(currentSample);
-        blackHole._tick(currentSample);
+        blackhole1._tick(currentSample);
+        blackhole2._tick(currentSample);
 
         *out++ = rootNode.frames.current[0];; 
         *out++ = rootNode.frames.current[1];; 
