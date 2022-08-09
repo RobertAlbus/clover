@@ -4,16 +4,20 @@
 
 #include "node.h"
 
-class Gain : public Node<2,2>
+template <size_t __arity>
+class Gain : public Node<__arity,__arity>
 {
 public:
-    Gain() : Node<2,2>()
+    Gain() : Node<__arity,__arity>()
     {
     }
 
 private:
-    Frame<2> tick(Frame<2> input)
+    Frame<__arity> tick(Frame<__arity> input)
     {
         return input;
     }
 };
+
+class Gain1 : public Gain<1> {};
+class Gain2 : public Gain<2> {};
