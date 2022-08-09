@@ -12,4 +12,4 @@ private:
 
         return input;
     }
-}
+};
