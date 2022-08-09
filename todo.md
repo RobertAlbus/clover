@@ -6,8 +6,6 @@
     * ~~L1 stereo pan ~~
     * ~~L1 stereo sum ~~
     * ~~L1 stereo difference~~
-    * ~~L1 leftPeel  (one channel of stereo into mono)~~
-    * ~~L1 rightPeel (one channel of stereo into mono)~~
     * L2 stereo imager (combo of previous two)
 * Waveshaper
     * Waveshaper<waveshapeFn>
@@ -23,7 +21,9 @@
     * L2 MIDI Source (L1 + scale + shaping)
 * Mixing / Routing
     * L3 Channel
-    * L3 Bus Input/Output? (high-arity single-node conenction)
+    * L1 Bus I/O? (high-arity single-node connection)
+    * ~~L1 leftPeel  (one channel of stereo into mono)~~
+    * ~~L1 rightPeel (one channel of stereo into mono)~~
     * L3 Mixer
 * L3 NxOsc
 * L3 FMN (FM8ish) or DXN (Dx7ish)
