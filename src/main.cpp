@@ -27,7 +27,7 @@ int main(void)
     float baseSineFreq = 202.;
 
 
-    sine >> outputPan >> *(new Stereo(-1,0)) >> *(new Sum2()) >> interface.rootNode;
+    sine >> outputPan >> interface.rootNode;
 
 
     Tri lfoModulator;
