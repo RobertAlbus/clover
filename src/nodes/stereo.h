@@ -2,8 +2,9 @@
 
 #include <cmath>
 
-#include "node.h"
 #include "difference.h"
+#include "node.h"
+#include "pan.h"
 #include "rootNode.h"
 #include "sum.h"
 
