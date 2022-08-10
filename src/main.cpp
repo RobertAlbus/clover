@@ -8,6 +8,7 @@
 #include "portaudio.h"
 
 #include "constants.h"
+#include "envelope.h"
 #include "interface.h"
 #include "pan.h"
 #include "stereo.h"
@@ -42,6 +43,9 @@ int main(void)
     
     lfo >> interface.blackhole1;
 
+    Envelope e(-1, 1, SAMPLE_RATE * 2);
+    e >> interface.blackhole1;
+
     int testQuantity = NODE_MAX_INPUT_CAPACITY;
     Sine* sineTest[testQuantity];
     for (int i = 0; i < testQuantity; i++)
@@ -74,7 +78,7 @@ int main(void)
             baseSineFreq + ( lfoAmount * lfo.frames.current[0] )
         );
 
-        outputPan.pan(lfoModulator.frames.current[0]);
+        outputPan.pan(e.frames.current[0]);
 
 
         if (DEBUG_PRINT) {
