@@ -64,15 +64,13 @@ public:
         return frames.current;
     }
 protected:
-
-
     /// Advance time for all input nodes
     ///
     void tickInputs(int currentClockTime) {
-    for(int i = 0, end = inputNodes.size(); i < end; i++) {
-        (inputNodes.at(i))->_tick(currentClockTime);
+        for(int i = 0, end = inputNodes.size(); i < end; i++) {
+            (inputNodes.at(i))->_tick(currentClockTime);
+        }
     }
-}
     
 
     /// Get a Frame that is arity-matched to this Node
@@ -89,7 +87,6 @@ protected:
 public:
     std::vector<INode<__arityInput>*> inputNodes;
     int lastComputedClockTime;
-
 };
 
 /// Add left Node to the right Node.inputNodes
