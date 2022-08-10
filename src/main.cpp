@@ -10,6 +10,7 @@
 #include "constants.h"
 #include "interface.h"
 #include "pan.h"
+#include "stereo.h"
 #include "sum.h"
 #include "time.h"
 #include "wavetableOsc.h"
@@ -22,11 +23,11 @@ int main(void)
     Interface interface;
 
     Sine sine;
-    Pan1 outputPan(1);
+    Pan1 outputPan(0);
     float baseSineFreq = 202.;
 
 
-    sine >> outputPan >> *(new Sum1()) >> *(new Pan1()) >> interface.rootNode;
+    sine >> outputPan >> *(new Stereo(-1,0)) >> *(new Sum2()) >> interface.rootNode;
 
 
     Tri lfoModulator;
@@ -72,6 +73,8 @@ int main(void)
         sine.freq(
             baseSineFreq + ( lfoAmount * lfo.frames.current[0] )
         );
+
+        outputPan.pan(lfoModulator.frames.current[0]);
 
 
         if (DEBUG_PRINT) {
