@@ -10,29 +10,32 @@ class Envelope : public Node<0,1>
 public:
   Envelope() : Node()
   {
-    set(0,0,0);
+    set(0.,0.,0);
   }
 
-  Envelope(float currentValue, float targetValue, int durationTime) : Node()
+  Envelope(float currentValue, float targetValue, size_t durationTime) : Node()
   {
+    printf("\n\n%f - %f - %d\n", currentValue, targetValue, durationTime);
     set(currentValue, targetValue, durationTime);
   }
 
   void set(float targetValue)
   {
     target(targetValue);
-    startTime = lastComputedClockTime;
-    targetTime = startTime + duration;
+    updateTargetTime();
   }
-  void set(float targetValue, int durationTime)
+  void set(float targetValue, size_t durationTime)
   { 
-    set(targetValue);
+    target(targetValue);
     dur(durationTime);
+    updateTargetTime();
   }
-  void set(float currentValue, float targetValue, int durationTime)
+  void set(float currentValue, float targetValue, size_t durationTime)
   {
-    set(targetValue, durationTime);
+    target(targetValue);
+    dur(durationTime);
     current(currentValue);
+    updateTargetTime();
   }
 
   void target(float t) {
@@ -43,28 +46,35 @@ public:
     startValue = currentValue;
   }
 
-  void dur(int d) {
+  void dur(size_t d) {
     duration = d;
   }
 
 
 protected:
-  int startTime;
-  int targetTime;
-  int duration;
+  size_t startTime;
+  size_t targetTime;
+  size_t duration;
   float startValue;
   float targetValue;
 
+  void updateTargetTime()
+  {
+    startTime = lastComputedClockTime;
+    targetTime = startTime + duration;
+  }
+
   Frame<1> tick(Frame<0> inputFrame)
   {
+    if (lastComputedClockTime > targetTime) return Frame<1> {targetValue};
     int currentTime = lastComputedClockTime;
     int elapsedTime = currentTime - startTime;
 
     float linearScaledTime = (float)elapsedTime / (float)duration;
-    Frame<1> f = {
+    return Frame<1>
+    {
       std::lerp(startValue, targetValue, linearScaledTime)
     };
-    return f;
   }
 
 };

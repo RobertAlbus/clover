@@ -43,7 +43,7 @@ int main(void)
     
     lfo >> interface.blackhole1;
 
-    Envelope e(-1, 1, SAMPLE_RATE * 2);
+    Envelope e(-1, 1, (SAMPLE_RATE * 2));
     e >> interface.blackhole1;
 
     int testQuantity = NODE_MAX_INPUT_CAPACITY;
@@ -75,10 +75,11 @@ int main(void)
         
         lfo.freq( (lfoModulator.frames.current[0] * lfoModAmount) + lfoBaseFreq );
         sine.freq(
-            baseSineFreq + ( lfoAmount * lfo.frames.current[0] )
+            // baseSineFreq + ( lfoAmount * lfo.frames.current[0] )
+            baseSineFreq +  e.frames.current[0] * 238.4
         );
 
-        outputPan.pan(e.frames.current[0]);
+        // outputPan.pan(e.frames.current[0]);
 
 
         if (DEBUG_PRINT) {
