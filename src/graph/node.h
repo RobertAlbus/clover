@@ -52,8 +52,8 @@ public:
         if (currentClockTime == lastComputedClockTime) return;
 
         lastComputedClockTime = currentClockTime;
-
         tickInputs(currentClockTime);
+        _tickCallback(currentClockTime);
         frames.push(
             tick( sumInputs() ) *= gain
         );
@@ -71,7 +71,9 @@ protected:
             (inputNodes.at(i))->_tick(currentClockTime);
         }
     }
-    
+
+    /// override this method to add functionality to hook into Node::_tick(int currentClockTime)
+    virtual void _tickCallback(int currentClockTime) { }
 
     /// Get a Frame that is arity-matched to this Node
     ///
