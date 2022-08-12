@@ -43,7 +43,7 @@ int main(void)
     
     lfo >> interface.blackhole1;
 
-    Envelope e(-1, 1, (SAMPLE_RATE * 2));
+    Envelope e(-1, 1, (SAMPLE_RATE * NUM_SECONDS));
     e >> interface.blackhole1;
 
     int testQuantity = NODE_MAX_INPUT_CAPACITY;
@@ -75,8 +75,9 @@ int main(void)
         
         lfo.freq( (lfoModulator.frames.current[0] * lfoModAmount) + lfoBaseFreq );
         sine.freq(
-            // baseSineFreq + ( lfoAmount * lfo.frames.current[0] )
-            baseSineFreq +  e.frames.current[0] * 238.4
+            baseSineFreq
+            + ( lfoAmount * lfo.frames.current[0] )
+            +  (e.frames.current[0] * baseSineFreq)
         );
 
         // outputPan.pan(e.frames.current[0]);
@@ -90,25 +91,25 @@ int main(void)
             );
         }
 
-        if (fmod((double)currentSecond,10.) == 0.0) {
-            lfoModFreqBase = 238.4; 
-            lfoModAmount = 2130;
+        // if (fmod((double)currentSecond,10.) == 0.0) {
+        //     lfoModFreqBase = 238.4; 
+        //     lfoModAmount = 2130;
 
-            lfoBaseFreq = 666;
-            lfoAmount = 300;
-        } else if (fmod((double)currentSecond,10.) == 7.0)
-        {
-            lfoModFreqBase = 119.4;
-            lfoModAmount  = (lfoModAmount / 5.) * 6.;
-            lfoBaseFreq = (lfoBaseFreq / 5.) * 6.;
-            lfoAmount = (lfoAmount / 5.) * 6.;
-        } else if (fmod((double)currentSecond,10.) == 4.5)
-        {
-            lfoModFreqBase = lfoModFreqBase * 1.1;
-            lfoModAmount  = (lfoModAmount / 6.) * 13.;
-            lfoBaseFreq = (lfoBaseFreq / 6.) * 7.;
-            lfoAmount = ((lfoAmount / 5.) * 7.) + lfoModAmount * 0.25;
-        }
+        //     lfoBaseFreq = 666;
+        //     lfoAmount = 300;
+        // } else if (fmod((double)currentSecond,10.) == 7.0)
+        // {
+        //     lfoModFreqBase = 119.4;
+        //     lfoModAmount  = (lfoModAmount / 5.) * 6.;
+        //     lfoBaseFreq = (lfoBaseFreq / 5.) * 6.;
+        //     lfoAmount = (lfoAmount / 5.) * 6.;
+        // } else if (fmod((double)currentSecond,10.) == 4.5)
+        // {
+        //     lfoModFreqBase = lfoModFreqBase * 1.1;
+        //     lfoModAmount  = (lfoModAmount / 6.) * 13.;
+        //     lfoBaseFreq = (lfoBaseFreq / 6.) * 7.;
+        //     lfoAmount = ((lfoAmount / 5.) * 7.) + lfoModAmount * 0.25;
+        // }
     });
 
     if (interface.initialize() != paNoError) return 1;
