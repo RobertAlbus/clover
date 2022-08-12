@@ -28,7 +28,7 @@ public:
     Node() :
         arityInput(__arityInput),
         arityOutput(__arityOutput),
-        lastComputedClockTime(-1),
+        _currentClockTime(-1),
         gain(1.)
     {
         inputNodes.reserve(NODE_MAX_INPUT_CAPACITY);
@@ -49,9 +49,9 @@ public:
     void _tick(int currentClockTime)
     {
         // Short-circuit any graph cycles
-        if (currentClockTime == lastComputedClockTime) return;
+        if (currentClockTime == _currentClockTime) return;
 
-        lastComputedClockTime = currentClockTime;
+        _currentClockTime = currentClockTime;
         tickInputs(currentClockTime);
         _tickCallback(currentClockTime);
         frames.push(
@@ -88,7 +88,7 @@ protected:
     }
 public:
     std::vector<INode<__arityInput>*> inputNodes;
-    int lastComputedClockTime;
+    int _currentClockTime;
 };
 
 /// Add left Node to the right Node.inputNodes

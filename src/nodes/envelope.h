@@ -60,14 +60,14 @@ protected:
 
   void updateTargetTime()
   {
-    startTime = lastComputedClockTime;
+    startTime = _currentClockTime;
     targetTime = startTime + duration;
   }
 
   Frame<1> tick(Frame<0> inputFrame)
   {
-    if (lastComputedClockTime > targetTime) return Frame<1> {targetValue};
-    int currentTime = lastComputedClockTime;
+    if (_currentClockTime > targetTime) return Frame<1> {targetValue};
+    int currentTime = _currentClockTime;
     int elapsedTime = currentTime - startTime;
 
     float linearScaledTime = (float)elapsedTime / (float)duration;
