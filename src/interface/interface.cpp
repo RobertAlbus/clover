@@ -115,13 +115,15 @@ int Interface::paCallbackMethod(const void *inputBuffer, void *outputBuffer,
 
     for( i=0; i<framesPerBuffer; i++ )
     {
-        int currentSample = clock.tick();
+        int currentSample = clock.currentSample();
         rootNode._tick(currentSample);
         blackhole1._tick(currentSample);
         blackhole2._tick(currentSample);
 
         *out++ = rootNode.frames.current[0];; 
         *out++ = rootNode.frames.current[1];; 
+        
+        clock.tick();
     }
 
     return paContinue;

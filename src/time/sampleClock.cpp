@@ -8,16 +8,16 @@
 SampleClock::SampleClock()
 {
     callbacks.reserve(10);
+    _currentSample = 0;
 };
 
-int SampleClock::tick()
+void SampleClock::tick()
 {
-    _currentSample++;
     for (int i = 0, end = callbacks.size(); i < end; i++)
     {
         callbacks[i](_currentSample);
     }
-    return currentSample();
+    _currentSample++;
 }
 
 int SampleClock::currentSample()

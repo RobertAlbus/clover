@@ -10,7 +10,7 @@ class SampleClock
 public:
     SampleClock();
     int currentSample();
-    int tick();
+    void tick();
     void registerTickCallback(ClockCallbackFn fn);
 
 private:
