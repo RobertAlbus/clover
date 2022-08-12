@@ -1,4 +1,4 @@
-#define NUM_SECONDS (10)
+#define NUM_SECONDS (100)
 
 #include <chrono>
 #include <math.h>
@@ -25,7 +25,7 @@ int main(void)
 
     Sine sine;
     Pan1 outputPan(0);
-    float baseSineFreq = 202.;
+    float baseSineFreq = 52.;
 
 
     sine >> outputPan >> interface.rootNode;
@@ -33,17 +33,17 @@ int main(void)
 
     Tri lfoModulator;
     lfoModulator >> interface.blackhole1;
-    float lfoModFreqBase = 238.4;
+    float lfoModFreqBase = 538.4;
     lfoModulator.freq(lfoModFreqBase);
     float lfoModAmount = 2130;
 
     Saw lfo;
-    float lfoBaseFreq = 666;
-    float lfoAmount = 300;
+    float lfoBaseFreq = 66;
+    float lfoAmount = 30;
     
     lfo >> interface.blackhole1;
 
-    Envelope e(-1, 1, (SAMPLE_RATE * NUM_SECONDS));
+    Envelope e(-1, 1, (SAMPLE_RATE * 1));
     e >> interface.blackhole1;
 
     int testQuantity = NODE_MAX_INPUT_CAPACITY;
@@ -73,11 +73,11 @@ int main(void)
         // WOAHJ
         // lfoModulator.freq(lfoModFreqBase * (sine.frames.current[0] * -0.15) * lfoModulator.frames.current[0]);
         
-        lfo.freq( (lfoModulator.frames.current[0] * lfoModAmount) + lfoBaseFreq );
+        lfo.freq( (lfoModulator.frames.current[0] * lfoModAmount) + lfoBaseFreq /2 + (e.frames.current[0] * 1000));
         sine.freq(
             baseSineFreq
             + ( lfoAmount * lfo.frames.current[0] )
-            +  (e.frames.current[0] * baseSineFreq)
+            +  (e.frames.current[0] * baseSineFreq * 0.5)
         );
 
         // outputPan.pan(e.frames.current[0]);
@@ -89,6 +89,13 @@ int main(void)
                 interface.rootNode.frames.current[1],
                 (int)time.currentUnit(1)
             );
+        }
+
+        if (fmod((double)currentSecond,2.) == 0.0) {
+            e.set(-1, 1, (SAMPLE_RATE * 1));
+        } else if (fmod((double)currentSecond,2.) == 1.0)
+        {
+            e.set(1, -1, (SAMPLE_RATE * 1));
         }
 
         // if (fmod((double)currentSecond,10.) == 0.0) {
