@@ -8,7 +8,7 @@
 #include "portaudio.h"
 
 #include "constants.h"
-#include "envelope.h"
+#include "adsr.h"
 #include "interface.h"
 #include "pan.h"
 #include "stereo.h"
@@ -43,7 +43,8 @@ int main(void)
     
     lfo >> interface.blackhole1;
 
-    Envelope e(-1, 1, (SAMPLE_RATE * 1));
+    // Envelope e(-1, 1, (SAMPLE_RATE * 1));
+    Adsr e(0, time.quat / 10., 0, 0);
     e >> interface.blackhole1;
 
     int testQuantity = NODE_MAX_INPUT_CAPACITY;
@@ -60,28 +61,25 @@ int main(void)
 
         float currentSecond = time.currentUnit(SAMPLE_RATE);
         
-        if (time.currentUnit(1) == 1) {
-            printf("\n\n%f\n", 0);
-        }
-        if (fmod(currentSecond,1.) == 0.0) {
-            printf("%f\n", currentSecond);
-        }
+        // if (time.currentUnit(1) == 1) {
+        //     printf("\n\n%f\n", 0);
+        // }
+        // if (fmod(currentSecond,1.) == 0.0) {
+        //     printf("%f\n", currentSecond);
+        // }
 
 
         lfoModulator.freq(lfoModFreqBase * (sine.frames.current[0] * -0.15));
 
         // WOAHJ
-        // lfoModulator.freq(lfoModFreqBase * (sine.frames.current[0] * -0.15) * lfoModulator.frames.current[0]);
+        lfoModulator.freq(lfoModFreqBase * (sine.frames.current[0] * -0.15) * lfoModulator.frames.current[0]);
         
         lfo.freq( (lfoModulator.frames.current[0] * lfoModAmount) + lfoBaseFreq /2 + (e.frames.current[0] * 1000));
         sine.freq(
             baseSineFreq
             + ( lfoAmount * lfo.frames.current[0] )
-            +  (e.frames.current[0] * baseSineFreq * 0.5)
+            +  (e.frames.current[0] * 300)
         );
-
-        // outputPan.pan(e.frames.current[0]);
-
 
         if (DEBUG_PRINT) {
             printf("%f - %f - %d\n", 
@@ -91,11 +89,12 @@ int main(void)
             );
         }
 
-        if (fmod((double)currentSecond,2.) == 0.0) {
-            e.set(-1, 1, (SAMPLE_RATE * 1));
-        } else if (fmod((double)currentSecond,2.) == 1.0)
+        if (fmod((double)currentSecond,0.5) == 0.0)
         {
-            e.set(1, -1, (SAMPLE_RATE * 1));
+            e.keyOn();
+        } else if (fmod((double)currentSecond,0.5) == 0.25)
+        {
+            e.keyOff();
         }
 
         // if (fmod((double)currentSecond,10.) == 0.0) {
