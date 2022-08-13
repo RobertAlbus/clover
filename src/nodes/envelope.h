@@ -16,7 +16,6 @@ public:
 
   Envelope(float currentValue, float targetValue, size_t durationTime) : Node()
   {
-
     set(currentValue, targetValue, durationTime);
   }
 

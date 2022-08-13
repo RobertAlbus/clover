@@ -70,10 +70,10 @@ protected:
         // attack
         // release
         
-        if      ( _keyOn  && _currentClockTime >  startTime + _attack + _decay ) { envelope.set( _sustain,  _sustain,  0);        }
-        else if ( _keyOn  && _currentClockTime == startTime + _attack )          { envelope.set( 1.,        _sustain,  _decay);   }
-        else if ( _keyOn  && _currentClockTime == startTime )                    { envelope.set( 0.,        1.      ,  _attack);  }
-        else if ( !_keyOn && _currentClockTime == startTime )                    { envelope.set( frames.current[0],  0,         _release); }
+        if      ( _keyOn  && _currentClockTime >  startTime + _attack + _decay ) { envelope.set( _sustain,          _sustain,  0);        }
+        else if ( _keyOn  && _currentClockTime == startTime + _attack )          { envelope.set( 1.,                _sustain,  _decay);   }
+        else if ( _keyOn  && _currentClockTime == startTime )                    { envelope.set( 0.,                1.      ,  _attack);  }
+        else if ( !_keyOn && _currentClockTime == startTime )                    { envelope.set( frames.current[0], 0,         _release); }
 
         return blackHole.frames.current;
     }
