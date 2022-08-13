@@ -11,7 +11,7 @@ class Envelope : public Node<0,1>
 public:
   Envelope() : Node()
   {
-    set(0.,0.,1);
+    set(0.,0.,0);
   }
 
   Envelope(float currentValue, float targetValue, size_t durationTime) : Node()
