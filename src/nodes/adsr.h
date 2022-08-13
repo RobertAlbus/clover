@@ -3,16 +3,16 @@
 #include <cmath>
 
 #include "envelope.h"
-#include "node.h"
+#include "subgraph.h"
 #include "rootNode.h"
 
-class Adsr : public Node<0,1>
+class Adsr : public Subgraph<0,1>
 {
 public:
     Adsr() : Adsr(0.,0.,1.,0.) { }
 
     Adsr(size_t a, size_t d, float s, size_t r) :
-        Node(), _keyOn(false), envelope(0,0,1)
+        Subgraph(), _keyOn(false), envelope(0,0,1)
     {
         connectNodes();
         set(a, d, s, r);
@@ -49,19 +49,12 @@ public:
 
 protected:
     Envelope envelope;
-    RootNode<1> blackHole;
     size_t _attack;
     size_t _decay;
     float  _sustain;
     size_t _release;
     size_t startTime;
     bool  _keyOn;
-
-
-    void _tickCallback(int currentClockTime) override
-    {
-        blackHole._tick(currentClockTime);
-    }
 
     Frame<1> tick(Frame<0> input) override
     {

@@ -3,21 +3,20 @@
 #include <cmath>
 
 #include "difference.h"
-#include "node.h"
+#include "subgraph.h"
 #include "pan.h"
-#include "rootNode.h"
 #include "sum.h"
 
-class Stereo : public Node<2,2>
+class Stereo : public Subgraph<2,2>
 {
 public:
-  Stereo() : Node(), pan2(0)
+  Stereo() : Subgraph(), pan2(0)
   {
     connectNodes();
     spread(0);
   }
 
-  Stereo(float s, float p) : pan2(p)
+  Stereo(float s, float p) : Subgraph(), pan2(p)
   {
     connectNodes();
     spread(s);
@@ -59,15 +58,9 @@ protected:
   Difference side;
   Pan2 pan2;
   RootNode<2> spring;
-  RootNode<2> blackHole;
 
   float _spreadReadOnly;
   
-  void _tickCallback(int currentClockTime) override
-  {
-    blackHole._tick(currentClockTime);
-  }
-
   Frame<2> tick(Frame<2> input) override
   {
     spring.frames.next(input);
