@@ -7,8 +7,10 @@
 
 #include "portaudio.h"
 
-#include "constants.h"
 #include "adsr.h"
+#include "constants.h"
+#include "delay.h"
+#include "gain.h"
 #include "interface.h"
 #include "pan.h"
 #include "stereo.h"
@@ -25,10 +27,16 @@ int main(void)
 
     Sine sine;
     Pan1 outputPan(0);
-    float baseSineFreq = 52.;
+    float baseSineFreq = 152.;
 
 
     sine >> outputPan >> interface.rootNode;
+
+    const size_t delayTime = (size_t)((float)SAMPLE_RATE*0.74);
+    Delay<2, delayTime> delay;
+    outputPan >> delay >> interface.rootNode;
+    delay >> delay;
+    delay.gain = 0.2;
 
 
     Tri lfoModulator;
@@ -64,9 +72,9 @@ int main(void)
         // if (time.currentUnit(1) == 1) {
         //     printf("\n\n%f\n", 0);
         // }
-        // if (fmod(currentSecond,1.) == 0.0) {
-        //     printf("%f\n", currentSecond);
-        // }
+        if (fmod(currentSecond,1.) == 0.0) {
+            printf("%f\n", currentSecond);
+        }
 
 
         lfoModulator.freq(lfoModFreqBase * (sine.frames.current[0] * -0.15));
@@ -80,6 +88,7 @@ int main(void)
             + ( lfoAmount * lfo.frames.current[0] )
             +  (e.frames.current[0] * 300)
         );
+        sine.gain = e.frames.current[0];
 
         if (DEBUG_PRINT) {
             printf("%f - %f - %d\n", 

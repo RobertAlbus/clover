@@ -38,6 +38,7 @@ add_executable(${PROJECT_NAME}
 target_include_directories(${PROJECT_NAME}
     PRIVATE
         src
+        src/buffer
         src/calc
         src/interface
         src/graph
