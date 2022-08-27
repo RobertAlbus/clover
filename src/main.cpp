@@ -32,11 +32,12 @@ int main(void)
 
     sine >> outputPan >> interface.rootNode;
 
+
     const size_t delayTime = (size_t)((float)SAMPLE_RATE*0.74);
-    Delay<2, delayTime> delay;
+    Delay<2, delayTime+3000> delay(delayTime+3000);
     outputPan >> delay >> interface.rootNode;
     delay >> delay;
-    delay.gain = 0.2;
+    delay.gain = 0.97;
 
 
     Tri lfoModulator;
@@ -52,7 +53,7 @@ int main(void)
     lfo >> interface.blackhole1;
 
     // Envelope e(-1, 1, (SAMPLE_RATE * 1));
-    Adsr e(0, time.quat / 10., 0, 0);
+    Adsr e(20, time.quat * 2., 0, time.quat);
     e >> interface.blackhole1;
 
     int testQuantity = NODE_MAX_INPUT_CAPACITY;
@@ -80,13 +81,12 @@ int main(void)
         lfoModulator.freq(lfoModFreqBase * (sine.frames.current[0] * -0.15));
 
         // WOAHJ
-        lfoModulator.freq(lfoModFreqBase * (sine.frames.current[0] * -0.15) * lfoModulator.frames.current[0]);
+        // lfoModulator.freq(lfoModFreqBase * (sine.frames.current[0] * -0.15) * lfoModulator.frames.current[0]);
         
         lfo.freq( (lfoModulator.frames.current[0] * lfoModAmount) + lfoBaseFreq /2 + (e.frames.current[0] * 1000));
         sine.freq(
             baseSineFreq
             + ( lfoAmount * lfo.frames.current[0] )
-            +  (e.frames.current[0] * 300)
         );
         sine.gain = e.frames.current[0];
 
@@ -98,12 +98,22 @@ int main(void)
             );
         }
 
-        if (fmod((double)currentSecond,0.5) == 0.0)
+        if (fmod((double)currentSecond,4) == 0.0)
         {
             e.keyOn();
-        } else if (fmod((double)currentSecond,0.5) == 0.25)
+        } else if (fmod((double)currentSecond,4) == 2)
         {
             e.keyOff();
+        }
+
+        if (fmod((double)currentSecond,16) == 0.0)
+        {
+            size_t t = (size_t) ((float)delayTime / 2.1);
+            delay.setDelayTime(delayTime);
+        } else if (fmod((double)currentSecond,16) == 8)
+        {
+            size_t t = (size_t) ((float)delayTime / 1.1);
+            delay.setDelayTime(t);
         }
 
         // if (fmod((double)currentSecond,10.) == 0.0) {
