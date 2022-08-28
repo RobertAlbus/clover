@@ -46,8 +46,10 @@
 - L3 FMN (FM8ish) or DXN (Dx7ish)
 
 ## Ops
+how do I make Clover into a package? Is it necessary?
 
 - Conan C++ - package manager
 - JFrog Artifactory Community Edition - package repo
+- or packages from repos via cmake? <-- probably>
 
 https://conan.io/
