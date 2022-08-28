@@ -2,32 +2,18 @@
 
 #include "node.h"
 
-class Sum1 : public Node<2,1>
+auto sum1Fn = [](Frame<2> input)
 {
-public:
-    Sum1() : Node<2,1>() { }
-
-private:
-    Frame<1> tick(Frame<2> input)
-    {
-        Frame<1> f {(input[0] + input[1]) * 0.5};
-        return f;
-    }
+        return Frame<2> {(input[0] + input[1]) * 0.5f};
 };
+class Sum1 : public StatelessProcessor<2,2,sum1Fn> { };
 
-class Sum2 : public Node<2,2>
+auto sum2Fn = [](Frame<2> input)
 {
-public:
-    Sum2() : Node<2,2>() { }
-
-private:
-    Frame<2> tick(Frame<2> input)
-    {
-        Frame<2> f {
-            (input[0] + input[1]) * 0.5,
-            (input[0] + input[1]) * 0.5
+        return Frame<2>
+        {
+            (input[0] + input[1]) * 0.5f,
+            (input[0] + input[1]) * 0.5f
         };
-
-        return f;
-    }
 };
+class Sum2 : public StatelessProcessor<2,2,sum2Fn> { };

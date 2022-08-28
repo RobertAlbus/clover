@@ -1,31 +1,15 @@
 #pragma once
 
-#include "node.h"
+#include "statelessProcessor.h"
 
-// if I ever encounter arity higher than 2 I should template this.
-
-class PeelL : public Node<2,1>
+template <size_t __arityIn, size_t channel>
+auto peelFn = [](Frame<__arityIn> input)
 {
-public:
-    PeelL() : Node() { }
-
-private:
-    Frame<1> tick(Frame<2> input)
-    {
-        Frame<1> f {input[0]};
-        return f;
-    }
+    return Frame<1> f {input[channel]};
 };
 
-class PeelR : public Node<2,1>
-{
-public:
-    PeelR() : Node() { }
+template <size_t __arity>
+class PeelL : public StatelessProcessor<__arity,peelFn<__arity,0>> { };
 
-private:
-    Frame<1> tick(Frame<2> input)
-    {
-        Frame<1> f {input[1]};
-        return f;
-    }
-};
+template <size_t __arity>
+class PeelR : public StatelessProcessor<__arity,peelFn<__arity,1>> { };

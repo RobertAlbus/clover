@@ -1,18 +1,13 @@
 #pragma once
 
-#include "node.h"
+#include "statelessProcessor.h"
 
-class Difference : public Node<2,2>
+auto differenceFn = [](Frame<2> input)
 {
-private:
-    Frame<2> tick(Frame<2> input)
+    return Frame<2>
     {
-        Frame<2> f
-        {
-            input[0] - input[1],
-            input[1] - input[0]
-        };
-
-        return f;
-    }
+        input[0] - input[1],
+        input[1] - input[0]
+    };
 };
+class Difference : public StatelessProcessor<2,2,differenceFn> { };

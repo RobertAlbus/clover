@@ -1,23 +1,14 @@
 #pragma once
 
-#include <algorithm>
-
-#include "node.h"
+#include "statelessProcessor.h"
 
 template <size_t __arity>
-class Gain : public Node<__arity,__arity>
+auto passFn = [](Frame<__arity> input)
 {
-public:
-    Gain() : Node<__arity,__arity>()
-    {
-    }
-
-private:
-    Frame<__arity> tick(Frame<__arity> input)
-    {
-        return input;
-    }
+    return input;
 };
+template <size_t __arity>
+class Gain : public StatelessProcessor<__arity,__arity,passFn<__arity>> { };
 
 class Gain1 : public Gain<1> {};
 class Gain2 : public Gain<2> {};
