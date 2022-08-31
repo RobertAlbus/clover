@@ -1,8 +1,10 @@
 # TODO
 
+once SVF is created, all nodes should have a `latency()` method that returns the samples of latency. it would be great to have this calculable between two nodes, but that is a dream for now.
+
 ## Nodes
 
-- Stereo Image
+- ~~ Stereo Image ~~
   - ~~ L1 mono pan ~~
   - ~~ L1 stereo pan ~~
   - ~~ L1 stereo sum ~~
@@ -21,19 +23,19 @@
   - pitch shift
   - vocode
   - bucket brigade and other weird stuff that fucks with spectra
-- Waveshaper (only a tick function, no additional state)
-  - Waveshaper<waveshapeFn>
-    - L1 Scale
-    - L1 Inverter
-    - L1 Bit Crusher
-  - L1 Sample Crusher (not quite a wave shaper, current imagined implementation would require a bit of state)
-- Envelope
+- ~~ StatelessProcessor (only a tick function, no additional state) ~~
+  - ~~ StatelessProcessor<waveshapeFn> ~~
+    - ~~ L1 Inverter ~~
+- L1 Bit Crusher
+- L1 Sample Crusher (not quite a wave shaper, current imagined implementation would require a bit of state)
+- ~~ Envelope ~~
   - ~~ L1 Envelope ~~
   - ~~ L2 ADSR ~~
+  - automation clip
 - Source
   - L1 Noises
-  - L1 Wavetable Osc
-  - L1 DC
+  - ~~ L1 Wavetable Osc ~~
+  - ~~ L1 DC ~~
   - L1 MIDI Source
   - L2 MIDI Source (L1 + scale + shaping)
 - Mixing / Routing
