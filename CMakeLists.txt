@@ -31,19 +31,16 @@ add_executable(${PROJECT_NAME}
 
     src/interface/interface.cpp    
 
-    src/time/musicTime.cpp
-    src/time/sampleClock.cpp
+    src/util/musicTime.cpp
+    src/util/sampleClock.cpp
 )
 
 target_include_directories(${PROJECT_NAME}
     PRIVATE
         src
-        src/buffer
-        src/calc
         src/interface
         src/graph
         src/nodes
         src/sine
-        src/time
-        src/wavetable
+        src/util
 )
