@@ -69,7 +69,7 @@ namespace Wavetable {
             double increment = 2. / (double) __tableSize;
             for( int i=0; i < __tableSize; i++ )
             {
-                wavetable[i] = (float) 2. - (i * increment);
+                wavetable[i] = (float) 1. - (i * increment);
             }
 
             return wavetable;
