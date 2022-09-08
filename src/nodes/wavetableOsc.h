@@ -96,3 +96,9 @@ class TriSized : public WavetableOsc<__tableSize, Wavetable::Generate::Tri<__tab
 { };
 
 class Tri : public TriSized<DEFAULT_WAVETABLE_SIZE> {};
+
+template <size_t __tableSize>
+class NoiseWhiteSized : public WavetableOsc<__tableSize, Wavetable::Generate::NoiseWhite<__tableSize>>
+{ };
+
+class NoiseWhite : public NoiseWhiteSized<1000000> {};

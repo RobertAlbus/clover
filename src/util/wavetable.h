@@ -81,5 +81,19 @@ namespace Wavetable {
             std::array<Sample, 5> lerpTable = {0,1,0,-1,0};
             return LerpTable<__tableSize, 5UL>(lerpTable);
         }
+
+        // Generate a wavetable for a white noise wave.
+        template<size_t __tableSize = DEFAULT_WAVETABLE_SIZE>
+        std::array<Sample, __tableSize> NoiseWhite() {
+            std::array<Sample, __tableSize> wavetable;
+            for( int i=0; i < __tableSize; i++ )
+            {
+                float noise = ((float)rand()) / (float)(RAND_MAX);
+                noise = 2.0 * (noise - 0.5);
+                wavetable[i] = noise;
+            }
+
+            return wavetable;
+        }
     }
 }
