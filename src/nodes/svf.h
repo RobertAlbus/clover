@@ -7,6 +7,16 @@
 #include "firLowPass.h"
 #include "subgraph.h"
 
+namespace SVFd
+{
+  constexpr int lowpass  = 1;
+  constexpr int bandpass = 2;
+  constexpr int highpass = 3;
+
+  constexpr int lp = lowpass;
+  constexpr int bp = bandpass;
+  constexpr int hp = highpass;
+}
 
 class SVF : public Subgraph<1,1>
 {
@@ -59,8 +69,11 @@ protected:
     float feedback = 1.0 - _q;
 
     // smooth parameter changes
-    dt_prime = (dt * (1.0-0.999)) + (dt_prime * 0.999); 
-    fb_prime = (feedback * (1.0-0.993)) + (fb_prime * 0.993); 
+    // dt_prime = (dt * (1.0-0.999)) + (dt_prime * 0.999); 
+    // fb_prime = (feedback * (1.0-0.993)) + (fb_prime * 0.993); 
+
+    dt_prime = dt; 
+    fb_prime = feedback; 
 
     // integrate filter state with oversampling
     for(int nn = 0; nn < _oversamplingFactor; nn++){
