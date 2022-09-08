@@ -5,6 +5,11 @@
 namespace calc 
 {
 
+    float sign(float value)
+    {
+        return value < 0. ? -1 : 1;
+    }
+    
     float ltodb(float x)
     {
         return log10(fabs(x)) * 20.;

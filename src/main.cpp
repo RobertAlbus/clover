@@ -8,6 +8,7 @@
 #include "portaudio.h"
 
 #include "adsr.h"
+#include "bitcrusher.h"
 #include "constants.h"
 #include "delay.h"
 #include "gain.h"
@@ -26,19 +27,22 @@ int main(void)
     SampleClock clock;
     Interface interface;
 
-    Saw sine;
+    Sine sine;
+    sine.freq(100);
     Pan1 outputPan(0);
-    SVF filt(0.3,0.9,1);
+    SVF filt(0.3,0.5,1);
     filt.gain = 0.9;
     float baseSineFreq = 152.;
 
+    BitCrusher bitcrusher(600);
+
     Sine cutLFO;
-    cutLFO.freq(12.9);
+    cutLFO.freq(.1);
     cutLFO.gain = 0.9;
     cutLFO >> interface.blackhole1;
 
 
-    sine >> filt >> outputPan >> interface.rootNode;
+    sine >> bitcrusher >> outputPan >> interface.rootNode;
 
 
     // const size_t delayTime = (size_t)((float)SAMPLE_RATE*0.74);
@@ -76,7 +80,12 @@ int main(void)
     clock.registerTickCallback([&](int currentTime)->void
     {   
         float lfoVal = (cutLFO.getCurrentFrame()[0] +2.) / 2.9;
-        filt.cutoff( 0.25 * lfoVal +0.02);
+        filt.cutoff( 0.98 * lfoVal +0.02);
+
+        float bitsCrushed = ((cutLFO.getCurrentFrame()[0] + 2.) / 2) * 2;
+        bitsCrushed += 1;
+
+        bitcrusher.bits = bitsCrushed;
         // cutLFO.freq(lfoVal * 1111);
         // float currentSecond = time.currentUnit(SAMPLE_RATE);
         
