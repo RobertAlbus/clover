@@ -15,8 +15,10 @@ once SVF is created, all nodes should have a `latency()` method that returns the
   - ~~ Delay node (all pass filter) ~~
   - echo
   - ping pong or custom-feedback-insert
-- Filters
-  - SVF with oversampling
+- ~~ Filters ~~
+  - ~~ SVF with oversampling ~~
+  - SVF with freq-based interface
+  - do I really need the oversampling and downsampling FIR?
 - Spectral Domain
   - FFT library integration
   - time stretch
@@ -31,9 +33,9 @@ once SVF is created, all nodes should have a `latency()` method that returns the
 - ~~ Envelope ~~
   - ~~ L1 Envelope ~~
   - ~~ L2 ADSR ~~
-  - automation clip
+- automation clip - don't worry about looping automation clips. composition-level only.
 - Source
-  - L1 Noises
+  - ~~ L1 Noises ~~
   - ~~ L1 Wavetable Osc ~~
   - ~~ L1 DC ~~
   - L1 MIDI Source
