@@ -24,6 +24,10 @@ public:
     target(targetValue);
     updateTargetTime();
   }
+  void reset(float targetValue)
+  {
+    updateTargetTime();
+  }
   void set(float targetValue, size_t durationTime)
   { 
     target(targetValue);
