@@ -1,7 +1,6 @@
 #pragma once
 
-#include <limits.h>
-#include <math.h>
+#include <algorithm>
 
 #include "calc.h"
 #include "node.h"
@@ -22,7 +21,7 @@ protected:
     {
         if (samplesToHold < 1.)
         {
-            samplesToHold += 1 + (range * amount);
+            samplesToHold += 1 + std::max((range * amount), 0.f);
             heldSample = inputFrame[0];
         }
         samplesToHold--;
