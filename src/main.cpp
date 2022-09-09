@@ -14,6 +14,7 @@
 #include "gain.h"
 #include "interface.h"
 #include "pan.h"
+#include "samplecrusher.h"
 #include "stereo.h"
 #include "sum.h"
 #include "svf.h"
@@ -34,7 +35,8 @@ int main(void)
     filt.gain = 0.9;
     float baseSineFreq = 152.;
 
-    BitCrusher bitcrusher(600);
+    BitCrusher bitcrusher(200);
+    Samplecrusher samplecrusher(50);
 
     Sine cutLFO;
     cutLFO.freq(.1);
@@ -42,7 +44,7 @@ int main(void)
     cutLFO >> interface.blackhole1;
 
 
-    sine >> bitcrusher >> outputPan >> interface.rootNode;
+    sine >> samplecrusher >> bitcrusher >> outputPan >> interface.rootNode;
 
 
     // const size_t delayTime = (size_t)((float)SAMPLE_RATE*0.74);
@@ -82,10 +84,9 @@ int main(void)
         float lfoVal = (cutLFO.getCurrentFrame()[0] +2.) / 2.9;
         filt.cutoff( 0.98 * lfoVal +0.02);
 
-        float bitsCrushed = ((cutLFO.getCurrentFrame()[0] + 2.) / 2) * 2;
-        bitsCrushed += 1;
-
-        bitcrusher.bits = bitsCrushed;
+        float normalizedLfo = ((cutLFO.getCurrentFrame()[0] + 2.) / 2);
+        bitcrusher.bits = (normalizedLfo * 2) + 1;
+        samplecrusher.amount = normalizedLfo;
         // cutLFO.freq(lfoVal * 1111);
         // float currentSecond = time.currentUnit(SAMPLE_RATE);
         
