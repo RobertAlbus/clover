@@ -1,0 +1,3 @@
+// the configured options and settings for Tutorial
+#define Clover_VERSION_MAJOR @Clover_VERSION_MAJOR@
+#define Clover_VERSION_MINOR @Clover_VERSION_MINOR@

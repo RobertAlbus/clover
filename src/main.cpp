@@ -7,6 +7,8 @@
 
 #include "portaudio.h"
 
+#include "config.h"
+
 #include "adsr.h"
 #include "bitcrusher.h"
 #include "constants.h"
@@ -22,8 +24,10 @@
 #include "wavetableOsc.h"
 
 
-int main(void)
+int main(int argc, char* argv[])
 {
+    printf("\nClover Version %d.%d\n", Clover_VERSION_MAJOR, Clover_VERSION_MINOR);
+
     Time time(120);
     SampleClock clock;
     Interface interface;

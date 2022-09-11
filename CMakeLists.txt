@@ -15,7 +15,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2")
 # set(CMAKE_BUILD_TYPE RelWithDebInfo)
 
 # set the project name
-project(Clover)
+project(Clover VERSION 1.0)
 
 link_libraries(asound)
 link_libraries(m)
@@ -25,6 +25,8 @@ link_libraries(portaudio)
 file(GLOB_RECURSE SOURCES
     src/*.cpp
 )
+
+configure_file(src/config.h.in config.h)
 
 add_executable(${PROJECT_NAME} 
     src/main.cpp
@@ -36,7 +38,8 @@ add_executable(${PROJECT_NAME}
 )
 
 target_include_directories(${PROJECT_NAME}
-    PRIVATE
+    PUBLIC
+        "${PROJECT_BINARY_DIR}"
         src
         src/interface
         src/graph
