@@ -2,7 +2,6 @@
 
 #include <algorithm>
 
-#include "calc.h"
 #include "node.h"
 
 class Samplecrusher : public Node<1,1>

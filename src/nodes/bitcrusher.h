@@ -3,8 +3,10 @@
 #include <limits.h>
 #include <math.h>
 
-#include "util/calc.h"
+#include "util/util.h"
 #include "node.h"
+
+using namespace Clover::Util;
 
 class BitCrusher : public Node<1,1>
 {
@@ -23,7 +25,7 @@ public:
 protected:
     Frame<1> tick(Frame<1> inputFrame)
     {
-        float sign = calc::sign(inputFrame[0]);
+        float sign = Calc::sign(inputFrame[0]);
         float abs = fabs(inputFrame[0]);
         abs = floor(abs * bits) / bits;
         return Frame<1> {abs * sign};

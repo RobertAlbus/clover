@@ -7,6 +7,8 @@
 #include "pan.h"
 #include "sum.h"
 
+using namespace Clover::Util;
+
 class Stereo : public Subgraph<2,2>
 {
 public:
@@ -34,7 +36,7 @@ public:
     _spreadReadOnly = s;
 
     s = fabs(_spreadReadOnly);
-    float neutralGain = dbtol(-4.5);
+    float neutralGain = Calc::dbtol(-4.5);
     float gainUp  = lerp(neutralGain, 0., s);
     float gainDown = lerp(neutralGain, 1., s);
 

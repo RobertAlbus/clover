@@ -2,10 +2,11 @@
 
 #include <algorithm>
 
-#include "calc.h"
+#include "util/util.h"
 #include "node.h"
 
-using namespace calc;
+using namespace Clover::Util;
+
 
 template <size_t __arityInput>
 class Pan : public Node<__arityInput,2>
@@ -25,7 +26,7 @@ public:
     {
         _pan = (float)std::clamp((double)p, -1., 1.);
         p = fabs(_pan);
-        float midGain = dbtol(-4.5);
+        float midGain = Calc::dbtol(-4.5);
         float panDown = lerp(midGain, 0., p);
         float panUp   = lerp(midGain, 1., p);
 
