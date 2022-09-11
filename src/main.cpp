@@ -31,7 +31,7 @@ int main(void)
     Sine sine;
     sine.freq(100);
     Pan1 outputPan(0);
-    SVF filt(0.3,0.5,1);
+    SVF filt(0.3,0.7,1);
     filt.gain = 0.9;
     float baseSineFreq = 152.;
 
@@ -39,12 +39,12 @@ int main(void)
     Samplecrusher samplecrusher(400);
 
     Sine cutLFO;
-    cutLFO.freq(.1);
+    cutLFO.freq(1);
     cutLFO.gain = 0.9;
     cutLFO >> interface.blackhole1;
 
 
-    sine >> samplecrusher >> outputPan >> interface.rootNode;
+    sine >> bitcrusher >> samplecrusher >> filt >> outputPan >> interface.rootNode;
 
 
     // const size_t delayTime = (size_t)((float)SAMPLE_RATE*0.74);
@@ -82,7 +82,7 @@ int main(void)
     clock.registerTickCallback([&](int currentTime)->void
     {   
         float lfoVal = (cutLFO.getCurrentFrame()[0] +2.) / 2.9;
-        filt.cutoff( 0.98 * lfoVal +0.02);
+        filt.cutoff( 1 - (0.98 * lfoVal +0.02) );
 
         float normalizedLfo = ((cutLFO.getCurrentFrame()[0] + 2.) / 2);
         bitcrusher.bits = (normalizedLfo * 2) + 1;

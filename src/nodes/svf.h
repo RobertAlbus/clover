@@ -101,8 +101,8 @@ protected:
         out = lp;
     }
 
-    fir.frames.next(Frame<1>{out});
-    return fir.frames.current;
-    // return Frame<1>{hp};
+    // fir.frames.next(Frame<1>{out});
+    // return fir.frames.current;
+    return Frame<1>{out};
   }
 };
