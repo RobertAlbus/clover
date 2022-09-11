@@ -28,22 +28,25 @@ file(GLOB_RECURSE SOURCES
 
 configure_file(src/config.h.in config.h)
 
+add_subdirectory(src/util)
+list(APPEND EXTRA_LIBS CloverUtil)
+list(APPEND EXTRA_INCLUDES "${PROJECT_SOURCE_DIR}/src/util")
+
 add_executable(${PROJECT_NAME} 
     src/main.cpp
 
     src/interface/interface.cpp    
-
-    src/util/musicTime.cpp
-    src/util/sampleClock.cpp
 )
+target_link_libraries(${PROJECT_NAME} PUBLIC ${EXTRA_LIBS})
+
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC
         "${PROJECT_BINARY_DIR}"
+        ${EXTRA_INCLUDES}
         src
         src/interface
         src/graph
         src/nodes
         src/sine
-        src/util
 )

@@ -3,7 +3,6 @@
 #include <cmath>
 #include <math.h>
 
-#include "constants.h"
 
 namespace Wavetable {
     namespace Generate {

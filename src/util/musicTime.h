@@ -4,7 +4,7 @@
 class Time
 {
 public:
-    Time(float bpm);
+    Time(float bpm, size_t sampleRate);
 
     float currentQuat();
     float currentTrip();
@@ -13,13 +13,13 @@ public:
     float currentUnit(int unitInSamples);
 
     float bpm;
-    float bps;
     int quat;
     int trip;
     int beat;
     int bar;
 
 private:
+    size_t _sampleRate;
     void initMusicTime();
     SampleClock sampleClock;
 };

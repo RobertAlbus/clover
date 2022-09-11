@@ -3,7 +3,7 @@
 #include <limits.h>
 #include <math.h>
 
-#include "calc.h"
+#include "util/calc.h"
 #include "node.h"
 
 class BitCrusher : public Node<1,1>

@@ -1,10 +1,9 @@
-#include "constants.h"
 #include "musicTime.h"
 
-Time::Time(float bpm) :
-    bpm(bpm),
-    bps(bpm/60.)
+Time::Time(float bpm, size_t sampleRate) :
+    bpm(bpm)
 {
+    _sampleRate = sampleRate;
     initMusicTime();
 };
 
@@ -33,11 +32,10 @@ float Time::currentBar()
     return currentUnit(bar);
 }
 
-
 void Time::initMusicTime() {
     float beatsPerSecond = bpm/60;
 
-    beat = int((float)SAMPLE_RATE / beatsPerSecond);
+    beat = int((float)_sampleRate / beatsPerSecond);
     quat = beat / 4;
     trip = beat / 3;
     bar  = beat * 4;

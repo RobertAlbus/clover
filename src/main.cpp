@@ -28,7 +28,7 @@ int main(int argc, char* argv[])
 {
     printf("\nClover Version %d.%d\n", Clover_VERSION_MAJOR, Clover_VERSION_MINOR);
 
-    Time time(120);
+    Time time(120, SAMPLE_RATE);
     SampleClock clock;
     Interface interface;
 
