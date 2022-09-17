@@ -18,6 +18,8 @@ namespace SVFd
   constexpr int hp = highpass;
 }
 
+namespace Clover::NodeSimplex::Filter {
+
 class SVF : public Subgraph<1,1>
 {
 public:
@@ -106,3 +108,5 @@ protected:
     return Frame<1>{out};
   }
 };
+
+}

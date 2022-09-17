@@ -7,9 +7,9 @@
 
 #include "delay/delay.h" // should be called fractional
 
+#include "envelope/basicEnvelope.h" // must come first
 #include "envelope/adsr.h"
 #include "envelope/dc.h"
-#include "envelope/envelope.h"
 
 #include "filter/firLowPass.h"
 #include "filter/svf.h"

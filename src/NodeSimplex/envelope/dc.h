@@ -2,6 +2,7 @@
 
 #include "node.h"
 
+namespace Clover::NodeSimplex::Envelope {
 
 class DC : public Node<0, 1>
 {
@@ -20,3 +21,5 @@ protected:
     return Frame<1> {_value};
   }
 };
+
+}

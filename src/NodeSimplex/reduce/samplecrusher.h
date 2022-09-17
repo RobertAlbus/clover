@@ -4,6 +4,8 @@
 
 #include "node.h"
 
+namespace Clover::NodeSimplex::Reduce {
+
 class Samplecrusher : public Node<1,1>
 {
 public:
@@ -27,3 +29,5 @@ protected:
         return Frame<1> {heldSample};
     }
 };
+
+}

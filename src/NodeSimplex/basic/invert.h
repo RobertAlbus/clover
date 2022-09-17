@@ -2,6 +2,8 @@
 
 #include "../nodeSimplex.h"
 
+namespace Clover::NodeSimplex::Basic {
+
 template <size_t __arity>
 auto invertFn = [](Frame<__arity> input)
 {
@@ -16,3 +18,5 @@ auto invertFn = [](Frame<__arity> input)
 };
 template <size_t __arity>
 class Invert : public StatelessProcessor<__arity,__arity,invertFn<__arity>> { };
+
+}

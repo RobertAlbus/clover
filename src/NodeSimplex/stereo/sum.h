@@ -2,6 +2,8 @@
 
 #include "node.h"
 
+namespace Clover::NodeSimplex::Stereo {
+
 auto sum1Fn = [](Frame<2> input)
 {
   return Frame<1> {(input[0] + input[1]) * 0.5f };
@@ -17,3 +19,5 @@ auto sum2Fn = [](Frame<2> input)
   };
 };
 class Sum2 : public StatelessProcessor<2,2,sum2Fn> { };
+
+}

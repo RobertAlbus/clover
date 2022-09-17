@@ -9,12 +9,15 @@
 
 #include "config.h"
 
-#include "nodeSimplex.h"
+#include "NodeSimplex/nodeSimplex.h"
 
 #include "constants.h"
 #include "interface.h"
 #include "time.h"
 
+using namespace Clover::NodeSimplex::Filter;
+using namespace Clover::NodeSimplex::Stereo;
+using namespace Clover::NodeSimplex::Wavetable;
 
 int main(int argc, char* argv[])
 {
@@ -59,7 +62,7 @@ int main(int argc, char* argv[])
     
     // lfo >> interface.blackhole1;
 
-    // // Envelope e(-1, 1, (SAMPLE_RATE * 1));
+    // // BasicEnvelope e(-1, 1, (SAMPLE_RATE * 1));
     // Adsr e(20, time.quat * 2., 0, time.quat);
     // e >> interface.blackhole1;
 

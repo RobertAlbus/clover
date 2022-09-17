@@ -5,6 +5,8 @@
 #include "constants.h"
 #include "node.h"
 
+namespace Clover::NodeSimplex::Filter {
+
 template <int __order = 128, size_t __sampleRate = SAMPLE_RATE>
 class FirLowPass : public Node<1,1>
 {
@@ -91,3 +93,5 @@ protected:
 };
 
 class FIRLP : public FirLowPass<39, SAMPLE_RATE> {};
+
+}

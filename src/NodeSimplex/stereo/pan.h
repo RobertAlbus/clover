@@ -7,6 +7,7 @@
 
 using namespace Clover::Util;
 
+namespace Clover::NodeSimplex::Stereo {
 
 template <size_t __arityInput>
 class Pan : public Node<__arityInput,2>
@@ -75,3 +76,5 @@ private:
     }
 
 };
+
+}

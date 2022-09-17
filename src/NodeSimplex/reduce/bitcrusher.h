@@ -8,6 +8,8 @@
 
 using namespace Clover::Util;
 
+namespace Clover::NodeSimplex::Reduce {
+
 class BitCrusher : public Node<1,1>
 {
 public:
@@ -31,3 +33,5 @@ protected:
         return Frame<1> {abs * sign};
     }
 };
+
+}

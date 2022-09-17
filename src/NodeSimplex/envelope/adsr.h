@@ -2,8 +2,10 @@
 
 #include <cmath>
 
-#include "envelope.h"
+#include "../nodeSimplex.h"
 #include "rootNode.h"
+
+namespace Clover::NodeSimplex::Envelope {
 
 class Adsr : public Subgraph<0,1>
 {
@@ -47,7 +49,7 @@ public:
   
 
 protected:
-    Envelope envelope;
+    BasicEnvelope envelope;
     size_t _attack;
     size_t _decay;
     float  _sustain;
@@ -70,3 +72,5 @@ protected:
         return blackHole.frames.current;
     }
 };
+
+}

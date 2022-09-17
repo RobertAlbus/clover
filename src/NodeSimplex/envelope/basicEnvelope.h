@@ -5,16 +5,17 @@
 
 #include "node.h"
 
+namespace Clover::NodeSimplex::Envelope {
 
-class Envelope : public Node<0,1>
+class BasicEnvelope : public Node<0,1>
 {
 public:
-  Envelope() : Node()
+  BasicEnvelope() : Node()
   {
     set(0.,0.,0);
   }
 
-  Envelope(float currentValue, float targetValue, size_t durationTime) : Node()
+  BasicEnvelope(float currentValue, float targetValue, size_t durationTime) : Node()
   {
     set(currentValue, targetValue, durationTime);
   }
@@ -86,3 +87,5 @@ protected:
   }
 
 };
+
+}

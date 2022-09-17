@@ -5,6 +5,8 @@
 #include "node.h"
 #include "ringBuffer.h"
 
+namespace Clover::NodeSimplex::Delay {
+
 template <size_t __arity, size_t __bufferSize>
 class Delay : public Node<__arity, __arity>
 {
@@ -30,3 +32,5 @@ protected:
     return f;
   }
 };
+
+}
