@@ -1,17 +1,38 @@
 # TODO
 
 once SVF is created, all nodes should have a `latency()` method that returns the samples of latency. it would be great to have this calculable between two nodes, but that is a dream for now.
+-- this has been invalidated because I removed the FIR filter which was the source of latency. everything else is latency-free.
+-- this may become relevant again in the future if I need to do any look-ahead such as for certain envelope followers
+
 
 ## Nodes
+- should have input and output gain
 
 
+- Wave Shapers / Distortions
+  - cubic interpolation
+  - bicubic interpolation for morphing
+  - linear interpolation
+  - bilinear interpolation for morphing
+- Dynamics control
+  - compressor/limiter
+    - input gain
+    - wave shaping function?
+  - gate
+- Sampler
+  - can sample N samples from a graph with a clock
+  - can load a wave file
+  - crossfade loop
 - Delay
   - echo
   - ping pong or custom-feedback-insert
+  - upgrade buffer
+    - make it a fractional delay line
+    - make it a Node
 - ~~ Filters ~~
   - ~~ SVF with oversampling ~~
     - SVF with freq-based interface
-    - do I really need the oversampling and downsampling FIR?
+    - do I really need the oversampling and downsampling FIR? musically, not strictly necessary.
 - Spectral Domain
   - FFT library integration
   - time stretch
@@ -21,7 +42,8 @@ once SVF is created, all nodes should have a `latency()` method that returns the
 - ~~ Envelope ~~
   - ~~ L1 Envelope ~~
   - ~~ L2 ADSR ~~
-  - L1 envelope follower 
+  - L1 envelope follower
+  - L1 N-Stage
 - automation clip - don't worry about looping automation clips. composition-level only.
 - Source
   - L1 MIDI Source
@@ -35,9 +57,49 @@ once SVF is created, all nodes should have a `latency()` method that returns the
 - brown noise
 - L3 NxOsc
 - L3 FMN (FM8ish) or DXN (Dx7ish)
+- UI output
+  - specral analyzer
+  - metering (peak, RMS, etc)
+  - waveform
+  - composition/pattern displays?
+
+## House Keeping
+
+- build system
+
+  - aggregation headers for simpler imports
+  - can be imported into other projects as a git submodule
+  - can be built as a cmake library
+  - convert non-template header implementations to source implementations
+
+- namespacing
+  - Clover
+    - Graph (frame, history, node, stateless, subgraph, root node)
+    - IO (audio IO, MIDI IO, OSC IO, .wav render)
+    - NodeSimplex
+      - envelope (standard, ADSR, follower, N-stage, DC, impulse, etc)
+      - wavetable
+      - waveshape (distortions)
+      - reduce (bit/sample crushers)
+      - delay (fractional delay line)
+      - stereo (sum, difference, pan1/2, peel)
+      - midi
+    - NodeComplex
+      - spatial (echo, verb, convolver, etc)
+      - dynamics
+      - instrument (FMN, NxOsc)
 
 ## Ops
-how do I make Clover into a package? Is it necessary?
+
+how do I make Clover into a package? Is it necessary? Don't do artifacts, do git submodules, version tags, and cmakelists
+
+DO:
+- clover git repo uses tags for versions (starting with v1 = first consumable version)
+- clover git module added as submodule in consuming project
+- clover CMakeLists can be targeted by consuming project's CMakeLists
+- clover has submodules for portaudio, portmidi, and other cmake-able deps
+
+NOT:
 
 - Conan C++ - package manager?
 - JFrog Artifactory Community Edition? - package repo
