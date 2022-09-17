@@ -32,6 +32,11 @@ add_subdirectory(src/util)
 list(APPEND EXTRA_LIBS CloverUtil)
 list(APPEND EXTRA_INCLUDES "${PROJECT_SOURCE_DIR}/src/util")
 
+add_subdirectory(src/NodeSimplex)
+list(APPEND EXTRA_LIBS NodeSimplex)
+list(APPEND EXTRA_INCLUDES "${PROJECT_SOURCE_DIR}/src/NodeSimplex")
+
+
 add_executable(${PROJECT_NAME} 
     src/main.cpp
 

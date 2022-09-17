@@ -5,7 +5,7 @@
 
 #include "constants.h"
 #include "firLowPass.h"
-#include "subgraph.h"
+#include "../nodeSimplex.h"
 
 namespace SVFd
 {

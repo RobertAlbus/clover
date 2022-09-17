@@ -1,6 +1,6 @@
 #pragma once
 
-#include "statelessProcessor.h"
+#include "../nodeSimplex.h"
 
 auto differenceFn = [](Frame<2> input)
 {

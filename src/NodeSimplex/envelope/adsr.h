@@ -3,7 +3,6 @@
 #include <cmath>
 
 #include "envelope.h"
-#include "subgraph.h"
 #include "rootNode.h"
 
 class Adsr : public Subgraph<0,1>

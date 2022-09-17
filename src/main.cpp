@@ -9,19 +9,11 @@
 
 #include "config.h"
 
-#include "adsr.h"
-#include "bitcrusher.h"
+#include "nodeSimplex.h"
+
 #include "constants.h"
-#include "delay.h"
-#include "gain.h"
 #include "interface.h"
-#include "pan.h"
-#include "samplecrusher.h"
-#include "stereo.h"
-#include "sum.h"
-#include "svf.h"
 #include "time.h"
-#include "wavetableOsc.h"
 
 
 int main(int argc, char* argv[])

@@ -1,6 +1,8 @@
 #pragma once
 
+#include "frame.h"
 #include "statelessProcessor.h"
+#include "../nodeSimplex.h"
 
 template <size_t __arity>
 auto passFn = [](Frame<__arity> input)

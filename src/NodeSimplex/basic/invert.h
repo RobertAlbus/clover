@@ -1,6 +1,6 @@
 #pragma once
 
-#include "statelessProcessor.h"
+#include "../nodeSimplex.h"
 
 template <size_t __arity>
 auto invertFn = [](Frame<__arity> input)
