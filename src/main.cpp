@@ -32,23 +32,20 @@ int main(int argc, char* argv[])
     SampleClock clock;
     Interface interface;
 
+    float baseSineFreq = 400.;
     Sine sine;
-    sine.freq(100);
+    sine.freq(baseSineFreq);
     Pan1 outputPan(0);
     SVF filt(0.3,0.7,1);
     filt.gain = 0.9;
-    float baseSineFreq = 152.;
 
-    BitCrusher bitcrusher(200);
-    Samplecrusher samplecrusher(400);
-
-    Sine cutLFO;
-    cutLFO.freq(1);
-    cutLFO.gain = 0.9;
-    cutLFO >> interface.blackhole1;
+    NoiseWhite LFO;
+    LFO.freq(0.0001);
+    LFO >> interface.blackhole1;
+    float lfoRange = baseSineFreq * 0.01;
 
 
-    sine >> bitcrusher >> samplecrusher >> filt >> outputPan >> interface.rootNode;
+    sine >> outputPan >> interface.rootNode;
 
 
     // const size_t delayTime = (size_t)((float)SAMPLE_RATE*0.74);
@@ -85,12 +82,9 @@ int main(int argc, char* argv[])
 
     clock.registerTickCallback([&](int currentTime)->void
     {   
-        float lfoVal = (cutLFO.getCurrentFrame()[0] +2.) / 2.9;
-        filt.cutoff( 1 - (0.98 * lfoVal +0.02) );
+        sine.freq(baseSineFreq + (LFO.getCurrentFrame()[0] * lfoRange));
+        printf("%f\n", LFO.getCurrentFrame()[0]);
 
-        float normalizedLfo = ((cutLFO.getCurrentFrame()[0] + 2.) / 2);
-        bitcrusher.bits = (normalizedLfo * 2) + 1;
-        samplecrusher.amount = (normalizedLfo * 0.5) + 0.1;
         // cutLFO.freq(lfoVal * 1111);
         // float currentSecond = time.currentUnit(SAMPLE_RATE);
         
