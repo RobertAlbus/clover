@@ -4,7 +4,7 @@
 #include <math.h>
 
 
-namespace Clover::Wavetable::Generate {
+namespace Clover::Util::GenerateWavetable {
 
 // linear interpolation to create a larger wavetable from a smaller wavetable
 // check Wavetable::Generate::Tri to see it in use

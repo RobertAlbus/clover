@@ -1,6 +1,8 @@
 #pragma once
 #include "sampleClock.h"
 
+namespace Clover::Util {
+
 class Time
 {
 public:
@@ -23,3 +25,5 @@ private:
     void initMusicTime();
     SampleClock sampleClock;
 };
+
+}

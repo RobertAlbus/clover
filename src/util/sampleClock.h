@@ -2,6 +2,7 @@
 #include <functional>
 #include <vector>
 
+namespace Clover::Util {
 
 typedef std::function<void(int)> ClockCallbackFn;
 
@@ -17,3 +18,5 @@ private:
     static int _currentSample;
     static std::vector<ClockCallbackFn> callbacks;
 };
+
+}

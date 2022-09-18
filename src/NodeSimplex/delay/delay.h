@@ -22,7 +22,7 @@ public:
   }
 
 protected:
-  RingBuffer<__arity, __bufferSize> buffer;
+  Clover::Util::RingBuffer<__arity, __bufferSize> buffer;
   Frame<__arity> tick(Frame<__arity> input)
   {
     buffer.write(input);

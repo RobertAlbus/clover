@@ -3,6 +3,7 @@
 
 #include "sampleClock.h"
 
+using namespace Clover::Util;
 
 SampleClock::SampleClock()
 {

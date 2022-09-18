@@ -1,5 +1,7 @@
 #include "musicTime.h"
 
+using namespace Clover::Util;
+
 Time::Time(float bpm, size_t sampleRate) :
     bpm(bpm)
 {

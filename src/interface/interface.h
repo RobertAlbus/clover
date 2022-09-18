@@ -35,7 +35,7 @@ private:
 
     PaStream *stream;
     char message[20];
-    SampleClock clock;
+    Clover::Util::SampleClock clock;
 public:
     RootNode<2> rootNode;
     RootNode<1> blackhole1;

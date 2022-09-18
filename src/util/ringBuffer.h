@@ -6,6 +6,7 @@
 
 #include "frame.h"
 
+namespace Clover::Util {
 
 template <size_t __arity, size_t __bufferSize>
 class RingBuffer
@@ -43,3 +44,5 @@ protected:
   int readHead;
   int writeHead;
 };
+
+}
