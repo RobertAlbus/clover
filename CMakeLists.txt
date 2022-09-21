@@ -32,6 +32,8 @@ add_subdirectory(src/util)
 list(APPEND EXTRA_LIBS CloverUtil)
 list(APPEND EXTRA_INCLUDES "${PROJECT_SOURCE_DIR}/src/util")
 
+list(APPEND EXTRA_INCLUDES "${PROJECT_SOURCE_DIR}/src/IO")
+
 add_subdirectory(src/NodeSimplex)
 list(APPEND EXTRA_LIBS NodeSimplex)
 list(APPEND EXTRA_INCLUDES "${PROJECT_SOURCE_DIR}/src/NodeSimplex")
@@ -39,8 +41,7 @@ list(APPEND EXTRA_INCLUDES "${PROJECT_SOURCE_DIR}/src/NodeSimplex")
 
 add_executable(${PROJECT_NAME} 
     src/main.cpp
-
-    src/interface/interface.cpp    
+    src/IO/interface.cpp
 )
 target_link_libraries(${PROJECT_NAME} PUBLIC ${EXTRA_LIBS})
 
@@ -50,7 +51,6 @@ target_include_directories(${PROJECT_NAME}
         "${PROJECT_BINARY_DIR}"
         ${EXTRA_INCLUDES}
         src
-        src/interface
         src/graph
         src/nodes
         src/sine

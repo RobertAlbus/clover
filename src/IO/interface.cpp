@@ -3,8 +3,8 @@
 #include <stdio.h>
 #include "portaudio.h"
 
-#include "constants.h"
 #include "interface.h"
+#include "rootNode.h"
 
 
 Interface::Interface() : stream(0)

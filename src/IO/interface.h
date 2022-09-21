@@ -1,10 +1,9 @@
 #pragma once
 
 #include "portaudio.h"
-#include "node.h"
+
 #include "rootNode.h"
-#include "sampleClock.h"
-#include "musicTime.h"
+#include "util/sampleClock.h"
 
 class Interface
 {

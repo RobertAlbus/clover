@@ -12,8 +12,8 @@
 #include "NodeSimplex/nodeSimplex.h"
 
 #include "constants.h"
-#include "interface.h"
-#include "time.h"
+#include "IO/interface.h"
+#include "util/musicTime.h"
 
 using namespace Clover::NodeSimplex::Filter;
 using namespace Clover::NodeSimplex::Stereo;

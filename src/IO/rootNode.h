@@ -1,4 +1,5 @@
 #pragma once
+
 #include "node.h"
 
 template <size_t __arity>
