@@ -6,6 +6,7 @@
 #include "interface.h"
 #include "rootNode.h"
 
+using namespace Clover::IO;
 
 Interface::Interface() : stream(0)
 {

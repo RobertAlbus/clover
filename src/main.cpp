@@ -15,6 +15,7 @@
 #include "IO/interface.h"
 #include "util/musicTime.h"
 
+using namespace Clover::IO;
 using namespace Clover::NodeSimplex::Filter;
 using namespace Clover::NodeSimplex::Stereo;
 using namespace Clover::NodeSimplex::Wavetable;

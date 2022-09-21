@@ -2,6 +2,8 @@
 
 #include "node.h"
 
+namespace Clover::IO {
+
 template <size_t __arity>
 class RootNode : public Node<__arity,__arity>
 {
@@ -16,3 +18,5 @@ protected:
         return input;
     }
 };
+
+}

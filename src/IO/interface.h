@@ -5,6 +5,8 @@
 #include "rootNode.h"
 #include "util/sampleClock.h"
 
+namespace Clover::IO {
+
 class Interface
 {
 public:
@@ -40,3 +42,5 @@ public:
     RootNode<1> blackhole1;
     RootNode<2> blackhole2;
 };
+
+}
