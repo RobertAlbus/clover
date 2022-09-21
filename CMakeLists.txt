@@ -22,10 +22,6 @@ link_libraries(m)
 link_libraries(pthread)
 link_libraries(portaudio)
 
-file(GLOB_RECURSE SOURCES
-    src/*.cpp
-)
-
 configure_file(src/config.h.in config.h)
 
 add_subdirectory(src/util)
@@ -52,9 +48,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC ${EXTRA_LIBS})
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC
-        "${PROJECT_BINARY_DIR}"
+        ${PROJECT_BINARY_DIR}
         ${EXTRA_INCLUDES}
         src
-        src/nodes
-        src/sine
 )
