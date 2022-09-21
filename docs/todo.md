@@ -98,6 +98,7 @@ DO:
 - clover git module added as submodule in consuming project
 - clover CMakeLists can be targeted by consuming project's CMakeLists
 - clover has submodules for portaudio, portmidi, and other cmake-able deps
+  - https://github.com/CD3/libInterpolate
 
 NOT:
 
