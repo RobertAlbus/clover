@@ -7,6 +7,8 @@
 #include "frame.h"
 #include "frameHistory.h"
 
+namespace Clover::Graph {
+
 template <size_t __arityOutput>
 class INode
 {
@@ -101,4 +103,6 @@ Node<Y,Z>& operator>> (Node<X,Y> &sourceNode, Node<Y,Z> &destinationNode)
     auto sourceNodeAddress = &sourceNode;
     destinationNode.addInputNode(sourceNode);
     return destinationNode;
+}
+
 }

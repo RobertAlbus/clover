@@ -5,6 +5,8 @@
 #include "frame.h"
 #include "node.h"
 
+using namespace Clover::Graph;
+
 /// A Node with a transform function that does not maintain any inter-sample state.
 template <size_t __arityIn, size_t __arityOut, Frame<__arityOut> processFn(Frame<__arityIn>)> 
 class StatelessProcessor : public Node<__arityIn, __arityOut>

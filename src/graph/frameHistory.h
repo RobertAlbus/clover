@@ -2,6 +2,8 @@
 
 #include "frame.h"
 
+namespace Clover::Graph {
+
 template<size_t __arity>
 class FrameHistory
 {
@@ -29,3 +31,5 @@ protected:
     Frame<__arity> _next = {};
     bool _hasNext;
 };
+
+}

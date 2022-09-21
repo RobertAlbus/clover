@@ -2,6 +2,8 @@
 
 #include "node.h"
 
+using namespace Clover::Graph;
+
 namespace Clover::IO {
 
 template <size_t __arity>

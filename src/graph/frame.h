@@ -3,6 +3,8 @@
 #include <string>
 #include "constants.h"
 
+namespace Clover::Graph {
+
 template<size_t __arity>
 using Frame = std::array<Sample, __arity>;
 
@@ -26,4 +28,6 @@ Frame<__arity> operator*= (Frame<__arity> frame, float gain)
     }
 
     return frame;
+}
+
 }
