@@ -67,16 +67,18 @@ once SVF is created, all nodes should have a `latency()` method that returns the
 
 - build system
 
-  - aggregation headers for simpler imports
+  - aggregation headers for simpler imports FAKE AND DUMB I GUESS?
   - can be imported into other projects as a git submodule
   - can be built as a cmake library
-  - convert non-template header implementations to source implementations
+  - convert non-template header implementations to source implementations (not now, why bother with the effort until build are too slow)
+  - deps should be included via cmakelists instead of the system (yeah?)
 
 - namespacing
   - Clover
     - Graph (frame, history, node, stateless, subgraph, root node)
     - IO (audio IO, MIDI IO, OSC IO, .wav render)
     - NodeSimplex
+      - basic (gain, invert, rectifier, stateless processor and subgraph base classes)
       - envelope (standard, ADSR, follower, N-stage, DC, impulse, etc)
       - wavetable
       - waveshape (distortions)
