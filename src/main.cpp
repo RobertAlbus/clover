@@ -78,7 +78,6 @@ int main(int argc, char* argv[])
     clock.registerTickCallback([&](int currentTime)->void
     {   
         sine.freq(baseSineFreq + (LFO.getCurrentFrame()[0] * lfoRange));
-        printf("%f\n", LFO.getCurrentFrame()[0]);
 
         // cutLFO.freq(lfoVal * 1111);
         // float currentSecond = time.currentUnit(SAMPLE_RATE);
