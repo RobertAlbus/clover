@@ -2,7 +2,6 @@
 
 #include "frame.h"
 #include "statelessProcessor.h"
-#include "../nodeSimplex.h"
 
 namespace Clover::NodeSimplex::Basic {
 

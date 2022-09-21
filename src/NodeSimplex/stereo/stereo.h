@@ -3,22 +3,23 @@
 #include <cmath>
 
 #include "difference.h"
-#include "subgraph.h"
+#include "NodeSimplex/basic/subgraph.h"
 #include "pan.h"
 #include "sum.h"
 
+using namespace Clover::NodeSimplex::Stereo;
 using namespace Clover::Util;
 
-class Stereo : public Subgraph<2,2>
+class StereoImage : public Subgraph<2,2>
 {
 public:
-  Stereo() : Subgraph(), pan2(0)
+  StereoImage() : Subgraph(), pan2(0)
   {
     connectNodes();
     spread(0);
   }
 
-  Stereo(float s, float p) : Subgraph(), pan2(p)
+  StereoImage(float s, float p) : Subgraph(), pan2(p)
   {
     connectNodes();
     spread(s);

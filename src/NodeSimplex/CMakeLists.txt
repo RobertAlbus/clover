@@ -7,5 +7,6 @@ INTERFACE
     envelope
     filter
     reduce
+    stereo
     wavetable
 )

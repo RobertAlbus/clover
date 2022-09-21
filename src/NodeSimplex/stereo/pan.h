@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-#include "util/util.h"
+#include "util/calc.h"
 #include "node.h"
 
 using namespace Clover::Util;

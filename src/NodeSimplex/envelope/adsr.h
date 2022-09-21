@@ -3,7 +3,6 @@
 #include <cmath>
 
 #include "../nodeSimplex.h"
-#include "rootNode.h"
 
 namespace Clover::NodeSimplex::Envelope {
 
