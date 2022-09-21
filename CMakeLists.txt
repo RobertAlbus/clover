@@ -32,6 +32,10 @@ add_subdirectory(src/util)
 list(APPEND EXTRA_LIBS CloverUtil)
 list(APPEND EXTRA_INCLUDES "${PROJECT_SOURCE_DIR}/src/util")
 
+add_subdirectory(src/graph)
+list(APPEND EXTRA_LIBS Graph)
+list(APPEND EXTRA_INCLUDES "${PROJECT_SOURCE_DIR}/src/graph")
+
 list(APPEND EXTRA_INCLUDES "${PROJECT_SOURCE_DIR}/src/IO")
 
 add_subdirectory(src/NodeSimplex)
@@ -51,7 +55,6 @@ target_include_directories(${PROJECT_NAME}
         "${PROJECT_BINARY_DIR}"
         ${EXTRA_INCLUDES}
         src
-        src/graph
         src/nodes
         src/sine
 )
