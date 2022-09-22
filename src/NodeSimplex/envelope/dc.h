@@ -4,10 +4,11 @@
 
 namespace Clover::NodeSimplex::Envelope {
 
-class DC : public Node<0, 1>
+// consider making this arity-templated if DC is needed on more than one channel at a time.
+class DC : public Node<1, 1>
 {
 public:
-  DC(Sample value) : Node<0, 1>(), _value(value) {}
+  DC(Sample value) : Node<1, 1>(), _value(value) {}
 
   void value(Sample v)
   {
@@ -16,9 +17,9 @@ public:
 
 protected:
   Sample _value;
-  Frame<1> tick(Frame<0> input)
+  Frame<1> tick(Frame<1> input)
   {
-    return Frame<1> {_value};
+    return Frame<1> {_value + input[0]};
   }
 };
 

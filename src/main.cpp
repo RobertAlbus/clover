@@ -16,6 +16,7 @@
 #include "util/musicTime.h"
 
 using namespace Clover::IO;
+using namespace Clover::NodeSimplex::Envelope;
 using namespace Clover::NodeSimplex::Filter;
 using namespace Clover::NodeSimplex::Stereo;
 using namespace Clover::NodeSimplex::Wavetable;
@@ -42,7 +43,7 @@ int main(int argc, char* argv[])
 
 
     sine >> outputPan >> interface.rootNode;
-
+    sine >> *(new DC(100.)) >> interface.blackhole1;
 
     // const size_t delayTime = (size_t)((float)SAMPLE_RATE*0.74);
     // Delay<2, delayTime+3000> delay(delayTime+3000);
@@ -79,6 +80,7 @@ int main(int argc, char* argv[])
     clock.registerTickCallback([&](int currentTime)->void
     {   
         sine.freq(baseSineFreq + (LFO.getCurrentFrame()[0] * lfoRange));
+        printf("%f\n", interface.blackhole1.getCurrentFrame()[0]);
 
         // cutLFO.freq(lfoVal * 1111);
         // float currentSecond = time.currentUnit(SAMPLE_RATE);
