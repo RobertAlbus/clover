@@ -20,9 +20,14 @@ project(Clover VERSION 1.0)
 link_libraries(asound)
 link_libraries(m)
 link_libraries(pthread)
+
+# PortAudio
 add_subdirectory(dependencies/portaudio)
 list(APPEND EXTRA_LIBS PortAudio)
 
+# AudioFile
+add_subdirectory(dependencies/AudioFile)
+list(APPEND EXTRA_LIBS AudioFile)
 
 configure_file(src/config.h.in config.h)
 
