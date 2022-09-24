@@ -6,6 +6,7 @@
 #include "basic/subgraph.h"
 
 #include "delay/delay.h" // should be called fractional
+#include "delay/fractionalDelayLine.h"
 
 #include "envelope/basicEnvelope.h" // must come first
 #include "envelope/adsr.h"
