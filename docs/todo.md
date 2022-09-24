@@ -4,10 +4,9 @@ once SVF is created, all nodes should have a `latency()` method that returns the
 -- this has been invalidated because I removed the FIR filter which was the source of latency. everything else is latency-free.
 -- this may become relevant again in the future if I need to do any look-ahead such as for certain envelope followers
 
-
 ## Nodes
-- should have input and output gain
 
+- should have input and output gain
 
 - Wave Shapers / Distortions
   - cubic interpolation
@@ -44,6 +43,10 @@ once SVF is created, all nodes should have a `latency()` method that returns the
   - ~~ L2 ADSR ~~
   - L1 envelope follower
   - L1 N-Stage
+  - envelopes should handle input
+  - all envelopes should add the envelope value to the input value
+  - envelopes should be arity-able where all channels of the envelope are the same - will be needed to handle multi-arity inputs
+  - don't implement arity yet tho, just lock to 1
 - automation clip - don't worry about looping automation clips. composition-level only.
 - Source
   - L1 MIDI Source
@@ -79,6 +82,8 @@ once SVF is created, all nodes should have a `latency()` method that returns the
     - IO (audio IO, MIDI IO, OSC IO, .wav render)
     - NodeSimplex
       - basic (gain, invert, rectifier, stateless processor and subgraph base classes)
+        - rectifier
+        - multiplier (just use a gain)
       - envelope (standard, ADSR, follower, N-stage, DC, impulse, etc)
       - wavetable
       - waveshape (distortions)
@@ -96,6 +101,7 @@ once SVF is created, all nodes should have a `latency()` method that returns the
 how do I make Clover into a package? Is it necessary? Don't do artifacts, do git submodules, version tags, and cmakelists
 
 DO:
+
 - clover git repo uses tags for versions (starting with v1 = first consumable version)
 - clover git module added as submodule in consuming project
 - clover CMakeLists can be targeted by consuming project's CMakeLists
