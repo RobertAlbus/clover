@@ -66,6 +66,9 @@ once SVF is created, all nodes should have a `latency()` method that returns the
   - waveform
   - composition/pattern displays?
 
+https://github.com/thestk/stk
+http://svr-www.eng.cam.ac.uk/comp.speech/Section1/AudioSoftware/spkit.html
+
 ## House Keeping
 
 - build system
