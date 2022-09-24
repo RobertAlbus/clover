@@ -17,7 +17,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2")
 # set the project name
 project(Clover VERSION 1.0)
 
-link_libraries(asound)
+# link_libraries(asound)
 link_libraries(m)
 link_libraries(pthread)
 
