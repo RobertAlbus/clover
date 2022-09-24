@@ -29,7 +29,7 @@ public:
   {
     cutoff(__cutoff);
     q(reso);
-    fir >> blackHole;
+    // fir >> blackHole;
   }
 
   void  cutoff(float freq) { _cutoff = freq; }
@@ -42,7 +42,7 @@ public:
   int  mode()         { return _mode; }
 
 protected:
-  FIRLP fir;
+  // FIRLP fir;
 
   float _cutoff;
   float _q;

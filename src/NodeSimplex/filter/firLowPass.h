@@ -46,8 +46,6 @@ protected:
 
       // sample sinc function
       h_d[n] = omega_c * std::sin((omega_c * ii))/(omega_c * ii);
-      printf("\n\n%d - %d \n\n", n, _order);
-
     }
 
     // compute windowing function
