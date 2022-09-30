@@ -10,9 +10,9 @@ template <size_t __arity>
 class RootNode : public Node<__arity,__arity>
 {
 public:
-    /// RootNode exposes _tick publicly as the starting point of the signal graph
-    void _tick(int currentTime) {
-        Node<__arity,__arity>::_tick(currentTime);
+    /// RootNode exposes metaTick publicly as the starting point of the signal graph
+    void metaTick(int currentTime) {
+        Node<__arity,__arity>::metaTick(currentTime);
     }
 protected:
     Frame<__arity> tick(Frame<__arity> input) 

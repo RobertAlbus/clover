@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
     sine.freq(baseSineFreq);
     Pan1 outputPan(0);
     SVF filt(0.3,0.7,1);
-    filt.gain = 0.9;
+    filt.gain(0.9);
 
     float delayTime = 48000.33 * 4;
     FractionalDelayLine<2,4800000> fdl( delayTime );
@@ -84,9 +84,9 @@ int main(int argc, char* argv[])
 
     clock.registerTickCallback([&](int currentTime)->void
     {   
-        sine.freq(baseSineFreq + (LFO.getCurrentFrame()[0] * lfoRange));
+        // sine.freq(baseSineFreq + (LFO.currentFrame()[0] * lfoRange));
 
-        float lfoNormalized = (LFO.getCurrentFrame()[0] +1.) / 2.;
+        float lfoNormalized = (LFO.currentFrame()[0] +1.) / 2.;
         fdl.setDelayTime(delayTime + (20 * lfoNormalized));
 
         // cutLFO.freq(lfoVal * 1111);

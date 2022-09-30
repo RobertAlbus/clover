@@ -13,8 +13,8 @@ template <size_t __arityOutput>
 class INode
 {
 public:
-    virtual void _tick(int currentClockTime) = 0;
-    virtual Frame<__arityOutput> getCurrentFrame() = 0;
+    virtual void metaTick(int currentClockTime) = 0;
+    virtual Frame<__arityOutput> currentFrame() = 0;
 };
 
 /// Base class for all N channel nodes of the audio graph.
@@ -22,8 +22,8 @@ template<size_t __arityInput, size_t __arityOutput>
 class Node : public INode<__arityOutput>
 {
 public:
-    float gain;
-    float gainIn;
+    float _gain;
+    float _gainIn;
     const size_t arityInput;
     const size_t arityOutput;
     FrameHistory<__arityOutput> frames;
@@ -32,11 +32,26 @@ public:
         arityInput(__arityInput),
         arityOutput(__arityOutput),
         _currentClockTime(-1),
-        gain(1.),
-        gainIn(1.)
+        _gain(1.),
+        _gainIn(1.)
     {
         inputNodes.reserve(NODE_MAX_INPUT_CAPACITY);
     }
+
+    void gain(float gainOut)
+    {
+        _gain = gainOut;
+    }
+    float gain() {return _gain;}
+
+    void gainIn(float gainIn)
+    {
+        _gainIn = gainIn;
+    }
+    float gainIn() { return _gainIn;}
+
+    std::vector<INode<__arityInput>*> inputNodes;
+    int _currentClockTime;
 
     /// User-defined sample processing method with fallback implementation
     //
@@ -50,34 +65,35 @@ public:
 
     /// Programmatic tick function that gathers the various Frames
     /// from the input Nodes and passes them to implementation-defined tick()
-    void _tick(int currentClockTime)
+    void metaTick(int currentClockTime)
     {
         // Short-circuit any graph cycles
         if (currentClockTime == _currentClockTime) return;
 
         _currentClockTime = currentClockTime;
         tickInputs(currentClockTime);
-        _tickCallback(currentClockTime);
+        tickCallback(currentClockTime);
         frames.push(
-            tick( sumInputs() *= gainIn ) *= gain
+            tick( sumInputs() *= _gainIn ) *= _gain
         );
     }
 
-    Frame<__arityOutput> getCurrentFrame()
+    Frame<__arityOutput> currentFrame()
     {
         return frames.current;
     }
-protected:
+
+private:
     /// Advance time for all input nodes
     ///
     void tickInputs(int currentClockTime) {
         for(int i = 0, end = inputNodes.size(); i < end; i++) {
-            (inputNodes.at(i))->_tick(currentClockTime);
+            (inputNodes.at(i))->metaTick(currentClockTime);
         }
     }
 
-    /// override this method to add functionality to hook into Node::_tick(int currentClockTime)
-    virtual void _tickCallback(int currentClockTime) { }
+    /// override this method to add functionality to hook into Node::metaTick(int currentClockTime)
+    virtual void tickCallback(int currentClockTime) { }
 
     /// Get a Frame that is arity-matched to this Node
     ///
@@ -85,14 +101,11 @@ protected:
     {
         Frame<__arityInput> accumulationFrame = {};
         for(int i = 0, end = inputNodes.size(); i < end; i++) {
-            accumulationFrame += (inputNodes.at(i))->getCurrentFrame();
+            accumulationFrame += (inputNodes.at(i))->currentFrame();
         }
         accumulationFrame;
         return accumulationFrame;
     }
-public:
-    std::vector<INode<__arityInput>*> inputNodes;
-    int _currentClockTime;
 };
 
 /// Add left Node to the right Node.inputNodes
