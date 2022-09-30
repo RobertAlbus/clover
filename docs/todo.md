@@ -11,6 +11,7 @@
   - should this be a node?
   - how can I render a whole track vs stems?
 - interface
+
   - should this be a node?
   - can I select which outputs I actually use, not just the interface?
   - input!
@@ -37,7 +38,7 @@
 
 ## Nodes
 
-- should have a reset method that inits all values, including the `lastComputedClockTime` for instances of programmatic rendering of EG. multiple hihat samples 
+- should have a reset method that inits all values, including the `lastComputedClockTime` for instances of programmatic rendering of EG. multiple hihat samples
 - should use getters and setters for all props on nodes
 
 - Wavetable Osc
@@ -66,8 +67,8 @@
   - fractional delay line
     - should support N-tap with default at 1
 - Filters
-    - freq-based interface for SVF
-    - cross-over filter split
+  - freq-based interface for SVF
+  - cross-over filter split
 - Spectral Domain
   - FFT library integration
   - time stretch
@@ -77,7 +78,7 @@
 - Envelope
   - Interface class so they all have the same shape
     - keyOn, keyOff
-    - triggerable vs keyable? triggerable for envs, keyable for instruments 
+    - triggerable vs keyable? triggerable for envs, keyable for instruments
   - L1 envelope follower
   - L1 N-Stage
   - L1 impulse
@@ -116,6 +117,7 @@ http://svr-www.eng.cam.ac.uk/comp.speech/Section1/AudioSoftware/spkit.html
 - build system
 
   - can be built as a cmake library
+
 - namespacing
   - Clover
     - Graph (frame, history, node, stateless, subgraph, root node)
@@ -136,7 +138,6 @@ http://svr-www.eng.cam.ac.uk/comp.speech/Section1/AudioSoftware/spkit.html
       - instrument (FMN, NxOsc, Kicker, HH808, etc)
 
 ## Ops
-
 
 DO:
 
