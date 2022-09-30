@@ -40,7 +40,9 @@ protected:
   int writeHead;
   Frame<__arity> tick(Frame<__arity> input)
   {
-
+    // push new data to buffer
+    buffer[writeHead] = input;
+    
     // linear interpolate between current and  next frame
     int previousReadHead = (int) readHead;
     int nextReadHead = (previousReadHead + 1) %  __bufferSize;
@@ -55,9 +57,6 @@ protected:
         lerpAmount
         );
     }
-    
-    // push new data to buffer
-    buffer[writeHead] = input;
 
     // advance the buffer
     readHead  = fmod(readHead + 1.f, (float) __bufferSize);
