@@ -37,7 +37,6 @@
 
 ## Nodes
 
-- should have __input__ and __output__ gain
 - should have a reset method that inits all values, including the `lastComputedClockTime` for instances of programmatic rendering of EG. multiple hihat samples 
 - should use getters and setters for all props on nodes
 

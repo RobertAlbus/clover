@@ -23,6 +23,7 @@ class Node : public INode<__arityOutput>
 {
 public:
     float gain;
+    float gainIn;
     const size_t arityInput;
     const size_t arityOutput;
     FrameHistory<__arityOutput> frames;
@@ -31,7 +32,8 @@ public:
         arityInput(__arityInput),
         arityOutput(__arityOutput),
         _currentClockTime(-1),
-        gain(1.)
+        gain(1.),
+        gainIn(1.)
     {
         inputNodes.reserve(NODE_MAX_INPUT_CAPACITY);
     }
@@ -57,7 +59,7 @@ public:
         tickInputs(currentClockTime);
         _tickCallback(currentClockTime);
         frames.push(
-            tick( sumInputs() ) *= gain
+            tick( sumInputs() *= gainIn ) *= gain
         );
     }
 
