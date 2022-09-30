@@ -25,9 +25,10 @@ link_libraries(pthread)
 add_subdirectory(dependencies/portaudio)
 list(APPEND EXTRA_LIBS PortAudio)
 
-# AudioFile
-add_subdirectory(dependencies/AudioFile)
-list(APPEND EXTRA_LIBS AudioFile)
+# wave
+option(wave_enable_tests "Build Unit tests" OFF)
+add_subdirectory(dependencies/wave)
+list(APPEND EXTRA_LIBS wave)
 
 configure_file(src/config.h.in config.h)
 

@@ -1,3 +1,6 @@
 [submodule "dependencies/portaudio"]
 	path = dependencies/portaudio
 	url = https://github.com/PortAudio/portaudio
+[submodule "dependencies/wave"]
+	path = dependencies/wave
+	url = https://github.com/audionamix/wave
