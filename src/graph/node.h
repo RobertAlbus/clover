@@ -114,8 +114,6 @@ template<size_t X, size_t Y, size_t Z>
 Node<Y,Z>& operator>> (Node<X,Y> &sourceNode, Node<Y,Z> &destinationNode)
 {
     printf("\n%p   >> %p", &sourceNode, &destinationNode);
-    auto destinationNodeAddress = &destinationNode;
-    auto sourceNodeAddress = &sourceNode;
     destinationNode.addInputNode(sourceNode);
     return destinationNode;
 }
