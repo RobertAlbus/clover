@@ -36,11 +36,12 @@ int main(int argc, char* argv[])
     float baseSineFreq = 100.;
     Sine sine;
     sine.freq(baseSineFreq);
+    sine.gain(1.5);
 
     Sine sine2;
     sine2.freq(baseSineFreq * 2);
 
-    Pan1 outputPan(1);
+    Pan1 outputPan(0);
     SVF filt(0.3,0.7,1);
     filt.gain(0.9);
 

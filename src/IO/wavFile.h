@@ -1,12 +1,15 @@
 #pragma once
 
+#include <algorithm>
 #include <string>
 
 #include "wave/file.h"
 
 #include "node.h"
+#include "util/calc.h"
 
 using namespace Clover::Graph;
+using namespace Clover::Util;
 
 namespace Clover::IO {
 
@@ -20,7 +23,7 @@ public:
     
   {
     content.reserve( (size_t) duration * __arity);
-    writeFile.Open(filePath, wave::kOut);
+    writeFile.Open(filePath, wave::kIn);
 
     writeFile.set_channel_number(2);
     writeFile.set_sample_rate(44100);
@@ -37,22 +40,35 @@ private:
 
   int _durationSamples;
   std::string _filePath;
+  float _signalMaxima;
 
   Frame<0> tick(Frame<__arity> input) 
   {
     Frame<0> f {};
     if (Node<__arity,0>::_currentClockTime == _durationSamples)
     {
-      writeFile.Write(content);
+      normalizeContent();
+      bool clip = true;
+      writeFile.Write(content, clip);
       return f;
     }
 
     for (int i = 0, end = (int) __arity; i < end; i++)
     {
+      _signalMaxima = std::max(_signalMaxima, fabs(input[i]));
       content.emplace_back(input[i]);
     }
 
     return f;
+  }
+
+  void normalizeContent()
+  {
+    float minusThreeDb = Calc::dbtol(-3.);
+    for (int i = 0; i < content.size(); i++)
+    {
+      content[i] = content[i] / _signalMaxima * minusThreeDb;
+    }
   }
 };
 
