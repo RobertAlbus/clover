@@ -47,6 +47,9 @@ private:
     Frame<0> f {};
     if (Node<__arity,0>::_currentClockTime == _durationSamples)
     {
+      // TODO: make this configurable with options
+      // - normalize if small
+      // - normalize if large
       normalizeContent();
       bool clip = true;
       writeFile.Write(content, clip);

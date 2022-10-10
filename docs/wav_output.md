@@ -1,5 +1,10 @@
 # Wav File Output
 
+Consider changing over to this library:
+https://github.com/kleydon/WavUtils
+
+because it can perform incremental reading/writing of wav files.
+
 ## Possible Approaches
 
 - Node based

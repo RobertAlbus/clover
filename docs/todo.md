@@ -146,3 +146,9 @@ DO:
 - clover CMakeLists can be targeted by consuming project's CMakeLists
 - clover has submodules for portaudio, portmidi, and other cmake-able deps
   - https://github.com/CD3/libInterpolate
+
+## Notes
+
+Special thanks to
+https://github.com/janne808/svf
+for the referene material upon which my SVF is based.
