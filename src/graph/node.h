@@ -120,4 +120,16 @@ Node<Y,Z>& operator>> (Node<X,Y> &sourceNode, Node<Y,Z> &destinationNode)
     return destinationNode;
 }
 
+template<size_t X, size_t Y, size_t Z>
+Node<Y,Z>& operator>> (Node<X,Y> *sourceNode, Node<Y,Z> &destinationNode)
+{
+    return *(sourceNode) >> destinationNode;
+}
+
+template<size_t X, size_t Y, size_t Z>
+Node<Y,Z>& operator>> (Node<X,Y> &sourceNode, Node<Y,Z> *destinationNode)
+{
+    return sourceNode >> *(destinationNode);
+}
+
 }
