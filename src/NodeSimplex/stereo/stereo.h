@@ -41,8 +41,8 @@ public:
     float gainUp  = lerp(neutralGain, 0., s);
     float gainDown = lerp(neutralGain, 1., s);
 
-    mid.gain  = _spreadReadOnly < 0 ? gainUp   : gainDown;
-    side.gain = _spreadReadOnly < 0 ? gainDown : gainUp;
+    mid.gain ( _spreadReadOnly < 0 ? gainUp   : gainDown );
+    side.gain( _spreadReadOnly < 0 ? gainDown : gainUp   );
   }
 
   float spread()
