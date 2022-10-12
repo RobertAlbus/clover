@@ -12,6 +12,7 @@
 #include "envelope/basicEnvelope.h" // must come first
 #include "envelope/adsr.h"
 #include "envelope/dc.h"
+#include "envelope/impulse.h"
 
 #include "filter/firLowPass.h"
 #include "filter/svf.h"
