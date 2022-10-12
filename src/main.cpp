@@ -28,7 +28,6 @@ int main(int argc, char* argv[])
 {
     printf("\nClover Version %d.%d\n", Clover_VERSION_MAJOR, Clover_VERSION_MINOR);
 
-
     Time time(120, SAMPLE_RATE);
     SampleClock clock;
     Interface interface;
@@ -36,47 +35,32 @@ int main(int argc, char* argv[])
     float baseSineFreq = 100.;
     Sine sine;
     sine.freq(baseSineFreq);
-    sine.gain(1.5);
 
-    Sine sine2;
-    sine2.freq(baseSineFreq * 2);
-
+    SinDrive<1> sinDrive;
     Pan1 outputPan(0);
-    SVF filt(0.3,0.7,1);
-    filt.gain(0.9);
 
-    float delayTime = 1; //48000.33 * 4;
-    FractionalDelayLine<1,4800000> fdl( delayTime );
+    sine >> sinDrive >> outputPan >> interface.rootNode;
 
-    NoiseWhite LFO;
-    LFO.freq(0.0001);
-    LFO >> interface.blackhole1;
-    float lfoRange = baseSineFreq * 0.01;
+    Sine lfo;
+    lfo.freq(0.05);
 
-    Gain1 inverter;
-    inverter.gain(1.f);
+    DC<1> normalizer(0.5);
+    normalizer.gain(0.5);
 
+    lfo >> normalizer >> interface.blackhole1;
 
-    sine >> inverter >> outputPan;
-    // sine2 >> inverter;
-    outputPan.gain(0.5);
-
-    sine >> outputPan >> interface.rootNode;
-    sine >> new DC(100.) >> interface.blackhole1;
-    new DC(100.) >> interface.blackhole1;
+    BasicEnvelope e;
+    e.set(0., 1., 1 * time.bar);
+    e >> interface.blackhole1;
 
     outputPan >> *(new WavFile<2>(std::string("test.wav"), 48000)) >> *(new NullAdapter<0,2>()) >> interface.blackhole2;
 
 
     clock.registerTickCallback([&](int currentTime)->void
     {   
-        float lfoNormalized = (LFO.currentFrame()[0] +1.) / 2.;
+        float lfoVal = normalizer.frames.current[0];
+        sinDrive.shape(lfoVal);
     });
-
-    printf("\n\n%d\n\n", sizeof(float));
-    printf("%d\n\n", sizeof(float));
-    printf("%i\n\n", sizeof(float));
-    printf("%i\n\n", sizeof(CHAR_BIT));
 
     if (interface.initialize() != paNoError) return 1;
     if (interface.open(Pa_GetDefaultOutputDevice()) != paNoError ) return 1;

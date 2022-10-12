@@ -8,5 +8,6 @@ INTERFACE
     filter
     reduce
     stereo
+    waveshape
     wavetable
 )

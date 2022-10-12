@@ -24,4 +24,6 @@
 #include "stereo/peel.h"
 #include "stereo/sum.h"
 
+#include "waveshape/sinDrive.h"
+
 #include "wavetable/wavetableOsc.h"
