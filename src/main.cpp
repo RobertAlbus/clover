@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include <thread>
 
+#include <fcntl.h> // swallow portaudio logging
+
 #include "portaudio.h"
 
 #include "config.h"
@@ -27,6 +29,7 @@ using namespace Clover::NodeSimplex::Wavetable;
 int main(int argc, char* argv[])
 {
     printf("\nClover Version %d.%d\n", Clover_VERSION_MAJOR, Clover_VERSION_MINOR);
+    printf("\nDefault Audio Device Index: %d\n", Pa_GetDefaultOutputDevice());
 
     Time time(120, SAMPLE_RATE);
     SampleClock clock;
@@ -62,7 +65,13 @@ int main(int argc, char* argv[])
         sinDrive.shape(lfoVal);
     });
 
+
+    int saved_stderr = dup(STDERR_FILENO);
+    int devnull = open("/dev/null", O_RDWR);
+    dup2(devnull, STDERR_FILENO);  // Replace standard out
     if (interface.initialize() != paNoError) return 1;
+    dup2(saved_stderr, STDERR_FILENO);
+
     if (interface.open(Pa_GetDefaultOutputDevice()) != paNoError ) return 1;
     if (interface.start() != paNoError ) {interface.close(); return 1;}
 
