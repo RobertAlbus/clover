@@ -14,23 +14,15 @@ class NStage : public Node<__arity,__arity>
 public:
   NStage() : Node<__arity,__arity>() {}
 
-  struct Stage {
-    Stage()
-    bool hasCurrent;
-    float current;
-    float target;
-    int duration;
-  };
-
-  void set(std::vector<Stage> stages)
+  void setStage(int stage, float target, int duration)
   {
-    _stages
-  }
 
-  void keyOn() {}
+  }
+  void keyOn()  { _startTime = _currentClockTime; }
   void keyOff() {}
 private:
-  std::vector<Stage> _stages
+  int _startTime;
+  
   Frame<__arity> tick(Frame<__arity> input)
   {
     Frame<__arity> f;
