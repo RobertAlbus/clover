@@ -30,6 +30,11 @@ option(wave_enable_tests "Build Unit tests" OFF)
 add_subdirectory(dependencies/wave)
 list(APPEND EXTRA_LIBS wave)
 
+# rtmidi
+set(RTMIDI_TARGETNAME_UNINSTALL "uninstall_rtmidi" CACHE STRING "Name of 'uninstall' build target")
+add_subdirectory(dependencies/rtmidi)
+list(APPEND EXTRA_LIBS rtmidi)
+
 configure_file(src/config.h.in config.h)
 
 add_subdirectory(src/util)

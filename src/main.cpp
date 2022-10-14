@@ -9,6 +9,7 @@
 #include <fcntl.h> // swallow portaudio logging
 
 #include "portaudio.h"
+#include "RtMidi.h"
 
 #include "config.h"
 
@@ -31,6 +32,13 @@ int main(int argc, char* argv[])
 {
     printf("\nClover Version %d.%d\n", Clover_VERSION_MAJOR, Clover_VERSION_MINOR);
     printf("\nDefault Audio Device Index: %d\n", Pa_GetDefaultOutputDevice());
+
+    try {
+        RtMidiIn midiin;
+    } catch (RtMidiError &error) {
+        // Handle the exception here
+        error.printMessage();
+    }
 
     Time time(120, SAMPLE_RATE);
     SampleClock clock;
