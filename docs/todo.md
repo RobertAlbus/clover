@@ -1,5 +1,8 @@
 # TODO
 
+- update cmake to compile the library separately from `main.cpp`
+- create a script for `rebuild.sh` that only nukes Clover, and not dependiencies
+
 ## Wavetables
 - Make Wavetable Osc use the head instead of the stack for wave data
 - Create noises
@@ -33,6 +36,7 @@
     - N-Stage
     - Impulse
     - Automation Clip
+- add BasicEnvelope::isComplete() or similar 
 
 # Dynamics control
 - VCA compressor/limiter
