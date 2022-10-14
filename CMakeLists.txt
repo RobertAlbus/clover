@@ -22,7 +22,7 @@ link_libraries(m)
 link_libraries(pthread)
 
 # PortAudio
-add_subdirectory(dependencies/portaudio)
+add_subdirectory(dependencies/portaudio EXCLUDE_FROM_ALL)
 list(APPEND EXTRA_LIBS PortAudio)
 
 # wave
