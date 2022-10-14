@@ -19,7 +19,7 @@ protected:
   {
     Frame<__arity> f {};
 
-    for (int i = 0; 0 < __arity; i++)
+    for (int i = 0; i < __arity; i++)
     {
       f[i] = _value + input[i];
     }

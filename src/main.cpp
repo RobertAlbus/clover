@@ -50,8 +50,8 @@ int main(int argc, char* argv[])
     lfo.gain(1);
 
 
-    DC<1> normalizer(1.);
-    normalizer.gain(0.5f);
+    DC<1> normalizer(0.50001);
+    normalizer.gainIn(0.5f);
     Gain<1> g;
     g.gain(0.0001);
 
@@ -68,7 +68,8 @@ int main(int argc, char* argv[])
     {   
         float lfoVal = normalizer.frames.current[0];
         sinDrive.shape(lfoVal);
-        lfo.freq(M_PI_2 * baseSineFreq * 3 * std::numbers::phi);
+        lfo.freq(M_PI * baseSineFreq * std::numbers::phi * (lfoVal + 3.2));
+        printf("%f - %f\n", lfo.frames.current[0], normalizer.frames.current[0]);
 
     });
 
