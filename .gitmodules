@@ -4,3 +4,6 @@
 [submodule "dependencies/wave"]
 	path = dependencies/wave
 	url = https://github.com/audionamix/wave
+[submodule "dependencies/rtmidi"]
+	path = dependencies/rtmidi
+	url = git@github.com:thestk/rtmidi.git
