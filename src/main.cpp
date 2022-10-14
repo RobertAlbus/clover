@@ -2,6 +2,7 @@
 
 #include <chrono>
 #include <math.h>
+#include <numbers>
 #include <stdio.h>
 #include <thread>
 
@@ -45,10 +46,14 @@ int main(int argc, char* argv[])
     sine >> sinDrive >> outputPan >> interface.rootNode;
 
     Sine lfo;
-    lfo.freq(0.05);
+    lfo.freq(M_PI_2 * baseSineFreq * 3 * std::numbers::phi);
+    lfo.gain(1);
 
-    DC<1> normalizer(0.5);
-    normalizer.gain(0.5);
+
+    DC<1> normalizer(1.);
+    normalizer.gain(0.5f);
+    Gain<1> g;
+    g.gain(0.0001);
 
     lfo >> normalizer >> interface.blackhole1;
 
@@ -63,6 +68,8 @@ int main(int argc, char* argv[])
     {   
         float lfoVal = normalizer.frames.current[0];
         sinDrive.shape(lfoVal);
+        lfo.freq(M_PI_2 * baseSineFreq * 3 * std::numbers::phi);
+
     });
 
 
