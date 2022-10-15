@@ -7,10 +7,10 @@
 using namespace Clover::Graph;
 
 template <size_t __arity>
-class SinDrive : public Node<__arity,__arity>
+class RingMod_V1 : public Node<__arity,__arity>
 {
 public:
-  SinDrive() : Node<__arity,__arity>(),
+  RingMod_V1() : Node<__arity,__arity>(),
     _shape(0)
   {
 
