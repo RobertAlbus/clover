@@ -90,8 +90,13 @@
 - https://github.com/twoz/binaural-vst (head related transfer functions for mono=>stereo as JUCE VST)
 - https://www.reddit.com/r/DSP/comments/x5kopp/fir_filter_for_downsampling/ (multirate filters, downsampling FIR)
 - https://ccrma.stanford.edu/~jos/pasp/Fractional_Delay_Filtering_Linear.html
+
+  spline:
 - https://stackoverflow.com/questions/1204553/are-there-any-good-libraries-for-solving-cubic-splines-in-c
 - https://github.com/NCAR/bspline
+- https://github.com/ttk592/spline
+- https://kluge.in-chemnitz.de/opensource/spline/
+
 - https://signalsmith-audio.co.uk/contact/
 - https://github.com/janne808/svf
 - https://stackoverflow.com/questions/32889309/adding-gaussian-noise
@@ -100,10 +105,12 @@
 - https://github.com/CD3/libInterpolate
 - https://github.com/PortMidi/portmidi
 
+- https://en.wikipedia.org/wiki/FFTW
+- https://github.com/project-gemmi/benchmarking-fft
+
 UI
+
 - https://github.com/Immediate-Mode-UI/Nuklear
-
-
 
 C++ style standards
 - http://www.possibility.com/Cpp/CppCodingStandard.html#noabbrev
