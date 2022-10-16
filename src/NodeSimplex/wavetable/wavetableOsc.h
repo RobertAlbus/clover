@@ -14,56 +14,44 @@ public:
     {
         freq(100);
         phase(0);
-        /* initialise sinusoidal wavetable */
         auto wt = __wtFunct();
         std::swap(wt, wavetable); 
     }
 
-    // Assign waveform phase with value between 0.0 and 1.0
     void phase(float p) {
-        p = fmod(fabs(p), 1.);
-        _phase = p * __tableSize *_phaseIncrement;
+        _phase = fmod(p, 1.) * __tableSize *_phaseIncrement;
     }
 
-    // Set waveform phase as value between 0.0 and 1.0
-    float phase() {
-        return _phase / __tableSize;
+    float phase() { return _phase / __tableSize; }
+
+    void phaseOffset(float offset) {
+        _phaseOffset = fmod(offset, 1) * __tableSize *_phaseIncrement;
     }
+
+    float phaseOffset() { return _phaseOffset / __tableSize; }
 
     void freq(float freq) {
         freq = std::max(freq, (float)0.);
-        _readonlyFreq = freq;
         _phaseIncrement = freq * ((float)__tableSize) / ((float)SAMPLE_RATE);
     }
 
     float freq() {
-        return _readonlyFreq;
-    }
-
-    float lerp() {
-        int truncatedIndex = static_cast<int>(_phase);
-        int nextIndex = (truncatedIndex + 1);
-        if (nextIndex >= __tableSize) {
-            nextIndex %= __tableSize;
-        }
-
-        float nextIndexWeight = _phase - static_cast<float>(truncatedIndex);
-        float truncatedIndexWeight = 1. - nextIndexWeight;
-
-        Sample value = truncatedIndexWeight * wavetable[truncatedIndex] + 
-            nextIndexWeight * wavetable[nextIndex];
-
-        return value;
+        return _phaseIncrement * SAMPLE_RATE / __tableSize;
     }
 
 protected:
     Frame<1> tick(Frame<0> input)
     {
-        Sample value = lerp();
-
-        _phase = fmod(_phase + _phaseIncrement, __tableSize);
+        int truncatedIndex = static_cast<int>(_phase);
+        int nextIndex = (truncatedIndex + 1) % __tableSize;
+        float value = std::lerp(
+            wavetable[truncatedIndex],
+            wavetable[nextIndex],
+            _phase - truncatedIndex
+        );
 
         Frame<1> f {value};
+        _phase = fmod(_phase + _phaseOffset + _phaseIncrement, __tableSize);
 
         return f;
     }
@@ -71,8 +59,8 @@ protected:
     std::array<Sample, __tableSize> wavetable;
 private:
     float _phase;
+    float _phaseOffset;
     float _phaseIncrement;
-    float _readonlyFreq;
 };
 
 template <size_t __tableSize>
