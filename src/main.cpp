@@ -1,12 +1,13 @@
 #define NUM_SECONDS (100)
 
 #include <chrono>
+#include <cstdlib> // rand
+#include <fcntl.h> // swallow portaudio logging
 #include <math.h>
 #include <numbers>
 #include <stdio.h>
 #include <thread>
 
-#include <fcntl.h> // swallow portaudio logging
 
 #include "portaudio.h"
 #include "RtMidi.h"
@@ -27,6 +28,11 @@ using namespace Clover::NodeSimplex::Envelope;
 using namespace Clover::NodeSimplex::Filter;
 using namespace Clover::NodeSimplex::Stereo;
 using namespace Clover::NodeSimplex::Wavetable;
+
+
+float getRandomFloat(int max) {
+    return static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/max));
+}
 
 int main(int argc, char* argv[])
 {
@@ -95,41 +101,37 @@ int main(int argc, char* argv[])
     SampleClock clock;
     Interface interface;
 
-    float baseSineFreq = 100.;
+    float baseSineFreq = 200.;
     Sine sine;
     sine.freq(baseSineFreq);
 
-    SinDrive<1> sinDrive;
+    Sine mod;
+    mod.freq(100);
+
+    mod >> *(new NullAdapter<1,2>()) >> interface.rootNode;
+
     Pan1 outputPan(0);
 
-    sine >> sinDrive >> outputPan >> interface.rootNode;
-
-    Sine lfo;
-    lfo.freq(M_PI_2 * baseSineFreq * 3 * std::numbers::phi);
-    lfo.gain(1);
-
-
-    DC<1> normalizer(0.50001);
-    normalizer.gainIn(0.5f);
-    Gain<1> g;
-    g.gain(0.0001);
-
-    lfo >> normalizer >> interface.blackhole1;
-
-    BasicEnvelope e;
-    e.set(0., 1., 1 * time.bar);
-    e >> interface.blackhole1;
-
+    sine >> outputPan >> interface.rootNode;
     outputPan >> *(new WavFile<2>(std::string("test.wav"), 48000)) >> *(new NullAdapter<0,2>()) >> interface.blackhole2;
 
+    srand(11);
+    int intervalMultiplier = std::max(rand() / (RAND_MAX / 5), 1);
+    float fuck = 0;
 
     clock.registerTickCallback([&](int currentTime)->void
     {   
-        float lfoVal = normalizer.frames.current[0];
-        sinDrive.shape(lfoVal);
-        lfo.freq(M_PI * baseSineFreq * std::numbers::phi * (lfoVal + 3.2));
-        printf("%f - %f\n", lfo.frames.current[0], normalizer.frames.current[0]);
+        if (currentTime % (time.quat * intervalMultiplier) == 0) {
+            fuck = getRandomFloat(108) + 80;
+            mod.freq(getRandomFloat(16008) + 80);
+            intervalMultiplier = std::max(rand() / (RAND_MAX / 5), 1);
+            printf("GGGG\n");
+        }
 
+        float modAmount = (baseSineFreq - 1) * mod.frames.current[0];
+        float original = sine.frames.current[0];
+        float normalized = ((sine.frames.current[0] + 1.) / 2.);
+        sine.freq((baseSineFreq + modAmount * (original)) + fuck);
     });
 
 
@@ -148,10 +150,5 @@ int main(int argc, char* argv[])
 
     interface.stop();
     return paNoError;
-
-
-
-
-
 
 }
