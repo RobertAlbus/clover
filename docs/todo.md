@@ -25,7 +25,11 @@
 ## Misc Nodes
 - rectifier
 - stereo invert
-
+- NodeSimplex::Limits
+  - Min
+  - Max
+  - Clamp
+  - inspired by the math needed to solve the "dead zone" issue when modulation reaches 0hz in FM feedback networks
 
 ## Envelopes
 - create a base class for all envelopes
