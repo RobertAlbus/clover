@@ -51,13 +51,11 @@ add_subdirectory(src/NodeSimplex)
 list(APPEND EXTRA_LIBS NodeSimplex)
 list(APPEND EXTRA_INCLUDES "${PROJECT_SOURCE_DIR}/src/NodeSimplex")
 
-
-add_executable(${PROJECT_NAME} 
-    src/main.cpp
+add_library(${PROJECT_NAME} SHARED
     src/IO/interface.cpp
 )
-target_link_libraries(${PROJECT_NAME} PUBLIC ${EXTRA_LIBS})
 
+target_link_libraries(${PROJECT_NAME} PUBLIC ${EXTRA_LIBS})
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC
@@ -65,3 +63,10 @@ target_include_directories(${PROJECT_NAME}
         ${EXTRA_INCLUDES}
         src
 )
+
+
+
+add_executable(${PROJECT_NAME}Demo 
+    src/main.cpp
+)
+target_link_libraries(${PROJECT_NAME}Demo PUBLIC ${PROJECT_NAME})
