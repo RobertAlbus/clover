@@ -101,14 +101,9 @@ int main(int argc, char* argv[])
     SampleClock clock;
     Interface interface;
 
-    float baseSineFreq = 200.;
+    float baseSineFreq = 60.;
     Sine sine;
     sine.freq(baseSineFreq);
-
-    Sine mod;
-    mod.freq(100);
-
-    mod >> *(new NullAdapter<1,2>()) >> interface.rootNode;
 
     Pan1 outputPan(0);
 
@@ -122,16 +117,10 @@ int main(int argc, char* argv[])
     clock.registerTickCallback([&](int currentTime)->void
     {   
         if (currentTime % (time.quat * intervalMultiplier) == 0) {
-            fuck = getRandomFloat(108) + 80;
-            mod.freq(getRandomFloat(16008) + 80);
-            intervalMultiplier = std::max(rand() / (RAND_MAX / 5), 1);
-            printf("GGGG\n");
+            printf("\nonChange");
+
         }
 
-        float modAmount = (baseSineFreq - 1) * mod.frames.current[0];
-        float original = sine.frames.current[0];
-        float normalized = ((sine.frames.current[0] + 1.) / 2.);
-        sine.freq((baseSineFreq + modAmount * (original)) + fuck);
     });
 
 

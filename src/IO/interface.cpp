@@ -41,7 +41,7 @@ PaError Interface::open(PaDeviceIndex index)
     const PaDeviceInfo* pInfo = Pa_GetDeviceInfo(index);
     if (pInfo != 0)
     {
-        printf("Output device name: '%s'\r", pInfo->name);
+        printf("\nOutput device name: '%s'\r", pInfo->name);
     }
 
     outputParameters.channelCount = 2;       /* stereo output */
