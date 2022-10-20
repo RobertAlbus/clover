@@ -1,6 +1,7 @@
 # TODO
 
-- update cmake to compile the library separately from `main.cpp`
+- make the lib build cleaner with a properly exported API (or confirm that it's already fine, idk)
+- https://stackoverflow.com/questions/17511496/how-to-create-a-shared-library-with-cmake
 - create a script for `rebuild.sh` that only nukes Clover, and not dependiencies
 
 ## Wavetables
