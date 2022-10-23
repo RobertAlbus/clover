@@ -51,15 +51,18 @@ int main(int argc, char* argv[])
 
     MidiIn::printPorts();
     MidiIn midiInput("Axiom A.I.R. Mini32:Axiom A.I.R. Mini32 MIDI 20:0", 1000);
+    midiInput.printChange(true);
     midiInput >> new NullAdapter<256,1>() >> interface.blackhole1;
 
-    float baseSineFreq = 600.;
-    Sine sine;
+    float baseSineFreq = 60.;
+    Square sine;
     sine.freq(baseSineFreq);
+
+    SVF filter(0, 0.7, 1, 1);
 
     Pan1 outputPan(0);
 
-    sine >> outputPan >> interface.rootNode;
+    sine >> filter >> outputPan >> interface.rootNode;
     outputPan >> *(new WavFile<2>(std::string("test.wav"), 48000)) >> *(new NullAdapter<0,2>()) >> interface.blackhole2;
 
     srand(11);
@@ -73,8 +76,10 @@ int main(int argc, char* argv[])
 
         // }
         float rawMidiSignal = midiInput.frames.current[128+5];
-        printf("\n%f - %f", rawMidiSignal, rawMidiSignal/127);
-        sine.freq(baseSineFreq * (rawMidiSignal / 127.) + baseSineFreq);
+        // printf("\n%f - %f", rawMidiSignal, rawMidiSignal/127);
+        filter.q(midiInput.frames.current[128+1] / 127.);
+        filter.cutoff(midiInput.frames.current[128+5] / 127.);
+        //sine.freq();
 
     });
 
