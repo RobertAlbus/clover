@@ -17,7 +17,7 @@ public:
   MidiIn(
     const std::string& deviceName,
     unsigned int queueSizeLimit = 1000 
-  )
+  ) : Node(), _printChange(false)
   {
     RtMidi::Api api = RtMidi::Api::UNSPECIFIED;
     const std::string& clientName = "Clover Midi Input Client";
@@ -66,6 +66,9 @@ public:
     }
   }
 
+  void printChange(bool shouldPrint) { _printChange = shouldPrint; }
+  bool printChange()                 { return _printChange;        }
+
   int getPortNumberByName(const std::string& selectedDeveiceName)
   {
     unsigned int nPorts = rtMidi->getPortCount();
@@ -84,6 +87,7 @@ public:
   }
 
 private:
+  bool _printChange;
   std::vector<unsigned char> noteChannel;
   std::vector<unsigned char> controlChannel;
   RtMidiIn* rtMidi = 0;
@@ -106,6 +110,11 @@ private:
     {
       printf("\nClover received a MIDI message of type %c, which is unsupported", message->at(0));
       exit(EXIT_FAILURE);
+    }
+
+    if(midiIn->printChange())
+    {
+      printf("\n%i | %i | %i", message->at(0), message->at(1), message->at(2));
     }
     midiRegister->at(message->at(1)) = message->at(2);
   }
