@@ -12,6 +12,9 @@
     - character-ful noises IE tape
 - add phase member (-1..1)
 
+## Filter
+- moog ladder
+
 ## Node Base
 - add lifecycle hooks and callbacks
     - tick
@@ -48,7 +51,6 @@
 - gate
 
 ## MIDI
-- raw MIDI input
 - high-order construct for nicer MIDI input
 - note utils
 
