@@ -51,6 +51,8 @@ add_subdirectory(src/NodeSimplex)
 list(APPEND EXTRA_LIBS NodeSimplex)
 list(APPEND EXTRA_INCLUDES "${PROJECT_SOURCE_DIR}/src/NodeSimplex")
 
+list(APPEND EXTRA_INCLUDES "${PROJECT_SOURCE_DIR}/src/Midi")
+
 add_library(${PROJECT_NAME} SHARED
     src/IO/interface.cpp
 )
