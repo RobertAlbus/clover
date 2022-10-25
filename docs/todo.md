@@ -3,6 +3,8 @@
 - make the lib build cleaner with a properly exported API (or confirm that it's already fine, idk)
 - https://stackoverflow.com/questions/17511496/how-to-create-a-shared-library-with-cmake
 - create a script for `rebuild.sh` that only nukes Clover, and not dependiencies
+- convert .cpp files into header implementations
+- migrate to RtAudio
 
 ## Wavetables
 - Make Wavetable Osc use the head instead of the stack for wave data
@@ -11,9 +13,6 @@
     - clicks, pops, etc
     - character-ful noises IE tape
 - add phase member (-1..1)
-
-## Filter
-- moog ladder
 
 ## Node Base
 - add lifecycle hooks and callbacks
@@ -52,7 +51,6 @@
 
 ## MIDI
 - high-order construct for nicer MIDI input
-- note utils
 
 ## Audio IO
 - create a better UI and paradigm for the Interface
@@ -75,11 +73,14 @@
 - L3 Channel
 - L1 Bus I/O? (high-arity single-node connection)
 - L3 Mixer
+- pass-through adapter (map input channel to output channel with no additional processing)
 
 # Filters
 - multi-arity SVF
 - freq-based interface for SVF
 - cross-over filter split (arity<1,2>, arity<2,4>)
+- moog ladder
+- EQ
 
 # Interpolation
 - cubic interpolation
