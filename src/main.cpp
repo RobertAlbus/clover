@@ -50,19 +50,25 @@ int main(int argc, char* argv[])
     Interface interface;
 
     MidiIn::printPorts();
-    MidiIn midiInput("Axiom A.I.R. Mini32:Axiom A.I.R. Mini32 MIDI 20:0", 1000);
+    MidiIn midiInput("Axiom A.I.R. Mini32:Axiom A.I.R. Mini32 MIDI 36:0", 1000);
     midiInput.printChange(true);
     midiInput >> new NullAdapter<256,1>() >> interface.blackhole1;
 
     float baseSineFreq = 60.;
-    Square sine;
-    sine.freq(baseSineFreq);
+    Sine osc1;
+    osc1.freq(baseSineFreq);
+
+    Clover::NodeSimplex::Waveshape::DistExponent<1> distortion;
 
     SVF filter(0, 0.7, 1, 1);
 
     Pan1 outputPan(0);
 
-    sine >> filter >> outputPan >> interface.rootNode;
+    osc1 >> distortion >> filter >> outputPan >> interface.rootNode;
+
+    Gain<1> fbGain;
+    fbGain.gain(0.1);
+    distortion >> fbGain >> distortion;
     outputPan >> *(new WavFile<2>(std::string("test.wav"), 48000)) >> *(new NullAdapter<0,2>()) >> interface.blackhole2;
 
     srand(11);
@@ -77,9 +83,18 @@ int main(int argc, char* argv[])
         // }
         float rawMidiSignal = midiInput.frames.current[128+5];
         // printf("\n%f - %f", rawMidiSignal, rawMidiSignal/127);
-        filter.q(midiInput.frames.current[128+1] / 127.);
-        filter.cutoff(midiInput.frames.current[128+5] / 127.);
-        //sine.freq();
+
+        filter.q(midiInput.frames.current[127+1] / 127.);
+        filter.cutoff(midiInput.frames.current[127+5] / 127.);
+
+        //osc1.freq();
+
+        // distortion.gainIn   ( midiInput.frames.current[127+4] / 127.);
+        // distortion.gain     ( midiInput.frames.current[127+8] / 127.);
+        distortion.exponent ( midiInput.frames.current[127+7] / 127.);
+
+        printf("\n%f - %f", osc1.frames.current[0], distortion.frames.current[0]);
+
 
     });
 
