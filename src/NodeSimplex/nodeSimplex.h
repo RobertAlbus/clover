@@ -2,6 +2,7 @@
 #include "basic/statelessProcessor.h"
 
 #include "Adapter/NullAdapter.h"
+#include "Adapter/MapAdapter.h"
 
 #include "basic/gain.h"
 #include "basic/invert.h"

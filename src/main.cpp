@@ -72,6 +72,12 @@ int main(int argc, char* argv[])
     distortion >> fbGain >> distortion;
     outputPan >> *(new WavFile<2>(std::string("test.wav"), 48000)) >> *(new NullAdapter<0,2>()) >> interface.blackhole2;
 
+    MapAdapter<256,1> mapAdapter;
+    mapAdapter.map(127+4,0);
+
+    mapAdapter >> interface.blackhole1;
+
+
     srand(11);
     int intervalMultiplier = std::max(rand() / (RAND_MAX / 5), 1);
     float fuck = 0;
