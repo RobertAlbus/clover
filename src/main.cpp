@@ -94,7 +94,6 @@ int main(int argc, char* argv[])
         // distortion.gain     ( midiInput.frames.current[127+8] / 127.);
         distortion.exponent ( midiInput.frames.current[127+7] / 127.);
 
-        printf("\n%f - %f", osc1.frames.current[0], distortion.frames.current[0]);
 
 
     });
