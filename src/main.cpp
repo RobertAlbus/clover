@@ -25,6 +25,7 @@
 #include "util/musicTime.h"
 
 using namespace Clover::IO;
+using namespace Clover::NodeSimplex::Adapter;
 using namespace Clover::NodeSimplex::Basic;
 using namespace Clover::NodeSimplex::Delay;
 using namespace Clover::NodeSimplex::Envelope;
@@ -50,7 +51,7 @@ int main(int argc, char* argv[])
     Interface interface;
 
     MidiIn::printPorts();
-    MidiIn midiInput("Axiom A.I.R. Mini32:Axiom A.I.R. Mini32 MIDI 36:0", 1000);
+    MidiIn midiInput("Axiom A.I.R. Mini32:Axiom A.I.R. Mini32 MIDI 20:0", 1000);
     midiInput.printChange(true);
     midiInput >> new NullAdapter<256,1>() >> interface.blackhole1;
 
