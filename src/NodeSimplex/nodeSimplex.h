@@ -1,9 +1,10 @@
 #pragma once
+#include "basic/statelessProcessor.h"
+
+#include "Adapter/NullAdapter.h"
 
 #include "basic/gain.h"
 #include "basic/invert.h"
-#include "basic/nullAdapter.h"
-#include "basic/statelessProcessor.h"
 #include "basic/subgraph.h"
 
 #include "delay/delay.h" // should be called fractional
