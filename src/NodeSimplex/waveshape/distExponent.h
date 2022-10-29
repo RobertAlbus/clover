@@ -33,9 +33,6 @@ private:
         float sign = Calc::sign(input[i]);
         float abs = fabs(input[i]);
         f[i] = pow(abs, 1.- _exponent) * sign;
-        printf(" ||||      %f | %f | %f | %f | %f | %f\n",
-          Node<__arity,__arity>::gainIn(), input[i], sign, abs, _exponent, f[i]
-        );
     }
 
     return f;

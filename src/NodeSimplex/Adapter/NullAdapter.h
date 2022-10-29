@@ -1,8 +1,11 @@
 #pragma once
 
+#include "graph/frame.h"
 #include "../nodeSimplex.h"
 
-namespace Clover::NodeSimplex::Basic {
+using namespace Clover::Graph;
+
+namespace Clover::NodeSimplex::Adapter {
 
 template <size_t __arityIn, size_t __arityOut>
 auto adapterFn = [](Frame<__arityIn> input)
