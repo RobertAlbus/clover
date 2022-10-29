@@ -10,6 +10,7 @@ using namespace Clover::Graph;
 
 namespace Clover::NodeSimplex::Adapter {
 
+/// BEWARE: there are no safeguards in place to prevent inefficient mappings or overwriting previously registered mappings
 template <size_t __arityIn, size_t __arityOut>
 class MapAdapter : public Node<__arityIn, __arityOut>
 {
@@ -24,6 +25,15 @@ public:
   {
     validateMapping(from, to);
     mappings.emplace_back(std::tuple<int, int> {from, to});
+  }
+
+  void mapRange(int from, int count, int to)
+  {
+    validateMapping(from, count, to);
+    for(int i = 0; i < count; i++)
+    {
+      map(from + i, to + i);
+    }
   }
 
 private:
@@ -41,6 +51,22 @@ private:
       exit(EXIT_FAILURE);
     }
   }
+
+  void validateMapping(int from, int count, int to)
+  {
+    bool rangeExceedsInputArity  = count + from > __arityIn;
+    bool rangeExceedsOutputArity = count + to   > __arityOut;
+    if (rangeExceedsInputArity || rangeExceedsOutputArity) 
+    {
+      printf("\n\ninvalid range mapping in MapAdapter<%i,%i>", __arityIn, __arityOut);
+      if(rangeExceedsInputArity)
+        printf("\n  mapping range of size %i exceeds the capacity of the input frame.", count);
+      if(rangeExceedsOutputArity)
+        printf("\n  mapping range of size %i exceeds the capacity of the output frame.", count);
+      exit(EXIT_FAILURE);
+    }
+  }
+
   Frame<__arityOut> tick(Frame<__arityIn> input)
   {
     Frame<__arityOut> f {};
