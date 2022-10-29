@@ -12,7 +12,7 @@ class Interface
 public:
     Interface();
     PaError initialize();
-    PaError open(PaDeviceIndex index);
+    PaError openDevice(PaDeviceIndex index);
     PaError close();
     PaError start();
     PaError stop();

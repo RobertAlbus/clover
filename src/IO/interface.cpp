@@ -1,8 +1,11 @@
-#include <algorithm>
-#include <math.h>
-#include <stdio.h>
+// swallow portaudio logging
+#include <fcntl.h>
+#include <thread>
+
+// external dependencies
 #include "portaudio.h"
 
+// internal dependencies
 #include "interface.h"
 #include "rootNode.h"
 
@@ -15,7 +18,13 @@ Interface::Interface() : stream(0)
 
 PaError Interface::initialize()
 {
+    int saved_stderr = dup(STDERR_FILENO);
+    int devnull = open("/dev/null", O_RDWR);
+    dup2(devnull, STDERR_FILENO);  // Replace standard out
+
     return resultValidation(Pa_Initialize());
+
+    dup2(saved_stderr, STDERR_FILENO);
 }
 
 PaError Interface::resultValidation(PaError error)
@@ -29,7 +38,7 @@ PaError Interface::resultValidation(PaError error)
     return error;
 }
 
-PaError Interface::open(PaDeviceIndex index)
+PaError Interface::openDevice(PaDeviceIndex index)
 {
     PaStreamParameters outputParameters;
 

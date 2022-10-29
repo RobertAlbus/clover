@@ -4,10 +4,8 @@
 
 #include <chrono>
 #include <cstdlib> // rand
-#include <fcntl.h> // swallow portaudio logging
 #include <math.h>
 #include <numbers>
-#include <stdio.h>
 #include <thread>
 
 
@@ -48,13 +46,9 @@ int main(int argc, char* argv[])
 
     });
 
-    int saved_stderr = dup(STDERR_FILENO);
-    int devnull = open("/dev/null", O_RDWR);
-    dup2(devnull, STDERR_FILENO);  // Replace standard out
     if (interface.initialize() != paNoError) return 1;
-    dup2(saved_stderr, STDERR_FILENO);
 
-    if (interface.open(Pa_GetDefaultOutputDevice()) != paNoError ) return 1;
+    if (interface.openDevice(Pa_GetDefaultOutputDevice()) != paNoError ) return 1;
     if (interface.start() != paNoError ) {interface.close(); return 1;}
 
     // TODO: need a way to determine the composition length but this will do for now.
