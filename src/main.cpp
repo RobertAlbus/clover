@@ -25,14 +25,6 @@
 #include "util/musicTime.h"
 
 using namespace Clover::IO;
-using namespace Clover::NodeSimplex::Adapter;
-using namespace Clover::NodeSimplex::Basic;
-using namespace Clover::NodeSimplex::Delay;
-using namespace Clover::NodeSimplex::Envelope;
-using namespace Clover::NodeSimplex::Filter;
-using namespace Clover::NodeSimplex::Stereo;
-using namespace Clover::NodeSimplex::Wavetable;
-
 
 float getRandomFloat(int max) {
     return static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/max));
@@ -50,57 +42,9 @@ int main(int argc, char* argv[])
     SampleClock clock;
     Interface interface;
 
-    MidiIn::printPorts();
-    MidiIn midiInput("Axiom A.I.R. Mini32:Axiom A.I.R. Mini32 MIDI 20:0", 1000);
-    midiInput.printChange(true);
-    midiInput >> new NullAdapter<256,1>() >> interface.blackhole1;
-
-    float baseSineFreq = 60.;
-    Sine osc1;
-    osc1.freq(baseSineFreq);
-
-    Clover::NodeSimplex::Waveshape::DistExponent<1> distortion;
-
-    SVF filter(0, 0.7, 1, 1);
-
-    Pan1 outputPan(0);
-
-    osc1 >> distortion >> filter >> outputPan >> interface.rootNode;
-
-    Gain<1> fbGain;
-    fbGain.gain(0.1);
-    distortion >> fbGain >> distortion;
-    outputPan >> *(new WavFile<2>(std::string("test.wav"), 48000)) >> *(new NullAdapter<0,2>()) >> interface.blackhole2;
-
-    MapAdapter<256,1> mapAdapter;
-    mapAdapter.map(127+4,0);
-
-    mapAdapter >> interface.blackhole1;
-
-
-    srand(11);
-    int intervalMultiplier = std::max(rand() / (RAND_MAX / 5), 1);
-    float fuck = 0;
-
     clock.registerTickCallback([&](int currentTime)->void
     {   
-        // if (currentTime % (time.quat * intervalMultiplier) == 0) {
-        //     printf("\nonChange");
-
-        // }
-        float rawMidiSignal = midiInput.frames.current[128+5];
-        // printf("\n%f - %f", rawMidiSignal, rawMidiSignal/127);
-
-        filter.q(midiInput.frames.current[127+1] / 127.);
-        filter.cutoff(midiInput.frames.current[127+5] / 127.);
-
-        //osc1.freq();
-
-        // distortion.gainIn   ( midiInput.frames.current[127+4] / 127.);
-        // distortion.gain     ( midiInput.frames.current[127+8] / 127.);
-        distortion.exponent ( midiInput.frames.current[127+7] / 127.);
-
-
+        
 
     });
 
