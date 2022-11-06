@@ -3,8 +3,7 @@
 - make the lib build cleaner with a properly exported API (or confirm that it's already fine, idk)
 - https://stackoverflow.com/questions/17511496/how-to-create-a-shared-library-with-cmake
 - create a script for `rebuild.sh` that only nukes Clover, and not dependiencies
-- convert .cpp files into header implementations
-- migrate to RtAudio
+- migrate to RtAudio? or off of rtmidi? want to have the same provider, but RtMidi is buggy. or perhaps it is my controller.
 
 ## Wavetables
 - Make Wavetable Osc use the head instead of the stack for wave data
@@ -73,7 +72,6 @@
 - L3 Channel
 - L1 Bus I/O? (high-arity single-node connection)
 - L3 Mixer
-- pass-through adapter (map input channel to output channel with no additional processing)
 
 # Filters
 - multi-arity SVF
