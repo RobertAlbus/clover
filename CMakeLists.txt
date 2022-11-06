@@ -48,12 +48,8 @@ list(APPEND EXTRA_LIBS rtmidi)
 ########
 # internal libraries
 
-add_subdirectory(src/util)
-list(APPEND EXTRA_LIBS CloverUtil)
 list(APPEND EXTRA_INCLUDES "${PROJECT_SOURCE_DIR}/src/util")
 
-add_subdirectory(src/graph)
-list(APPEND EXTRA_LIBS Graph)
 list(APPEND EXTRA_INCLUDES "${PROJECT_SOURCE_DIR}/src/graph")
 
 list(APPEND EXTRA_INCLUDES "${PROJECT_SOURCE_DIR}/src/IO")
@@ -68,14 +64,13 @@ list(APPEND EXTRA_INCLUDES "${PROJECT_SOURCE_DIR}/src/Midi")
 ########
 # libs, linking, etc
 
-add_library(${PROJECT_NAME} SHARED
-    src/IO/interface.cpp
+add_library(${PROJECT_NAME} INTERFACE
 )
 
-target_link_libraries(${PROJECT_NAME} PUBLIC ${EXTRA_LIBS})
+target_link_libraries(${PROJECT_NAME} INTERFACE ${EXTRA_LIBS})
 
 target_include_directories(${PROJECT_NAME}
-    PUBLIC
+    INTERFACE
         ${PROJECT_BINARY_DIR}
         ${EXTRA_INCLUDES}
         src

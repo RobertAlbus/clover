@@ -20,7 +20,7 @@
 #include "IO/interface.h"
 #include "IO/midiIn.h"
 #include "IO/wavFile.h"
-#include "util/musicTime.h"
+#include "util/util.h"
 
 using namespace Clover::IO;
 
@@ -39,6 +39,11 @@ int main(int argc, char* argv[])
     Time time(120, SAMPLE_RATE);
     SampleClock clock;
     Interface interface;
+
+    Clover::NodeSimplex::Wavetable::Saw osc;
+    osc.freq(600);
+
+    osc >> new Clover::NodeSimplex::Stereo::Pan1() >> interface.rootNode;
 
     clock.registerTickCallback([&](int currentTime)->void
     {   
