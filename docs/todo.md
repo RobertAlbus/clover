@@ -110,6 +110,7 @@
 - http://svr-www.eng.cam.ac.uk/comp.speech/Section1/AudioSoftware/spkit.html
 - https://github.com/CD3/libInterpolate
 - https://github.com/PortMidi/portmidi
+- http://rampmeupscotty.herokuapp.com/blog/2016/01/19/anatomy-of-midi-message/
 
 - https://en.wikipedia.org/wiki/FFTW
 - https://github.com/project-gemmi/benchmarking-fft
