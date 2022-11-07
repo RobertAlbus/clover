@@ -6,6 +6,8 @@
 
 #include "portaudio.h"
 
+// internal dependencies
+#include "interface.h"
 #include "rootNode.h"
 #include "util/sampleClock.h"
 
@@ -163,7 +165,6 @@ private:
             timeInfo,
             statusFlags);
     }
-
 
 private:
     void paStreamFinishedMethod()

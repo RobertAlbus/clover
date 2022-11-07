@@ -14,15 +14,15 @@
 
 #include "config.h"
 
-#include "NodeSimplex/nodeSimplex.h"
+#include "NodeSimplex.h"
 
 #include "constants.h"
-#include "IO/interface.h"
-#include "IO/midiIn.h"
-#include "IO/wavFile.h"
-#include "util/util.h"
+#include "IO.h"
+#include "util.h"
 
 using namespace Clover::IO;
+using namespace Clover::NodeSimplex::Wavetable;
+using namespace Clover::NodeSimplex::Stereo;
 
 float getRandomFloat(int max) {
     return static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/max));

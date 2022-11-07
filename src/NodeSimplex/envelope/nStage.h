@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "node.h"
+#include "graph.h"
 
 using namespace Clover::Graph;
 

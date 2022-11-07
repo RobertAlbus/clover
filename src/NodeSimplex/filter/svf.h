@@ -5,7 +5,7 @@
 
 #include "constants.h"
 #include "firLowPass.h"
-#include "../nodeSimplex.h"
+#include "NodeSimplex.h"
 
 namespace SVFd
 {

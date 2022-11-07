@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-#include "../nodeSimplex.h"
+#include "NodeSimplex.h"
 
 namespace Clover::NodeSimplex::Envelope {
 

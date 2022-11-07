@@ -4,7 +4,7 @@
 
 #include "graph/frame.h"
 
-#include "../nodeSimplex.h"
+#include "NodeSimplex.h"
 
 using namespace Clover::Graph;
 

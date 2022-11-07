@@ -48,26 +48,13 @@ list(APPEND EXTRA_LIBS rtmidi)
 ########
 # internal libraries
 
-list(APPEND EXTRA_INCLUDES "${PROJECT_SOURCE_DIR}/src/util")
-
-list(APPEND EXTRA_INCLUDES "${PROJECT_SOURCE_DIR}/src/graph")
-
-list(APPEND EXTRA_INCLUDES "${PROJECT_SOURCE_DIR}/src/IO")
-
-add_subdirectory(src/NodeSimplex)
-list(APPEND EXTRA_LIBS NodeSimplex)
-list(APPEND EXTRA_INCLUDES "${PROJECT_SOURCE_DIR}/src/NodeSimplex")
-
-list(APPEND EXTRA_INCLUDES "${PROJECT_SOURCE_DIR}/src/Midi")
-
+add_library(${PROJECT_NAME} INTERFACE)
+# target_link_libraries(${PROJECT_NAME} INTERFACE ${EXTRA_LIBS})
 
 ########
 # libs, linking, etc
 
-add_library(${PROJECT_NAME} INTERFACE
-)
 
-target_link_libraries(${PROJECT_NAME} INTERFACE ${EXTRA_LIBS})
 
 target_include_directories(${PROJECT_NAME}
     INTERFACE

@@ -2,8 +2,8 @@
 
 #include <array>
 
-#include "node.h"
-#include "ringBuffer.h"
+#include "graph.h"
+#include "util.h"
 
 namespace Clover::NodeSimplex::Delay {
 

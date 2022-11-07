@@ -1,6 +1,6 @@
 #pragma once
 
-#include "node.h"
+#include "graph.h"
 
 namespace Clover::NodeSimplex::Stereo {
 

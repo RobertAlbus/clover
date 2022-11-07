@@ -2,8 +2,7 @@
 
 #include <functional>
 
-#include "frame.h"
-#include "node.h"
+#include "graph.h"
 
 using namespace Clover::Graph;
 

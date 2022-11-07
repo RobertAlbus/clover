@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../nodeSimplex.h"
+#include "NodeSimplex.h"
 
 namespace Clover::NodeSimplex::Basic {
 

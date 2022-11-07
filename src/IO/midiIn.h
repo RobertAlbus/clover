@@ -5,7 +5,7 @@
 
 #include "RtMidi.h"
 
-#include "node.h"
+#include "graph.h"
 
 using namespace Clover::Graph;
 

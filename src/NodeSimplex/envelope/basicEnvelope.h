@@ -3,7 +3,7 @@
 #include <cmath>
 #include <algorithm>
 
-#include "node.h"
+#include "graph.h"
 
 namespace Clover::NodeSimplex::Envelope {
 
