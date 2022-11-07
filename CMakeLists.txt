@@ -4,7 +4,7 @@
 set(version 3.10)
 cmake_minimum_required(VERSION ${version})
 project(Clover VERSION 1.0)
-configure_file(src/config.h.in config.h)
+configure_file(includes/config.h.in config.h)
 
 
 ########
@@ -49,7 +49,7 @@ list(APPEND EXTRA_LIBS rtmidi)
 # internal libraries
 
 add_library(${PROJECT_NAME} INTERFACE)
-# target_link_libraries(${PROJECT_NAME} INTERFACE ${EXTRA_LIBS})
+target_link_libraries(${PROJECT_NAME} INTERFACE ${EXTRA_LIBS})
 
 ########
 # libs, linking, etc
@@ -60,6 +60,7 @@ target_include_directories(${PROJECT_NAME}
     INTERFACE
         ${PROJECT_BINARY_DIR}
         ${EXTRA_INCLUDES}
+        includes
         src
 )
 
