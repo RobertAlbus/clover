@@ -3,16 +3,15 @@
 - make the lib build cleaner with a properly exported API (or confirm that it's already fine, idk)
 - https://stackoverflow.com/questions/17511496/how-to-create-a-shared-library-with-cmake
 - create a script for `rebuild.sh` that only nukes Clover, and not dependiencies
-- convert .cpp files into header implementations
-- migrate to RtAudio
+- migrate to RtAudio? or off of rtmidi? want to have the same provider, but RtMidi is buggy. or perhaps it is my controller.
 
 ## Wavetables
-- Make Wavetable Osc use the head instead of the stack for wave data
+- Make Wavetable Osc use the heap instead of the stack for wave data
 - Create noises
     - Gauss noise
     - clicks, pops, etc
     - character-ful noises IE tape
-- add phase member (-1..1)
+- ensure we can handle negative freq values (for FM)
 
 ## Node Base
 - add lifecycle hooks and callbacks
@@ -32,6 +31,7 @@
   - Min
   - Max
   - Clamp
+  - RangeAvoider
   - inspired by the math needed to solve the "dead zone" issue when modulation reaches 0hz in FM feedback networks
 
 ## Envelopes
@@ -73,7 +73,6 @@
 - L3 Channel
 - L1 Bus I/O? (high-arity single-node connection)
 - L3 Mixer
-- pass-through adapter (map input channel to output channel with no additional processing)
 
 # Filters
 - multi-arity SVF
@@ -112,6 +111,7 @@
 - http://svr-www.eng.cam.ac.uk/comp.speech/Section1/AudioSoftware/spkit.html
 - https://github.com/CD3/libInterpolate
 - https://github.com/PortMidi/portmidi
+- http://rampmeupscotty.herokuapp.com/blog/2016/01/19/anatomy-of-midi-message/
 
 - https://en.wikipedia.org/wiki/FFTW
 - https://github.com/project-gemmi/benchmarking-fft

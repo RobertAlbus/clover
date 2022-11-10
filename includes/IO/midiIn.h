@@ -5,7 +5,7 @@
 
 #include "RtMidi.h"
 
-#include "node.h"
+#include "graph.h"
 
 using namespace Clover::Graph;
 
@@ -126,7 +126,7 @@ private:
     for ( int i = 0; i < 128; i++)
     {
       f[i]     = noteChannel[i];
-      f[i+127] = controlChannel[i];
+      f[i+128] = controlChannel[i];
     }
 
     return f;

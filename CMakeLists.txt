@@ -1,11 +1,20 @@
-# THIS IS SUPER NAIVE.
-# eventually this project should be broken
-# into sublibraries for modular compilation. 
-# for now this is fine.
-
+########
+# Clover: Composable Signal Graphs for Creative Sound Coding
 
 set(version 3.10)
 cmake_minimum_required(VERSION ${version})
+project(Clover VERSION 1.0)
+configure_file(includes/config.h.in config.h)
+
+
+########
+# Clover variables
+
+set(CLOVER_BUILD_DEMO ON)
+
+
+########
+# cmake variables
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -14,10 +23,10 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2")
 # set(CMAKE_BUILD_TYPE Debug)
 # set(CMAKE_BUILD_TYPE RelWithDebInfo)
 
-# set the project name
-project(Clover VERSION 1.0)
 
-# link_libraries(asound)
+########
+# external libraries
+
 link_libraries(m)
 link_libraries(pthread)
 
@@ -35,40 +44,27 @@ set(RTMIDI_TARGETNAME_UNINSTALL "uninstall_rtmidi" CACHE STRING "Name of 'uninst
 add_subdirectory(dependencies/rtmidi)
 list(APPEND EXTRA_LIBS rtmidi)
 
-configure_file(src/config.h.in config.h)
 
-add_subdirectory(src/util)
-list(APPEND EXTRA_LIBS CloverUtil)
-list(APPEND EXTRA_INCLUDES "${PROJECT_SOURCE_DIR}/src/util")
+########
+# internal libraries
 
-add_subdirectory(src/graph)
-list(APPEND EXTRA_LIBS Graph)
-list(APPEND EXTRA_INCLUDES "${PROJECT_SOURCE_DIR}/src/graph")
+add_library(${PROJECT_NAME} INTERFACE)
+target_link_libraries(${PROJECT_NAME} INTERFACE ${EXTRA_LIBS})
 
-list(APPEND EXTRA_INCLUDES "${PROJECT_SOURCE_DIR}/src/IO")
+########
+# libs, linking, etc
 
-add_subdirectory(src/NodeSimplex)
-list(APPEND EXTRA_LIBS NodeSimplex)
-list(APPEND EXTRA_INCLUDES "${PROJECT_SOURCE_DIR}/src/NodeSimplex")
 
-list(APPEND EXTRA_INCLUDES "${PROJECT_SOURCE_DIR}/src/Midi")
-
-add_library(${PROJECT_NAME} SHARED
-    src/IO/interface.cpp
-)
-
-target_link_libraries(${PROJECT_NAME} PUBLIC ${EXTRA_LIBS})
 
 target_include_directories(${PROJECT_NAME}
-    PUBLIC
+    INTERFACE
         ${PROJECT_BINARY_DIR}
         ${EXTRA_INCLUDES}
+        includes
         src
 )
 
-
-
-add_executable(${PROJECT_NAME}Demo 
-    src/main.cpp
-)
-target_link_libraries(${PROJECT_NAME}Demo PUBLIC ${PROJECT_NAME})
+if(CLOVER_BUILD_DEMO)
+    add_executable(${PROJECT_NAME}Demo src/main.cpp)
+    target_link_libraries(${PROJECT_NAME}Demo PUBLIC ${PROJECT_NAME})
+endif()
