@@ -3,7 +3,7 @@
 
 set(version 3.10)
 cmake_minimum_required(VERSION ${version})
-project(Clover VERSION 1.0)
+project(Clover VERSION 2.0)
 configure_file(includes/config.h.in config.h)
 
 
