@@ -6,12 +6,12 @@
 - migrate to RtAudio? or off of rtmidi? want to have the same provider, but RtMidi is buggy. or perhaps it is my controller.
 
 ## Wavetables
-- Make Wavetable Osc use the head instead of the stack for wave data
+- Make Wavetable Osc use the heap instead of the stack for wave data
 - Create noises
     - Gauss noise
     - clicks, pops, etc
     - character-ful noises IE tape
-- add phase member (-1..1)
+- ensure we can handle negative freq values (for FM)
 
 ## Node Base
 - add lifecycle hooks and callbacks
@@ -31,6 +31,7 @@
   - Min
   - Max
   - Clamp
+  - RangeAvoider
   - inspired by the math needed to solve the "dead zone" issue when modulation reaches 0hz in FM feedback networks
 
 ## Envelopes
