@@ -22,6 +22,7 @@
 #include "NodeSimplex/reduce/samplecrusher.h"
 
 #include "NodeSimplex/stereo/difference.h"
+#include "NodeSimplex/stereo/invert.h"
 #include "NodeSimplex/stereo/pan.h"
 #include "NodeSimplex/stereo/peel.h"
 #include "NodeSimplex/stereo/sum.h"

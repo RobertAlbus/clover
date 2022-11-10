@@ -26,7 +26,6 @@
 
 ## Misc Nodes
 - rectifier
-- stereo invert
 - NodeSimplex::Limits
   - Min
   - Max
