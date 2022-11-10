@@ -6,6 +6,7 @@
 
 #include "NodeSimplex/basic/gain.h"
 #include "NodeSimplex/basic/invert.h"
+#include "NodeSimplex/basic/rectifier.h"
 #include "NodeSimplex/basic/subgraph.h"
 
 #include "NodeSimplex/delay/delay.h" // should be called fractional

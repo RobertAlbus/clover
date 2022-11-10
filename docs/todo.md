@@ -25,7 +25,6 @@
 - add a connectNode check to prevent duplicate entries!
 
 ## Misc Nodes
-- rectifier
 - NodeSimplex::Limits
   - Min
   - Max
