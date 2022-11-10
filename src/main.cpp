@@ -14,11 +14,8 @@
 
 #include "config.h"
 
-#include "NodeSimplex.h"
+#include "clover.h"
 
-#include "constants.h"
-#include "IO.h"
-#include "util.h"
 
 using namespace Clover::IO;
 using namespace Clover::NodeSimplex::Wavetable;

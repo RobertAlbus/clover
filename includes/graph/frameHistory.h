@@ -1,6 +1,8 @@
 #pragma once
 
-#include "frame.h"
+#include <algorithm>
+
+#include "graph/frame.h"
 
 namespace Clover::Graph {
 
@@ -9,6 +11,7 @@ class FrameHistory
 {
 public:
     FrameHistory() : _hasNext(false) { }
+    // FrameHistory(FrameHistory&&) = default;
 
     void push(Frame<__arity> frame)
     {
