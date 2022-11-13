@@ -6,14 +6,33 @@
 
 namespace Clover::NodeSimplex::Envelope {
 
-class Adsr : public Subgraph<0,1>
+struct AdsrSettings
+{
+    size_t attack;
+    size_t decay;
+    float  sustain;
+    size_t release;
+    size_t startTime;
+    bool   keyOn;
+};
+
+class Adsr : public StatefulSubgraph<0,1, AdsrSettings>
 {
 public:
     Adsr() : Adsr(0.,0.,1.,0.) { }
 
     Adsr(size_t a, size_t d, float s, size_t r) :
-        Subgraph(), _keyOn(false), envelope(0,0,1)
+        StatefulSubgraph(), envelope(0,0,1)
     {
+        settings.initial.attack  = a;
+        settings.initial.decay   = d;
+        settings.initial.sustain = s;
+        settings.initial.release = r;
+        settings.initial.keyOn = false;
+        settings.initial.startTime = 0;
+
+        settings.reset();
+
         connectNodes();
         set(a, d, s, r);
     }
@@ -26,49 +45,50 @@ public:
         release(r);
     }
 
+    size_t attack()        { return settings.current.attack; }
+    void attack(size_t a)  { settings.current.attack = a; }
+
+    size_t decay()         { return settings.current.decay; }
+    void decay(size_t d)   { settings.current.decay = d; }
+
+    float sustain()        { return settings.current.sustain; }
+    void sustain(float s)  { settings.current.sustain = s; }
+
+    size_t release()       { return settings.current.release; }
+    void release(size_t r) { settings.current.release = r; }
+
+    void keyOn()  { settings.current.keyOn = true;  settings.current.startTime = _currentClockTime + 1; }
+    void keyOff() { settings.current.keyOn = false; settings.current.startTime = _currentClockTime + 1; }
+  
+protected:
+    BasicEnvelope envelope;
+
+    Frame<1> tick(Frame<0> input)
+    {
+        AdsrSettings& s = settings.current;
+
+        bool isStartOfSustain =  s.keyOn && _currentClockTime >  s.startTime + s.attack + s.decay;
+        bool isStartOfDecay   =  s.keyOn && _currentClockTime == s.startTime + s.attack;
+        bool isStartOfAttack  =  s.keyOn && _currentClockTime == s.startTime;
+        bool isStartOfRelease = !s.keyOn && _currentClockTime == s.startTime;
+        printf("\n%i %i %i %i    |    %i    %i %i %f %i    |    %i",
+            isStartOfAttack, isStartOfDecay, isStartOfSustain, isStartOfRelease,
+            s.keyOn, s.attack, s.decay, s.sustain, s.release, s.startTime
+            
+            
+        );
+        
+        if      ( isStartOfSustain ) { envelope.set( s.sustain,         s.sustain,  0        ); }
+        else if ( isStartOfDecay   ) { envelope.set( 1.,                s.sustain,  s.decay  ); }
+        else if ( isStartOfAttack  ) { envelope.set( 0.,                1.,         s.attack ); }
+        else if ( isStartOfRelease ) { envelope.set( frames.current[0], 0,          s.release); }
+
+        return blackHole.frames.current;
+    }
+ 
     void connectNodes()
     {
         envelope >> blackHole;
-    }
-
-    size_t attack()        { return _attack; }
-    void attack(size_t a)  { _attack = a; }
-
-    size_t decay()         { return _decay; }
-    void decay(size_t d)   { _decay = d; }
-
-    float sustain()        { return _sustain; }
-    void sustain(float s)  { _sustain = s; }
-
-    size_t release()       { return _release; }
-    void release(size_t r) { _release =r; }
-
-    void keyOn()  { _keyOn = true;  startTime = _currentClockTime + 1; }
-    void keyOff() { _keyOn = false; startTime = _currentClockTime + 1; }
-  
-
-protected:
-    BasicEnvelope envelope;
-    size_t _attack;
-    size_t _decay;
-    float  _sustain;
-    size_t _release;
-    size_t startTime;
-    bool  _keyOn;
-
-    Frame<1> tick(Frame<0> input) override
-    {
-        // sustain
-        // decay
-        // attack
-        // release
-        
-        if      ( _keyOn  && _currentClockTime >  startTime + _attack + _decay ) { envelope.set( _sustain,          _sustain,  0);        }
-        else if ( _keyOn  && _currentClockTime == startTime + _attack )          { envelope.set( 1.,                _sustain,  _decay);   }
-        else if ( _keyOn  && _currentClockTime == startTime )                    { envelope.set( 0.,                1.      ,  _attack);  }
-        else if ( !_keyOn && _currentClockTime == startTime )                    { envelope.set( frames.current[0], 0,         _release); }
-
-        return blackHole.frames.current;
     }
 };
 

@@ -36,15 +36,28 @@ int main(int argc, char* argv[])
     Time time(120, SAMPLE_RATE);
     SampleClock clock;
     Interface interface;
+    Clover::NodeSimplex::Adapter::NullAdapter<1,2> blackHole;
+    blackHole >> interface.rootNode;
 
     Clover::NodeSimplex::Wavetable::Saw osc;
     osc.freq(600);
 
     osc >> new Clover::NodeSimplex::Stereo::Pan1() >> interface.rootNode;
 
-    clock.registerTickCallback([&](int currentTime)->void
+    Clover::NodeSimplex::Envelope::Adsr adsr(time.bar, 0, 0, time.bar);
+    adsr >> blackHole;
+
+    interface.clock.registerTickCallback([&](int currentTime)->void
     {   
-        
+        float envelopeValue = adsr.frames.current[0];
+        osc.gain(envelopeValue);
+        // printf("adsr %f\n", envelopeValue);
+
+        if (fmod(time.currentBar(), 2.f) == 0.) {
+            adsr.keyOn();
+        } else if (fmod(time.currentBar(), 2.f) == 1.) {
+            adsr.keyOff();
+        }
 
     });
 
