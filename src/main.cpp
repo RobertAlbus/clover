@@ -33,9 +33,8 @@ int main(int argc, char* argv[])
     printf("\nClover Version %d.%d\n", Clover_VERSION_MAJOR, Clover_VERSION_MINOR);
     printf("\nDefault Audio Device Index: %d\n", Pa_GetDefaultOutputDevice());
 
-    Time time(120, SAMPLE_RATE);
-    SampleClock clock;
     Interface interface;
+    Time time(120, SAMPLE_RATE, &interface.clock);
     Clover::NodeSimplex::Adapter::NullAdapter<1,2> blackHole;
     blackHole >> interface.rootNode;
 

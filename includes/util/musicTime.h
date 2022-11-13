@@ -6,7 +6,7 @@ namespace Clover::Util {
 class Time
 {
 public:
-    Time(float bpm, size_t sampleRate) : bpm(bpm)
+    Time(float bpm, size_t sampleRate, SampleClock* clock) : bpm(bpm), sampleClock(clock)
     {
         _sampleRate = sampleRate;
         initMusicTime();
@@ -34,7 +34,7 @@ public:
     
     float currentUnit(int samplesPerUnit)
     {
-        return (float)sampleClock.currentSample() / (float)samplesPerUnit;
+        return (float)sampleClock->currentSample() / (float)samplesPerUnit;
     }
 
     float bpm;
@@ -43,6 +43,7 @@ public:
     int beat;
     int bar;
 
+    SampleClock* sampleClock;
 private:
     size_t _sampleRate;
     void initMusicTime() {
@@ -54,7 +55,6 @@ private:
         bar  = beat * 4;
     };
     
-    SampleClock sampleClock;
 };
 
 }
