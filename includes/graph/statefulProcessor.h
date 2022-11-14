@@ -4,8 +4,6 @@
 
 #include "graph.h"
 
-using namespace Clover::Graph;
-
 namespace Clover::Graph
 {
 

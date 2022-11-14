@@ -3,6 +3,9 @@
 #include <cmath>
 
 #include "NodeSimplex.h"
+#include "graph.h"
+
+using namespace Clover::Graph;
 
 namespace Clover::NodeSimplex::Envelope {
 

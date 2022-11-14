@@ -1,7 +1,6 @@
 #pragma once
 
 #include "graph.h"
-#include "statelessProcessor.h"
 
 namespace Clover::NodeSimplex::Basic {
 

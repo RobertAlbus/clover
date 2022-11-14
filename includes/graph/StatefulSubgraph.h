@@ -3,6 +3,9 @@
 #include "graph.h"
 #include "IO.h"
 
+namespace Clover::Graph
+{
+
 template <size_t __arityIn, size_t __arityOut, class SettingsType>
 class StatefulSubgraph : public StatefulProcessor<__arityIn, __arityOut, SettingsType>
 {
@@ -14,3 +17,5 @@ protected:
     blackHole.metaTick(currentClockTime);
   }
 };
+
+}

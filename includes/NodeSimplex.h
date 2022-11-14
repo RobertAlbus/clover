@@ -1,6 +1,4 @@
 #pragma once
-#include "NodeSimplex/basic/statelessProcessor.h"
-#include "NodeSimplex/basic/statefulProcessor.h"
 
 #include "NodeSimplex/Adapter/NullAdapter.h"
 #include "NodeSimplex/Adapter/MapAdapter.h"
@@ -8,8 +6,6 @@
 #include "NodeSimplex/basic/gain.h"
 #include "NodeSimplex/basic/invert.h"
 #include "NodeSimplex/basic/rectifier.h"
-#include "NodeSimplex/basic/subgraph.h"
-#include "NodeSimplex/basic/StatefulSubgraph.h"
 
 #include "NodeSimplex/delay/delay.h" // should be called fractional
 #include "NodeSimplex/delay/fractionalDelayLine.h"

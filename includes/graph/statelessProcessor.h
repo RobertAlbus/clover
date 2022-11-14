@@ -4,7 +4,8 @@
 
 #include "graph.h"
 
-using namespace Clover::Graph;
+namespace Clover::Graph
+{
 
 /// A Node with a transform function that does not maintain any inter-sample state.
 template <size_t __arityIn, size_t __arityOut, Frame<__arityOut> processFn(Frame<__arityIn>)> 
@@ -18,3 +19,5 @@ protected:
         return processFn(input);
     };
 };
+
+}
