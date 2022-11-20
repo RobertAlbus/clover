@@ -2,31 +2,41 @@
 
 #include <vector>
 
-#include "graph/frame.h"
-
-#include "NodeSimplex.h"
-
-using namespace Clover::Graph;
 
 namespace Clover::NodeSimplex::Adapter {
 
-/// BEWARE: there are no safeguards in place to prevent inefficient mappings or overwriting previously registered mappings
+typedef std::tuple<int, int> Mapping;
+struct MapAdapterSettings
+{
+  MapAdapterSettings() : mappings() {}
+  std::vector<Mapping> mappings;
+};
+
 template <size_t __arityIn, size_t __arityOut>
-class MapAdapter : public Node<__arityIn, __arityOut>
+class MapAdapter : public StatefulProcessor<__arityIn, __arityOut, MapAdapterSettings>
 {
 public:
-  MapAdapter() : 
-    Node<__arityIn, __arityOut>()
+  MapAdapter() {}
+  MapAdapter(MapAdapterSettings initialSettings)
+  : StatefulProcessor<__arityIn, __arityOut, MapAdapterSettings>(initialSettings)
   {
-
+    std::for_each(
+      initialSettings.mappings.cbegin(),
+      initialSettings.mappings.cend(),
+      [=, this](Mapping m){
+        this->validateMapping(m);
+      }
+    );
   }
 
+  /// BEWARE: there are no safeguards in place to prevent inefficient mappings or overwriting previously registered mappings
   void map(int from, int to)
   {
     validateMapping(from, to);
-    mappings.emplace_back(std::tuple<int, int> {from, to});
+    this->settings.current.mappings.emplace_back(Mapping {from, to});
   }
 
+  /// BEWARE: there are no safeguards in place to prevent inefficient mappings or overwriting previously registered mappings
   void mapRange(int from, int count, int to)
   {
     validateMapping(from, count, to);
@@ -36,8 +46,10 @@ public:
     }
   }
 
-private:
-  std::vector<std::tuple<int, int>> mappings;
+  void validateMapping(Mapping mapping)
+  {
+      validateMapping(std::get<0>(mapping), std::get<1>(mapping));
+  }
 
   void validateMapping(int from, int to)
   {
@@ -67,14 +79,15 @@ private:
     }
   }
 
+private:
   Frame<__arityOut> tick(Frame<__arityIn> input)
   {
     Frame<__arityOut> f {};
 
-    for ( int i = 0, end = mappings.size(); i < end; i++)
+    for ( int i = 0, end = this->settings.current.mappings.size(); i < end; i++)
     {
-      int from = std::get<0>(mappings.at(i));
-      int to =   std::get<1>(mappings.at(i));
+      int from = std::get<0>(this->settings.current.mappings.at(i));
+      int to =   std::get<1>(this->settings.current.mappings.at(i));
 
       f[to] = input[from];
     }
