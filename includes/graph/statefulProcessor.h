@@ -10,6 +10,8 @@ namespace Clover::Graph
 template <class SettingsType>
 struct NodeSettings
 {
+  NodeSettings() : current(), initial() {}
+  NodeSettings(const SettingsType& settings) : current(settings), initial(settings) {}
   SettingsType current;
   SettingsType initial;
 
@@ -25,6 +27,10 @@ class StatefulProcessor : public Node<__arityIn, __arityOut>
 {
 public:
   StatefulProcessor() : Node<__arityIn, __arityOut>() {}
+  StatefulProcessor(const SettingsType& initialSettings)
+    : Node<__arityIn, __arityOut>(),
+      settings(initialSettings) {}
+
   NodeSettings<SettingsType> settings;
 };
 
