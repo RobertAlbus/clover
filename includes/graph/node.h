@@ -14,7 +14,7 @@ class INode
 {
 public:
     virtual void metaTick(int currentClockTime) = 0;
-    virtual Frame<__arityOutput> currentFrame() = 0;
+    virtual const Frame<__arityOutput>& currentFrame() = 0;
 };
 
 /// Base class for all N channel nodes of the audio graph.
@@ -78,7 +78,7 @@ public:
         );
     }
 
-    Frame<__arityOutput> currentFrame()
+    const Frame<__arityOutput>& currentFrame()
     {
         return frames.current;
     }
@@ -103,7 +103,6 @@ private:
         for(int i = 0, end = inputNodes.size(); i < end; i++) {
             accumulationFrame += (inputNodes.at(i))->currentFrame();
         }
-        accumulationFrame;
         return accumulationFrame;
     }
 };
