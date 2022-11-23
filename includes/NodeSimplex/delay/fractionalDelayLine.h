@@ -8,28 +8,34 @@
 
 namespace Clover::NodeSimplex::Delay {
 
+struct FractionalDelayLineSettings
+{
+  FractionalDelayLineSettings() : FractionalDelayLineSettings(0) {}
+  FractionalDelayLineSettings(float delayTime) : delayTime(delayTime) {}
+  float delayTime;
+};
+
 template <size_t __arity, size_t __bufferSize>
-class FractionalDelayLine : public Node<__arity, __arity>
+class FractionalDelayLine : public StatefulProcessor<__arity, __arity, FractionalDelayLineSettings>
 {
 public:
-  FractionalDelayLine(float delayTime) : 
-    Node<__arity, __arity>(),
+  FractionalDelayLine(FractionalDelayLineSettings initialSettings)
+  : StatefulProcessor<__arity, __arity, FractionalDelayLineSettings>(initialSettings),
     buffer{}, writeHead(0), readHead(0)
   {
     buffer.reserve(__bufferSize);
-    setDelayTime(delayTime);
+    setDelayTime(initialSettings.delayTime);
   }
 
   void setDelayTime(float time)
   {
+    this->settings.current.delayTime = time;
+
     float bufferSize = (float) __bufferSize;
     time = std::clamp(time, 0.f, bufferSize-1.f);
     
-    readHead = (float) writeHead - time;
-    
-    // ensure value wraps around the buffer size
     readHead = fmod(
-      (readHead + bufferSize),
+      ((float) writeHead - time + bufferSize),
       bufferSize
     );
   }
