@@ -7,15 +7,28 @@
 
 namespace Clover::NodeSimplex::Envelope {
 
-class BasicEnvelope : public Node<0,1>
+struct BasicEnvelopeSettings
+{
+  size_t startTime;
+  size_t targetTime;
+  size_t duration;
+  float startValue;
+  float targetValue;
+};
+
+class BasicEnvelope : public StatefulProcessor<0,1, BasicEnvelopeSettings>
 {
 public:
-  BasicEnvelope() : Node()
+  BasicEnvelope(BasicEnvelopeSettings initialSettings) : StatefulProcessor(initialSettings)
   {
-    set(0.,0.,0);
+    set(
+      initialSettings.startValue,
+      initialSettings.targetValue,
+      initialSettings.duration
+    );
   }
 
-  BasicEnvelope(float currentValue, float targetValue, size_t durationTime) : Node()
+  BasicEnvelope(float currentValue, float targetValue, size_t durationTime) : StatefulProcessor()
   {
     set(currentValue, targetValue, durationTime);
   }
@@ -43,46 +56,37 @@ public:
     updateTargetTime();
   }
 
+protected:
+
   void target(float t) {
-    targetValue = t;
+    settings.current.targetValue = t;
   }
 
   void current(float currentValue) {
-    startValue = currentValue;
+    settings.current.startValue = currentValue;
   }
 
   void dur(size_t d) {
-    duration = std::max(d,0UL);
+    settings.current.duration = std::max(d,0UL);
   }
-
-
-protected:
-  size_t startTime;
-  size_t targetTime;
-  size_t duration;
-  float startValue;
-  float targetValue;
 
   void updateTargetTime()
   {
-    startTime = _currentClockTime;
-    targetTime = startTime + duration;
+    BasicEnvelopeSettings& s = settings.current;
+    s.startTime = _currentClockTime;
+    s.targetTime = s.startTime + s.duration;
   }
 
   Frame<1> tick(Frame<0> inputFrame)
   {
-    if (_currentClockTime > targetTime) return Frame<1> {targetValue};
-    float currentTime = _currentClockTime;
-    double elapsedTime = currentTime - startTime;
+    BasicEnvelopeSettings& s = settings.current;
 
-    float linearScaledTime =
-      (float) std::clamp(
-        0.,
-        1.,
-        elapsedTime / duration);
+    if (_currentClockTime > s.targetTime) return Frame<1> {s.targetValue};
+    double elapsedTime = _currentClockTime - s.startTime;
+
     return Frame<1>
     {
-      std::lerp(startValue, targetValue, linearScaledTime)
+      std::lerp(s.startValue, s.targetValue, (float)(elapsedTime / s.duration))
     };
   }
 
