@@ -18,8 +18,7 @@
 
 
 using namespace Clover::IO;
-using namespace Clover::NodeSimplex::Wavetable;
-using namespace Clover::NodeSimplex::Stereo;
+using namespace Clover::NodeSimplex;
 
 float getRandomFloat(int max) {
     return static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/max));

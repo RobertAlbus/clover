@@ -4,8 +4,6 @@
 
 #include "graph.h"
 
-using namespace Clover::Graph;
-
 namespace Clover::NodeSimplex::Envelope {
 
 template <size_t __stages, size_t __arity>

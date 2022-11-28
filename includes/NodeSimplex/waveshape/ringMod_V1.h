@@ -2,9 +2,9 @@
 
 #include <cmath>
 
-#include "graph/node.h"
+#include "graph.h"
 
-using namespace Clover::Graph;
+namespace Clover::NodeSimplex::Waveshape {
 
 template <size_t __arity>
 class RingMod_V1 : public Node<__arity,__arity>
@@ -33,3 +33,5 @@ private:
     return f;
   }
 };
+
+}

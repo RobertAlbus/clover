@@ -7,8 +7,6 @@
 
 #include "graph.h"
 
-using namespace Clover::Graph;
-
 namespace Clover::IO {
 
 class MidiIn : public Node<0,256>
