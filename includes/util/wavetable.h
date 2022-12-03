@@ -1,5 +1,5 @@
 #pragma once
-#include <array>
+#include <vector>
 #include <cmath>
 #include <math.h>
 
@@ -10,34 +10,38 @@ namespace Clover::Util::GenerateWavetable {
 
 // linear interpolation to create a larger wavetable from a smaller wavetable
 // check Wavetable::Generate::Tri to see it in use
-template<size_t __tableSize, size_t __lerpTableSize>
-std::array<Sample, __tableSize> LerpTable(std::array<float, __lerpTableSize> rawTable) {
-    double scaleFactor = (double)__tableSize / (double)__lerpTableSize;
+std::vector<Sample> LerpTable(int outputSize, std::vector<Sample> rawTable) {
+    double scaleFactor = (double)outputSize / (double)rawTable.size();
 
-    std::array<Sample, __tableSize> wavetable;
-    for( int i=0; i < __tableSize; i++ )
+    std::vector<Sample> wavetable;
+    wavetable.reserve(outputSize);
+    for( int i=0; i < outputSize; i++ )
     {
         double scaledIndex = i/scaleFactor;
         int truncatedIndex = (int)scaledIndex;
         int nextIndex = truncatedIndex + 1;
         double weight =  scaledIndex - truncatedIndex;
 
-        wavetable[i] = std::lerp(
-            rawTable[truncatedIndex],
-            rawTable[nextIndex],
-            weight
+        wavetable.emplace_back(
+            std::lerp(
+                rawTable[truncatedIndex],
+                rawTable[nextIndex],
+                weight
+            )
         );
     }
     return wavetable;
 }
 
 // Generate a wavetable for a sine wave.
-template<size_t __tableSize = DEFAULT_WAVETABLE_SIZE>
-std::array<Sample, __tableSize> Sine() {
-    std::array<Sample, __tableSize> wavetable;
-    for( int i=0; i<__tableSize; i++ )
+std::vector<Sample> Sine(int size) {
+    std::vector<Sample> wavetable;
+    wavetable.reserve(size);
+    for( int i=0; i<size; i++ )
     {
-        wavetable[i] = (float) sin( ((double)i/(double)__tableSize) * M_PI * 2. );
+        wavetable.emplace_back(
+            (float) sin( ((double)i/(double)size) * M_PI * 2. )
+        );
     }
 
     return wavetable;
@@ -45,52 +49,54 @@ std::array<Sample, __tableSize> Sine() {
 
 // Generate a wavetable for a pulse wave.
 // pulseWidth 0..1 inclusive
-template<size_t __tableSize = DEFAULT_WAVETABLE_SIZE>
-std::array<Sample, __tableSize> Pulse(float pulseWidth) {
-    std::array<Sample, __tableSize> wavetable;
-    for( int i=0; i < __tableSize; i++ )
+std::vector<Sample> Pulse(int size, float pulseWidth) {
+    std::vector<Sample> wavetable;
+    wavetable.reserve(size);
+    for( int i=0; i < size; i++ )
     {
-        wavetable[i] = i < ((float)__tableSize * pulseWidth) ? 1. : -1.; 
+        wavetable.emplace_back(
+            i < ((float)size * pulseWidth) ? 1. : -1.
+        );
     }
 
     return wavetable;
 }
 
 // Generate a wavetable for a square wave.
-template<size_t __tableSize = DEFAULT_WAVETABLE_SIZE>
-std::array<Sample, __tableSize> Square() {
-    return Pulse<__tableSize>(0.5);
+std::vector<Sample> Square(int size) {
+    return Pulse(size, 0.5);
 }
 
 // Generate a wavetable for a saw wave.
-template<size_t __tableSize = DEFAULT_WAVETABLE_SIZE>
-std::array<Sample, __tableSize> Saw() {
-    std::array<Sample, __tableSize> wavetable;
-    double increment = 2. / (double) __tableSize;
-    for( int i=0; i < __tableSize; i++ )
+std::vector<Sample> Saw(int size) {
+    std::vector<Sample> wavetable;
+    wavetable.reserve(size);
+    double increment = 2. / (double) size;
+    for( int i=0; i < size; i++ )
     {
-        wavetable[i] = (float) 1. - (i * increment);
+        wavetable.emplace_back(
+            (float) 1. - (i * increment)
+        );
     }
 
     return wavetable;
 }
 
 // Generate a wavetable for a triangle wave.
-template<size_t __tableSize = DEFAULT_WAVETABLE_SIZE>
-std::array<Sample, __tableSize> Tri() {
-    std::array<Sample, 5> lerpTable = {0,1,0,-1,0};
-    return LerpTable<__tableSize, 5UL>(lerpTable);
+std::vector<Sample> Tri(int size) {
+    std::vector<Sample> lerpTable = {0,1,0,-1,0};
+    return LerpTable(size, lerpTable);
 }
 
 // Generate a wavetable for a white noise wave.
-template<size_t __tableSize = DEFAULT_WAVETABLE_SIZE>
-std::array<Sample, __tableSize> NoiseWhite() {
-    std::array<Sample, __tableSize> wavetable;
-    for( int i=0; i < __tableSize; i++ )
+std::vector<Sample> NoiseWhite(int size) {
+    std::vector<Sample> wavetable;
+    wavetable.reserve(size);
+    for( int i=0; i < size; i++ )
     {
         float noise = ((float)rand()) / (float)(RAND_MAX);
         noise = 2.0 * (noise - 0.5);
-        wavetable[i] = noise;
+        wavetable.emplace_back(noise);
     }
 
     return wavetable;

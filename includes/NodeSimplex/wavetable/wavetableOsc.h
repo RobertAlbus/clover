@@ -1,96 +1,148 @@
 #pragma once
+#include <cmath>
 #include <functional>
+#include <vector>
 
 #include "constants.h"
 #include "util.h"
 
 namespace Clover::NodeSimplex::Wavetable {
 
-template <size_t __tableSize, auto __wtFunct>
-class WavetableOsc : public Node<0,1>
+typedef std::vector<Sample> Wavetable;
+
+struct WavetableOscSettings {
+    float freq;
+    float phase;
+    float phaseOffset;
+    float readIndex;
+    float readIndexIncrement;
+    float readIndexOffset;
+    Wavetable wavetable;
+    float wavetableSize;
+};
+
+class WavetableOsc : public StatefulProcessor<0,1, WavetableOscSettings>
 {
 public:
-    WavetableOsc() : Node<0,1>()
+    WavetableOsc() : WavetableOsc(
+        Clover::Util::GenerateWavetable::Sine(400),
+        200,
+        0,
+        0
+    ) {}
+
+    WavetableOsc(Wavetable wavetable, float freq, float phase, float phaseOffset) : StatefulProcessor<0,1, WavetableOscSettings>()
     {
-        freq(100);
-        phase(0);
-        auto wt = __wtFunct();
-        std::swap(wt, wavetable); 
+        settings.current.wavetable, wavetable;
+        settings.initial.wavetableSize = (float) wavetable.size();
+        settings.initial.freq = freq;
+        settings.initial.phase = normalizePhase(phase);
+        settings.initial.phaseOffset = normalizePhase(phaseOffset);
+        
+        settings.initial.readIndexIncrement = calculateReadIndexIncrement(freq);
+        settings.initial.readIndex = 0.;
+        settings.initial.readIndexOffset = calculateReadIndexOffset(settings.initial.phaseOffset);
+
+        settings.reset();
     }
 
-    void phase(float p) {
-        _phase = fmod(p, 1.) * __tableSize *_phaseIncrement;
+    void phase(float phase) {
+        phase = normalizePhase(phase);
+        settings.current.phase = phase;
+        settings.current.readIndex = ((float)settings.current.wavetableSize) * phase;
     }
 
-    float phase() { return _phase / __tableSize; }
+    float phase() { return settings.current.phase / settings.current.wavetableSize; }
 
     void phaseOffset(float offset) {
-        _phaseOffset = fmod(offset, 1) * __tableSize *_phaseIncrement;
+        settings.current.phaseOffset = normalizePhase(offset);
+        settings.current.readIndexOffset = calculateReadIndexOffset(offset);
     }
 
-    float phaseOffset() { return _phaseOffset / __tableSize; }
+    float phaseOffset() { return settings.current.phaseOffset; }
 
     void freq(float freq) {
-        freq = std::max(freq, (float)0.);
-        _phaseIncrement = freq * ((float)__tableSize) / ((float)SAMPLE_RATE);
+        settings.current.freq = freq;
+        settings.current.readIndexIncrement = calculateReadIndexIncrement(freq);
     }
 
     float freq() {
-        return _phaseIncrement * SAMPLE_RATE / __tableSize;
+        return settings.current.freq;
     }
 
-protected:
+    void wavetable(Wavetable wt) {
+        settings.current.wavetable = wt;
+        settings.current.wavetableSize = (float) wt.size();
+    }
+
+    Wavetable wavetable() { return settings.current.wavetable; }
+
+    void sine(int size = 400)
+    {
+        wavetable(Clover::Util::GenerateWavetable::Sine(size));
+    }
+    void square(int size = 400)
+    {
+        wavetable(Clover::Util::GenerateWavetable::Square(size));
+    }
+    void saw(int size = 400)
+    {
+        wavetable(Clover::Util::GenerateWavetable::Saw(size));
+    }
+    void tri(int size = 400)
+    {
+        wavetable(Clover::Util::GenerateWavetable::Tri(size));
+    }
+    void noise(int size = 1000)
+    {
+        wavetable(Clover::Util::GenerateWavetable::NoiseWhite(size));
+    }
+
+
+
+private:
     Frame<1> tick(Frame<0> input)
     {
-        int truncatedIndex = static_cast<int>(_phase);
-        int nextIndex = (truncatedIndex + 1) % __tableSize;
+        float direction = Clover::Util::Calc::sign(settings.current.freq);
+        float nextIndex = normalizeReadIndex(settings.current.readIndex + direction);
         float value = std::lerp(
-            wavetable[truncatedIndex],
-            wavetable[nextIndex],
-            _phase - truncatedIndex
+            settings.current.wavetable[(int)settings.current.readIndex],
+            settings.current.wavetable[nextIndex],
+            settings.current.readIndex - nextIndex
         );
 
         Frame<1> f {value};
-        _phase = fmod(_phase + _phaseOffset + _phaseIncrement, __tableSize);
+
+        float newIndex =
+            settings.current.readIndex
+            + settings.current.readIndexOffset
+            + settings.current.readIndexIncrement;
+
+        settings.current.readIndex = normalizeReadIndex(newIndex);
 
         return f;
     }
 
-    std::array<Sample, __tableSize> wavetable;
-private:
-    float _phase;
-    float _phaseOffset;
-    float _phaseIncrement;
+    float normalizeReadIndex(float index)
+    {
+        float wtSize = (float)settings.current.wavetableSize;
+        return fmod(fmod(index, wtSize) + wtSize, wtSize);
+    }
+
+    float normalizePhase(float phase)
+    {
+        return fmod(fmod(phase, 1.) + 1., 1);
+    }
+    
+    float calculateReadIndexIncrement(float freq)
+    {
+        return freq * ((float)settings.current.wavetableSize) / ((float)SAMPLE_RATE);
+    }
+
+    float calculateReadIndexOffset(float phaseOffset)
+    {
+        return ((float) settings.current.wavetableSize) * normalizePhase(phaseOffset);
+    }
 };
-
-template <size_t __tableSize>
-class SineSized : public WavetableOsc<__tableSize, Clover::Util::GenerateWavetable::Sine<__tableSize>>
-{ };
-
-class Sine : public SineSized<DEFAULT_WAVETABLE_SIZE> {};
-
-template <size_t __tableSize>
-class SquareSized : public WavetableOsc<__tableSize, Clover::Util::GenerateWavetable::Square<__tableSize>>
-{ };
-
-class Square : public SquareSized<DEFAULT_WAVETABLE_SIZE> {};
-
-template <size_t __tableSize>
-class SawSized : public WavetableOsc<__tableSize, Clover::Util::GenerateWavetable::Saw<__tableSize>>
-{ };
-
-class Saw : public SawSized<DEFAULT_WAVETABLE_SIZE> {};
-
-template <size_t __tableSize>
-class TriSized : public WavetableOsc<__tableSize, Clover::Util::GenerateWavetable::Tri<__tableSize>>
-{ };
-
-class Tri : public TriSized<DEFAULT_WAVETABLE_SIZE> {};
-
-template <size_t __tableSize>
-class NoiseWhiteSized : public WavetableOsc<__tableSize, Clover::Util::GenerateWavetable::NoiseWhite<__tableSize>>
-{ };
-
-class NoiseWhite : public NoiseWhiteSized<1000000> {};
 
 }

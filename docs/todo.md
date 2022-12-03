@@ -5,21 +5,17 @@
 - upgrade file names and folder names to use CapitalCaseNaming
 
 ## Wavetables
-- Make Wavetable Osc use the heap instead of the stack for wave data
 - Create noises
     - Gauss noise
     - clicks, pops, etc
     - character-ful noises IE tape
-- ensure we can handle negative freq values (for FM)
 
 ## Node Base
 - add lifecycle hooks and callbacks
     - tick
     - reset
     - etc (define more when doing this task)
-- make every node use getter and setter methods, with member properties private
 - make every node have a ClassNameSettings object for all member variables
-    - make re-init, presets, etc. much easier.
     - ctor should accept this (with a copy, not a ref)
 - add a connectNode check to prevent duplicate entries!
 
