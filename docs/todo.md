@@ -111,8 +111,12 @@
 - https://github.com/project-gemmi/benchmarking-fft
 
 UI
+- https://stackoverflow.com/questions/1283202/lightweight-c-gui-library
 
-- https://github.com/Immediate-Mode-UI/Nuklear
+- https://github.com/Immediate-Mode-UI/Nuklear  (simple, clean, flat) <=== this one!
+- http://cegui.org.uk/content/getting-started (games and cool stuff)
+- https://www.fltk.org/ (application UIs)
+- http://www.gnuplot.info (no just for plotting, interacts with UI lib)
 
 C++ style standards
 - http://www.possibility.com/Cpp/CppCodingStandard.html#noabbrev
