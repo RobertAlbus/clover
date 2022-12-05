@@ -11,10 +11,6 @@
     - character-ful noises IE tape
 
 ## Node Base
-- add lifecycle hooks and callbacks
-    - tick
-    - reset
-    - etc (define more when doing this task)
 - make every node have a ClassNameSettings object for all member variables
     - ctor should accept this (with a copy, not a ref)
 
