@@ -37,13 +37,37 @@ int main(int argc, char* argv[])
     Clover::NodeSimplex::Adapter::NullAdapter<1,2> blackHole;
     blackHole >> interface.rootNode;
 
-    Clover::NodeSimplex::Wavetable::Saw osc;
-    osc.freq(600);
 
-    osc >> new Clover::NodeSimplex::Stereo::Pan1() >> interface.rootNode;
+    Wavetable::WavetableOsc osc;
+    osc.saw();
+    osc.freq(60);
+    Stereo::Pan1 pan;
+    osc >> pan >> interface.rootNode;
 
-    Clover::NodeSimplex::Envelope::Adsr adsr(time.bar, 0, 0, time.bar);
+    Delay::FractionalDelayLine<1, 48000> delay(*(new Delay::FractionalDelayLineSettings(47777)));
+    Basic::Gain<1> fbGain;
+    Basic::Gain<1> delayOutGain;
+    fbGain.gain(0.8);
+    delayOutGain.gain(0.8);
+
+    osc >> delay >> fbGain >> delay;
+    fbGain >> delayOutGain >> pan;
+
+    Envelope::AdsrSettings adsrSettings(10, time.beat * 0.1, 0, 0);
+    Envelope::Adsr adsr(adsrSettings);
     adsr >> blackHole;
+
+    Envelope::DC<1> dc(12.);
+    Adapter::MapAdapter<1,4> adapter1;
+
+    dc >> adapter1;
+
+    adapter1.map(0,0);
+    adapter1.map(0,3);
+
+    Adapter::MapAdapter<1,4> adapter2(adapter1.settings.current);
+    Adapter::NullAdapter<4, 1> nullAdapter;
+    adapter1 >> nullAdapter >> blackHole;
 
     interface.clock.registerTickCallback([&](int currentTime)->void
     {   
@@ -51,9 +75,9 @@ int main(int argc, char* argv[])
         osc.gain(envelopeValue);
         // printf("adsr %f\n", envelopeValue);
 
-        if (fmod(time.currentBar(), 2.f) == 0.) {
+        if (fmod(time.currentBeat(), 5.f) == 0.) {
             adsr.keyOn();
-        } else if (fmod(time.currentBar(), 2.f) == 1.) {
+        } else if (fmod(time.currentBeat(), 5.f) == 1.) {
             adsr.keyOff();
         }
 
