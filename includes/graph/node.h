@@ -60,6 +60,11 @@ public:
     template<size_t X>
     void addInputNode(Node<X,__arityInput> &inputNode)
     {
+        if(std::find(inputNodes.begin(), inputNodes.end(), &inputNode) != inputNodes.end())
+        {
+            printf("\nAttempted to double connect %p to %p\n", &inputNode, this);
+            exit(1);
+        } 
         inputNodes.emplace_back(&inputNode);
     }
 

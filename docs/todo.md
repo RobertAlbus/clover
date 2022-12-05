@@ -17,7 +17,6 @@
     - etc (define more when doing this task)
 - make every node have a ClassNameSettings object for all member variables
     - ctor should accept this (with a copy, not a ref)
-- add a connectNode check to prevent duplicate entries!
 
 ## Misc Nodes
 - NodeSimplex::Limits
