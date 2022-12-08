@@ -25,13 +25,13 @@ class WavetableOsc : public StatefulProcessor<0,1, WavetableOscSettings>
 {
 public:
     WavetableOsc() : WavetableOsc(
-        Clover::Util::GenerateWavetable::Sine(400),
+        Clover::Util::GenerateWavetable::Sine(512),
         200,
         0,
         0
     ) {}
 
-    WavetableOsc(Wavetable wavetable, float freq, float phase, float phaseOffset) : StatefulProcessor<0,1, WavetableOscSettings>()
+    WavetableOsc(Wavetable wavetable, float freq, float phase = 0, float phaseOffset = 0) : StatefulProcessor<0,1, WavetableOscSettings>()
     {
         settings.current.wavetable, wavetable;
         settings.initial.wavetableSize = (float) wavetable.size();
@@ -104,11 +104,13 @@ private:
     Frame<1> tick(Frame<0> input)
     {
         float direction = Clover::Util::Calc::sign(settings.current.freq);
-        float nextIndex = normalizeReadIndex(settings.current.readIndex + direction);
+        float nextIndex = normalizeReadIndex((int)settings.current.readIndex + direction);
+
+        // this lerp is technically incorrecto for negative frequencies. Should fix that.
         float value = std::lerp(
             settings.current.wavetable[(int)settings.current.readIndex],
-            settings.current.wavetable[nextIndex],
-            settings.current.readIndex - nextIndex
+            settings.current.wavetable[(int)nextIndex],
+            ((int)settings.current.readIndex) + direction - settings.current.readIndex
         );
 
         Frame<1> f {value};

@@ -13,6 +13,10 @@
 ## Node Base
 - make every node have a ClassNameSettings object for all member variables
     - ctor should accept this (with a copy, not a ref)
+    - fix the LERP direction when freqencies are negative
+      - create "lerpNegative()" and "lerpPositive()" methods. 
+      - when setting the freq, assign the correct function to "lerp()"
+      - can optimize the sign lookup at the top of `tick()` on freq-assign as well
 
 ## Misc Nodes
 - NodeSimplex::Limits
