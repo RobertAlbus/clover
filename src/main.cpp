@@ -39,21 +39,12 @@ int main(int argc, char* argv[])
 
 
     Wavetable::WavetableOsc osc;
-    osc.saw();
-    osc.freq(60);
+    osc.sine(2048);
+    osc.freq(110);
     Stereo::Pan1 pan;
     osc >> pan >> interface.rootNode;
 
-    Delay::FractionalDelayLine<1, 48000> delay(*(new Delay::FractionalDelayLineSettings(47777)));
-    Basic::Gain<1> fbGain;
-    Basic::Gain<1> delayOutGain;
-    fbGain.gain(0.8);
-    delayOutGain.gain(0.8);
-
-    osc >> delay >> fbGain >> delay;
-    fbGain >> delayOutGain >> pan;
-
-    Envelope::AdsrSettings adsrSettings(10, time.beat * 0.1, 0, 0);
+    Envelope::AdsrSettings adsrSettings(0, time.beat * 0.1, 1, 0);
     Envelope::Adsr adsr(adsrSettings);
     adsr >> blackHole;
 
@@ -69,19 +60,35 @@ int main(int argc, char* argv[])
     Adapter::NullAdapter<4, 1> nullAdapter;
     adapter1 >> nullAdapter >> blackHole;
 
-    interface.clock.registerTickCallback([&](int currentTime)->void
-    {   
-        float envelopeValue = adsr.frames.current[0];
-        osc.gain(envelopeValue);
-        // printf("adsr %f\n", envelopeValue);
 
-        if (fmod(time.currentBeat(), 5.f) == 0.) {
-            adsr.keyOn();
-        } else if (fmod(time.currentBeat(), 5.f) == 1.) {
-            adsr.keyOff();
-        }
+    // interface.clock.registerTickCallback([&](int currentTime)->void
+    // {   
+    //     float envelopeValue = adsr.frames.current[0];
+    //     osc.gain(envelopeValue * 0.9);
+    //     // printf("adsr %f   -   %f\n",2 envelopeValue, osc.frames.current[0]);
 
-    });
+
+    //     if (fmod(time.currentBeat(), 5.f) == 0.) {
+    //         adsr.keyOn();
+    //     } else if (fmod(time.currentBeat(), 5.f) == 2.) {
+    //         adsr.keyOff();
+    //     }
+
+    // });
+
+    auto start = std::chrono::high_resolution_clock::now();
+    for (int i = 0; i < SAMPLE_RATE * 360; i++)
+    {
+        interface.rootNode.metaTick(interface.clock.currentSample());
+        interface.clock.tick();
+
+    }
+    auto end = std::chrono::high_resolution_clock::now();
+
+
+    auto duration = duration_cast<std::chrono::milliseconds>(end - start);
+    printf("\n\n%i", duration);
+    exit(0);
 
     if (interface.initialize() != paNoError) return 1;
 
