@@ -9,6 +9,7 @@
     - Gauss noise
     - clicks, pops, etc
     - character-ful noises IE tape
+- fix click at the beginning of the WavetableOsc
 
 ## Node Base
 - make every node have a ClassNameSettings object for all member variables
@@ -17,6 +18,10 @@
       - create "lerpNegative()" and "lerpPositive()" methods. 
       - when setting the freq, assign the correct function to "lerp()"
       - can optimize the sign lookup at the top of `tick()` on freq-assign as well
+- improve code efficiency
+  - create benchmarking function that sets up a graph and manually ticks it for a certain quantity of data
+  - remove extraneous copies
+  - convert all data in the node ingress to const reference args and returns
 
 ## Misc Nodes
 - NodeSimplex::Limits
@@ -113,6 +118,10 @@ UI
 - https://stackoverflow.com/questions/1283202/lightweight-c-gui-library
 
 - https://github.com/Immediate-Mode-UI/Nuklear  (simple, clean, flat) <=== this one!
+  - only one I could get working
+  - no external dependencies
+  - ANSI C
+
 - http://cegui.org.uk/content/getting-started (games and cool stuff)
 - https://www.fltk.org/ (application UIs)
 - http://www.gnuplot.info (no just for plotting, interacts with UI lib)
