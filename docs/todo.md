@@ -1,6 +1,5 @@
 # TODO
 
-- create a script for `rebuild.sh` that only nukes Clover, and not dependiencies
 - migrate to RtAudio? or off of rtmidi? want to have the same provider, but RtMidi is buggy. or perhaps it is my controller.
 - upgrade file names and folder names to use CapitalCaseNaming
 
