@@ -76,12 +76,15 @@ int main(int argc, char* argv[])
 
     // });
 
+    int quantity = SAMPLE_RATE * 360 * 10;
+    std::vector<Frame<2>> benchmarkData;
+    benchmarkData.reserve(quantity);
     auto start = std::chrono::high_resolution_clock::now();
-    for (int i = 0; i < SAMPLE_RATE * 360; i++)
+    for (int i = 0; i < quantity; i++)
     {
         interface.rootNode.metaTick(interface.clock.currentSample());
         interface.clock.tick();
-
+        benchmarkData.emplace_back(interface.rootNode.frames.current);
     }
     auto end = std::chrono::high_resolution_clock::now();
 
