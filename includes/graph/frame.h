@@ -22,7 +22,7 @@ Frame<__arity>& operator+= (Frame<__arity>& frame1, const Frame<__arity>& frame2
 }
 
 template<size_t __arity>
-Frame<__arity> operator*= (Frame<__arity> frame, float gain)
+Frame<__arity>& operator*= (Frame<__arity>& frame, float gain)
 {
     for (int i = 0; i < __arity; i++) {
         frame[i] *= gain;
