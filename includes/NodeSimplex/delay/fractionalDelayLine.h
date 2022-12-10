@@ -65,7 +65,7 @@ protected:
     }
 
     // advance the buffer
-    readHead  = fmod(readHead + 1.f, (float) __bufferSize);
+    readHead  = fmod(readHead + 1.f, 1.0 * __bufferSize);
     writeHead = (writeHead + 1) % __bufferSize;
 
     return f;

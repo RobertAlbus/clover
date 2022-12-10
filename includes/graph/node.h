@@ -78,9 +78,19 @@ public:
         _currentClockTime = currentClockTime;
         tickInputs(currentClockTime);
         tickCallback(currentClockTime);
-        frames.push(
-            tick( sumInputs() *= _gainIn ) *= _gain
-        );
+
+        for(int i = 0, end = inputNodes.size(); i < end; i++) {
+            accumulationFrame[i] = 0;
+        }
+        for(int i = 0, end = inputNodes.size(); i < end; i++) {
+            accumulationFrame += (inputNodes.at(i))->currentFrame();
+        }
+        accumulationFrame *= _gainIn; 
+
+        processedFrame = tick( accumulationFrame );
+
+        processedFrame *= _gain;
+        frames.push( processedFrame );
     }
 
     const Frame<__arityOutput>& currentFrame()
@@ -89,6 +99,8 @@ public:
     }
 
 private:
+    Frame<__arityInput> accumulationFrame = {};
+    Frame<__arityOutput> processedFrame {};
     /// Advance time for all input nodes
     ///
     void tickInputs(int currentClockTime) {
@@ -100,16 +112,6 @@ private:
     /// override this method to add functionality to hook into Node::metaTick(int currentClockTime)
     virtual void tickCallback(int currentClockTime) { }
 
-    /// Get a Frame that is arity-matched to this Node
-    ///
-    Frame<__arityInput> sumInputs()
-    {
-        Frame<__arityInput> accumulationFrame = {};
-        for(int i = 0, end = inputNodes.size(); i < end; i++) {
-            accumulationFrame += (inputNodes.at(i))->currentFrame();
-        }
-        return accumulationFrame;
-    }
 };
 
 /// Add left Node to the right Node.inputNodes

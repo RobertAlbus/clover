@@ -1,3 +1,3 @@
 #!/bin/bash
 
-pprof -gv ./build/Clover test.prof;
+pprof -web ./build/CloverDemo ./test.prof

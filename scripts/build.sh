@@ -1,4 +1,3 @@
 #!/bin/bash
 
-cmake -B build;
-make -C build && sh scripts/run.sh
+ sh scripts/buildNoRun.sh && sh scripts/run.sh
