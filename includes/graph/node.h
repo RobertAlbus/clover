@@ -79,13 +79,15 @@ public:
         tickInputs(currentClockTime);
         tickCallback(currentClockTime);
 
-        Frame<__arityInput> accumulationFrame = {};
+        for(int i = 0, end = inputNodes.size(); i < end; i++) {
+            accumulationFrame[i] = 0;
+        }
         for(int i = 0, end = inputNodes.size(); i < end; i++) {
             accumulationFrame += (inputNodes.at(i))->currentFrame();
         }
         accumulationFrame *= _gainIn; 
 
-        Frame<__arityOutput> processedFrame = tick( accumulationFrame );
+        processedFrame = tick( accumulationFrame );
 
         processedFrame *= _gain;
         frames.push( processedFrame );
@@ -97,6 +99,8 @@ public:
     }
 
 private:
+    Frame<__arityInput> accumulationFrame = {};
+    Frame<__arityOutput> processedFrame {};
     /// Advance time for all input nodes
     ///
     void tickInputs(int currentClockTime) {
