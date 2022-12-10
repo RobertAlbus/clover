@@ -17,10 +17,6 @@
       - create "lerpNegative()" and "lerpPositive()" methods. 
       - when setting the freq, assign the correct function to "lerp()"
       - can optimize the sign lookup at the top of `tick()` on freq-assign as well
-- improve code efficiency
-  - create benchmarking function that sets up a graph and manually ticks it for a certain quantity of data
-  - remove extraneous copies
-  - convert all data in the node ingress to const reference args and returns
 
 ## Misc Nodes
 - NodeSimplex::Limits
@@ -128,7 +124,8 @@ UI
 C++ style standards
 - http://www.possibility.com/Cpp/CppCodingStandard.html#noabbrev
 
-
+Compiler optimization flags:
+- https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html
 
 
 
