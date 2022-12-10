@@ -68,7 +68,7 @@ private:
   void normalizeContent()
   {
     float minusThreeDb = Calc::dbtol(-3.);
-    for (int i = 0; i < content.size(); i++)
+    for (int i = 0, end = content.size(); i < end; i++)
     {
       content[i] = content[i] / _signalMaxima * minusThreeDb;
     }
