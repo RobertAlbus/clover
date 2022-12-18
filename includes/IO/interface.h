@@ -131,13 +131,25 @@ private:
 
         for( i=0; i<framesPerBuffer; i++ )
         {
+            *out++ = 0.f;
+            *out++ = 0.f;
+        }
+
+        for( i=0; i<framesPerBuffer; i++ )
+        {
+            *out--;
+            *out--;
+        }
+
+        for( i=0; i<framesPerBuffer; i++ )
+        {
             int currentSample = clock.currentSample();
             rootNode.metaTick(currentSample);
             blackhole1.metaTick(currentSample);
             blackhole2.metaTick(currentSample);
 
-            *out++ = rootNode.frames.current[0];; 
-            *out++ = rootNode.frames.current[1];; 
+            *out++ = rootNode.frames.current[0];
+            *out++ = rootNode.frames.current[1];
             
             clock.tick();
         }
