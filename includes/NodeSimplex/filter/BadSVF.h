@@ -7,7 +7,7 @@
 #include "firLowPass.h"
 #include "NodeSimplex.h"
 
-namespace SVFd
+namespace BadSVFd
 {
   constexpr int lowpass  = 1;
   constexpr int bandpass = 2;
@@ -20,10 +20,10 @@ namespace SVFd
 
 namespace Clover::NodeSimplex::Filter {
 
-class SVF : public Subgraph<1,1>
+class BadSVF : public Subgraph<1,1>
 {
 public:
-  SVF(float __cutoff, float reso, int mode = 1, int oversamplingFactor = 4, float __sampleRate = SAMPLE_RATE) : Subgraph(),
+  BadSVF(float __cutoff, float reso, int mode = 1, int oversamplingFactor = 4, float __sampleRate = SAMPLE_RATE) : Subgraph(),
     dt_prime(0), fb_prime(0), _mode(mode), _oversamplingFactor(oversamplingFactor),
     lp(0), bp(0), hp(0)
   {
