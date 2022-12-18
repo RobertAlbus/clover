@@ -7,6 +7,3 @@
 [submodule "dependencies/rtmidi"]
 	path = dependencies/rtmidi
 	url = git@github.com:thestk/rtmidi.git
-[submodule "dependencies/stk"]
-	path = dependencies/stk
-	url = git@github.com:thestk/stk.git
