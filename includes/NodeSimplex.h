@@ -16,6 +16,7 @@
 
 #include "NodeSimplex/filter/firLowPass.h"
 #include "NodeSimplex/filter/BadSVF.h"
+#include "NodeSimplex/filter/BiQuad.h"
 
 #include "NodeSimplex/reduce/bitcrusher.h"
 #include "NodeSimplex/reduce/samplecrusher.h"
