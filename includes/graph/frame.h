@@ -9,6 +9,9 @@ namespace Clover::Graph {
 template<size_t __arity>
 using Frame = std::array<Sample, __arity>;
 
+template<size_t __arity, size_t size>
+using FrameBuffer = std::array<Frame<__arity>, size>;
+
 /// add right frame to left frame.
 ///
 template<size_t __arity>

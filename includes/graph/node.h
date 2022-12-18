@@ -79,7 +79,7 @@ public:
         tickInputs(currentClockTime);
         tickCallback(currentClockTime);
 
-        for(int i = 0, end = inputNodes.size(); i < end; i++) {
+        for(int i = 0, end = __arityInput; i < end; i++) {
             accumulationFrame[i] = 0;
         }
         for(int i = 0, end = inputNodes.size(); i < end; i++) {
