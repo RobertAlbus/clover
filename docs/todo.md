@@ -27,15 +27,12 @@
   - inspired by the math needed to solve the "dead zone" issue when modulation reaches 0hz in FM feedback networks
 
 ## Envelopes
-- create a base class for all envelopes
-- upgrade existing envelopes to multi-arity
-- upgrade existing envelopes to handle input
 - Create new envelope types
     - Follower (with hold and decay)
     - N-Stage
     - Impulse
     - Automation Clip
-- add BasicEnvelope::isComplete() or similar 
+- pre-compute ADSR event times based on keyOn() time
 
 # Dynamics control
 - VCA compressor/limiter
@@ -68,8 +65,11 @@
 - L3 Mixer
 
 # Filters
-- multi-arity SVF
-- freq-based interface for SVF
+- BiQuad upgrades:
+  - Unify freq/reso interface
+  - should have one freq() method and one q() method
+  - proxy to a filter-type setter depending on which filter type is enabled
+  - extend it to include shelf filters
 - cross-over filter split (arity<1,2>, arity<2,4>)
 - moog ladder
 - EQ
