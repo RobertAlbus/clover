@@ -1,6 +1,7 @@
 #define NUM_SECONDS (100)
 
 #include <csignal> // midi input message demo
+#include <cmath>
 
 #include <chrono>
 #include <cstdlib> // rand
@@ -33,18 +34,22 @@ int main(int argc, char* argv[])
     printf("\nDefault Audio Device Index: %d\n", Pa_GetDefaultOutputDevice());
 
     Interface interface;
-    Time time(120, SAMPLE_RATE, &interface.clock);
+    Time time(160, SAMPLE_RATE, &interface.clock);
     Clover::NodeSimplex::Adapter::NullAdapter<1,2> blackHole;
     blackHole >> interface.rootNode;
 
 
     Wavetable::WavetableOsc osc;
-    osc.sine(2048);
-    osc.freq(110);
-    Stereo::Pan1 pan;
-    osc >> pan >> interface.rootNode;
+    osc.saw(1024);
+    osc.freq(110.);
 
-    Envelope::AdsrSettings adsrSettings(100, time.beat * 0.1, 1, 100);
+    Filter::BiQuad<2> filter;
+    filter.setLowPass(300., 0.5);
+
+    Stereo::Pan1 pan;
+    osc >> pan >> filter >> interface.rootNode;
+
+    Envelope::AdsrSettings adsrSettings(0, time.quat, 0.0f, time.quat);
     Envelope::Adsr adsr(adsrSettings);
     adsr >> blackHole;
 
@@ -83,14 +88,16 @@ int main(int argc, char* argv[])
         interface.clock.registerTickCallback([&](int currentTime)->void
         {   
             float envelopeValue = adsr.frames.current[0];
-            osc.gain(envelopeValue * 0.9);
-            // printf("adsr %f   -   %f\n",2 envelopeValue, osc.frames.current[0]);
+            filter.setLowPass(envelopeValue * 10000., 0.8);
 
+            float currentQuat = time.currentQuat();
 
-            if (fmod(time.currentBeat(), 5.f) == 0.) {
+            if (
+                fmod(currentQuat, 8.f) == 0.f ||
+                fmod(currentQuat, 8.f) == 3.f ||
+                fmod(currentQuat, 8.f) == 6.f
+            ) {
                 adsr.keyOn();
-            } else if (fmod(time.currentBeat(), 5.f) == 2.) {
-                adsr.keyOff();
             }
 
         });

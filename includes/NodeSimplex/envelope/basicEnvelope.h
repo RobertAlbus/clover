@@ -80,13 +80,24 @@ protected:
   Frame<1> tick(Frame<0> inputFrame)
   {
     BasicEnvelopeSettings& s = settings.current;
+    float elapsedTime = (float)_currentClockTime - (float)s.startTime;
+      
+    if (_currentClockTime > s.targetTime) 
+    {
+      return Frame<1> {s.targetValue};
+    }
+    
+    if( elapsedTime <= 0.f)
+    {
+      return Frame<1> {s.startValue};
+    }
 
-    if (_currentClockTime > s.targetTime) return Frame<1> {s.targetValue};
-    double elapsedTime = _currentClockTime - s.startTime;
+    float lerpAmount = (elapsedTime / (float)s.duration);
+    lerpAmount = isinf(lerpAmount) ? 0. : lerpAmount;
 
     return Frame<1>
     {
-      std::lerp(s.startValue, s.targetValue, (float)(elapsedTime / s.duration))
+      std::lerp(s.startValue, s.targetValue, lerpAmount)
     };
   }
 
