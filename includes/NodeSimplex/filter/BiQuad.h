@@ -1,7 +1,8 @@
 #pragma once
 
-#include <cmath>
 #include <array>
+#include <cmath>
+#include <functional>
 
 #include "constants.h"
 #include "graph.h"
@@ -13,6 +14,19 @@ namespace Clover::NodeSimplex::Filter {
 const float RECIP_SQRT_2 = static_cast<float>( M_SQRT1_2 );  
 const float TWO_PI = M_PI * 2.0f;
 
+struct BiQuadSettings
+{
+  void (*setFunction)(float, float);
+  float freq;
+  float Q;
+
+  float K_;
+  float kSqr_;
+  float denom_;
+  std::array<float, 3> b_;
+  std::array<float, 3> a_;
+
+};
 
 template <size_t __arity>
 class BiQuad : public Node<__arity, __arity>
@@ -56,6 +70,77 @@ public:
 
   //! Set the a[2] coefficient value.
   void setA2( float a2 ) { a_[2] = a2; };
+
+  std::function<void(float, float)> setFunction;
+
+  void set(float f, float q)
+  {
+    setFunction(f, q);
+  }
+
+  void freq(float frequency)
+  {
+    setFunction(frequency, reso_);
+  }
+
+  void reso(float Q)
+  {
+    setFunction(freq_, Q);
+  }
+
+  void lowPass()
+  {
+    setFunction = [this](float freq, float reso) {
+      this->setLowPass(freq, reso);
+    };
+  }
+  
+  void highPass()
+  {
+    setFunction = [this](float freq, float reso) {
+      this->setHighPass(freq, reso);
+    };
+  }
+  
+  void allPass()
+  {
+    setFunction = [this](float freq, float reso) {
+      this->setAllPass(freq, reso);
+    };
+  }
+
+  void bandReject()
+  {
+    setFunction = [this](float freq, float reso) {
+      this->setBandReject(freq, reso);
+    };
+  }
+
+  void bandPass()
+  {
+    setFunction = [this](float freq, float reso) {
+      this->setBandPass(freq, reso);
+    };
+  }
+
+  Frame<__arity> tick(Frame<__arity> input)
+  {
+    inputs_[0] = input;
+
+    for (int i = 0; i < __arity; i++)
+    {
+      lastFrame_[i]  = b_[0] * inputs_[0][i]  + b_[1] * inputs_[1][i] + b_[2] * inputs_[2][i];
+      lastFrame_[i] -= a_[2] * outputs_[2][i] + a_[1] * outputs_[1][i];
+    }
+
+    inputs_[2] = inputs_[1];
+    inputs_[1] = inputs_[0];
+    outputs_[2] = outputs_[1];
+    outputs_[1] = lastFrame_;
+
+    return lastFrame_;
+  }
+
 
   //! Sets the filter coefficients for a resonance at \e frequency (in Hz).
   /*!
@@ -106,6 +191,7 @@ public:
     a_[1] = 0.0; 
     a_[2] = 0.0;
   }
+
   //! Set the filter coefficients for a low-pass with cutoff frequency \e fc (in Hz) and Q-factor \e Q.
   /*!
     This method determines the filter coefficients corresponding to a 
@@ -215,26 +301,22 @@ public:
     b_[2] = -1.0;
   }
 
-  Frame<__arity> tick(Frame<__arity> input)
-  {
-    inputs_[0] = input;
-
-    for (int i = 0; i < __arity; i++)
-    {
-      lastFrame_[i] = b_[0] * inputs_[0][i] + b_[1] * inputs_[1][i] + b_[2] * inputs_[2][i];
-      lastFrame_[i] -= a_[2] * outputs_[2][i] + a_[1] * outputs_[1][i];
-    }
-
-
-    inputs_[2] = inputs_[1];
-    inputs_[1] = inputs_[0];
-    outputs_[2] = outputs_[1];
-    outputs_[1] = lastFrame_;
-
-    return lastFrame_;
-  }
-
 protected:
+
+  float freq_;
+  float reso_;
+
+  float K_;
+  float kSqr_;
+  float denom_;
+
+  Frame<__arity> lastFrame_;
+
+  std::array<float, 3> b_;
+  std::array<float, 3> a_;
+  FrameBuffer<__arity, 3> outputs_;
+  FrameBuffer<__arity, 3> inputs_;
+
   // Helper function to update the three intermediate values for the predefined filter types
   // along with the feedback filter coefficients. Performs the debug check for fc and Q-factor arguments.
   void setCommonFilterValues( float fc, float Q)
@@ -257,19 +339,6 @@ protected:
     lastFrame_ = 0.0;
   }
 
-  float K_;
-  float kSqr_;
-  float denom_;
-
-  Frame<__arity> lastFrame_;
-
-  std::array<float, 3> b_;
-  std::array<float, 3> a_;
-  // Clover::Graph::FrameBuffer<1, 3> outputs_;
-  // Clover::Graph::FrameBuffer<1, 3> inputs_;
-  FrameBuffer<__arity, 3> outputs_;
-  FrameBuffer<__arity, 3> inputs_;
 };
-
 
 }

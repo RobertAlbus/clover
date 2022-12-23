@@ -44,7 +44,8 @@ int main(int argc, char* argv[])
     osc.freq(110.);
 
     Filter::BiQuad<2> filter;
-    filter.setLowPass(300., 0.5);
+    filter.lowPass();
+    filter.set(300., 0.5);
 
     Stereo::Pan1 pan;
     osc >> pan >> filter >> interface.rootNode;
