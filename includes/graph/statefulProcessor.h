@@ -29,7 +29,10 @@ public:
   StatefulProcessor() : Node<__arityIn, __arityOut>() {}
   StatefulProcessor(const SettingsType& initialSettings)
     : Node<__arityIn, __arityOut>(),
-      settings(initialSettings) {}
+      settings(initialSettings)
+  {
+    settings.reset();
+  }
 
   NodeSettings<SettingsType> settings;
 };
