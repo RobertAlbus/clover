@@ -145,8 +145,6 @@ private:
         {
             int currentSample = clock.currentSample();
             rootNode.metaTick(currentSample);
-            blackhole1.metaTick(currentSample);
-            blackhole2.metaTick(currentSample);
 
             *out++ = rootNode.frames.current[0];
             *out++ = rootNode.frames.current[1];
@@ -197,8 +195,6 @@ private:
 public:
     Clover::Util::SampleClock clock;
     RootNode<2> rootNode;
-    RootNode<1> blackhole1;
-    RootNode<2> blackhole2;
 };
 
 }
