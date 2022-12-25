@@ -41,16 +41,27 @@ int main(int argc, char* argv[])
 
     Wavetable::WavetableOsc osc;
     osc.saw(1024);
-    osc.freq(110.);
+    osc.freq(70.);
+
+    Wavetable::WavetableOsc mod;
+    mod.sine(11);
+    mod.freq(71);
+    mod >> blackHole;
 
     Filter::BiQuad<2> filter;
     filter.lowPass();
-    filter.set(300., 0.5);
+    filter.set(200., 0.9);
 
     Stereo::Pan1 pan;
     osc >> pan >> filter >> interface.rootNode;
 
-    Envelope::AdsrSettings adsrSettings(0, time.quat, 0.0f, time.quat);
+    Wavetable::WavetableOsc lfo;
+    lfo.sine(1024);
+    lfo.freq(0.25);
+    lfo.phase(0.75);
+    lfo >> blackHole;
+
+    Envelope::AdsrSettings adsrSettings(0, time.quat, 0.0f, time.beat);
     Envelope::Adsr adsr(adsrSettings);
     adsr >> blackHole;
 
@@ -88,8 +99,12 @@ int main(int argc, char* argv[])
     else {
         interface.clock.registerTickCallback([&](int currentTime)->void
         {   
+            float lfoAdjusted = lfo.frames.current[0] + 1.;
+            float modAdjusted = (mod.frames.current[0] + 1.) / 2.;
             float envelopeValue = adsr.frames.current[0];
-            filter.setLowPass(envelopeValue * 10000., 0.8);
+            osc.freq(70. * (modAdjusted * 100));
+            filter.setLowPass(envelopeValue * (1000. * lfoAdjusted) + 200, 0.8);
+            osc.gain(envelopeValue);
 
             float currentQuat = time.currentQuat();
 
