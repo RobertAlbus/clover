@@ -8,23 +8,15 @@
     - Gauss noise
     - clicks, pops, etc
     - character-ful noises IE tape
-- fix click at the beginning of the WavetableOsc
-
-## Node Base
-- make every node have a ClassNameSettings object for all member variables
-    - ctor should accept this (with a copy, not a ref)
     - fix the LERP direction when freqencies are negative
       - create "lerpNegative()" and "lerpPositive()" methods. 
       - when setting the freq, assign the correct function to "lerp()"
       - can optimize the sign lookup at the top of `tick()` on freq-assign as well
 
-## Misc Nodes
-- NodeSimplex::Limits
-  - Min
-  - Max
-  - Clamp
-  - RangeAvoider
-  - inspired by the math needed to solve the "dead zone" issue when modulation reaches 0hz in FM feedback networks
+## Node Base
+- make every node have a ClassNameSettings object for all member variables
+    - ctor should accept this (with a copy, not a ref)
+  - graph-propagating reset
 
 ## Envelopes
 - Create new envelope types
@@ -66,9 +58,6 @@
 
 # Filters
 - BiQuad upgrades:
-  - Unify freq/reso interface
-  - should have one freq() method and one q() method
-  - proxy to a filter-type setter depending on which filter type is enabled
   - extend it to include shelf filters
 - cross-over filter split (arity<1,2>, arity<2,4>)
 - moog ladder
