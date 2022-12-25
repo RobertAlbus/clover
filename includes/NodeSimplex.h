@@ -18,6 +18,10 @@
 #include "NodeSimplex/filter/BadSVF.h"
 #include "NodeSimplex/filter/BiQuad.h"
 
+#include "NodeSimplex/Range/Avoid.h"
+#include "NodeSimplex/Range/Clamp.h"
+#include "NodeSimplex/Range/Clip.h"
+
 #include "NodeSimplex/reduce/bitcrusher.h"
 #include "NodeSimplex/reduce/samplecrusher.h"
 
