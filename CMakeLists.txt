@@ -52,6 +52,10 @@ add_library(${PROJECT_NAME} INTERFACE)
 target_link_libraries(${PROJECT_NAME} INTERFACE ${EXTRA_LIBS})
 
 ########
+# tests
+include(${CMAKE_CURRENT_SOURCE_DIR}/CTest.cmake)
+
+########
 # libs, linking, etc
 
 
