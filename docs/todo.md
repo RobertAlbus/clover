@@ -1,7 +1,6 @@
 # TODO
 
 - migrate to RtAudio? or off of rtmidi? want to have the same provider, but RtMidi is buggy. or perhaps it is my controller.
-- upgrade file names and folder names to use CapitalCaseNaming
 
 ## Wavetables
 - Create noises
