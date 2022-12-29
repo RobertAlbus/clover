@@ -1,4 +1,4 @@
-#include "IO/interface.h"
-#include "IO/midiIn.h"
-#include "IO/rootNode.h"
-#include "IO/wavFile.h"
+#include "IO/Interface.h"
+#include "IO/MidiIn.h"
+#include "IO/RootNode.h"
+#include "IO/WavFile.h"

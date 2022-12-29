@@ -7,8 +7,8 @@
 #include "portaudio.h"
 
 // internal dependencies
-#include "interface.h"
-#include "rootNode.h"
+#include "Interface.h"
+#include "RootNode.h"
 #include "util/sampleClock.h"
 
 namespace Clover::IO {
