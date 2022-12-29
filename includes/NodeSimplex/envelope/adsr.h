@@ -4,7 +4,7 @@
 #include <cmath>
 
 #include "NodeSimplex.h"
-#include "graph.h"
+#include "Graph.h"
 
 
 namespace Clover::NodeSimplex::Envelope {

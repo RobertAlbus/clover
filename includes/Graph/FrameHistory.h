@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-#include "graph/frame.h"
+#include "Graph/Frame.h"
 
 namespace Clover::Graph {
 

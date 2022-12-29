@@ -2,7 +2,7 @@
 
 #include <functional>
 
-#include "graph.h"
+#include "Graph.h"
 
 namespace Clover::Graph
 {

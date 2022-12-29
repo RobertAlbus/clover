@@ -2,8 +2,8 @@
 
 #include <cmath>
 
+#include "Graph.h"
 #include "difference.h"
-#include "NodeSimplex/basic/subgraph.h"
 #include "pan.h"
 #include "sum.h"
 
@@ -60,7 +60,7 @@ protected:
   Sum2 mid;
   Difference side;
   Pan2 pan2;
-  RootNode<2> spring;
+  Clover::IO::RootNode<2> spring;
 
   float _spreadReadOnly;
   

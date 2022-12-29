@@ -1,6 +1,6 @@
 #pragma once
 
-#include "graph.h"
+#include "Graph.h"
 #include "IO.h"
 
 template <size_t __arityIn, size_t __arityOut>

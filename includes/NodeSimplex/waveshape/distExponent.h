@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-#include "graph.h"
+#include "Graph.h"
 
 using namespace Clover::Graph;
 using namespace Clover::Util;

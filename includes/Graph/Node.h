@@ -4,8 +4,8 @@
 #include <functional>
 #include <vector>
 
-#include "frame.h"
-#include "frameHistory.h"
+#include "Frame.h"
+#include "FrameHistory.h"
 
 namespace Clover::Graph {
 

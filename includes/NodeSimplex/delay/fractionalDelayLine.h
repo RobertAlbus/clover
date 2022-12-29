@@ -4,7 +4,7 @@
 #include <vector>
 #include <math.h>
 
-#include "graph.h"
+#include "Graph.h"
 
 namespace Clover::NodeSimplex::Delay {
 
