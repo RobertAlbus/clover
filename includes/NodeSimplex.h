@@ -1,7 +1,7 @@
 #pragma once
 
-#include "NodeSimplex/Adapter/NullAdapter.h"
 #include "NodeSimplex/Adapter/MapAdapter.h"
+#include "NodeSimplex/Adapter/NullAdapter.h"
 
 #include "NodeSimplex/Basic/Gain.h"
 #include "NodeSimplex/Basic/Invert.h"
@@ -10,13 +10,15 @@
 #include "NodeSimplex/Delay/Delay.h" // should be called fractional
 #include "NodeSimplex/Delay/FractionalDelayLine.h"
 
+// clang-format off
 #include "NodeSimplex/Envelope/BasicEnvelope.h" // must come first
 #include "NodeSimplex/Envelope/ADSR.h"
 #include "NodeSimplex/Envelope/DC.h"
+// clang-format on
 
-#include "NodeSimplex/Filter/FirLowPass.h"
 #include "NodeSimplex/Filter/BadSVF.h"
 #include "NodeSimplex/Filter/BiQuad.h"
+#include "NodeSimplex/Filter/FirLowPass.h"
 
 #include "NodeSimplex/Range/Avoid.h"
 #include "NodeSimplex/Range/Clamp.h"

@@ -8,29 +8,24 @@
 namespace Clover::NodeSimplex::Delay {
 
 template <size_t __arity, size_t __bufferSize>
-class Delay : public Node<__arity, __arity>
-{
+class Delay : public Node<__arity, __arity> {
 public:
-  Delay(size_t delayTime = __bufferSize) : Node<__arity, __arity>(), buffer(delayTime)
-  {
+  Delay(size_t delayTime = __bufferSize)
+      : Node<__arity, __arity>(), buffer(delayTime) {
     setDelayTime(delayTime);
   }
 
-  void setDelayTime(size_t time)
-  {
-    buffer.setDelayTime(time);
-  }
+  void setDelayTime(size_t time) { buffer.setDelayTime(time); }
 
 protected:
   Clover::Util::RingBuffer<__arity, __bufferSize> buffer;
-  Frame<__arity> tick(Frame<__arity> input)
-  {
+  Frame<__arity> tick(Frame<__arity> input) {
     buffer.write(input);
-    Frame<__arity> f {buffer.read()};
+    Frame<__arity> f{buffer.read()};
     buffer.advance();
 
     return f;
   }
 };
 
-}
+} // namespace Clover::NodeSimplex::Delay

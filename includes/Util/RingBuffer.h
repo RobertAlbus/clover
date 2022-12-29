@@ -1,40 +1,31 @@
 #pragma once
 
-#include <array>
 #include <algorithm>
+#include <array>
 
 #include "Graph.h"
 
 namespace Clover::Util {
 
-template <size_t __arity, size_t __bufferSize>
-class RingBuffer
-{
+template <size_t __arity, size_t __bufferSize> class RingBuffer {
 public:
-  RingBuffer(size_t delayTime = __bufferSize) : writeHead(__bufferSize-1), buffer {}
-  {
+  RingBuffer(size_t delayTime = __bufferSize)
+      : writeHead(__bufferSize - 1), buffer{} {
     setDelayTime(delayTime);
   }
 
-  void setDelayTime(size_t time)
-  {
+  void setDelayTime(size_t time) {
     time = std::min(time, __bufferSize);
-    readHead = (int) ((size_t) writeHead + __bufferSize - (time - 1)) % __bufferSize;
+    readHead =
+        (int)((size_t)writeHead + __bufferSize - (time - 1)) % __bufferSize;
   }
 
-  Frame<__arity> read()
-  {
-    return buffer[readHead];
-  }
+  Frame<__arity> read() { return buffer[readHead]; }
 
-  void write(Frame<__arity> f)
-  {
-    buffer[writeHead] = f;
-  }
+  void write(Frame<__arity> f) { buffer[writeHead] = f; }
 
-  void advance()
-  {
-    readHead  = (readHead  + 1) % __bufferSize;
+  void advance() {
+    readHead = (readHead + 1) % __bufferSize;
     writeHead = (writeHead + 1) % __bufferSize;
   }
 
@@ -44,4 +35,4 @@ protected:
   int writeHead;
 };
 
-}
+} // namespace Clover::Util
