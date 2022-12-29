@@ -6,7 +6,7 @@
 #include "wave/file.h"
 
 #include "Graph.h"
-#include "util/calc.h"
+#include "Util/Calc.h"
 
 using namespace Clover::Graph;
 using namespace Clover::Util;

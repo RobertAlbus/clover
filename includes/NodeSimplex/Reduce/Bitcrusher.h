@@ -3,7 +3,7 @@
 #include <limits.h>
 #include <math.h>
 
-#include "util/calc.h"
+#include "Util/Calc.h"
 #include "Graph.h"
 
 using namespace Clover::Util;

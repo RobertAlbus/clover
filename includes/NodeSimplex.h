@@ -3,35 +3,35 @@
 #include "NodeSimplex/Adapter/NullAdapter.h"
 #include "NodeSimplex/Adapter/MapAdapter.h"
 
-#include "NodeSimplex/basic/gain.h"
-#include "NodeSimplex/basic/invert.h"
-#include "NodeSimplex/basic/rectifier.h"
+#include "NodeSimplex/Basic/Gain.h"
+#include "NodeSimplex/Basic/Invert.h"
+#include "NodeSimplex/Basic/Rectifier.h"
 
-#include "NodeSimplex/delay/delay.h" // should be called fractional
-#include "NodeSimplex/delay/fractionalDelayLine.h"
+#include "NodeSimplex/Delay/Delay.h" // should be called fractional
+#include "NodeSimplex/Delay/FractionalDelayLine.h"
 
-#include "NodeSimplex/envelope/basicEnvelope.h" // must come first
-#include "NodeSimplex/envelope/adsr.h"
-#include "NodeSimplex/envelope/dc.h"
+#include "NodeSimplex/Envelope/BasicEnvelope.h" // must come first
+#include "NodeSimplex/Envelope/ADSR.h"
+#include "NodeSimplex/Envelope/DC.h"
 
-#include "NodeSimplex/filter/firLowPass.h"
-#include "NodeSimplex/filter/BadSVF.h"
-#include "NodeSimplex/filter/BiQuad.h"
+#include "NodeSimplex/Filter/FirLowPass.h"
+#include "NodeSimplex/Filter/BadSVF.h"
+#include "NodeSimplex/Filter/BiQuad.h"
 
 #include "NodeSimplex/Range/Avoid.h"
 #include "NodeSimplex/Range/Clamp.h"
 #include "NodeSimplex/Range/Clip.h"
 
-#include "NodeSimplex/reduce/bitcrusher.h"
-#include "NodeSimplex/reduce/samplecrusher.h"
+#include "NodeSimplex/Reduce/Bitcrusher.h"
+#include "NodeSimplex/Reduce/Samplecrusher.h"
 
-#include "NodeSimplex/stereo/difference.h"
-#include "NodeSimplex/stereo/invert.h"
-#include "NodeSimplex/stereo/pan.h"
-#include "NodeSimplex/stereo/peel.h"
-#include "NodeSimplex/stereo/sum.h"
+#include "NodeSimplex/Stereo/Difference.h"
+#include "NodeSimplex/Stereo/Invert.h"
+#include "NodeSimplex/Stereo/Pan.h"
+#include "NodeSimplex/Stereo/Peel.h"
+#include "NodeSimplex/Stereo/Sum.h"
 
-#include "NodeSimplex/waveshape/distExponent.h"
-#include "NodeSimplex/waveshape/ringMod_V1.h"
+#include "NodeSimplex/Waveshape/DistExponent.h"
+#include "NodeSimplex/Waveshape/RingMod_V1.h"
 
-#include "NodeSimplex/wavetable/wavetableOsc.h"
+#include "NodeSimplex/Wavetable/WavetableOsc.h"

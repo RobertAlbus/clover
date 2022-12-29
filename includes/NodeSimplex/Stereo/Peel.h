@@ -1,5 +1,7 @@
 #pragma once
 
+// this file is kind of unneeded given that I have MapAdapter
+
 #include "NodeSimplex.h"
 
 namespace Clover::NodeSimplex::Stereo {

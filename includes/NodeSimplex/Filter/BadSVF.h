@@ -4,7 +4,7 @@
 #include <algorithm>
 
 #include "constants.h"
-#include "firLowPass.h"
+#include "FirLowPass.h"
 #include "NodeSimplex.h"
 
 namespace BadSVFd

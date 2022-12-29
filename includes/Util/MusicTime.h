@@ -1,5 +1,5 @@
 #pragma once
-#include "sampleClock.h"
+#include "SampleClock.h"
 
 namespace Clover::Util {
 

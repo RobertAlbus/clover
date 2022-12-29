@@ -3,9 +3,9 @@
 #include <cmath>
 
 #include "Graph.h"
-#include "difference.h"
-#include "pan.h"
-#include "sum.h"
+#include "Difference.h"
+#include "Pan.h"
+#include "Sum.h"
 
 using namespace Clover::NodeSimplex::Stereo;
 using namespace Clover::Util;

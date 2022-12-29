@@ -9,7 +9,7 @@
 // internal dependencies
 #include "Interface.h"
 #include "RootNode.h"
-#include "util/sampleClock.h"
+#include "Util/SampleClock.h"
 
 namespace Clover::IO {
 

@@ -3,7 +3,7 @@
 #include <array>
 
 #include "Graph.h"
-#include "util.h"
+#include "Util.h"
 
 namespace Clover::NodeSimplex::Delay {
 
