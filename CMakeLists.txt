@@ -1,8 +1,7 @@
 ########
 # Clover: Composable Signal Graphs for Creative Sound Coding
 
-set(version 3.10)
-cmake_minimum_required(VERSION ${version})
+cmake_minimum_required(VERSION 3.14)
 project(Clover VERSION 2.1)
 configure_file(includes/config.h.in config.h)
 
