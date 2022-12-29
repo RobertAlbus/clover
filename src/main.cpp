@@ -13,9 +13,9 @@
 #include "portaudio.h"
 #include "RtMidi.h"
 
-#include "config.h"
+#include "Config.h"
 
-#include "clover.h"
+#include "Clover.h"
 
 
 using namespace Clover::IO;

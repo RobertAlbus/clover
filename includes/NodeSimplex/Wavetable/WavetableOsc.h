@@ -4,7 +4,7 @@
 #include <functional>
 #include <vector>
 
-#include "constants.h"
+#include "Constants.h"
 #include "Util.h"
 
 namespace Clover::NodeSimplex::Wavetable {

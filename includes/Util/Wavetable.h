@@ -3,7 +3,7 @@
 #include <cmath>
 #include <math.h>
 
-#include "constants.h"
+#include "Constants.h"
 
 
 namespace Clover::Util::GenerateWavetable {

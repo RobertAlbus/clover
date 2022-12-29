@@ -1,7 +1,7 @@
 #pragma once
 
-#include "config.h"
-#include "constants.h"
+#include "Config.h"
+#include "Constants.h"
 #include "Graph.h"
 #include "IO.h"
 #include "Midi.h"

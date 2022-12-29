@@ -2,7 +2,7 @@
 
 #include <math.h>
 
-#include "constants.h"
+#include "Constants.h"
 #include "Graph.h"
 
 namespace Clover::NodeSimplex::Filter {

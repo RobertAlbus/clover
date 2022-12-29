@@ -3,7 +3,7 @@
 
 cmake_minimum_required(VERSION 3.14)
 project(Clover VERSION 2.1)
-configure_file(includes/config.h.in config.h)
+configure_file(includes/Config.h.in Config.h)
 
 
 ########
