@@ -46,7 +46,10 @@ int main(int argc, char* argv[])
     Wavetable::WavetableOsc mod;
     mod.sine(11);
     mod.freq(71);
-    mod >> blackHole;
+
+    Clover::NodeSimplex::Range::Avoid<1> fbDestroyer(0.,0.);
+
+    mod >> fbDestroyer >> blackHole;
 
     Filter::BiQuad<2> filter;
     filter.lowPass();
@@ -101,8 +104,10 @@ int main(int argc, char* argv[])
         {   
             float lfoAdjusted = lfo.frames.current[0] + 1.;
             float modAdjusted = (mod.frames.current[0] + 1.) / 2.;
+            float oscAdjusted = (osc.frames.current[0] + 1.) / 2.;
             float envelopeValue = adsr.frames.current[0];
-            osc.freq(70. * (modAdjusted * 100));
+            osc.freq(70. * (modAdjusted * 2));
+            mod.freq(70. * (oscAdjusted * 3));
             filter.setLowPass(envelopeValue * (1000. * lfoAdjusted) + 200, 0.8);
             osc.gain(envelopeValue);
 
@@ -113,6 +118,8 @@ int main(int argc, char* argv[])
                 fmod(currentQuat, 8.f) == 3.f ||
                 fmod(currentQuat, 8.f) == 6.f
             ) {
+                osc.phase(0);
+                mod.phase(0);
                 adsr.keyOn();
             }
 
