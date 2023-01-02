@@ -13,9 +13,10 @@ add_executable(clover_test
     includes/NodeSimplex/Adapter/MapAdapter_Test.cc
     includes/NodeSimplex/Adapter/NullAdapter_Test.cc
 )
-target_link_libraries(
-  clover_test
-  gtest_main
+target_link_libraries(clover_test
+    PUBLIC
+        Clover
+        gtest_main
 )
 
 include(GoogleTest)
