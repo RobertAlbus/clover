@@ -7,3 +7,5 @@
 #include "Midi.h"
 #include "NodeSimplex.h"
 #include "Util.h"
+
+#include "_Test.h"
