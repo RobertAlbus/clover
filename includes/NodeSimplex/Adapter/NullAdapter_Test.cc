@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
 
+#include "Clover.h"
+
 // Demonstrate some basic assertions.
 TEST(NodeSimplex_Adapter_NullAdapter, ShouldMapNull) {
   // Expect two strings not to be equal.

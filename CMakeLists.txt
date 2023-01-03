@@ -48,6 +48,11 @@ list(APPEND EXTRA_LIBS rtmidi)
 # internal libraries
 
 add_library(${PROJECT_NAME} INTERFACE)
+target_include_directories(${PROJECT_NAME}
+    INTERFACE
+        ${PROJECT_BINARY_DIR}
+        includes
+)
 target_link_libraries(${PROJECT_NAME} INTERFACE ${EXTRA_LIBS})
 
 ########
@@ -58,14 +63,6 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/CTest.cmake)
 # libs, linking, etc
 
 
-
-target_include_directories(${PROJECT_NAME}
-    INTERFACE
-        ${PROJECT_BINARY_DIR}
-        ${EXTRA_INCLUDES}
-        includes
-        src
-)
 
 if(CLOVER_BUILD_DEMO)
     add_executable(${PROJECT_NAME}Demo src/main.cpp)

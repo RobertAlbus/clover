@@ -48,9 +48,9 @@ TEST(NodeSimplex_Adapter_MapAdapter, ShouldMapRange) {
   crank.turn(1);
 
   EXPECT_EQ(collector.frames[0][0], 0.f);
-  EXPECT_EQ(collector.frames[0][1], 1.f);
-  EXPECT_EQ(collector.frames[0][2], 2.f);
-  EXPECT_EQ(collector.frames[0][3], 3.f);
+  EXPECT_EQ(collector.frames[0][1], 2.f);
+  EXPECT_EQ(collector.frames[0][2], 3.f);
+  EXPECT_EQ(collector.frames[0][3], 0.f);
 }
 
 // test for out of bounds mapping

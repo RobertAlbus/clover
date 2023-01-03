@@ -14,7 +14,7 @@ add_executable(clover_test
     includes/NodeSimplex/Adapter/NullAdapter_Test.cc
 )
 target_link_libraries(clover_test
-    PUBLIC
+    PRIVATE
         Clover
         gtest_main
 )
