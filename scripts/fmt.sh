@@ -1,1 +1,1 @@
-clang-format -i src/**/*.cpp includes/**/*.h includes/**/*.cc
+clang-format -i src/**/*.cpp includes/**/*.h test/**/*.cc

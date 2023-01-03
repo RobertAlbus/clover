@@ -10,8 +10,8 @@ FetchContent_MakeAvailable(googletest)
 enable_testing()
 
 add_executable(clover_test
-    includes/NodeSimplex/Adapter/MapAdapter_Test.cc
-    includes/NodeSimplex/Adapter/NullAdapter_Test.cc
+    test/NodeSimplex/Adapter/MapAdapter_Test.cc
+    test/NodeSimplex/Adapter/NullAdapter_Test.cc
 )
 target_link_libraries(clover_test
     PRIVATE
