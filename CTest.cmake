@@ -12,6 +12,10 @@ enable_testing()
 add_executable(clover_test
     test/NodeSimplex/Adapter/MapAdapter_Test.cc
     test/NodeSimplex/Adapter/NullAdapter_Test.cc
+
+    test/NodeSimplex/Basic/Gain_Test.cc
+    test/NodeSimplex/Basic/Invert_Test.cc
+    test/NodeSimplex/Basic/Rectifier_Test.cc
 )
 target_link_libraries(clover_test
     PRIVATE
