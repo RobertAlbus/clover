@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 #include "Graph.h"
 
@@ -14,6 +15,21 @@ public:
   }
 
   std::vector<Frame<__arity>> frames;
+
+  void showBetween(size_t fromIndex, size_t toIndex) {
+    // add this to the collector node to dump the buffer
+    printf("\n\n");
+    for (int i = fromIndex; i <= toIndex; i++) {
+      std::string output = "\n ";
+      output += std::to_string(i);
+      for (int j = 0; j < __arity; j++) {
+        output += " - ";
+        output += std::to_string(frames[i][j]);
+      }
+      printf(output.c_str());
+    }
+    printf("\n\n");
+  }
 
 private:
   Frame<__arity> tick(Frame<__arity> input) {
