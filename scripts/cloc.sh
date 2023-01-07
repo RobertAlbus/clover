@@ -1,0 +1,1 @@
+cloc . --fullpath --exclude-dir=dependencies,build,.vscode,docs
