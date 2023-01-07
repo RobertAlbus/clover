@@ -25,6 +25,17 @@ struct AdsrSettings {
 
 class Adsr : public StatefulSubgraph<0, 1, AdsrSettings> {
 public:
+  Adsr(size_t a, size_t d, float s, size_t r)
+      : StatefulSubgraph(), envelope(0, 0, 0) {
+    this->settings.initial.attack = a;
+    this->settings.initial.decay = d;
+    this->settings.initial.sustain = s;
+    this->settings.initial.release = r;
+
+    settings.reset();
+    connectNodes();
+  }
+
   Adsr(AdsrSettings initialSettings)
       : StatefulSubgraph(initialSettings), envelope(0, 0, 0) {
     settings.reset();
