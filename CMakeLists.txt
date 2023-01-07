@@ -10,6 +10,7 @@ configure_file(includes/Config.h.in Config.h)
 # Clover variables
 
 set(CLOVER_BUILD_DEMO ON)
+set(CLOVER_BUILD_TESTS OFF)
 
 
 ########
@@ -57,7 +58,9 @@ target_link_libraries(${PROJECT_NAME} INTERFACE ${EXTRA_LIBS})
 
 ########
 # tests
-include(${CMAKE_CURRENT_SOURCE_DIR}/CTest.cmake)
+if(CLOVER_BUILD_TESTS)
+    include(${CMAKE_CURRENT_SOURCE_DIR}/CTest.cmake)
+endif()
 
 ########
 # libs, linking, etc
