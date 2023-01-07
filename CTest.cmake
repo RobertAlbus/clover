@@ -16,6 +16,11 @@ add_executable(clover_test
     test/NodeSimplex/Basic/Gain_Test.cc
     test/NodeSimplex/Basic/Invert_Test.cc
     test/NodeSimplex/Basic/Rectifier_Test.cc
+    
+    test/NodeSimplex/Envelope/ADSR_Test.cc
+    test/NodeSimplex/Envelope/BasicEnvelope_Test.cc
+    test/NodeSimplex/Envelope/DC_Test.cc
+
 )
 target_link_libraries(clover_test
     PRIVATE
