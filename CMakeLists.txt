@@ -11,6 +11,7 @@ configure_file(includes/Config.h.in Config.h)
 
 set(CLOVER_BUILD_DEMO ON)
 set(CLOVER_BUILD_TESTS OFF)
+set(CLOVER_BUILD_GENUARY23 ON)
 
 
 ########
@@ -70,4 +71,10 @@ endif()
 if(CLOVER_BUILD_DEMO)
     add_executable(${PROJECT_NAME}Demo src/main.cpp)
     target_link_libraries(${PROJECT_NAME}Demo PUBLIC ${PROJECT_NAME})
+endif()
+
+if(CLOVER_BUILD_GENUARY23)
+    # j1
+    add_executable(genuary23_1 src/genuary23/j1.cpp)
+    target_link_libraries(genuary23_1 PUBLIC ${PROJECT_NAME})
 endif()
