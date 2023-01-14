@@ -23,7 +23,7 @@ public:
     int result = writeFile.Open(filePath, wave::kOut);
 
     writeFile.set_channel_number((uint16_t)__arity);
-    writeFile.set_sample_rate(48000); // add sample rate to base class Clover
+    writeFile.set_sample_rate(48000);  // add sample rate to base class Clover
     writeFile.set_bits_per_sample(32); // add bit depth
   }
 

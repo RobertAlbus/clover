@@ -31,11 +31,12 @@ int main(int argc, char *argv[]) {
   blackHole >> interface.rootNode;
 
   int numOscs = 6;
-  std::vector<Clover::NodeSimplex::Wavetable::WavetableOsc*> oscs;
+  std::vector<Clover::NodeSimplex::Wavetable::WavetableOsc *> oscs;
   Clover::NodeSimplex::Stereo::Pan1 pan;
   pan.gain(0.3);
   pan >> interface.rootNode;
 
+  //clang-format off
   using namespace Clover::Midi;
   std::vector<float> notes {
     Note::E4,
@@ -45,8 +46,9 @@ int main(int argc, char *argv[]) {
     Note::Cs5,
     Note::D5
   };
+  //clang-format on
 
-  for (int i =0; i < numOscs; i++) {
+  for (int i = 0; i < numOscs; i++) {
     oscs.emplace_back(new Clover::NodeSimplex::Wavetable::WavetableOsc());
     oscs[i]->sine(9);
     oscs[i]->freq(Clover::Util::Calc::mtof(notes[i]));
@@ -54,7 +56,6 @@ int main(int argc, char *argv[]) {
   }
 
   interface.clock.registerTickCallback([&](int currentTime) -> void {
-
 
   });
 

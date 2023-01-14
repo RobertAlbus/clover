@@ -40,7 +40,7 @@ int main(int argc, char *argv[]) {
 
   int numOscs = 4;
   std::vector<Wavetable::WavetableOsc *> oscs{};
-  std::vector<float> detuneCent {-18., -10., 10., 18.};
+  std::vector<float> detuneCent{-18., -10., 10., 18.};
   float baseNote = Clover::Midi::Note::F1;
 
   Clover::NodeSimplex::Filter::BiQuad<2> filter;
@@ -58,7 +58,7 @@ int main(int argc, char *argv[]) {
   lfo.sine(9.);
   lfo.freq(22.);
   lfo.phase(0.75);
-  lfo >> *(new Clover::NodeSimplex::Adapter::NullAdapter<1,0>()) >> blackHole;
+  lfo >> *(new Clover::NodeSimplex::Adapter::NullAdapter<1, 0>()) >> blackHole;
 
   filter.gain(0.5);
 
@@ -79,7 +79,6 @@ int main(int argc, char *argv[]) {
   interface.clock.registerTickCallback([&](int currentTime) -> void {
     float lfoNormalized = (1. + lfo.frames.current[0]) / 2.;
     filter.freq(220. + (lfoNormalized * 2000.));
-
   });
 
   // this can live in the interface.

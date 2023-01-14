@@ -45,7 +45,6 @@ int main(int argc, char *argv[]) {
   // clang-format on
   float baseFreq = 300;
 
-
   for (int i = 0; i < numOscs; i++) {
     Wavetable::WavetableOsc *osc = new Wavetable::WavetableOsc();
     oscs.emplace_back(osc);
@@ -84,7 +83,7 @@ int main(int argc, char *argv[]) {
       oscs[i]->freq(freqs[i] + modAmount);
     }
     float fbMod = fbDestroyer.frames.current[0];
-    filter.set( 2222 * ((fbMod + 1)/2) , 0.8);
+    filter.set(2222 * ((fbMod + 1) / 2), 0.8);
 
     // float existingFreq = oscs[numOscs-1]->freq();
     // oscs[numOscs-1]->freq(existingFreq * fbMod);

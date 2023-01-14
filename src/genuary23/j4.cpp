@@ -34,7 +34,7 @@ int main(int argc, char *argv[]) {
 
   std::string wavPath = "/home/trax/code/music/clover/renders/j4.wav";
   Clover::IO::WavFile<2> wavOut(wavPath, 480000 * 10);
-  wavOut >> *(new Adapter::NullAdapter<0,1>()) >> blackHole;
+  wavOut >> *(new Adapter::NullAdapter<0, 1>()) >> blackHole;
 
   int numOscs = 6;
   std::vector<Clover::NodeSimplex::Wavetable::WavetableOsc *> oscs;
