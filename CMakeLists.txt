@@ -80,6 +80,12 @@ if(CLOVER_BUILD_GENUARY23)
     # j2
     add_executable(genuary23_2 src/genuary23/j2.cpp)
     target_link_libraries(genuary23_2 PUBLIC ${PROJECT_NAME})
+
+
+    # j4
+    add_executable(genuary23_4 src/genuary23/j4.cpp)
+    target_link_libraries(genuary23_4 PUBLIC ${PROJECT_NAME})
+    
     # j23
     add_executable(genuary23_23 src/genuary23/j23.cpp)
     target_link_libraries(genuary23_23 PUBLIC ${PROJECT_NAME})
