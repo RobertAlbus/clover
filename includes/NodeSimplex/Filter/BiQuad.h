@@ -299,6 +299,8 @@ protected:
 
     a_[1] = 2 * Q * (kSqr_ - 1) * denom_;
     a_[2] = (kSqr_ * Q - K_ + Q) * denom_;
+
+    reso_ = Q;
   }
 
   void clear() {
