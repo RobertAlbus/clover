@@ -50,9 +50,9 @@ int main(int argc, char *argv[]) {
     Wavetable::WavetableOsc *osc = new Wavetable::WavetableOsc();
     oscs.emplace_back(osc);
     if (i == 0) {
-      osc->sine(66622);
+      osc->tri(2222);
     } else {
-      osc->sine(2222);
+      osc->tri(2222);
     }
 
     // float modRange = baseModRange * pow(2,i);
