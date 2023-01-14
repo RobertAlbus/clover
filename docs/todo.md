@@ -135,9 +135,6 @@ C++ style standards
 Compiler optimization flags:
 - https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html
 
-CMake FetchContent for PortAudio
-- https://github.com/usnistgov/hevx/commit/b357491c3b63a806674895a5a15b4d11ff3c033f#
-
 
 
 ## RETHINKY THINK

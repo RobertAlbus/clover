@@ -27,13 +27,13 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Ofast -lprofiler")
 
 ########
 # external libraries
-include(FetchContent)
 
 link_libraries(m)
 link_libraries(pthread)
 
-include(dependencies/Portaudio.cmake)
-list(APPEND EXTRA_LIBS portaudio_static)
+# PortAudio
+add_subdirectory(dependencies/portaudio EXCLUDE_FROM_ALL)
+list(APPEND EXTRA_LIBS PortAudio)
 
 # wave
 option(wave_enable_tests "Build Unit tests" OFF)
