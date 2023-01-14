@@ -3,6 +3,24 @@
 - migrate to RtAudio? or off of rtmidi? want to have the same provider, but RtMidi is buggy. or perhaps it is my controller.
 - Move non-template code into source files (cpp) to adhere to the ODR (one definition rule)
 
+
+## Interface
+- create AudioOutput node
+  - used PA for audio
+  - design a better interface, lol
+    - selectDevice(interfaceName)
+    - selectDefaultDevice()
+    - listDevices
+    - streamStart
+    - streamStop
+
+## StepSequencer
+- Keyable interface
+  - how can I share this with the envelopes!? proxy from keyOn(freq) => keyOn()?
+- keyable instrument
+- StepSequencer
+- StepSequencerManager
+
 ## Wavetables
 - Create noises
     - Gauss noise
@@ -17,6 +35,7 @@
 - make every node have a ClassNameSettings object for all member variables
     - ctor should accept this (with a copy, not a ref)
   - graph-propagating reset
+  - print() to stringify
 
 ## Envelopes
 - Create new envelope types
