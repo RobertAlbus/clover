@@ -37,18 +37,20 @@ int main(int argc, char *argv[]) {
   int numOscs = 6;
   std::vector<Wavetable::WavetableOsc *> oscs{};
   // clang-format off
-  std::vector<float> freqs {222,    0.3, 3.2,  0.70002, 0.04, 0.064, 54, 888, 7, 11};
-  std::vector<float> ranges{243.678, 99,  1000, 20,      19,   64,    54, 888, 7, 11};
+  std::vector<float> freqs {222, 0.3, 0.305, 0.61, 0.92, 1.83, .54, 0.888, 7, 11};
+  for (int i = 1; i < freqs.size(); i++) {
+    freqs[i] = freqs[i] / 1000.;
+  }
+  std::vector<float> ranges{244, 99,  300,   20,   19,   64,   54,  888, 7, 11};
   // clang-format on
   float baseFreq = 300;
-
 
 
   for (int i = 0; i < numOscs; i++) {
     Wavetable::WavetableOsc *osc = new Wavetable::WavetableOsc();
     oscs.emplace_back(osc);
     if (i == 0) {
-      osc->saw(66622);
+      osc->sine(66622);
     } else {
       osc->sine(2222);
     }
