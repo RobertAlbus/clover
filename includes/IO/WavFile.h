@@ -20,11 +20,11 @@ public:
 
   {
     content.reserve((size_t)duration * __arity);
-    writeFile.Open(filePath, wave::kIn);
+    int result = writeFile.Open(filePath, wave::kOut);
 
-    writeFile.set_channel_number(2);
-    writeFile.set_sample_rate(44100);
-    writeFile.set_bits_per_sample(32);
+    writeFile.set_channel_number((uint16_t)__arity);
+    writeFile.set_sample_rate(48000); // add sample rate to base class Clover
+    writeFile.set_bits_per_sample(32); // add bit depth
   }
 
   int duration() { return _durationSamples; }
@@ -46,7 +46,7 @@ private:
       // - normalize if large
       normalizeContent();
       bool clip = true;
-      writeFile.Write(content, clip);
+      int result = writeFile.Write(content, clip);
       return f;
     }
 
