@@ -3,3 +3,4 @@ build
 experiments
 *.prof 
 callgrind*
+renders/*
