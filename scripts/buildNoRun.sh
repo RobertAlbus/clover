@@ -1,4 +1,4 @@
 #!/bin/bash
 
-cmake -B build;
+cmake -B build -G "Unix Makefiles";
 make -C build;
