@@ -54,6 +54,12 @@ int main(int argc, char *argv[]) {
   panL >> filter;
   panR >> filter;
 
+  Clover::NodeSimplex::Wavetable::WavetableOsc lfo;
+  lfo.sine(9.);
+  lfo.freq(22.);
+  lfo.phase(0.75);
+  lfo >> *(new Clover::NodeSimplex::Adapter::NullAdapter<1,0>()) >> blackHole;
+
   filter.gain(0.5);
 
   for (int i = 0; i < numOscs; i++) {
@@ -71,6 +77,8 @@ int main(int argc, char *argv[]) {
   }
 
   interface.clock.registerTickCallback([&](int currentTime) -> void {
+    float lfoNormalized = (1. + lfo.frames.current[0]) / 2.;
+    filter.freq(220. + (lfoNormalized * 2000.));
 
   });
 
