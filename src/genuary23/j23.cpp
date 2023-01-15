@@ -1,4 +1,4 @@
-#define NUM_SECONDS (11)
+#define NUM_SECONDS (100)
 
 #include <cmath>
 #include <csignal> // midi input message demo
@@ -40,12 +40,14 @@ int main(int argc, char *argv[]) {
 
   int numOscs = 4;
   std::vector<Wavetable::WavetableOsc *> oscs{};
-  std::vector<float> detuneCent{-18., -10., 10., 18.};
+  std::vector<float> detune{-3., -2., 2., 3.};
+  float spreadMultiplier = 0.;
   float baseNote = Clover::Midi::Note::F1;
 
+  float baseFiltFreq = 500.;
   Clover::NodeSimplex::Filter::BiQuad<2> filter;
   filter.lowPass();
-  filter.set(220., 0.9);
+  filter.set(baseFiltFreq, 0.9);
   filter >> interface.rootNode;
   filter >> wavOut;
 
@@ -56,7 +58,7 @@ int main(int argc, char *argv[]) {
 
   Clover::NodeSimplex::Wavetable::WavetableOsc lfo;
   lfo.sine(9.);
-  lfo.freq(22.);
+  lfo.freq(.1);
   lfo.phase(0.75);
   lfo >> *(new Clover::NodeSimplex::Adapter::NullAdapter<1, 0>()) >> blackHole;
 
@@ -66,8 +68,6 @@ int main(int argc, char *argv[]) {
     Wavetable::WavetableOsc *osc = new Wavetable::WavetableOsc();
     oscs.emplace_back(osc);
     osc->saw(2222);
-    float midiNote = baseNote + (detuneCent[i] * 0.01);
-    oscs[i]->freq(Clover::Util::Calc::mtof(midiNote));
 
     if (i % 2 == 0) {
       oscs[i] >> panL;
@@ -78,7 +78,14 @@ int main(int argc, char *argv[]) {
 
   interface.clock.registerTickCallback([&](int currentTime) -> void {
     float lfoNormalized = (1. + lfo.frames.current[0]) / 2.;
-    filter.freq(220. + (lfoNormalized * 2000.));
+    filter.freq(baseFiltFreq + ((1 - lfoNormalized) * 2000.));
+
+    spreadMultiplier = lfoNormalized * 20;
+
+    for (int i = 0; i < numOscs; i++) {
+      float midiNote = baseNote + (detune[i] * 0.01 * (spreadMultiplier * 0.5 + 0.5));
+      oscs[i]->freq(Clover::Util::Calc::mtof(midiNote));
+    }
   });
 
   // this can live in the interface.
@@ -95,8 +102,10 @@ int main(int argc, char *argv[]) {
   // TODO: need a way to determine the composition length but this will do for
   // now. I should be able to compute this value once I have composition-level
   // utilities.
-  std::this_thread::sleep_for(std::chrono::seconds(NUM_SECONDS));
 
+  // interface.playFor(time); ??????
+  std::this_thread::sleep_for(std::chrono::seconds(NUM_SECONDS));
   interface.stop();
+
   return paNoError;
 }
