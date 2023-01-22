@@ -49,13 +49,16 @@ list(APPEND EXTRA_LIBS rtmidi)
 ########
 # internal libraries
 
-add_library(${PROJECT_NAME} INTERFACE)
-target_include_directories(${PROJECT_NAME}
-    INTERFACE
-        ${PROJECT_BINARY_DIR}
-        includes
+add_library(${PROJECT_NAME} STATIC 
+    ${CMAKE_CURRENT_LIST_DIR}/includes/Util/Calc.cpp
+    
 )
-target_link_libraries(${PROJECT_NAME} INTERFACE ${EXTRA_LIBS})
+target_include_directories(${PROJECT_NAME}
+    PUBLIC
+        ${PROJECT_BINARY_DIR}
+        ${CMAKE_CURRENT_LIST_DIR}/includes
+)
+target_link_libraries(${PROJECT_NAME} PUBLIC ${EXTRA_LIBS})
 
 ########
 # tests
