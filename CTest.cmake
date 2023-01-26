@@ -23,6 +23,8 @@ add_executable(clover_test
     test/NodeSimplex/Envelope/BasicEnvelope_Test.cc
     test/NodeSimplex/Envelope/DC_Test.cc
 
+    test/Util/MusicTime.cc
+
 )
 target_link_libraries(clover_test
     PRIVATE

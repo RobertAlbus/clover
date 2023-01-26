@@ -12,34 +12,38 @@ public:
   }
 
   float currentQuat() { return currentUnit(quat); }
-
   float currentTrip() { return currentUnit(trip); }
-
   float currentBeat() { return currentUnit(beat); }
-
   float currentBar() { return currentUnit(bar); }
+  float currentUnit(float samplesPerUnit) {
+    return ((float)sampleClock->currentSample()) / samplesPerUnit;
+  }
 
-  float currentUnit(int samplesPerUnit) {
-    return (float)sampleClock->currentSample() / (float)samplesPerUnit;
+  int currentQuat_i() { return (int) currentUnit(quat); }
+  int currentTrip_i() { return (int) currentUnit(trip); }
+  int currentBeat_i() { return (int) currentUnit(beat); }
+  int currentBar_i() { return (int) currentUnit(bar); }
+  int currentUnit_i(float samplesPerUnit) {
+    return (int) currentUnit(samplesPerUnit);
   }
 
   float bpm;
-  int quat;
-  int trip;
-  int beat;
-  int bar;
+  float quat;
+  float trip;
+  float beat;
+  float bar;
 
   SampleClock *sampleClock;
 
 private:
   size_t _sampleRate;
   void initMusicTime() {
-    float beatsPerSecond = bpm / 60;
+    float beatsPerSecond = bpm / 60.;
 
-    beat = int((float)_sampleRate / beatsPerSecond);
-    quat = beat / 4;
-    trip = beat / 3;
-    bar = beat * 4;
+    beat = (float)_sampleRate / beatsPerSecond;
+    quat = beat / 4.;
+    trip = beat / 3.;
+    bar = beat * 4.;
   };
 };
 
