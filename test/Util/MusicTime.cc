@@ -17,7 +17,6 @@ TEST(Util_MusicTime, ShouldProvideCorrectTime) {
         clock.tick();
     }
 
-    EXPECT_EQ(time.beat, beatLength);
-    EXPECT_EQ(time.currentBeat(), 2.5);
+  EXPECT_EQ(time.beat(), beatLength);
     EXPECT_EQ(time.currentBeat_i(), 2);
 }

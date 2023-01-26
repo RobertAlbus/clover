@@ -61,7 +61,7 @@ int main(int argc, char *argv[]) {
   lfo.phase(0.75);
   lfo >> blackHole;
 
-  Envelope::AdsrSettings adsrSettings(0, time.quat, 0.0f, time.beat);
+  Envelope::AdsrSettings adsrSettings(0, time.quat(), 0.0f, time.beat());
   Envelope::Adsr adsr(adsrSettings);
   adsr >> blackHole;
 
