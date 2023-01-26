@@ -7,7 +7,6 @@
 #include "NodeSimplex/Basic/Invert.h"
 #include "NodeSimplex/Basic/Rectifier.h"
 
-#include "NodeSimplex/Delay/Delay.h" // should be called fractional
 #include "NodeSimplex/Delay/FractionalDelayLine.h"
 
 // clang-format off
