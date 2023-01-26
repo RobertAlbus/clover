@@ -16,7 +16,6 @@ add_executable(clover_test
     test/NodeSimplex/Adapter/NullAdapter_Test.cc
 
     test/NodeSimplex/Basic/Gain_Test.cc
-    test/NodeSimplex/Basic/Invert_Test.cc
     test/NodeSimplex/Basic/Rectifier_Test.cc
     
     test/NodeSimplex/Delay/FractionalDelayLine_Test.cc

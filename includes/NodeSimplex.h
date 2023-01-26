@@ -4,7 +4,6 @@
 #include "NodeSimplex/Adapter/NullAdapter.h"
 
 #include "NodeSimplex/Basic/Gain.h"
-#include "NodeSimplex/Basic/Invert.h"
 #include "NodeSimplex/Basic/Rectifier.h"
 
 #include "NodeSimplex/Delay/FractionalDelayLine.h"
