@@ -2,21 +2,22 @@
 
 #include <math.h>
 
+#include "Graph.h"
 #include "NodeSimplex.h"
 
 namespace Clover::NodeSimplex::Basic {
 
 template <size_t __arity>
-auto rectifierFn = [](Frame<__arity> input) {
-  Frame<__arity> f;
-  for (int i = 0; i < __arity; i++) {
-    f[i] = fabs(input[i]);
-  }
+class Rectifier : public StatelessProcessorV2<__arity, __arity> {
 
-  return f;
+  Frame<__arity> processFn(Frame<__arity> input) {
+    Frame<__arity> f;
+    for (int i = 0; i < __arity; i++) {
+      f[i] = fabs(input[i]);
+    }
+
+    return f;
+  }
 };
-template <size_t __arity>
-class Rectifier
-    : public StatelessProcessor<__arity, __arity, rectifierFn<__arity>> {};
 
 } // namespace Clover::NodeSimplex::Basic
