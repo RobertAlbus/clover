@@ -52,6 +52,7 @@ add_library(${PROJECT_NAME} STATIC
     ${CMAKE_CURRENT_LIST_DIR}/includes/Util/Calc.cpp
     ${CMAKE_CURRENT_LIST_DIR}/includes/Util/MusicTime.cpp
     ${CMAKE_CURRENT_LIST_DIR}/includes/Util/SampleClock.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/includes/Util/Wavetable.cpp
     
 )
 target_include_directories(${PROJECT_NAME}
