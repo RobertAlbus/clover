@@ -50,6 +50,7 @@ list(APPEND EXTRA_LIBS rtmidi)
 
 add_library(${PROJECT_NAME} STATIC 
     ${CMAKE_CURRENT_LIST_DIR}/includes/Util/Calc.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/includes/Util/MusicTime.cpp
     
 )
 target_include_directories(${PROJECT_NAME}
