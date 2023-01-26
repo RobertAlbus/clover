@@ -28,7 +28,6 @@
 #include "NodeSimplex/Stereo/Difference.h"
 #include "NodeSimplex/Stereo/Invert.h"
 #include "NodeSimplex/Stereo/Pan.h"
-#include "NodeSimplex/Stereo/Peel.h"
 #include "NodeSimplex/Stereo/Sum.h"
 
 #include "NodeSimplex/Waveshape/DistExponent.h"
