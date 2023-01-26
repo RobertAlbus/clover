@@ -19,6 +19,26 @@ public:
     return ((float)sampleClock->currentSample()) / samplesPerUnit;
   }
 
+  // // for example, every N bars
+  // bool isMultipleOfDuration(float duration) {
+  //   float currentSample = (float)sampleClock->currentSample();
+  //   float nextSample = currentSample + 1.;
+
+  //   bool exactMatch = fmod(currentSample, duration) == 0.;
+
+  //   // for non-perfect bpms, ie 159, we check if it would fall between this
+  //   and
+  //   // next sample
+  //   bool inRange = fmod(currentSample, duration) > fmod(nextSample,
+  //   duration);
+
+  //   return exactMatch || inRange;
+  // }
+
+  // bool isCurrentUnit(float time) {
+  //   return sampleClock->currentSample() == (int)time;
+  // }
+
   int currentQuat_i() { return (int)currentUnit(_quat); }
   int currentTrip_i() { return (int)currentUnit(_trip); }
   int currentBeat_i() { return (int)currentUnit(_beat); }
