@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Graph.h"
+
 namespace Clover::NodeSimplex::Adapter {
 
 template <size_t __arityIn, size_t __arityOut>

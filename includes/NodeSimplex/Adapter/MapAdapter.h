@@ -2,6 +2,8 @@
 
 #include <vector>
 
+#include "Graph.h"
+
 namespace Clover::NodeSimplex::Adapter {
 
 typedef std::tuple<int, int> Mapping;
