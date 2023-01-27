@@ -1,6 +1,6 @@
 #pragma once
 
-#include <algorithm>
+#include <cmath> // lerp
 
 #include "Graph.h"
 #include "Util/Calc.h"
@@ -11,16 +11,14 @@ namespace Clover::NodeSimplex::Stereo {
 
 template <size_t __arityInput> class Pan : public Node<__arityInput, 2> {
 public:
-  Pan() : Node<__arityInput, 2>() { pan(0); }
-
-  Pan(float p) : Node<__arityInput, 2>(), _pan(0) { pan(p); }
+  Pan(float p = 0) : Node<__arityInput, 2>(), _pan(0) { pan(p); }
 
   void pan(float p) {
     _pan = (float)std::clamp((double)p, -1., 1.);
     p = fabs(_pan);
     float midGain = Calc::dbtol(-4.5);
-    float panDown = lerp(midGain, 0., p);
-    float panUp = lerp(midGain, 1., p);
+    float panDown = std::lerp(midGain, 0., p);
+    float panUp = std::lerp(midGain, 1., p);
 
     _coefficientL = _pan < 0 ? panUp : panDown;
     _coefficientR = _pan < 0 ? panDown : panUp;
@@ -36,27 +34,18 @@ protected:
 
 class Pan1 : public Pan<1> {
 public:
-  Pan1() : Pan() {}
-  Pan1(float p) : Pan(p) {}
+  Pan1(float p = 0);
 
 private:
-  Frame<2> tick(Frame<1> input) {
-
-    Frame<2> f{input[0] * _coefficientL, input[0] * _coefficientR};
-    return f;
-  }
+  Frame<2> tick(Frame<1> input);
 };
 
 class Pan2 : public Pan<2> {
 public:
-  Pan2() : Pan() {}
-  Pan2(float p) : Pan(p) {}
+  Pan2(float p = 0);
 
 private:
-  Frame<2> tick(Frame<2> input) {
-    Frame<2> f{input[0] * _coefficientL, input[1] * _coefficientR};
-    return f;
-  }
+  Frame<2> tick(Frame<2> input);
 };
 
 } // namespace Clover::NodeSimplex::Stereo

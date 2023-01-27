@@ -4,14 +4,12 @@
 
 namespace Clover::NodeSimplex::Stereo {
 
-constexpr auto sum1Fn = [](Frame<2> input) {
-  return Frame<1>{(input[0] + input[1]) * 0.5f};
+class Sum1 : public StatelessProcessorV2<2, 1> {
+  Frame<1> processFn(Frame<2> input);
 };
-class Sum1 : public StatelessProcessor<2, 1, sum1Fn> {};
 
-constexpr auto sum2Fn = [](Frame<2> input) {
-  return Frame<2>{(input[0] + input[1]) * 0.5f, (input[0] + input[1]) * 0.5f};
+class Sum2 : public StatelessProcessorV2<2, 2> {
+  Frame<2> processFn(Frame<2> input);
 };
-class Sum2 : public StatelessProcessor<2, 2, sum2Fn> {};
 
 } // namespace Clover::NodeSimplex::Stereo
