@@ -65,7 +65,7 @@ int main(int argc, char *argv[]) {
   Envelope::Adsr adsr(adsrSettings);
   adsr >> blackHole;
 
-  Envelope::DC<1> dc(12.);
+  Envelope::DC dc(12.);
   Adapter::MapAdapter<1, 4> adapter1;
 
   dc >> adapter1;

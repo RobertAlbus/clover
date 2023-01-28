@@ -5,7 +5,7 @@
 TEST(NodeSimplex_Envelope_DC, ShouldOutputDC) {
   Clover::_Test::HandCrank<1> crank;
   Clover::_Test::Collector<1> collector(100);
-  Clover::NodeSimplex::Envelope::DC<1> dc;
+  Clover::NodeSimplex::Envelope::DC dc;
 
   dc.value(1.);
 
