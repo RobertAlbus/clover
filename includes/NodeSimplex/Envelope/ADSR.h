@@ -9,11 +9,7 @@
 namespace Clover::NodeSimplex::Envelope {
 
 struct AdsrSettings {
-  AdsrSettings() : AdsrSettings(0., 0., 1., 0.) {}
-  AdsrSettings(size_t a, size_t d, float s, size_t r)
-      : attack(std::max((size_t)1, a)), decay(std::max((size_t)1, d)),
-        sustain(s), release(std::max((size_t)1, r)), startTime(0),
-        keyOn(false) {}
+  AdsrSettings(size_t a = 0, size_t d = 0, float s = 1, size_t r = 0);
 
   size_t attack;
   size_t decay;
@@ -25,80 +21,31 @@ struct AdsrSettings {
 
 class Adsr : public StatefulSubgraph<0, 1, AdsrSettings> {
 public:
-  Adsr(size_t a, size_t d, float s, size_t r)
-      : StatefulSubgraph(), envelope(0, 0, 0) {
-    this->settings.initial.attack = a;
-    this->settings.initial.decay = d;
-    this->settings.initial.sustain = s;
-    this->settings.initial.release = r;
+  Adsr(size_t a = 0, size_t d = 0, float s = 1, size_t r = 0);
+  Adsr(AdsrSettings initialSettings);
 
-    settings.reset();
-    connectNodes();
-  }
+  void set(size_t a, size_t d, float s, size_t r);
 
-  Adsr(AdsrSettings initialSettings)
-      : StatefulSubgraph(initialSettings), envelope(0, 0, 0) {
-    settings.reset();
-    connectNodes();
-  }
+  size_t attack();
+  void attack(size_t a);
 
-  void set(size_t a, size_t d, float s, size_t r) {
-    attack(a);
-    decay(d);
-    sustain(s);
-    release(r);
-  }
+  size_t decay();
+  void decay(size_t d);
 
-  size_t attack() { return settings.current.attack; }
-  void attack(size_t a) { settings.current.attack = std::max((size_t)1, a); }
+  float sustain();
+  void sustain(float s);
 
-  size_t decay() { return settings.current.decay; }
-  void decay(size_t d) { settings.current.decay = std::max((size_t)1, d); }
+  size_t release();
+  void release(size_t r);
 
-  float sustain() { return settings.current.sustain; }
-  void sustain(float s) { settings.current.sustain = s; }
-
-  size_t release() { return settings.current.release; }
-  void release(size_t r) { settings.current.release = std::max((size_t)1, r); }
-
-  void keyOn() {
-    AdsrSettings &s = settings.current;
-    envelope.set(0.f, 1.f, s.attack);
-
-    settings.current.keyOn = true;
-    settings.current.startTime = _currentClockTime;
-  }
-  void keyOff() {
-    AdsrSettings &s = settings.current;
-
-    envelope.set(frames.current[0], 0., s.release);
-
-    settings.current.keyOn = false;
-    settings.current.startTime = _currentClockTime;
-  }
+  void keyOn();
+  void keyOff();
 
 protected:
   BasicEnvelope envelope;
-
-  Frame<1> tick(Frame<0> input) {
-    AdsrSettings &s = settings.current;
-
-    // should compute these times and store them in settings
-    bool isStartOfDecay =
-        s.keyOn && _currentClockTime == s.startTime + s.attack;
-    bool isStartOfSustain =
-        s.keyOn && _currentClockTime == s.startTime + s.attack + s.decay;
-
-    if (isStartOfSustain) {
-      envelope.set(s.sustain, s.sustain, 0);
-    } else if (isStartOfDecay) {
-      envelope.set(1., s.sustain, s.decay);
-    }
-
-    return blackHole.frames.current;
-  }
-
-  void connectNodes() { envelope >> blackHole; }
+  
+  Frame<1> tick(Frame<0> input);
+  void connectNodes();
 };
 
 } // namespace Clover::NodeSimplex::Envelope

@@ -5,27 +5,21 @@
 namespace Clover::NodeSimplex::Envelope {
 
 struct DCSettings {
-  DCSettings(Sample value = 0) : value(value) {}
+  DCSettings(Sample value = 0);
 
   Sample value;
 };
 
 class DC : public StatefulProcessor<0, 1, DCSettings> {
 public:
-  DC(Sample value = 0) : DC(*(new DCSettings(value))) {}
-  DC(DCSettings initialSettings) : StatefulProcessor(initialSettings) {}
+  DC(Sample value = 0);
+  DC(DCSettings initialSettings);
 
-  void value(Sample v) { settings.current.value = v; }
-  Sample value() { return settings.current.value; }
+  void value(Sample v);
+  Sample value();
 
 protected:
-  Frame<1> tick(Frame<0> input) {
-    Frame<1> f{};
-
-    f[0] = settings.current.value;
-
-    return f;
-  }
+  Frame<1> tick(Frame<0> input);
 };
 
 } // namespace Clover::NodeSimplex::Envelope
