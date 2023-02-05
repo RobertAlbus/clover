@@ -32,4 +32,4 @@ protected:
   Frame<2> tick(Frame<2> input);
 };
 
-}
+} // namespace Clover::NodeSimplex::Stereo

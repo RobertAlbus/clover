@@ -43,7 +43,7 @@ public:
 
 protected:
   BasicEnvelope envelope;
-  
+
   Frame<1> tick(Frame<0> input);
   void connectNodes();
 };
