@@ -15,9 +15,7 @@
 #include "NodeSimplex/Envelope/DC.h"
 // clang-format on
 
-#include "NodeSimplex/Filter/BadSVF.h"
 #include "NodeSimplex/Filter/BiQuad.h"
-#include "NodeSimplex/Filter/FirLowPass.h"
 
 #include "NodeSimplex/Range/Avoid.h"
 #include "NodeSimplex/Range/Clamp.h"
