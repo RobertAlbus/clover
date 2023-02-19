@@ -20,22 +20,18 @@ template <size_t __arityInput, size_t __arityOutput>
 class Node : public INode<__arityOutput> {
 public:
   float _gain;
-  float _gainIn;
   const size_t arityInput;
   const size_t arityOutput;
   FrameHistory<__arityOutput> frames;
 
   Node()
       : arityInput(__arityInput), arityOutput(__arityOutput),
-        _currentClockTime(-1), _gain(1.), _gainIn(1.) {
+        _currentClockTime(-1), _gain(1.) {
     inputNodes.reserve(NODE_MAX_INPUT_CAPACITY);
   }
 
   void gain(float gainOut) { _gain = gainOut; }
   float gain() { return _gain; }
-
-  void gainIn(float gainIn) { _gainIn = gainIn; }
-  float gainIn() { return _gainIn; }
 
   std::vector<INode<__arityInput> *> inputNodes;
   int _currentClockTime;
@@ -70,7 +66,6 @@ public:
     for (int i = 0, end = inputNodes.size(); i < end; i++) {
       accumulationFrame += (inputNodes.at(i))->currentFrame();
     }
-    accumulationFrame *= _gainIn;
 
     processedFrame = tick(accumulationFrame);
 
