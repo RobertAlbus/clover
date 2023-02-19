@@ -11,6 +11,7 @@ enable_testing()
 
 add_executable(clover_test
     test/Graph/Frame_Test.cc
+    test/Graph/FrameHistory_Test.cc
 
     test/Midi/Notes.cc
 
