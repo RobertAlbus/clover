@@ -27,6 +27,10 @@ add_executable(clover_test
     test/NodeSimplex/Envelope/ADSR_Test.cc
     test/NodeSimplex/Envelope/BasicEnvelope_Test.cc
     test/NodeSimplex/Envelope/DC_Test.cc
+    
+    test/NodeSimplex/Stereo/Difference_Test.cc
+    test/NodeSimplex/Stereo/Invert_Test.cc
+    test/NodeSimplex/Stereo/Pan_Test.cc
 
     test/Util/MusicTime.cc
 
