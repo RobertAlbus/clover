@@ -5,5 +5,4 @@
 #include "Graph/Node.h"
 #include "Graph/StatefulProcessor.h"
 #include "Graph/StatefulSubgraph.h"
-#include "Graph/StatelessProcessor.h"
 #include "Graph/Subgraph.h"

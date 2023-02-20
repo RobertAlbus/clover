@@ -4,8 +4,9 @@
 
 namespace Clover::NodeSimplex::Stereo {
 
-class Invert : public StatelessProcessorV2<2, 2> {
-  Frame<2> processFn(Frame<2> input);
+class Invert : public Node<2, 2> {
+
+  Frame<2> tick(Frame<2> input);
 };
 
 } // namespace Clover::NodeSimplex::Stereo
