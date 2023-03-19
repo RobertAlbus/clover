@@ -9,14 +9,14 @@ namespace Clover::Graph {
 template <size_t __arity> class FrameHistory {
 public:
   FrameHistory() : _hasNext(false) {}
-  // FrameHistory(FrameHistory&&) = default;
 
   void push(Frame<__arity> frame) {
     if (!_hasNext)
       _next = frame;
     _hasNext = false;
-    std::swap(current, _next);
-    std::swap(_next, last);
+    // todo: benchmark the current implementation with std::move compared to previous implementation with std::swap
+    last = std::move(current);
+    current = std::move(_next);
   }
 
   void next(Frame<__arity> frame) {
@@ -27,7 +27,7 @@ public:
   Frame<__arity> current = {};
   Frame<__arity> last = {};
 
-protected:
+private:
   Frame<__arity> _next = {};
   bool _hasNext;
 };
