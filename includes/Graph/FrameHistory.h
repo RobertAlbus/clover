@@ -14,7 +14,9 @@ public:
     if (!_hasNext)
       _next = frame;
     _hasNext = false;
-    // todo: benchmark the current implementation with std::move compared to previous implementation with std::swap
+    // todo: benchmark the current implementation with std::move compared to
+    // previous implementation with std::swap
+    // this is probably way better
     last = std::move(current);
     current = std::move(_next);
   }
