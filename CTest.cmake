@@ -33,6 +33,7 @@ add_executable(clover_test
     test/NodeSimplex/Stereo/Pan_Test.cc
 
     test/Util/MusicTime.cc
+    test/Util/CircularBuffer_Test.cc
 
 )
 target_link_libraries(clover_test
