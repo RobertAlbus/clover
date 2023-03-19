@@ -15,7 +15,8 @@ const float TWO_PI = M_PI * 2.0f;
 class StolenBiquad {
 public:
   //! Default constructor creates a second-order pass-through filter.
-  StolenBiquad(float sampleRate) : inputs_{}, outputs_{}, sampleRate_(sampleRate) {
+  StolenBiquad(float sampleRate)
+      : inputs_{}, outputs_{}, sampleRate_(sampleRate) {
     float cutoff = sampleRate * 0.45f;
     float reso = RECIP_SQRT_2;
     setLowPass(cutoff, reso);
