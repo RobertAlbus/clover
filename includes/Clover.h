@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Base.h"
 #include "Config.h"
 #include "Constants.h"
 #include "Graph.h"

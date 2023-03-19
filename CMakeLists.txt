@@ -49,6 +49,8 @@ list(APPEND EXTRA_LIBS rtmidi)
 # internal libraries
 
 add_library(${PROJECT_NAME} STATIC 
+    ${CMAKE_CURRENT_LIST_DIR}/includes/Base/CloverBase.cpp
+
     ${CMAKE_CURRENT_LIST_DIR}/includes/NodeSimplex/Envelope/ADSR.cpp
     ${CMAKE_CURRENT_LIST_DIR}/includes/NodeSimplex/Envelope/BasicEnvelope.cpp
     ${CMAKE_CURRENT_LIST_DIR}/includes/NodeSimplex/Envelope/DC.cpp
