@@ -9,7 +9,8 @@
 #include "Util.h"
 
 template <FloatingPoint T>
-IIRFilterCoefficients<T> chebyLowPass(T cutoff_hz, T Q, T stopband_attenuation_db, T samplerate_hz) {
+IIRFilterCoefficients<T>
+chebyLowPass(T cutoff_hz, T Q, T stopband_attenuation_db, T samplerate_hz) {
   // Type 2 Chebyshev
   T normalized_frequency = 2 * cutoff_hz / samplerate_hz;
   T epsilon = std::sqrt(std::pow(10, -0.1 * stopband_attenuation_db) - 1);
@@ -44,12 +45,15 @@ IIRFilterCoefficients<T> chebyLowPass(T cutoff_hz, T Q, T stopband_attenuation_d
 }
 
 template <FloatingPoint T>
-IIRFilterCoefficients<T> chebyHighPass(T cutoff_hz, T Q, T stopband_attenuation_db, T samplerate_hz) {
+IIRFilterCoefficients<T>
+chebyHighPass(T cutoff_hz, T Q, T stopband_attenuation_db, T samplerate_hz) {
   // Compute low-pass coefficients for the Chebyshev Type II filter
-  IIRFilterCoefficients<T> lp_coefficients = chebyType2LowPass(cutoff_hz, Q, stopband_attenuation_db, samplerate_hz);
+  IIRFilterCoefficients<T> lp_coefficients =
+      chebyType2LowPass(cutoff_hz, Q, stopband_attenuation_db, samplerate_hz);
 
   // Perform the low-pass to high-pass transformation
-  T k = std::tan(M_PI * cutoff_hz / samplerate_hz) / std::tan(M_PI * (samplerate_hz - cutoff_hz) / samplerate_hz);
+  T k = std::tan(M_PI * cutoff_hz / samplerate_hz) /
+        std::tan(M_PI * (samplerate_hz - cutoff_hz) / samplerate_hz);
   T denominator = k * k + 2 * k + 1;
 
   T b0_hp = lp_coefficients.b0 / denominator;
@@ -58,5 +62,6 @@ IIRFilterCoefficients<T> chebyHighPass(T cutoff_hz, T Q, T stopband_attenuation_
   T a1_hp = (2 * (k * k - 1)) / denominator;
   T a2_hp = (k * k - 2 * k + 1) / denominator;
 
-  return IIRFilterCoefficients<T>{lp_coefficients.gain, b0_hp, b1_hp, b2_hp, a1_hp, a2_hp};
+  return IIRFilterCoefficients<T>{
+      lp_coefficients.gain, b0_hp, b1_hp, b2_hp, a1_hp, a2_hp};
 }

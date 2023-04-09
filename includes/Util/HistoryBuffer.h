@@ -3,12 +3,9 @@
 
 template <typename T> class HistoryBuffer {
 public:
-  HistoryBuffer(int size)
-      : buffer_(size, 0.), index_(0) {}
+  HistoryBuffer(int size) : buffer_(size, 0.), index_(0) {}
 
-  void tick(T value) {
-    buffer_[(++index_ % buffer_.size())] = value;
-  }
+  void tick(T value) { buffer_[(++index_ % buffer_.size())] = value; }
 
   T read(int atIndex = 0) {
     // should it error if atIndex is greater than size?

@@ -7,7 +7,8 @@
 
 template <FloatingPoint T, int __arity> class FIRFilter {
 public:
-  FIRFilter(const std::vector<T> &coeffs) : coeffs_(coeffs), inputs_(coeffs.size(), T(0)) {}
+  FIRFilter(const std::vector<T> &coeffs)
+      : coeffs_(coeffs), inputs_(coeffs.size(), T(0)) {}
 
   std::array<T, __arity> tick(const std::array<T, __arity> &input) {
     inputs_.write(input);
