@@ -109,7 +109,8 @@ IIRFilterCoefficients<T> ChebyshevType2Notch(T center_frequency_hz, T Q,
   T a1_notch = (lp_coefficients.a1 + hp_coefficients.a1) / 2;
   T a2_notch = lp_coefficients.a2 * hp_coefficients.a2;
 
-  return IIRFilterCoefficients<T>{1.0, b0_notch, b1_notch, b2_notch, a1_notch, a2_notch};
+  return IIRFilterCoefficients<T>{1.0,      b0_notch, b1_notch,
+                                  b2_notch, a1_notch, a2_notch};
 }
 
 template <FloatingPoint T>

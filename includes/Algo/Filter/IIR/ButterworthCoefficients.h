@@ -108,7 +108,8 @@ IIRFilterCoefficients<T> SecondOrderButterworthPeakingEQ(T center_freq_hz, T Q,
                                                          T gain_db,
                                                          T samplerate_hz) {
   T A = std::pow(T(10), gain_db / T(40));
-  T omega_c = SecondOrderButterworthCalculateOmegaC(center_freq_hz, samplerate_hz);
+  T omega_c =
+      SecondOrderButterworthCalculateOmegaC(center_freq_hz, samplerate_hz);
   T sin_omega_c = std::sin(omega_c);
   T alpha = sin_omega_c / (T(2) * Q);
 
@@ -124,7 +125,8 @@ IIRFilterCoefficients<T> SecondOrderButterworthPeakingEQ(T center_freq_hz, T Q,
 }
 
 template <FloatingPoint T>
-T SecondOrderButterworthSecondOrderButterworthCalculateOmegaC(T cutoff_hz, T samplerate_hz) {
+T SecondOrderButterworthSecondOrderButterworthCalculateOmegaC(T cutoff_hz,
+                                                              T samplerate_hz) {
   return std::tan(M_PI * cutoff_hz / samplerate_hz);
 }
 
