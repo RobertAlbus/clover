@@ -1,133 +1,125 @@
 #include <cmath>
 
+#include "IIRCoefficientStrategy.h"
 #include "IIR_Coefficients.h"
 #include "Util.h"
 
 namespace Clover::Filter {
 
 template <FloatingPoint T>
-IIRFilterCoefficients<T> SecondOrderButterworthLowPass(T cutoff_hz, T Q,
-                                                       T samplerate_hz) {
-  T omega_c = SecondOrderButterworthCalculateOmegaC(cutoff_hz, samplerate_hz);
-  T alpha = omega_c / Q;
-  T denominator = T(1) + alpha;
+struct ButterworthCoefficientStrategy : public IIRCoefficientStrategy<T> {
+  IIRFilterCoefficients<T> lowPass(T cutoff_hz, T Q, T samplerate_hz) {
+    T omega_c = std::tan(M_PI * cutoff_hz / samplerate_hz);
+    T alpha = omega_c / Q;
+    T denominator = T(1) + alpha;
 
-  T b0 = omega_c / (T(2) * denominator);
-  T b1 = omega_c / denominator;
-  T b2 = b0;
-  T a1 = (T(2) * (omega_c * omega_c - T(1))) / denominator;
-  T a2 = (T(1) - alpha) / denominator;
+    T b0 = omega_c / (T(2) * denominator);
+    T b1 = omega_c / denominator;
+    T b2 = b0;
+    T a0 = T(1);
+    T a1 = (T(2) * (omega_c * omega_c - T(1))) / denominator;
+    T a2 = (T(1) - alpha) / denominator;
 
-  return IIRFilterCoefficients<T>{T(1), b0, b1, b2, a1, a2};
-}
+    return IIRFilterCoefficients<T>{b0, b1, b2, a0, a1, a2};
+  }
 
-template <FloatingPoint T>
-IIRFilterCoefficients<T> SecondOrderButterworthHighPass(T cutoff_hz, T Q,
-                                                        T samplerate_hz) {
-  T omega_c = SecondOrderButterworthCalculateOmegaC(cutoff_hz, samplerate_hz);
-  T alpha = omega_c / Q;
-  T denominator = T(1) + alpha;
+  IIRFilterCoefficients<T> highPass(T cutoff_hz, T Q, T samplerate_hz) {
+    T omega_c = std::tan(M_PI * cutoff_hz / samplerate_hz);
+    T alpha = omega_c / Q;
+    T denominator = T(1) + alpha;
 
-  T b0 = T(1) / (T(2) * denominator);
-  T b1 = -T(2) * b0;
-  T b2 = b0;
-  T a1 = (T(2) * (omega_c * omega_c - T(1))) / denominator;
-  T a2 = (T(1) - alpha) / denominator;
+    T b0 = T(1) / (T(2) * denominator);
+    T b1 = -T(2) * b0;
+    T b2 = b0;
+    T a0 = T(1);
+    T a1 = (T(2) * (omega_c * omega_c - T(1))) / denominator;
+    T a2 = (T(1) - alpha) / denominator;
 
-  return IIRFilterCoefficients<T>{T(1), b0, b1, b2, a1, a2};
-}
+    return IIRFilterCoefficients<T>{b0, b1, b2, a0, a1, a2};
+  }
 
-template <FloatingPoint T>
-IIRFilterCoefficients<T> SecondOrderButterworthBandPass(T cutoff_hz, T Q,
-                                                        T samplerate_hz) {
-  T omega_c = SecondOrderButterworthCalculateOmegaC(cutoff_hz, samplerate_hz);
-  T alpha = omega_c / Q;
-  T denominator = T(1) + alpha;
+  IIRFilterCoefficients<T> bandPass(T cutoff_hz, T Q, T samplerate_hz) {
+    T omega_c = std::tan(M_PI * cutoff_hz / samplerate_hz);
+    T alpha = omega_c / Q;
+    T denominator = T(1) + alpha;
 
-  T b0 = alpha / denominator;
-  T b1 = T(0);
-  T b2 = -b0;
-  T a1 = (T(2) * (omega_c * omega_c - T(1))) / denominator;
-  T a2 = (T(1) - alpha) / denominator;
+    T b0 = alpha / denominator;
+    T b1 = T(0);
+    T b2 = -b0;
+    T a0 = T(1);
+    T a1 = (T(2) * (omega_c * omega_c - T(1))) / denominator;
+    T a2 = (T(1) - alpha) / denominator;
 
-  return IIRFilterCoefficients<T>{T(1), b0, b1, b2, a1, a2};
-}
+    return IIRFilterCoefficients<T>{b0, b1, b2, a0, a1, a2};
+  }
 
-template <FloatingPoint T>
-IIRFilterCoefficients<T> SecondOrderButterworthNotch(T cutoff_hz, T Q,
-                                                     T samplerate_hz) {
-  T omega_c = SecondOrderButterworthCalculateOmegaC(cutoff_hz, samplerate_hz);
-  T alpha = omega_c / Q;
-  T denominator = T(1) + alpha;
+  IIRFilterCoefficients<T> notch(T cutoff_hz, T Q, T samplerate_hz) {
+    T omega_c = std::tan(M_PI * cutoff_hz / samplerate_hz);
+    T alpha = omega_c / Q;
+    T denominator = T(1) + alpha;
 
-  T b0 = T(1);
-  T b1 = (T(2) * (omega_c * omega_c - T(1))) / denominator;
-  T b2 = (T(1) - alpha) / denominator;
-  T a1 = b1;
-  T a2 = b2;
+    T b0 = T(1);
+    T b1 = (T(2) * (omega_c * omega_c - T(1))) / denominator;
+    T b2 = (T(1) - alpha) / denominator;
+    T a0 = T(1);
+    T a1 = b1;
+    T a2 = b2;
 
-  return IIRFilterCoefficients<T>{T(1), b0, b1, b2, a1, a2};
-}
+    return IIRFilterCoefficients<T>{b0, b1, b2, a0, a1, a2};
+  }
 
-template <FloatingPoint T>
-IIRFilterCoefficients<T>
-SecondOrderButterworthLowShelf(T cutoff_hz, T Q, T gain_db, T samplerate_hz) {
-  T A = std::pow(T(10), gain_db / T(40));
-  T omega_c = SecondOrderButterworthCalculateOmegaC(cutoff_hz, samplerate_hz);
-  T beta = std::sqrt(A) / Q;
-  T denominator = T(1) + omega_c / beta + omega_c * omega_c;
+  IIRFilterCoefficients<T> lowShelf(T cutoff_hz, T Q, T gain_db,
+                                    T samplerate_hz) {
+    T A = std::pow(T(10), gain_db / T(40));
+    T omega_c = std::tan(M_PI * cutoff_hz / samplerate_hz);
+    T beta = std::sqrt(A) / Q;
+    T denominator = T(1) + omega_c / beta + omega_c * omega_c;
 
-  T b0 = A * (T(1) + omega_c / beta + omega_c * omega_c) / denominator;
-  T b1 = T(2) * A * (omega_c * omega_c - T(1)) / denominator;
-  T b2 = A * (T(1) - omega_c / beta + omega_c * omega_c) / denominator;
-  T a1 = T(2) * (omega_c * omega_c - T(1)) / denominator;
-  T a2 = (T(1) - omega_c / beta + omega_c * omega_c) / denominator;
+    T b0 = A * (T(1) + omega_c / beta + omega_c * omega_c) / denominator;
+    T b1 = T(2) * A * (omega_c * omega_c - T(1)) / denominator;
+    T b2 = A * (T(1) - omega_c / beta + omega_c * omega_c) / denominator;
+    T a0 = T(1);
+    T a1 = T(2) * (omega_c * omega_c - T(1)) / denominator;
+    T a2 = (T(1) - omega_c / beta + omega_c * omega_c) / denominator;
 
-  return IIRFilterCoefficients<T>{T(1), b0, b1, b2, a1, a2};
-}
+    return IIRFilterCoefficients<T>{b0, b1, b2, a0, a1, a2};
+  }
 
-template <FloatingPoint T>
-IIRFilterCoefficients<T>
-SecondOrderButterworthHighShelf(T cutoff_hz, T Q, T gain_db, T samplerate_hz) {
-  T A = std::pow(T(10), gain_db / T(40));
-  T omega_c = SecondOrderButterworthCalculateOmegaC(cutoff_hz, samplerate_hz);
-  T beta = std::sqrt(A) / Q;
-  T denominator = T(1) + omega_c / beta + omega_c * omega_c;
+  IIRFilterCoefficients<T> highShelf(T cutoff_hz, T Q, T gain_db,
+                                     T samplerate_hz) {
+    T A = std::pow(T(10), gain_db / T(40));
+    T omega_c = std::tan(M_PI * cutoff_hz / samplerate_hz);
+    T beta = std::sqrt(A) / Q;
+    T denominator = T(1) + omega_c / beta + omega_c * omega_c;
 
-  T b0 = A * (T(1) - omega_c / beta + omega_c * omega_c) / denominator;
-  T b1 = T(2) * A * (T(1) - omega_c * omega_c) / denominator;
-  T b2 = A * (T(1) + omega_c / beta + omega_c * omega_c) / denominator;
-  T a1 = T(2) * (omega_c * omega_c - T(1)) / denominator;
-  T a2 = (T(1) - omega_c / beta + omega_c * omega_c) / denominator;
+    T b0 = A * (T(1) - omega_c / beta + omega_c * omega_c) / denominator;
+    T b1 = T(2) * A * (T(1) - omega_c * omega_c) / denominator;
+    T b2 = A * (T(1) + omega_c / beta + omega_c * omega_c) / denominator;
+    T a0 = T(1);
+    T a1 = T(2) * (omega_c * omega_c - T(1)) / denominator;
+    T a2 = (T(1) - omega_c / beta + omega_c * omega_c) / denominator;
 
-  return IIRFilterCoefficients<T>{T(1), b0, b1, b2, a1, a2};
-}
+    return IIRFilterCoefficients<T>{b0, b1, b2, a0, a1, a2};
+  }
 
-template <FloatingPoint T>
-IIRFilterCoefficients<T> SecondOrderButterworthPeakingEQ(T center_freq_hz, T Q,
-                                                         T gain_db,
-                                                         T samplerate_hz) {
-  T A = std::pow(T(10), gain_db / T(40));
-  T omega_c =
-      SecondOrderButterworthCalculateOmegaC(center_freq_hz, samplerate_hz);
-  T sin_omega_c = std::sin(omega_c);
-  T alpha = sin_omega_c / (T(2) * Q);
+  IIRFilterCoefficients<T> peakingEQ(T cutoff_hz, T Q, T gain_db,
+                                     T samplerate_hz) {
+    T A = std::pow(T(10), gain_db / T(40));
+    T omega_c = std::tan(M_PI * cutoff_hz / samplerate_hz);
+    T sin_omega_c = std::sin(omega_c);
+    T alpha = sin_omega_c / (T(2) * Q);
 
-  T denominator = T(1) + alpha / A;
+    T denominator = T(1) + alpha / A;
 
-  T b0 = (T(1) + alpha * A) / denominator;
-  T b1 = T(-2) * std::cos(omega_c) / denominator;
-  T b2 = (T(1) - alpha * A) / denominator;
-  T a1 = T(2) * std::cos(omega_c) / denominator;
-  T a2 = (T(1) - alpha / A) / denominator;
+    T b0 = (T(1) + alpha * A) / denominator;
+    T b1 = T(-2) * std::cos(omega_c) / denominator;
+    T b2 = (T(1) - alpha * A) / denominator;
+    T a0 = T(1);
+    T a1 = T(2) * std::cos(omega_c) / denominator;
+    T a2 = (T(1) - alpha / A) / denominator;
 
-  return IIRFilterCoefficients<T>{T(1), b0, b1, b2, a1, a2};
-}
-
-template <FloatingPoint T>
-T SecondOrderButterworthSecondOrderButterworthCalculateOmegaC(T cutoff_hz,
-                                                              T samplerate_hz) {
-  return std::tan(M_PI * cutoff_hz / samplerate_hz);
-}
+    return IIRFilterCoefficients<T>{b0, b1, b2, a0, a1, a2};
+  }
+};
 
 } // namespace Clover::Filter

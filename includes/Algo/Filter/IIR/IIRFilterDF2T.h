@@ -8,10 +8,10 @@
 
 template <FloatingPoint T, int __arity> class IIRFilterDF2T {
 public:
-  IIRFilterDF2T(const IIRFilterCoefficients<T> &coeffs) : coeffs_(coeffs) {
-    inputStates_.fill({std::array<T, __arity>{}, std::array<T, __arity>{}});
-    outputStates_.fill({std::array<T, __arity>{}, std::array<T, __arity>{}});
-  }
+  IIRFilterDF2T() : inputStates_({{0}}), outputStates_({{0}}) {}
+
+  IIRFilterDF2T(const IIRFilterCoefficients<T> &coeffs)
+      : inputStates_({{0}}), outputStates_({{0}}), coeffs_(coeffs) {}
 
   void updateCoefficients(const IIRFilterCoefficients<T> &coeffs) {
     coeffs_ = coeffs;
