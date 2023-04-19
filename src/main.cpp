@@ -48,7 +48,7 @@ int main(int argc, char *argv[]) {
 
   mod >> fbDestroyer >> blackHole;
 
-  Filter::BiQuad<2> filter;
+  Filter::Filter<2> filter;
   filter.lowPass();
   filter.set(200., 0.9);
 
@@ -99,9 +99,12 @@ int main(int argc, char *argv[]) {
       float modAdjusted = (mod.frames.current[0] + 1.) / 2.;
       float oscAdjusted = (osc.frames.current[0] + 1.) / 2.;
       float envelopeValue = adsr.frames.current[0];
-      osc.freq(70. * (modAdjusted * 2));
-      mod.freq(70. * (oscAdjusted * 3));
-      filter.setLowPass(envelopeValue * (1000. * lfoAdjusted) + 200, 0.8);
+      osc.freq(100. * (modAdjusted * 2.));
+      mod.freq(100. * (oscAdjusted * 3.));
+
+      float cut = envelopeValue * (1000. * lfoAdjusted) + 200;
+      float reso = envelopeValue * (-1. * lfoAdjusted) + 2;
+      filter.set(cut, reso);
       osc.gain(envelopeValue);
 
       float currentQuat = time.currentQuat();
