@@ -32,6 +32,7 @@ add_executable(clover_test
     test/NodeSimplex/Stereo/Invert_Test.cc
     test/NodeSimplex/Stereo/Pan_Test.cc
 
+    test/Util/Calc_Test.cc
     test/Util/MusicTime.cc
     test/Util/HistoryBuffer_Test.cc
 
