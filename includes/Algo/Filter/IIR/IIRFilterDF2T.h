@@ -6,6 +6,8 @@
 #include "IIR_Coefficients.h"
 #include "Util.h"
 
+namespace Clover::Filter {
+
 template <FloatingPoint T, int __arity> class IIRFilterDF2T {
 public:
   IIRFilterDF2T() : inputStates_({{0}}), outputStates_({{0}}) {}
@@ -26,8 +28,6 @@ public:
              coeffs_.a1 * outputStates_[0][ch] -
              coeffs_.a2 * outputStates_[1][ch];
 
-      yn *= coeffs_.gain;
-
       inputStates_[1][ch] = inputStates_[0][ch];
       inputStates_[0][ch] = input[ch];
       outputStates_[1][ch] = outputStates_[0][ch];
@@ -44,3 +44,5 @@ private:
   std::array<std::array<T, __arity>, 2> inputStates_;
   std::array<std::array<T, __arity>, 2> outputStates_;
 };
+
+} // namespace Clover::Filter
