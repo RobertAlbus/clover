@@ -29,3 +29,13 @@ TEST(Util_Calc, ShouldConvertFreqToMidi) {
   EXPECT_EQ(Calc::ftom(311.126983722f), 63);
   EXPECT_EQ(Calc::ftom(12543.8539514f), 127);
 }
+
+TEST(Util_Calc, ShouldHaveTensionCurve) {
+  EXPECT_EQ(Calc::tension(0.5, 0), 0.5);
+  
+  EXPECT_NEAR(Calc::tension(0.5, -.297), 0.4, 0.066);
+  EXPECT_EQ(Calc::tension(0.5, -10), 0.);
+
+  EXPECT_NEAR(Calc::tension(0.5, 1.13343), 0.8, 0.000005);
+  EXPECT_NEAR(Calc::tension(0.5, 10), 1., 0.00004);
+}

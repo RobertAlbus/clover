@@ -3,6 +3,10 @@
 
 namespace Clover::Util::Calc {
 
+float tension(float value, float tension) { 
+  return pow(fabs(value),exp(tension * -1.f) * Calc::sign(value));
+}
+
 float sign(float value) { return value < 0. ? -1 : 1; }
 
 float ltodb(float x) { return log10(fabs(x)) * 20.; }
