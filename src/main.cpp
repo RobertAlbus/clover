@@ -52,8 +52,12 @@ int main(int argc, char *argv[]) {
   filter.lowPass();
   filter.set(200., 0.9);
 
+  Filter::EQ<2> EQ;
+  EQ.peakingEQ();
+  EQ.set(100., 0.3, 9.);
+
   Stereo::Pan1 pan;
-  osc >> pan >> filter >> interface.rootNode;
+  osc >> pan >> filter >> EQ >> interface.rootNode;
 
   Wavetable::WavetableOsc lfo;
   lfo.sine(1024);
