@@ -10,7 +10,7 @@ configure_file(includes/Config.h.in Config.h)
 # Clover variables
 
 set(CLOVER_BUILD_DEMO ON)
-set(CLOVER_BUILD_TESTS OFF)
+set(CLOVER_BUILD_TESTS ON)
 
 
 ########
@@ -51,6 +51,7 @@ list(APPEND EXTRA_LIBS rtmidi)
 add_library(${PROJECT_NAME} STATIC 
     ${CMAKE_CURRENT_LIST_DIR}/includes/Base/CloverBase.cpp
 
+    ${CMAKE_CURRENT_LIST_DIR}/includes/NodeSimplex/Envelope/EnvelopeStruct.cpp
     ${CMAKE_CURRENT_LIST_DIR}/includes/NodeSimplex/Envelope/ADSR.cpp
     ${CMAKE_CURRENT_LIST_DIR}/includes/NodeSimplex/Envelope/BasicEnvelope.cpp
     ${CMAKE_CURRENT_LIST_DIR}/includes/NodeSimplex/Envelope/DC.cpp

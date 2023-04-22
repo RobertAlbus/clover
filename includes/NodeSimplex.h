@@ -10,7 +10,12 @@
 #include "NodeSimplex/Delay/FractionalDelayLine.h"
 
 // clang-format off
-#include "NodeSimplex/Envelope/BasicEnvelope.h" // must come first
+// new envelope ideas
+#include "NodeSimplex/Envelope/EnvelopeStruct.h" // must come first
+#include "NodeSimplex/Envelope/AutomationClip.h" 
+
+// old envelope ideas
+#include "NodeSimplex/Envelope/BasicEnvelope.h"  // must come first
 #include "NodeSimplex/Envelope/ADSR.h"
 #include "NodeSimplex/Envelope/DC.h"
 // clang-format on

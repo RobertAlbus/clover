@@ -25,6 +25,7 @@ add_executable(clover_test
     test/NodeSimplex/Delay/FractionalDelayLine_Test.cc
     
     test/NodeSimplex/Envelope/ADSR_Test.cc
+    test/NodeSimplex/Envelope/AutomationClip_Test.cc
     test/NodeSimplex/Envelope/BasicEnvelope_Test.cc
     test/NodeSimplex/Envelope/DC_Test.cc
     
