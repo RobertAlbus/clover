@@ -11,10 +11,12 @@ TEST(NodeSimplex_Envelope_AutomationClip, ShouldOutputEnvelope) {
   automationClip >> collector >> crank;
 
   EnvelopeDefinition envDef;
+  // clang-format off
   envDef.addPoint(0  , 0.0);
   envDef.addPoint(100, 0.0);
   envDef.addPoint(200, 1.0);
   envDef.addPoint(300, 0.5);
+  // clang-format on
 
   automationClip.useEnvelope(envDef);
 
@@ -52,7 +54,7 @@ TEST(NodeSimplex_Envelope_AutomationClip, ShouldHoldLastValue) {
   automationClip >> collector >> crank;
 
   EnvelopeDefinition envDef;
-  envDef.addPoint(0  , 0.0);
+  envDef.addPoint(0, 0.0);
   envDef.addPoint(100, 0.5);
 
   automationClip.useEnvelope(envDef);

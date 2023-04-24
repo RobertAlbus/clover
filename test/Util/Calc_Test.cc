@@ -32,7 +32,7 @@ TEST(Util_Calc, ShouldConvertFreqToMidi) {
 
 TEST(Util_Calc, ShouldHaveTensionCurve) {
   EXPECT_EQ(Calc::tension(0.5, 0), 0.5);
-  
+
   EXPECT_NEAR(Calc::tension(0.5, -.297), 0.4, 0.066);
   EXPECT_EQ(Calc::tension(0.5, -10), 0.);
 
