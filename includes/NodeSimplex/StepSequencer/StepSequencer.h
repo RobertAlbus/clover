@@ -50,22 +50,16 @@ struct STSQ : public Node<0, 0> {
   int nextIndex;
 
   void setPattern(int i) {
-    printf("\n ======== ");
-    printf("\n setting pattern index to %i", i);
+    // should add bounds checking here
     patternIndex = i;
-
     updateIndexForNewPattern();
-    printf("\n ======== ");
   }
 
   void addPattern(const STSQ_Pattern<StepDataType> &newPattern) {
-    printf("\n adding new pattern");
     patterns.emplace_back(newPattern);
   }
 
   Frame<0> tick(Frame<0> input) {
-    printf("\ncurrent time: %i   ----------------", _currentClockTime);
-
     checkTimeAndPerformStep();
 
     return Frame<0>{};
@@ -84,56 +78,36 @@ private:
   }
 
   float getElapsedPatternTime() {
-    printf("\nelapsed time: %f",
-           fmod((float)_currentClockTime, currentPattern().totalDuration));
     return fmod((float)_currentClockTime, currentPattern().totalDuration);
   }
 
   bool isStartOfNextStep() {
-    printf("\nis start of next step?: %d",
-           ((int)getElapsedPatternTime()) == currentPattern()[nextIndex].start);
     return ((int)getElapsedPatternTime()) == currentPattern()[nextIndex].start;
   }
 
   void performStep() {
-    printf("\n ---------------- performing step %i at time %i", nextIndex,
-           currentPattern()[nextIndex].start);
     applyStepDataFunc(currentPattern()[nextIndex].data, targets);
   }
 
   bool isStartOfNextIteration() {
-    printf("\nis start of next iteration?: %d",
-           nextIndex >= currentPattern().size());
     return nextIndex >= currentPattern().size();
   }
 
   void updateIndexForNewPattern() {
     bool isInitialSampleClockState = _currentClockTime <= 0;
     if (isInitialSampleClockState) {
-      printf("\n - at initial clock state, exiting");
-
       nextIndex = 0;
       return;
     }
     int currentElapsedPatternTime = (int)getElapsedPatternTime();
-    printf("\n - current clock time: %i", _currentClockTime);
-    printf("\n - total pattern time: %f", currentPattern().totalDuration);
-    printf("\n - current elapsed pattern time: %i", currentElapsedPatternTime);
-    printf("\n - current pattern has %i steps", currentPattern().size());
-
     for (int i = 0; i < currentPattern().size() - 1; i++) {
-      printf("\n - checking if should start at pattern[%i].start: %i", i,
-             currentPattern()[i].start);
       if (currentElapsedPatternTime == currentPattern()[i].start) {
-        printf("\n   - exact match");
         nextIndex = i;
         checkTimeAndPerformStep();
         break;
       } else if (currentElapsedPatternTime > currentPattern()[i].start) {
-        printf("\n   - matched, keep searching");
         nextIndex = i + 1;
       } else {
-        printf("\n   - found, break");
         break;
       }
     }
@@ -149,16 +123,3 @@ private:
 
 // void PitchableFacilitator(const float &data, std::vector<Pitchable>
 // &targets);
-
-/*
-1
-
-0
-10
-20
-30
-
-
-
-
-*/

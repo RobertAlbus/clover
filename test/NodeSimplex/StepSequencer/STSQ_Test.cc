@@ -16,7 +16,6 @@ struct TestTarget {
 void TestFacilitator(const int &data, std::vector<TestTarget *> &targets) {
   for (int i = 0; i < targets.size(); i++) {
     targets[i]->increment();
-    printf("\n\n--------");
   }
 }
 
