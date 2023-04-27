@@ -56,7 +56,10 @@ add_library(${PROJECT_NAME} STATIC
     ${CMAKE_CURRENT_LIST_DIR}/includes/NodeSimplex/Envelope/BasicEnvelope.cpp
     ${CMAKE_CURRENT_LIST_DIR}/includes/NodeSimplex/Envelope/DC.cpp
 
+    ${CMAKE_CURRENT_LIST_DIR}/includes/NodeSimplex/StepSequencer/PatternSettable.cpp
     ${CMAKE_CURRENT_LIST_DIR}/includes/NodeSimplex/StepSequencer/StepSequencer.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/includes/NodeSimplex/StepSequencer/lib/Pitchable.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/includes/NodeSimplex/StepSequencer/lib/Triggerable.cpp
 
     ${CMAKE_CURRENT_LIST_DIR}/includes/NodeSimplex/Stereo/Difference.cpp
     ${CMAKE_CURRENT_LIST_DIR}/includes/NodeSimplex/Stereo/Invert.cpp

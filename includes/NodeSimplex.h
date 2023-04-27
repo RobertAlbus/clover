@@ -31,7 +31,9 @@
 #include "NodeSimplex/Reduce/Bitcrusher.h"
 #include "NodeSimplex/Reduce/Samplecrusher.h"
 
+#include "NodeSimplex/StepSequencer/PatternSettable.h"
 #include "NodeSimplex/StepSequencer/StepSequencer.h"
+#include "NodeSimplex/StepSequencer/lib.h"
 
 #include "NodeSimplex/Stereo/Difference.h"
 #include "NodeSimplex/Stereo/Invert.h"

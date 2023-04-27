@@ -5,6 +5,7 @@
 
 #include "Graph.h"
 #include "NodeSimplex.h"
+#include "NodeSimplex/StepSequencer/lib.h"
 
 namespace Clover::NodeSimplex::Envelope {
 
@@ -19,7 +20,7 @@ struct AdsrSettings {
   bool keyOn;
 };
 
-class Adsr : public StatefulSubgraph<0, 1, AdsrSettings> {
+class Adsr : public Triggerable, public StatefulSubgraph<0, 1, AdsrSettings> {
 public:
   Adsr(size_t a = 0, size_t d = 0, float s = 1, size_t r = 0);
   Adsr(AdsrSettings initialSettings);
@@ -38,8 +39,12 @@ public:
   size_t release();
   void release(size_t r);
 
+  // todo: deprecate
   void keyOn();
   void keyOff();
+
+  void triggerOn() override;
+  void triggerOff() override;
 
 protected:
   BasicEnvelope envelope;

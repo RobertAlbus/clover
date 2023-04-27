@@ -6,6 +6,10 @@
 
 #include "Graph.h"
 
+struct PatternSettable {
+  virtual void setPattern(int i);
+};
+
 template <typename T> struct STSQ_Pattern {
   STSQ_Pattern() : totalDuration(0) {}
 
@@ -40,7 +44,7 @@ template <typename T> struct STSQ_Pattern {
 template <typename StepDataType, typename TargetType,
           void (*applyStepDataFunc)(const StepDataType &,
                                     std::vector<TargetType *> &)>
-struct STSQ : public Node<0, 0> {
+struct STSQ : public Node<0, 0>, public PatternSettable {
 
   STSQ() : Node(), nextIndex(0), patternIndex(0) {}
 
@@ -49,7 +53,7 @@ struct STSQ : public Node<0, 0> {
   std::vector<TargetType *> targets;
   int nextIndex;
 
-  void setPattern(int i) {
+  void setPattern(int i) override {
     // should add bounds checking here
     patternIndex = i;
     updateIndexForNewPattern();
@@ -89,9 +93,7 @@ private:
     applyStepDataFunc(currentPattern()[nextIndex].data, targets);
   }
 
-  bool isStartOfNextIteration() {
-    return nextIndex >= currentPattern().size();
-  }
+  bool isStartOfNextIteration() { return nextIndex >= currentPattern().size(); }
 
   void updateIndexForNewPattern() {
     bool isInitialSampleClockState = _currentClockTime <= 0;
@@ -120,6 +122,3 @@ private:
     }
   }
 };
-
-// void PitchableFacilitator(const float &data, std::vector<Pitchable>
-// &targets);
