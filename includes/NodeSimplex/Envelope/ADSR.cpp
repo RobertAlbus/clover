@@ -65,6 +65,13 @@ void Adsr::keyOff() {
   settings.current.startTime = _currentClockTime;
 }
 
+void Adsr::triggerOn() {
+  keyOn();
+}
+void Adsr::triggerOff() {
+  keyOff();
+}
+
 Frame<1> Adsr::tick(Frame<0> input) {
   AdsrSettings &s = settings.current;
 
