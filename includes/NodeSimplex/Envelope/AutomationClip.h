@@ -1,9 +1,9 @@
 #pragma once
 
 #include <cmath>
-#include "Graph.h"
 
 #include "Algorithm.h"
+#include "Graph.h"
 
 class AutomationNode : public Node<0, 1> {
 public:
