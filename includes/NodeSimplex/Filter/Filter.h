@@ -12,7 +12,11 @@ namespace Clover::NodeSimplex::Filter {
 
 template <size_t __arity> class Filter : public Node<__arity, __arity> {
 public:
-  Filter() : biquad(), sampleRate_(48000) {}
+  Filter() : biquad(), sampleRate_(48000) {
+    coefficientStrategy = std::make_unique<
+        Clover::Filter::ResonantButterworthCoefficientStrategy<Sample>>();
+    resetCoefficients();
+  }
 
   void set(float f, float Q) { setFunction(f, Q, sampleRate_); }
 
@@ -25,7 +29,7 @@ public:
       this->freq_ = freq;
       this->reso_ = reso;
       IIRFilterCoefficients<Sample> coefficients =
-          this->coefficientStrategy.lowPass(freq, reso, sampleRate);
+          this->coefficientStrategy->lowPass(freq, reso, sampleRate);
       this->biquad.updateCoefficients(coefficients);
     };
   }
@@ -35,7 +39,7 @@ public:
       this->freq_ = freq;
       this->reso_ = reso;
       IIRFilterCoefficients<Sample> coefficients =
-          this->coefficientStrategy.highPass(freq, reso, sampleRate);
+          this->coefficientStrategy->highPass(freq, reso, sampleRate);
       this->biquad.updateCoefficients(coefficients);
     };
   }
@@ -45,7 +49,7 @@ public:
       this->freq_ = freq;
       this->reso_ = reso;
       IIRFilterCoefficients<Sample> coefficients =
-          this->coefficientStrategy.notch(freq, reso, sampleRate);
+          this->coefficientStrategy->notch(freq, reso, sampleRate);
       this->biquad.updateCoefficients(coefficients);
     };
   }
@@ -55,9 +59,33 @@ public:
       this->freq_ = freq;
       this->reso_ = reso;
       IIRFilterCoefficients<Sample> coefficients =
-          this->coefficientStrategy.bandPass(freq, reso, sampleRate);
+          this->coefficientStrategy->bandPass(freq, reso, sampleRate);
       this->biquad.updateCoefficients(coefficients);
     };
+  }
+
+  void butterworthResonant() {
+    coefficientStrategy = std::make_unique<
+        Clover::Filter::ResonantButterworthCoefficientStrategy<Sample>>();
+    resetCoefficients();
+  }
+
+  void butterworth() {
+    coefficientStrategy = std::make_unique<
+        Clover::Filter::ButterworthCoefficientStrategy<Sample>>();
+    resetCoefficients();
+  }
+
+  void chebyshevType1() {
+    coefficientStrategy = std::make_unique<
+        Clover::Filter::ChebyshevType1CoefficientStrategy<Sample>>();
+    resetCoefficients();
+  }
+
+  void chebyshevType2() {
+    coefficientStrategy = std::make_unique<
+        Clover::Filter::ChebyshevType2CoefficientStrategy<Sample>>();
+    resetCoefficients();
   }
 
   Frame<__arity> tick(Frame<__arity> input) { return biquad.process(input); }
@@ -70,10 +98,13 @@ protected:
   std::function<void(float, float, float)> setFunction;
   Clover::Filter::IIRFilterDF2T<Sample, __arity> biquad;
 
-  // TODO: update this to be a type union that can be used for strategy
-  // switching
-  Clover::Filter::ResonantButterworthCoefficientStrategy<Sample>
+  std::unique_ptr<Clover::Filter::IIRCoefficientStrategy<Sample>>
       coefficientStrategy;
+
+  void resetCoefficients() {
+    lowPass();
+    set(21000, 0.707);
+  }
 };
 
 } // namespace Clover::NodeSimplex::Filter
