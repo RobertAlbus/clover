@@ -32,11 +32,12 @@ int main(int argc, char *argv[]) {
   printf("\nDefault Audio Device Index: %d\n", Pa_GetDefaultOutputDevice());
 
   Interface interface;
+  interface.rootNode.gain(0.5);
   Time time(160, SAMPLE_RATE, &interface.clock);
   Clover::NodeSimplex::Adapter::NullAdapter<1, 2> blackHole;
   blackHole >> interface.rootNode;
 
-  Wavetable::WavetableOsc osc;
+  Wavetable::WavetableOscStereo osc;
   osc.saw(1024);
   osc.freq(70.);
 
@@ -54,10 +55,9 @@ int main(int argc, char *argv[]) {
 
   Filter::EQ<2> EQ;
   EQ.peakingEQ();
-  EQ.set(100., 0.3, 9.);
+  EQ.set(100., 0.7, 5);
 
-  Stereo::Pan1 pan;
-  osc >> pan >> filter >> EQ >> interface.rootNode;
+  osc >> filter >> EQ >> interface.rootNode;
 
   Wavetable::WavetableOsc lfo;
   lfo.sine(1024);
@@ -103,7 +103,7 @@ int main(int argc, char *argv[]) {
       float modAdjusted = (mod.frames.current[0] + 1.) / 2.;
       float oscAdjusted = (osc.frames.current[0] + 1.) / 2.;
       float envelopeValue = adsr.frames.current[0];
-      osc.freq(100. * (modAdjusted * 2.));
+      osc.freq(100. * (modAdjusted * 2. - 1));
       mod.freq(100. * (oscAdjusted * 3.));
 
       float cut = envelopeValue * (1000. * lfoAdjusted) + 200;
@@ -126,6 +126,11 @@ int main(int argc, char *argv[]) {
 
     if (interface.openDevice(Pa_GetDefaultOutputDevice()) != paNoError)
       return 1;
+
+    // might need to add some sort of "graphReady" functionaltiy to prevent
+    // starting until everything is initialized
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+
     if (interface.start() != paNoError) {
       interface.close();
       return 1;

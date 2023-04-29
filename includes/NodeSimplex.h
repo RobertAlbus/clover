@@ -45,3 +45,4 @@
 #include "NodeSimplex/Waveshape/RingMod_V1.h"
 
 #include "NodeSimplex/Wavetable/WavetableOsc.h"
+#include "NodeSimplex/Wavetable/WavetableOscStereo.h"
