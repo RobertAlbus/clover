@@ -1,6 +1,7 @@
 #pragma once
 #include <cmath>
 #include <functional>
+#include <memory>
 #include <tgmath.h>
 #include <vector>
 
@@ -18,20 +19,22 @@ struct WavetableOscSettings {
   float readIndex;
   float readIndexIncrement;
   float readIndexOffset;
-  Wavetable wavetable;
+  std::shared_ptr<Wavetable> wavetable;
   float wavetableSize;
 };
 
 class WavetableOsc : public StatefulProcessor<0, 1, WavetableOscSettings> {
 public:
   WavetableOsc()
-      : WavetableOsc(Clover::Util::GenerateWavetable::Sine(512), 200, 0, 0) {}
+      : WavetableOsc(std::make_shared<std::vector<Sample>>(
+                         Util::GenerateWavetable::Sine(256)),
+                     200, 0, 0) {}
 
-  WavetableOsc(Wavetable wavetable, float freq, float phase = 0,
-               float phaseOffset = 0)
+  WavetableOsc(std::shared_ptr<Wavetable> wavetable, float freq,
+               float phase = 0, float phaseOffset = 0)
       : StatefulProcessor<0, 1, WavetableOscSettings>() {
     settings.initial.wavetable = wavetable;
-    settings.initial.wavetableSize = (float)wavetable.size();
+    settings.initial.wavetableSize = (float)wavetable->size();
     settings.initial.freq = freq;
     settings.initial.phase = normalizePhase(phase);
     settings.initial.phaseOffset = normalizePhase(phaseOffset);
@@ -47,8 +50,7 @@ public:
   void phase(float phase) {
     phase = normalizePhase(phase);
     settings.current.phase = phase;
-    settings.current.readIndex =
-        ((float)settings.current.wavetableSize) * phase;
+    settings.current.readIndex = (settings.current.wavetableSize) * phase;
   }
 
   float phase() {
@@ -63,35 +65,46 @@ public:
   float phaseOffset() { return settings.current.phaseOffset; }
 
   void freq(float freq) {
+    freq = fabs(freq);
     settings.current.freq = freq;
     settings.current.readIndexIncrement = calculateReadIndexIncrement(freq);
   }
 
   float freq() { return settings.current.freq; }
 
-  void wavetable(Wavetable wt) {
+  void wavetable(std::shared_ptr<Wavetable> wt) {
     settings.current.wavetable = wt;
-    settings.current.wavetableSize = (float)wt.size();
+    settings.current.wavetableSize = (float)wt->size();
     settings.current.readIndexIncrement =
         calculateReadIndexIncrement(settings.current.freq);
   }
 
-  Wavetable wavetable() { return settings.current.wavetable; }
+  std::shared_ptr<Wavetable> wavetable() { return settings.current.wavetable; }
 
-  void sine(int size = 400) {
-    wavetable(Clover::Util::GenerateWavetable::Sine(size));
+  void sine(int size = 512) {
+    std::shared_ptr<Wavetable> wt = std::make_shared<std::vector<Sample>>(
+        Util::GenerateWavetable::Sine(size));
+    wavetable(wt);
   }
-  void square(int size = 400) {
-    wavetable(Clover::Util::GenerateWavetable::Square(size));
+  void square(int size = 512) {
+    std::shared_ptr<Wavetable> wt = std::make_shared<std::vector<Sample>>(
+        Util::GenerateWavetable::Square(size));
+    wavetable(wt);
   }
-  void saw(int size = 400) {
-    wavetable(Clover::Util::GenerateWavetable::Saw(size));
+  void saw(int size = 512) {
+    std::shared_ptr<Wavetable> wt = std::make_shared<std::vector<Sample>>(
+        Util::GenerateWavetable::Saw(size));
+    wavetable(wt);
   }
-  void tri(int size = 400) {
-    wavetable(Clover::Util::GenerateWavetable::Tri(size));
+  void tri(int size = 512) {
+    std::shared_ptr<Wavetable> wt = std::make_shared<std::vector<Sample>>(
+        Util::GenerateWavetable::Tri(size));
+    wavetable(wt);
   }
-  void noise(int size = 1000) {
-    wavetable(Clover::Util::GenerateWavetable::NoiseWhite(size));
+  void noise(int size = 1024) {
+    std::shared_ptr<Wavetable> wt = std::make_shared<std::vector<Sample>>(
+        Util::GenerateWavetable::NoiseWhite(size));
+    wavetable(wt);
   }
 
 private:
@@ -100,11 +113,12 @@ private:
     float nextIndex =
         normalizeReadIndex(floor(settings.current.readIndex) + direction);
 
+    Wavetable &wt = *(settings.current.wavetable);
+
     // this lerp is technically incorrecto for negative frequencies. Should fix
     // that.
     float value =
-        std::lerp(settings.current.wavetable[(int)settings.current.readIndex],
-                  settings.current.wavetable[(int)nextIndex],
+        std::lerp(wt[(int)settings.current.readIndex], wt[(int)nextIndex],
                   fmod(settings.current.readIndex, 1)
 
         );
