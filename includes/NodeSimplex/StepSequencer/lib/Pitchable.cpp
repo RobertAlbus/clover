@@ -4,11 +4,11 @@
 #include "Exception.h"
 #include "Pitchable.h"
 
-void Pitchable::pitch(float note) {
+void Pitchable::midiNote(float note) {
   throw NotImplementedException("Pitchable:pitch(float)");
 };
 
 void PitchableFacilitator(const float &data, std::vector<Pitchable*> &targets) {
   for (Pitchable* target : targets)
-    target->pitch(data);
+    target->midiNote(data);
 }

@@ -3,6 +3,10 @@
 
 namespace Clover::Util::Calc {
 
+float freqBySemitoneDifference(float freq, float semitones) {
+    return freq * pow(2.0, semitones / 12.0);
+}
+
 float tension(float value, float tension) { 
   return pow(fabs(value),exp(tension * -1.f) * Calc::sign(value));
 }

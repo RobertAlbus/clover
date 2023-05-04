@@ -2,6 +2,14 @@
 
 #include "Clover.h"
 
+TEST(Util_Calc, ShouldCalculateFreqDifferenceBySemitone) {
+  EXPECT_EQ(Calc::freqBySemitoneDifference(1000, 12), 2000);
+  EXPECT_EQ(Calc::freqBySemitoneDifference(1000, -12), 500);
+
+  EXPECT_NEAR(Calc::freqBySemitoneDifference(1000.001, 12), 2000.002, 0.00005);
+  EXPECT_NEAR(Calc::freqBySemitoneDifference(10000.001, 12), 20000.002, 0.00005);
+}
+
 TEST(Util_Calc, ShouldDetectSign) {
   EXPECT_EQ(Calc::sign(-10), -1);
   EXPECT_EQ(Calc::sign(0), 1);
