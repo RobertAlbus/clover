@@ -67,6 +67,9 @@ add_library(${PROJECT_NAME} STATIC
     ${CMAKE_CURRENT_LIST_DIR}/includes/NodeSimplex/Stereo/Stereo.cpp
     ${CMAKE_CURRENT_LIST_DIR}/includes/NodeSimplex/Stereo/Sum.cpp
 
+    ${CMAKE_CURRENT_LIST_DIR}/includes/NodeSimplex/Wavetable/WavetableOsc.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/includes/NodeSimplex/Wavetable/WavetableOscStereo.cpp
+
     ${CMAKE_CURRENT_LIST_DIR}/includes/Util/Calc.cpp
     ${CMAKE_CURRENT_LIST_DIR}/includes/Util/MusicTime.cpp
     ${CMAKE_CURRENT_LIST_DIR}/includes/Util/SampleClock.cpp

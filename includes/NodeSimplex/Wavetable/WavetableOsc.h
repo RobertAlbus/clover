@@ -8,6 +8,8 @@
 #include "Constants.h"
 #include "Util.h"
 
+#include "WavetableOscInterface.h"
+
 namespace Clover::NodeSimplex::Wavetable {
 
 typedef std::vector<Sample> Wavetable;
@@ -23,141 +25,43 @@ struct WavetableOscSettings {
   float wavetableSize;
 };
 
-class WavetableOsc : public StatefulProcessor<0, 1, WavetableOscSettings> {
-public:
-  WavetableOsc()
-      : WavetableOsc(std::make_shared<std::vector<Sample>>(
-                         Util::GenerateWavetable::Sine(256)),
-                     200, 0, 0) {}
-
+struct WavetableOsc : public StatefulProcessor<0, 1, WavetableOscSettings>,
+                      public WavetableOscInterface {
+  WavetableOsc();
   WavetableOsc(std::shared_ptr<Wavetable> wavetable, float freq,
-               float phase = 0, float phaseOffset = 0)
-      : StatefulProcessor<0, 1, WavetableOscSettings>() {
-    settings.initial.wavetable = wavetable;
-    settings.initial.wavetableSize = (float)wavetable->size();
-    settings.initial.freq = freq;
-    settings.initial.phase = normalizePhase(phase);
-    settings.initial.phaseOffset = normalizePhase(phaseOffset);
+               float phase = 0, float phaseOffset = 0);
 
-    settings.initial.readIndexIncrement = calculateReadIndexIncrement(freq);
-    settings.initial.readIndex = 0.;
-    settings.initial.readIndexOffset =
-        calculateReadIndexOffset(settings.initial.phaseOffset);
+  void phase(float phase) override;
+  float phase() override;
+  void phaseOffset(float offset) override;
+  float phaseOffset() override;
 
-    settings.reset();
-  }
+  void freq(float freq) override;
+  float freq() override;
+  virtual void note(float midiNote) override;
+  virtual float note() override;
+  void wavelength(float wavelengthSamples) override;
+  float wavelength() override;
 
-  void phase(float phase) {
-    phase = normalizePhase(phase);
-    settings.current.phase = phase;
-    settings.current.readIndex = (settings.current.wavetableSize) * phase;
-  }
+  void wavetable(std::shared_ptr<Wavetable> wt) override;
+  std::shared_ptr<Wavetable> wavetable() override;
 
-  float phase() {
-    return settings.current.phase / settings.current.wavetableSize;
-  }
-
-  void phaseOffset(float offset) {
-    settings.current.phaseOffset = normalizePhase(offset);
-    settings.current.readIndexOffset = calculateReadIndexOffset(offset);
-  }
-
-  float phaseOffset() { return settings.current.phaseOffset; }
-
-  void freq(float freq) {
-    freq = fabs(freq);
-    settings.current.freq = freq;
-    settings.current.readIndexIncrement = calculateReadIndexIncrement(freq);
-  }
-
-  float freq() { return settings.current.freq; }
-
-  void wavetable(std::shared_ptr<Wavetable> wt) {
-    settings.current.wavetable = wt;
-    settings.current.wavetableSize = (float)wt->size();
-    settings.current.readIndexIncrement =
-        calculateReadIndexIncrement(settings.current.freq);
-  }
-
-  std::shared_ptr<Wavetable> wavetable() { return settings.current.wavetable; }
-
-  void sine(int size = 512) {
-    std::shared_ptr<Wavetable> wt = std::make_shared<std::vector<Sample>>(
-        Util::GenerateWavetable::Sine(size));
-    wavetable(wt);
-  }
-  void square(int size = 512) {
-    std::shared_ptr<Wavetable> wt = std::make_shared<std::vector<Sample>>(
-        Util::GenerateWavetable::Square(size));
-    wavetable(wt);
-  }
-  void saw(int size = 512) {
-    std::shared_ptr<Wavetable> wt = std::make_shared<std::vector<Sample>>(
-        Util::GenerateWavetable::Saw(size));
-    wavetable(wt);
-  }
-  void tri(int size = 512) {
-    std::shared_ptr<Wavetable> wt = std::make_shared<std::vector<Sample>>(
-        Util::GenerateWavetable::Tri(size));
-    wavetable(wt);
-  }
-  void noise(int size = 1024) {
-    std::shared_ptr<Wavetable> wt = std::make_shared<std::vector<Sample>>(
-        Util::GenerateWavetable::NoiseWhite(size));
-    wavetable(wt);
-  }
+  void sine(int size = 512);
+  void square(int size = 512);
+  void saw(int size = 512);
+  void tri(int size = 512);
+  void noise(int size = 1024);
 
 private:
-  Frame<1> tick(Frame<0> input) {
-    float direction = Clover::Util::Calc::sign(settings.current.freq);
-    float nextIndex =
-        normalizeReadIndex(floor(settings.current.readIndex) + direction);
+  Frame<1> tick(Frame<0> input) override;
 
-    Wavetable &wt = *(settings.current.wavetable);
-
-    // this lerp is technically incorrecto for negative frequencies. Should fix
-    // that.
-    float value =
-        std::lerp(wt[(int)settings.current.readIndex], wt[(int)nextIndex],
-                  fmod(settings.current.readIndex, 1)
-
-        );
-
-    Frame<1> f{value};
-
-    float newIndex = settings.current.readIndex +
-                     settings.current.readIndexOffset +
-                     settings.current.readIndexIncrement;
-
-    settings.current.readIndex = normalizeReadIndex(newIndex);
-
-    return f;
-  }
-
-  float normalizeReadIndex(float index) {
-    float wtSize = (float)settings.current.wavetableSize;
-    return fmod(fmod(index, wtSize) + wtSize, wtSize);
-  }
-
-  float normalizePhase(float phase) { return fmod(fmod(phase, 1.) + 1., 1); }
-
-  float calculateReadIndexIncrement(float freq) {
-    return freq * ((float)settings.current.wavetableSize) /
-           ((float)SAMPLE_RATE);
-  }
-
-  float calculateReadIndexOffset(float phaseOffset) {
-    return ((float)settings.current.wavetableSize) *
-           normalizePhase(phaseOffset);
-  }
+  float normalizeReadIndex(float index);
+  float normalizePhase(float phase);
+  float calculateReadIndexIncrement(float freq);
+  float calculateReadIndexOffset(float phaseOffset);
 
 public:
-  void printSettings(WavetableOscSettings &settings) {
-    printf("\n%f   - %f   - %f   - %f   - %f   - %f   - %f\n",
-           settings.readIndex, settings.readIndexIncrement,
-           settings.wavetableSize, settings.freq, settings.phase,
-           settings.phaseOffset, settings.readIndexOffset);
-  }
+  void printSettings(WavetableOscSettings &settings);
 };
 
 } // namespace Clover::NodeSimplex::Wavetable

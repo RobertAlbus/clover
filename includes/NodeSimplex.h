@@ -44,5 +44,7 @@
 #include "NodeSimplex/Waveshape/DistExponent.h"
 #include "NodeSimplex/Waveshape/RingMod_V1.h"
 
+#include "NodeSimplex/Wavetable/WavetableOscInterface.h"
+
 #include "NodeSimplex/Wavetable/WavetableOsc.h"
 #include "NodeSimplex/Wavetable/WavetableOscStereo.h"
