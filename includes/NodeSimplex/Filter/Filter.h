@@ -8,9 +8,16 @@
 #include "Base.h"
 #include "Graph.h"
 
+#include "CoefficientStrategySettable.h"
+#include "FilterSettable.h"
+
 namespace Clover::NodeSimplex::Filter {
 
-template <size_t __arity> class Filter : public Base, public Node<__arity, __arity> {
+template <size_t __arity>
+class Filter : public FilterSettable,
+               public CoefficientStrategySettable,
+               public Base,
+               public Node<__arity, __arity> {
 public:
   Filter() : biquad() {
     coefficientStrategy = std::make_unique<
@@ -18,13 +25,13 @@ public:
     resetCoefficients();
   }
 
-  void set(float f, float Q) { setFunction(f, Q, Base::sampleRate); }
+  void set(float f, float Q) override { setFunction(f, Q, Base::sampleRate); }
 
-  void freq(float f) { setFunction(f, reso_, Base::sampleRate); }
+  void freq(float f) override { setFunction(f, reso_, Base::sampleRate); }
 
-  void reso(float Q) { setFunction(freq_, Q, Base::sampleRate); }
+  void reso(float Q) override { setFunction(freq_, Q, Base::sampleRate); }
 
-  void lowPass() {
+  void lowPass() override {
     setFunction = [this](float freq, float reso, float sampleRate) {
       this->freq_ = freq;
       this->reso_ = reso;
@@ -34,7 +41,7 @@ public:
     };
   }
 
-  void highPass() {
+  void highPass() override {
     setFunction = [this](float freq, float reso, float sampleRate) {
       this->freq_ = freq;
       this->reso_ = reso;
@@ -44,7 +51,7 @@ public:
     };
   }
 
-  void notch() {
+  void notch() override {
     setFunction = [this](float freq, float reso, float sampleRate) {
       this->freq_ = freq;
       this->reso_ = reso;
@@ -54,7 +61,7 @@ public:
     };
   }
 
-  void bandPass() {
+  void bandPass() override {
     setFunction = [this](float freq, float reso, float sampleRate) {
       this->freq_ = freq;
       this->reso_ = reso;
@@ -64,25 +71,25 @@ public:
     };
   }
 
-  void butterworthResonant() {
+  void butterworthResonant() override {
     coefficientStrategy = std::make_unique<
         Clover::Filter::ResonantButterworthCoefficientStrategy<Sample>>();
     resetCoefficients();
   }
 
-  void butterworth() {
+  void butterworth() override {
     coefficientStrategy = std::make_unique<
         Clover::Filter::ButterworthCoefficientStrategy<Sample>>();
     resetCoefficients();
   }
 
-  void chebyshevType1() {
+  void chebyshevType1() override {
     coefficientStrategy = std::make_unique<
         Clover::Filter::ChebyshevType1CoefficientStrategy<Sample>>();
     resetCoefficients();
   }
 
-  void chebyshevType2() {
+  void chebyshevType2() override {
     coefficientStrategy = std::make_unique<
         Clover::Filter::ChebyshevType2CoefficientStrategy<Sample>>();
     resetCoefficients();

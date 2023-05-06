@@ -8,9 +8,16 @@
 #include "Base.h"
 #include "Graph.h"
 
+#include "CoefficientStrategySettable.h"
+#include "EQSettable.h"
+
 namespace Clover::NodeSimplex::Filter {
 
-template <size_t __arity> class EQ : public Base, public Node<__arity, __arity> {
+template <size_t __arity>
+class EQ : public EQSettable,
+           public CoefficientStrategySettable,
+           public Base,
+           public Node<__arity, __arity> {
 public:
   EQ() : biquad() {
     coefficientStrategy = std::make_unique<
@@ -26,7 +33,9 @@ public:
 
   void reso(float Q) { setFunction(freq_, Q, dbGain_, Base::sampleRate); }
 
-  void dbGain(float dbGain) { setFunction(freq_, reso_, dbGain, Base::sampleRate); }
+  void dbGain(float dbGain) {
+    setFunction(freq_, reso_, dbGain, Base::sampleRate);
+  }
 
   void lowShelf() {
     setFunction = [this](float freq, float reso, float dbGain,
