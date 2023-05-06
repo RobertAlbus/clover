@@ -5,28 +5,28 @@
 #include <functional>
 
 #include "Algorithm.h"
-#include "Constants.h"
+#include "Base.h"
 #include "Graph.h"
 
 namespace Clover::NodeSimplex::Filter {
 
-template <size_t __arity> class EQ : public Node<__arity, __arity> {
+template <size_t __arity> class EQ : public Base, public Node<__arity, __arity> {
 public:
-  EQ() : biquad(), sampleRate_(48000) {
+  EQ() : biquad() {
     coefficientStrategy = std::make_unique<
         Clover::Filter::ResonantButterworthCoefficientStrategy<Sample>>();
     resetCoefficients();
   }
 
   void set(float f, float Q, float dbGain) {
-    setFunction(f, Q, dbGain, sampleRate_);
+    setFunction(f, Q, dbGain, Base::sampleRate);
   }
 
-  void freq(float f) { setFunction(f, reso_, dbGain_, sampleRate_); }
+  void freq(float f) { setFunction(f, reso_, dbGain_, Base::sampleRate); }
 
-  void reso(float Q) { setFunction(freq_, Q, dbGain_, sampleRate_); }
+  void reso(float Q) { setFunction(freq_, Q, dbGain_, Base::sampleRate); }
 
-  void dbGain(float dbGain) { setFunction(freq_, reso_, dbGain, sampleRate_); }
+  void dbGain(float dbGain) { setFunction(freq_, reso_, dbGain, Base::sampleRate); }
 
   void lowShelf() {
     setFunction = [this](float freq, float reso, float dbGain,
@@ -94,7 +94,6 @@ protected:
   float freq_;
   float reso_;
   float dbGain_;
-  float sampleRate_;
 
   std::function<void(float, float, float, float)> setFunction;
   Clover::Filter::IIRFilterDF2T<Sample, __arity> biquad;

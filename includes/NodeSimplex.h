@@ -20,7 +20,6 @@
 #include "NodeSimplex/Envelope/DC.h"
 // clang-format on
 
-#include "NodeSimplex/Filter/BiQuad.h"
 #include "NodeSimplex/Filter/EQ.h"
 #include "NodeSimplex/Filter/Filter.h"
 

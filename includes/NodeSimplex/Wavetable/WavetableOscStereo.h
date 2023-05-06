@@ -4,15 +4,12 @@
 #include <tgmath.h>
 #include <vector>
 
-#include "Constants.h"
-#include "Graph.h"
 #include "NodeSimplex.h"
-#include "Util.h"
 #include "WavetableOsc.h"
 
 namespace Clover::NodeSimplex::Wavetable {
 
-class WavetableOscStereo : public Node<0, 2>, public WavetableOscInterface {
+class WavetableOscStereo : public Base, public Node<0, 2>, public WavetableOscInterface {
 public:
   WavetableOscStereo();
 

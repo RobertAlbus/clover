@@ -56,10 +56,10 @@ void WavetableOscStereo::note(float midiNote) { freq(Clover::Util::Calc::mtof(mi
 float WavetableOscStereo::note() { return Clover::Util::Calc::ftom(freq()); }
 
 void WavetableOscStereo::wavelength(float wavelengthSamples) {
-  freq(((float)SAMPLE_RATE) / wavelengthSamples);
+  freq(((float)Base::sampleRate) / wavelengthSamples);
 }
 
-float WavetableOscStereo::wavelength() { return ((float)SAMPLE_RATE) / freq(); }
+float WavetableOscStereo::wavelength() { return ((float)Base::sampleRate) / freq(); }
 
 void WavetableOscStereo::wavetable(std::shared_ptr<Wavetable> wt) {
   oscL.wavetable(wt);

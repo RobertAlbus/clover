@@ -5,9 +5,6 @@
 #include <tgmath.h>
 #include <vector>
 
-#include "Constants.h"
-#include "Util.h"
-
 namespace Clover::NodeSimplex::Wavetable {
 
 typedef std::vector<Sample> Wavetable;

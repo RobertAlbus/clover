@@ -5,9 +5,6 @@
 #include <tgmath.h>
 #include <vector>
 
-#include "Constants.h"
-#include "Util.h"
-
 #include "WavetableOscInterface.h"
 
 namespace Clover::NodeSimplex::Wavetable {
@@ -25,7 +22,7 @@ struct WavetableOscSettings {
   float wavetableSize;
 };
 
-struct WavetableOsc : public StatefulProcessor<0, 1, WavetableOscSettings>,
+struct WavetableOsc : public Base, public StatefulProcessor<0, 1, WavetableOscSettings>,
                       public WavetableOscInterface {
   WavetableOsc();
   WavetableOsc(std::shared_ptr<Wavetable> wavetable, float freq,

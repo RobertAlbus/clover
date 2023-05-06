@@ -1,4 +1,7 @@
 #include "Base/CloverBase.h"
 
-int Clover::Base::SAMPLE_RATE = 48000;
-int Clover::Base::GLOBAL_OVERSAMPLE = 1;
+#ifndef CLOVER_SAMPLE_RATE
+#define CLOVER_SAMPLE_RATE 48000.f
+#endif
+
+int Clover::Base::sampleRate = CLOVER_SAMPLE_RATE;

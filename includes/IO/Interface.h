@@ -7,13 +7,14 @@
 #include "portaudio.h"
 
 // internal dependencies
+#include "Base.h"
 #include "Interface.h"
 #include "RootNode.h"
 #include "Util/SampleClock.h"
 
 namespace Clover::IO {
 
-class Interface {
+class Interface : public Base {
 public:
   Interface() : stream(0) {}
 
@@ -49,7 +50,7 @@ public:
 
     PaError err = Pa_OpenStream(
         &stream, NULL, /* no input */
-        &outputParameters, SAMPLE_RATE, paFramesPerBufferUnspecified,
+        &outputParameters, Base::sampleRate, paFramesPerBufferUnspecified,
         paClipOff, /* we won't output out of range samples so don't bother
                       clipping them */
         &Interface::paCallback, this /* Using 'this' for userData so we can cast

@@ -4,7 +4,7 @@
 #include <tgmath.h>
 #include <vector>
 
-#include "Constants.h"
+#include "Base.h"
 #include "Graph.h"
 #include "Util.h"
 
@@ -64,10 +64,10 @@ void WavetableOsc::note(float midiNote) { freq(Clover::Util::Calc::mtof(midiNote
 float WavetableOsc::note() { return Clover::Util::Calc::ftom(freq()); }
 
 void WavetableOsc::wavelength(float wavelengthSamples) {
-  freq(((float)SAMPLE_RATE) / wavelengthSamples);
+  freq(((float)Base::sampleRate) / wavelengthSamples);
 }
 
-float WavetableOsc::wavelength() { return ((float)SAMPLE_RATE) / freq(); }
+float WavetableOsc::wavelength() { return ((float)Base::sampleRate) / freq(); }
 
 void WavetableOsc::wavetable(std::shared_ptr<Wavetable> wt) {
   settings.current.wavetable = wt;
@@ -136,7 +136,7 @@ float WavetableOsc::normalizePhase(float phase) { return fmod(fmod(phase, 1.) + 
 
 float WavetableOsc::calculateReadIndexIncrement(float freq) {
   return freq * ((float)settings.current.wavetableSize) /
-          ((float)SAMPLE_RATE);
+          ((float)Base::sampleRate);
 }
 
 float WavetableOsc::calculateReadIndexOffset(float phaseOffset) {

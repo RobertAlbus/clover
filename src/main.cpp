@@ -33,7 +33,7 @@ int main(int argc, char *argv[]) {
 
   Interface interface;
   interface.rootNode.gain(0.5);
-  Time time(160, SAMPLE_RATE, &interface.clock);
+  Time time(160, Clover::Base::sampleRate, &interface.clock);
   Clover::NodeSimplex::Adapter::NullAdapter<1, 2> blackHole;
   blackHole >> interface.rootNode;
 
@@ -83,7 +83,7 @@ int main(int argc, char *argv[]) {
 
   bool isProfilingMode = false;
   if (isProfilingMode) {
-    int quantity = SAMPLE_RATE * 360 * 10;
+    int quantity = Clover::Base::sampleRate * 360 * 10;
     std::vector<Frame<2>> benchmarkData;
     benchmarkData.reserve(quantity);
     auto start = std::chrono::high_resolution_clock::now();

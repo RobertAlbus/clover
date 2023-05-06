@@ -5,24 +5,24 @@
 #include <functional>
 
 #include "Algorithm.h"
-#include "Constants.h"
+#include "Base.h"
 #include "Graph.h"
 
 namespace Clover::NodeSimplex::Filter {
 
-template <size_t __arity> class Filter : public Node<__arity, __arity> {
+template <size_t __arity> class Filter : public Base, public Node<__arity, __arity> {
 public:
-  Filter() : biquad(), sampleRate_(48000) {
+  Filter() : biquad() {
     coefficientStrategy = std::make_unique<
         Clover::Filter::ResonantButterworthCoefficientStrategy<Sample>>();
     resetCoefficients();
   }
 
-  void set(float f, float Q) { setFunction(f, Q, sampleRate_); }
+  void set(float f, float Q) { setFunction(f, Q, Base::sampleRate); }
 
-  void freq(float f) { setFunction(f, reso_, sampleRate_); }
+  void freq(float f) { setFunction(f, reso_, Base::sampleRate); }
 
-  void reso(float Q) { setFunction(freq_, Q, sampleRate_); }
+  void reso(float Q) { setFunction(freq_, Q, Base::sampleRate); }
 
   void lowPass() {
     setFunction = [this](float freq, float reso, float sampleRate) {
@@ -93,7 +93,6 @@ public:
 protected:
   float freq_;
   float reso_;
-  float sampleRate_;
 
   std::function<void(float, float, float)> setFunction;
   Clover::Filter::IIRFilterDF2T<Sample, __arity> biquad;
