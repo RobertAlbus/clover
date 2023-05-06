@@ -9,7 +9,9 @@
 
 namespace Clover::NodeSimplex::Wavetable {
 
-class WavetableOscStereo : public Base, public Node<0, 2>, public WavetableOscInterface {
+class WavetableOscStereo : public Base,
+                           public Node<0, 2>,
+                           public WavetableOscInterface {
 public:
   WavetableOscStereo();
 

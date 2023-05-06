@@ -22,7 +22,8 @@ struct WavetableOscSettings {
   float wavetableSize;
 };
 
-struct WavetableOsc : public Base, public StatefulProcessor<0, 1, WavetableOscSettings>,
+struct WavetableOsc : public Base,
+                      public StatefulProcessor<0, 1, WavetableOscSettings>,
                       public WavetableOscInterface {
   WavetableOsc();
   WavetableOsc(std::shared_ptr<Wavetable> wavetable, float freq,
