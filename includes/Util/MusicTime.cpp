@@ -27,15 +27,15 @@ namespace Clover::Util {
 
   float Time::bpm(float multiplier) { return _bpm * multiplier; }
 
-  float Time::quat(float multiplier) { return _quat * multiplier; }
-  float Time::trip(float multiplier) { return _trip * multiplier; }
-  float Time::beat(float multiplier) { return _beat * multiplier; }
-  float Time::bar(float multiplier) { return _bar * multiplier; }
+  float Time::quat(float multiplier = 1) { return _quat * multiplier; }
+  float Time::trip(float multiplier = 1) { return _trip * multiplier; }
+  float Time::beat(float multiplier = 1) { return _beat * multiplier; }
+  float Time::bar(float multiplier = 1) { return _bar * multiplier; }
 
-  float Time::quat_i(float multiplier) { return (int)quat(multiplier); }
-  float Time::trip_i(float multiplier) { return (int)trip(multiplier); }
-  float Time::beat_i(float multiplier) { return (int)beat(multiplier); }
-  float Time::bar_i(float multiplier) { return (int)bar(multiplier); }
+  float Time::quat_i(float multiplier = 1) {  return (int)quat(multiplier); }
+  float Time::trip_i(float multiplier = 1) { return (int)trip(multiplier); }
+  float Time::beat_i(float multiplier = 1) { return (int)beat(multiplier); }
+  float Time::bar_i(float multiplier = 1) { return (int)bar(multiplier); }
 
   void Time::initMusicTime() {
     float beatsPerSecond = _bpm / 60.;
