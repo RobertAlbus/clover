@@ -128,11 +128,14 @@ Frame<1> WavetableOsc::tick(Frame<0> input) {
 }
 
 float WavetableOsc::normalizeReadIndex(float index) {
-  float wtSize = (float)settings.current.wavetableSize;
-  return fmod(fmod(index, wtSize) + wtSize, wtSize);
+  return fmod(index, (float)settings.current.wavetableSize);
 }
 
-float WavetableOsc::normalizePhase(float phase) { return fmod(fmod(phase, 1.) + 1., 1); }
+float WavetableOsc::normalizePhase(float phase) { 
+  phase = fmod(phase, 1);
+  if (phase < 0) phase += 1;
+  return phase;
+}
 
 float WavetableOsc::calculateReadIndexIncrement(float freq) {
   return freq * ((float)settings.current.wavetableSize) /
