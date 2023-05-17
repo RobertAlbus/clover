@@ -26,6 +26,30 @@ set(CMAKE_BUILD_TYPE Debug)
 # set(CMAKE_BUILD_TYPE RelWithDebInfo)
 endif()
 
+# Enable SSE, AVX if the target architecture supports it
+if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANG)
+    set(ENABLE_SSE OFF)
+    set(ENABLE_AVX OFF)
+
+    if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "(x86)|(X86)|(amd64)|(AMD64)")
+        set(ENABLE_SSE ON)
+    endif()
+
+    if(${CMAKE_SYSTEM_PROCESSOR} STREQUAL "x86_64")
+        set(ENABLE_AVX ON)
+    endif()
+
+    if(ENABLE_SSE)
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -msse")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse")
+    endif()
+
+    if(ENABLE_AVX)
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -mavx")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mavx")
+    endif()
+endif()
+
 
 ########
 # external libraries
