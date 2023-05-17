@@ -26,10 +26,10 @@ public:
   float beat(float multiplier = 1.);
   float bar(float multiplier = 1.);
 
-  float quat_i(float multiplier = 1.);
-  float trip_i(float multiplier = 1.);
-  float beat_i(float multiplier = 1.);
-  float bar_i(float multiplier = 1.);
+  int quat_i(float multiplier = 1.);
+  int trip_i(float multiplier = 1.);
+  int beat_i(float multiplier = 1.);
+  int bar_i(float multiplier = 1.);
 
   SampleClock *sampleClock;
 
