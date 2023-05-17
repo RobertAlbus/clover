@@ -36,6 +36,16 @@ void Adsr::set(size_t a, size_t d, float s, size_t r) {
   release(r);
 }
 
+void Adsr::set(float a, float d, float s, float r) {
+  size_t a_rounded = (size_t) std::round(a);
+  size_t d_rounded = (size_t) std::round(a + d) - a_rounded;
+  size_t r_rounded = (size_t) std::round(r);
+  attack(a);
+  decay(d);
+  sustain(s);
+  release(r);
+}
+
 size_t Adsr::attack() { return settings.current.attack; }
 void Adsr::attack(size_t a) { settings.current.attack = std::max((size_t)1, a); }
 

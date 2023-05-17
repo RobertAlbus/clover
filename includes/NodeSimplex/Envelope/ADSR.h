@@ -26,6 +26,7 @@ public:
   Adsr(AdsrSettings initialSettings);
 
   void set(size_t a, size_t d, float s, size_t r);
+  void set(float a, float d, float s, float r);
 
   size_t attack();
   void attack(size_t a);
