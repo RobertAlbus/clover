@@ -58,8 +58,14 @@ void Adsr::keyOn() {
 
 void Adsr::keyOff() {
   AdsrSettings &s = settings.current;
+  float currentValue = frames.current[0] / _gain;
 
-  envelope.set(frames.current[0], 0., s.release);
+  float percentOfSustain = currentValue / s.sustain;
+
+  // todo: add a test for early release scenario
+  float releaseDuration = s.release * std::min(percentOfSustain, 1.f);
+
+  envelope.set(currentValue, 0., releaseDuration);
 
   settings.current.keyOn = false;
   settings.current.startTime = _currentClockTime;
