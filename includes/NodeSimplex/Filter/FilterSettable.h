@@ -15,8 +15,10 @@ public:
   virtual void set(float f, float Q) = 0;
 
   virtual void freq(float f) = 0;
+  virtual float freq() = 0;
 
   virtual void reso(float Q) = 0;
+  virtual float reso() = 0;
 
   virtual void lowPass() = 0;
 

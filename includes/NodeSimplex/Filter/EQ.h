@@ -30,8 +30,10 @@ public:
   }
 
   void freq(float f) { setFunction(f, reso_, dbGain_, Base::sampleRate); }
+  float freq() { return freq_; }
 
   void reso(float Q) { setFunction(freq_, Q, dbGain_, Base::sampleRate); }
+  float reso() { return reso_; }
 
   void dbGain(float dbGain) {
     setFunction(freq_, reso_, dbGain, Base::sampleRate);

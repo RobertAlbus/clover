@@ -18,8 +18,10 @@ public:
   void set(float f, float Q, float dbGain);
 
   void freq(float f);
+  float freq();
 
   void reso(float Q);
+  float reso();
 
   void dbGain(float dbGain);
 

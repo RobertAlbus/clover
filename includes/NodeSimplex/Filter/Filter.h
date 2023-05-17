@@ -28,8 +28,10 @@ public:
   void set(float f, float Q) override { setFunction(f, Q, Base::sampleRate); }
 
   void freq(float f) override { setFunction(f, reso_, Base::sampleRate); }
+  float freq() override {return freq_; }
 
   void reso(float Q) override { setFunction(freq_, Q, Base::sampleRate); }
+  float reso() override {return reso_; }
 
   void lowPass() override {
     setFunction = [this](float freq, float reso, float sampleRate) {
