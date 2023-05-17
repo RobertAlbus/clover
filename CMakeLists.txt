@@ -10,7 +10,6 @@ configure_file(includes/Config.h.in Config.h)
 # Clover variables
 
 set(CLOVER_BUILD_DEMO ON)
-set(CLOVER_BUILD_TESTS ON)
 
 
 ########
