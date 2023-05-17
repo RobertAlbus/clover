@@ -11,3 +11,6 @@ enum TriggerState { On, Off, Pass };
 
 void TriggerableFacilitator(const TriggerState &data,
                             std::vector<Triggerable *> &targets);
+
+struct STSQ_Triggerable
+    : STSQ<TriggerState, Triggerable, TriggerableFacilitator> {};
