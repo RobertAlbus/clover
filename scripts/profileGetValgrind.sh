@@ -1,6 +1,7 @@
 #!/bin/bash
 
 rm -fr ./build/CloverDemo;
-sh scripts/buildNoRun.sh;
+cmake -B build -G "Unix Makefiles" -DPROFILING_MODE=true;
+make -C build;
 LD_PRELOAD=/usr/local/lib/libprofiler.so CPUPROFILE=./test.prof ./build/CloverDemo && \
-sh scripts/profileView.sh;
+pprof -web -cum ./build/CloverDemo ./test.prof

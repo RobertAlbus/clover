@@ -17,10 +17,14 @@ set(CLOVER_BUILD_DEMO ON)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++20")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Ofast -lprofiler")
-# set(CMAKE_BUILD_TYPE Debug)
+
+if(NOT PROFILING_MODE)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Ofast")
+else()
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -lprofiler")
+set(CMAKE_BUILD_TYPE Debug)
 # set(CMAKE_BUILD_TYPE RelWithDebInfo)
+endif()
 
 
 ########
