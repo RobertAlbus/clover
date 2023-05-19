@@ -4,12 +4,14 @@
 cmake_minimum_required(VERSION 3.14)
 project(Clover VERSION 2.1)
 configure_file(includes/Config.h.in Config.h)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 
 ########
 # Clover variables
 
 set(CLOVER_BUILD_DEMO ON)
+
 
 
 ########
