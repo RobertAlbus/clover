@@ -121,8 +121,10 @@ int main(int argc, char *argv[]) {
 
       float currentQuat = time.currentQuat();
 
-      if (fmod(currentQuat, 8.f) == 0.f || fmod(currentQuat, 8.f) == 3.f ||
-          fmod(currentQuat, 8.f) == 6.f) {
+      float currentSixteenthInTwoBeats = fmod(currentQuat, 8.f);
+      if (currentSixteenthInTwoBeats == 0.f ||
+          currentSixteenthInTwoBeats == 3.f ||
+          currentSixteenthInTwoBeats == 6.f) {
         osc.phase(0);
         mod.phase(0);
         adsr.keyOn();
