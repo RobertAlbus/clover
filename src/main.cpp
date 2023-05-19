@@ -16,6 +16,8 @@
 
 #include "Clover.h"
 
+#include "NxOscStsqDemo.h"
+
 using namespace Clover::IO;
 using namespace Clover::NodeSimplex;
 
@@ -80,6 +82,12 @@ int main(int argc, char *argv[]) {
   Adapter::MapAdapter<1, 4> adapter2(adapter1.settings.current);
   Adapter::NullAdapter<4, 1> nullAdapter;
   adapter1 >> nullAdapter >> blackHole;
+
+  OscAndStSq testPattern(time);
+
+  testPattern.instrument >> interface.rootNode;
+  testPattern.stsq_pitch >> *(new Adapter::NullAdapter<0,2>) >> interface.rootNode;
+  testPattern.stsq_trigger >> *(new Adapter::NullAdapter<0,2>) >> interface.rootNode;
 
   bool isProfilingMode = false;
   if (isProfilingMode) {

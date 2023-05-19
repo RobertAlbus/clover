@@ -9,6 +9,8 @@
 #include "IO.h"
 #include "Midi.h"
 #include "NodeSimplex.h"
+
+#include "NodeComplex.h"
 #include "Util.h"
 
 #include "_Test.h"
