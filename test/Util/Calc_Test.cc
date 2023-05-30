@@ -2,6 +2,21 @@
 
 #include "Clover.h"
 
+TEST(Util_Calc, ShouldCalculateFreqByOctaveDifference) {
+  EXPECT_EQ(Calc::scaleFreqByOctave(-1, 100, 2), 25);
+  EXPECT_EQ(Calc::scaleFreqByOctave(-1, 100, 1), 50);
+  EXPECT_EQ(Calc::scaleFreqByOctave(1, 100, 1), 200);
+  EXPECT_EQ(Calc::scaleFreqByOctave(1, 100, 2), 400);
+}
+
+TEST(Util_Calc, ShouldCalculateOctaveByFreqDifference) {
+  EXPECT_EQ(Calc::octaveByFreqDifference(100, 25), -2);
+  EXPECT_EQ(Calc::octaveByFreqDifference(100, 50), -1);
+  EXPECT_EQ(Calc::octaveByFreqDifference(100, 100), 0);
+  EXPECT_EQ(Calc::octaveByFreqDifference(100, 200), 1);
+  EXPECT_EQ(Calc::octaveByFreqDifference(100, 400), 2);
+}
+
 TEST(Util_Calc, ShouldCalculateFreqDifferenceBySemitone) {
   EXPECT_EQ(Calc::freqBySemitoneDifference(1000, 12), 2000);
   EXPECT_EQ(Calc::freqBySemitoneDifference(1000, -12), 500);

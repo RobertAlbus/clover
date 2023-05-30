@@ -86,8 +86,10 @@ int main(int argc, char *argv[]) {
   OscAndStSq testPattern(time);
 
   testPattern.instrument >> interface.rootNode;
-  testPattern.stsq_pitch >> *(new Adapter::NullAdapter<0,2>) >> interface.rootNode;
-  testPattern.stsq_trigger >> *(new Adapter::NullAdapter<0,2>) >> interface.rootNode;
+  testPattern.stsq_pitch >> *(new Adapter::NullAdapter<0, 2>) >>
+      interface.rootNode;
+  testPattern.stsq_trigger >> *(new Adapter::NullAdapter<0, 2>) >>
+      interface.rootNode;
 
   bool isProfilingMode = false;
   if (isProfilingMode) {

@@ -118,12 +118,13 @@ struct OscNx : public Clover::Graph::Node<0, 2>, Pitchable, Triggerable {
 
     float ff = filter.freq();
     float fr = filter.reso();
-    Time t(160, 48000, nullptr);
-    // printf("\ncut - Q | elapsed - time | ADSR |  %f hz - %f Q | %d - %d | %f", 
-    //   ff, 
-    //   fr, 
-    //   _currentClockTime % t.beat_i(), 
-    //   _currentClockTime, 
+    // Time t(160, 48000, nullptr);
+    // printf("\ncut - Q | elapsed - time | ADSR |  %f hz - %f Q | %d - %d |
+    // %f",
+    //   ff,
+    //   fr,
+    //   _currentClockTime % t.beat_i(),
+    //   _currentClockTime,
     //   filterCut.adsrValue()
     // );
 
@@ -161,6 +162,9 @@ struct OscNx : public Clover::Graph::Node<0, 2>, Pitchable, Triggerable {
   }
 
   void updateFilterMod() {
+    // float fff = getLogScaledFreq(filterCutoff_, filterCut.adsr.gain(),
+    // filterCut.adsrValue());
+
     float filterCutoff =
         filterCutoff_ + filterCut.adsrValue() + filterCut.lfoValue();
 

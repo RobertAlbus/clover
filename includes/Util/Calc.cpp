@@ -3,6 +3,32 @@
 
 namespace Clover::Util::Calc {
 
+float linearToLog(float linearValue, float minValue, float maxValue) {
+    float logMinValue = std::log2(minValue);
+    float logMaxValue = std::log2(maxValue);
+
+    float logValue = linearValue * (logMaxValue - logMinValue) + logMinValue;
+
+    return std::pow(2.f, logValue);
+}
+
+// this is incorrecto
+// float LinearLogCurve(float value, float minValue, float maxValue) {
+//     const float exponent = 2.3026f; // log10(10.0f)
+//     const float scaleFactor = 0.11111111f; // Reciprocal of 1/9
+
+//     float scaledValue = (std::exp(exponent * value) - 1.0f) * scaleFactor;
+//     return scaledValue * (maxValue - minValue) + minValue;
+// }
+
+float scaleFreqByOctave(float linearModulation, float f_center, float octave_range) {
+    return f_center * powf(2.f, octave_range * linearModulation);
+}
+
+float octaveByFreqDifference(float centerFreq, float newFreq) {
+    return log2f(newFreq / centerFreq);
+}
+
 float freqBySemitoneDifference(float freq, float semitones) {
     return freq * pow(2.0, semitones / 12.0);
 }

@@ -96,9 +96,10 @@ struct OscAndStSq {
     instrument.voices[2].gain(0.8);
 
     instrument.filter.lowPass();
-    instrument.filterCutoff_ = 100;
-    instrument.filterCut.adsr.set(time.beat(1), 0, 1, time.beat());
-    instrument.filterCut.adsr.gain(1000);
+    instrument.filterCutoff_ = 10;
+    instrument.filterReso_ = 2;
+    instrument.filterCut.adsr.set(time.beat(4), 0, 1, time.beat());
+    instrument.filterCut.adsr.gain(10000);
 
     instrument.amplitude.adsr.set(time.quat(1),0,1,time.quat(2));
     instrument.gain(0.6);
