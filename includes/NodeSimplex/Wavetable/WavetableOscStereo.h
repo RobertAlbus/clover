@@ -47,12 +47,14 @@ private:
 
   float stereoDetune_L_semi;
   float stereoDetune_R_semi;
+  float stereoDetuneSemitones; // used for a quick pre-calculation check
 
   float freq_;
 
   Frame<2> tick(Frame<0> input);
 
   void connectNodes();
+  void updateFreq();
 };
 
 } // namespace Clover::NodeSimplex::Wavetable

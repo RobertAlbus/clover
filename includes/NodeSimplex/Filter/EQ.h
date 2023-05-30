@@ -19,23 +19,31 @@ class EQ : public EQSettable,
            public Base,
            public Node<__arity, __arity> {
 public:
-  EQ() : biquad() {
-    coefficientStrategy = std::make_unique<
-        Clover::Filter::ResonantButterworthCoefficientStrategy<Sample>>();
-    resetCoefficients();
-  }
+  EQ() : biquad() { butterworthResonant(); }
 
   void set(float f, float Q, float dbGain) {
+    if (f == freq_ && Q == reso_ && dbGain == dbGain_)
+      return;
     setFunction(f, Q, dbGain, Base::sampleRate);
   }
 
-  void freq(float f) { setFunction(f, reso_, dbGain_, Base::sampleRate); }
   float freq() { return freq_; }
+  void freq(float f) {
+    if (f == freq_)
+      return;
+    setFunction(f, reso_, dbGain_, Base::sampleRate);
+  }
 
-  void reso(float Q) { setFunction(freq_, Q, dbGain_, Base::sampleRate); }
   float reso() { return reso_; }
+  void reso(float Q) {
+    if (Q == reso_)
+      return;
+    setFunction(freq_, Q, dbGain_, Base::sampleRate);
+  }
 
   void dbGain(float dbGain) {
+    if (dbGain == dbGain_)
+      return;
     setFunction(freq_, reso_, dbGain, Base::sampleRate);
   }
 

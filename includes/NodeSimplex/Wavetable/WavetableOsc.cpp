@@ -24,7 +24,9 @@ WavetableOsc::WavetableOsc(std::shared_ptr<Wavetable> wavetable, float freq, flo
   settings.initial.wavetableSize = (float)wavetable->size();
   settings.initial.freq = freq;
   settings.initial.phase = normalizePhase(phase);
+  settings.initial.phasePreCalculationCache = settings.initial.phase;
   settings.initial.phaseOffset = normalizePhase(phaseOffset);
+  settings.initial.phaseOffsetPreCalculationCache = settings.initial.phaseOffset;
 
   settings.initial.readIndexIncrement = calculateReadIndexIncrement(freq);
   settings.initial.readIndex = 0.;
@@ -35,6 +37,7 @@ WavetableOsc::WavetableOsc(std::shared_ptr<Wavetable> wavetable, float freq, flo
 }
 
 void WavetableOsc::phase(float phase) {
+  if (phase == settings.current.phasePreCalculationCache) return;
   phase = normalizePhase(phase);
   settings.current.phase = phase;
   settings.current.readIndex = (settings.current.wavetableSize) * phase;
@@ -45,6 +48,7 @@ float WavetableOsc::phase() {
 }
 
 void WavetableOsc::phaseOffset(float offset) {
+  if (offset == settings.current.phaseOffsetPreCalculationCache) return;
   settings.current.phaseOffset = normalizePhase(offset);
   settings.current.readIndexOffset = calculateReadIndexOffset(offset);
 }
@@ -52,9 +56,11 @@ void WavetableOsc::phaseOffset(float offset) {
 float WavetableOsc::phaseOffset() { return settings.current.phaseOffset; }
 
 void WavetableOsc::freq(float freq) {
+  if (settings.current.freq == freq || settings.current.freq == freq * -1.f) return;
+
   freq = fabs(freq);
   settings.current.freq = freq;
-  settings.current.readIndexIncrement = calculateReadIndexIncrement(freq);
+  settings.current.readIndexIncrement = calculateReadIndexIncrement(freq); 
 }
 
 float WavetableOsc::freq() { return settings.current.freq; }
@@ -105,15 +111,14 @@ void WavetableOsc::noise(int size) {
 }
 
 Frame<1> WavetableOsc::tick(Frame<0> input) {
-  float direction = Clover::Util::Calc::sign(settings.current.freq);
   float nextIndex =
-      normalizeReadIndex(floor(settings.current.readIndex) + direction);
+      normalizeReadIndex(floor(settings.current.readIndex + 1));
 
   Wavetable &wt = *(settings.current.wavetable);
 
   float value =
       std::lerp(wt[(int)settings.current.readIndex], wt[(int)nextIndex],
-                fmod(settings.current.readIndex, 1)
+                remainder(settings.current.readIndex, 1.f)
       );
 
   Frame<1> f{value};
@@ -128,23 +133,22 @@ Frame<1> WavetableOsc::tick(Frame<0> input) {
 }
 
 float WavetableOsc::normalizeReadIndex(float index) {
-  return fmod(index, (float)settings.current.wavetableSize);
+  return fmod(index, settings.current.wavetableSize);
 }
 
 float WavetableOsc::normalizePhase(float phase) { 
-  phase = fmod(phase, 1);
+  phase = fmod(phase, 1.f);
   if (phase < 0) phase += 1;
+
   return phase;
 }
 
 float WavetableOsc::calculateReadIndexIncrement(float freq) {
-  return freq * ((float)settings.current.wavetableSize) /
-          ((float)Base::sampleRate);
+  return freq * settings.current.wavetableSize / Base::sampleRate;
 }
 
 float WavetableOsc::calculateReadIndexOffset(float phaseOffset) {
-  return ((float)settings.current.wavetableSize) *
-          normalizePhase(phaseOffset);
+  return settings.current.wavetableSize * normalizePhase(phaseOffset);
 }
 
 void WavetableOsc::printSettings(WavetableOscSettings &settings) {

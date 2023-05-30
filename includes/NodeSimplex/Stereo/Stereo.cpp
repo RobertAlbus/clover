@@ -22,12 +22,13 @@ void StereoImage::connectNodes() {
 }
 
 void StereoImage::spread(float s) {
+  if (_spreadReadOnly == s) return;
   _spreadReadOnly = s;
 
   s = fabs(_spreadReadOnly);
-  float neutralGain = Calc::dbtol(-4.5);
-  float gainUp = std::lerp(neutralGain, 0., s);
-  float gainDown = std::lerp(neutralGain, 1., s);
+  float neutralGain = Calc::dbtol(-4.5f);
+  float gainUp = std::lerp(neutralGain, 0.f, s);
+  float gainDown = std::lerp(neutralGain, 1.f, s);
 
   mid.gain(_spreadReadOnly < 0 ? gainUp : gainDown);
   side.gain(_spreadReadOnly < 0 ? gainDown : gainUp);

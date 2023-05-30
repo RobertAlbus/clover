@@ -19,19 +19,27 @@ class Filter : public FilterSettable,
                public Base,
                public Node<__arity, __arity> {
 public:
-  Filter() : biquad() {
-    coefficientStrategy = std::make_unique<
-        Clover::Filter::ResonantButterworthCoefficientStrategy<Sample>>();
-    resetCoefficients();
+  Filter() : biquad() { butterworthResonant(); }
+
+  void set(float f, float Q) override {
+    if (f == freq_ && Q == reso_)
+      return;
+    setFunction(f, Q, Base::sampleRate);
   }
 
-  void set(float f, float Q) override { setFunction(f, Q, Base::sampleRate); }
+  float freq() override { return freq_; }
+  void freq(float f) override {
+    if (f == freq_)
+      return;
+    setFunction(f, reso_, Base::sampleRate);
+  }
 
-  void freq(float f) override { setFunction(f, reso_, Base::sampleRate); }
-  float freq() override {return freq_; }
-
-  void reso(float Q) override { setFunction(freq_, Q, Base::sampleRate); }
-  float reso() override {return reso_; }
+  float reso() override { return reso_; }
+  void reso(float Q) override {
+    if (Q == reso_)
+      return;
+    setFunction(freq_, Q, Base::sampleRate);
+  }
 
   void lowPass() override {
     setFunction = [this](float freq, float reso, float sampleRate) {

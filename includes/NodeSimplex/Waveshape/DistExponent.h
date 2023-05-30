@@ -23,7 +23,7 @@ private:
     for (int i = 0; i < __arity; i++) {
       float sign = Calc::sign(input[i]);
       float abs = fabs(input[i]);
-      f[i] = pow(abs, 1. - _exponent) * sign;
+      f[i] = pow(abs, 1.f - _exponent) * sign;
     }
 
     return f;

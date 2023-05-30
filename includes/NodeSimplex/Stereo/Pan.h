@@ -11,14 +11,16 @@ namespace Clover::NodeSimplex::Stereo {
 
 template <size_t __arityInput> class Pan : public Node<__arityInput, 2> {
 public:
-  Pan(float p = 0) : Node<__arityInput, 2>(), _pan(0) { pan(p); }
+  Pan(float p = 0)
+      : Node<__arityInput, 2>(), _pan(0), midGain(Calc::dbtol(-4.5)) {
+    pan(p);
+  }
 
   void pan(float p) {
-    _pan = (float)std::clamp((double)p, -1., 1.);
+    _pan = std::clamp<float>(p, -1.f, 1.f);
     p = fabs(_pan);
-    float midGain = Calc::dbtol(-4.5);
-    float panDown = std::lerp(midGain, 0., p);
-    float panUp = std::lerp(midGain, 1., p);
+    float panDown = std::lerp(midGain, 0.f, p);
+    float panUp = std::lerp(midGain, 1.f, p);
 
     _coefficientL = _pan < 0 ? panUp : panDown;
     _coefficientR = _pan < 0 ? panDown : panUp;
@@ -28,6 +30,7 @@ public:
 
 protected:
   float _pan;
+  float midGain;
   float _coefficientL;
   float _coefficientR;
 };

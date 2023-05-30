@@ -11,11 +11,11 @@ template <FloatingPoint T> struct IIRFilterCoefficients {
   T a2;
 
   void normalize() {
-    T a0_inv = 1.0 / a0;
+    T a0_inv = T(1) / a0;
     b0 *= a0_inv;
     b1 *= a0_inv;
     b2 *= a0_inv;
-    a0 = 1.0;
+    a0 = T(1);
     a1 *= a0_inv;
     a2 *= a0_inv;
   }

@@ -19,10 +19,13 @@ WavetableOscStereo::WavetableOscStereo()
 
 // detune from each other
 void WavetableOscStereo::stereoDetune(float semitones) {
+  if (semitones == stereoDetuneSemitones) return;
+  
+  stereoDetuneSemitones = semitones;
   stereoDetune_R_semi = 0.5 * semitones;
   stereoDetune_L_semi = stereoDetune_R_semi * -1;
 
-  freq(freq_);
+  updateFreq();
 }
 
 float WavetableOscStereo::stereoDetune() { return stereoDetune_L_semi * 2; }
@@ -44,9 +47,14 @@ void WavetableOscStereo::phaseOffset(float offset) {
 float WavetableOscStereo::phaseOffset() { return oscL.phaseOffset(); }
 
 void WavetableOscStereo::freq(float freq) {
+  if (freq == freq_) return;
   freq_ = freq;
-  oscL.freq(Calc::freqBySemitoneDifference(freq, stereoDetune_L_semi));
-  oscR.freq(Calc::freqBySemitoneDifference(freq, stereoDetune_R_semi));
+  updateFreq();
+}
+
+void WavetableOscStereo::updateFreq() {
+  oscL.freq(Calc::freqBySemitoneDifference(freq_, stereoDetune_L_semi));
+  oscR.freq(Calc::freqBySemitoneDifference(freq_, stereoDetune_R_semi));
 }
 
 float WavetableOscStereo::freq() { return freq_; }

@@ -18,18 +18,18 @@ struct ChebyshevType1CoefficientStrategy : public IIRCoefficientStrategy<T> {
   T stopBandAttenuationDb = T(60);
 
   IIRFilterCoefficients<T> lowPass(T cutoff_hz, T Q, T samplerate_hz) {
-    T ripple = std::sqrt(std::pow(10, 0.1 * Q) - 1);
-    T epsilon = std::sqrt(std::pow(10, 0.1 * ripple) - 1);
-    T A = std::pow(10, -0.05 * ripple);
-    T omega_c = 2 * M_PI * cutoff_hz / samplerate_hz;
-    T alpha = 1 / std::sinh(std::asinh(1 / epsilon) / 2);
+    T ripple = std::sqrt(std::pow(T(10), T(0.1) * Q) - T(1));
+    T epsilon = std::sqrt(std::pow(T(10), T(0.1) * ripple) - T(1));
+    T A = std::pow(T(10), -0.05 * ripple);
+    T omega_c = T(2) * M_PI * cutoff_hz / samplerate_hz;
+    T alpha = T(1) / std::sinh(std::asinh(T(1) / epsilon) / T(2));
 
-    T b0 = A * (1 - alpha);
-    T b1 = 2 * A * (alpha - std::cos(omega_c));
-    T b2 = A * (1 - alpha);
-    T a0 = 1 + alpha;
-    T a1 = -2 * std::cos(omega_c);
-    T a2 = 1 - alpha;
+    T b0 = A * (T(1) - alpha);
+    T b1 = T(2) * A * (alpha - std::cos(omega_c));
+    T b2 = A * (T(1) - alpha);
+    T a0 = T(1) + alpha;
+    T a1 = T(-2) * std::cos(omega_c);
+    T a2 = T(1) - alpha;
 
     IIRFilterCoefficients<T> coeffs{b0, b1, b2, a0, a1, a2};
     coeffs.normalize();
@@ -51,14 +51,14 @@ struct ChebyshevType1CoefficientStrategy : public IIRCoefficientStrategy<T> {
 
     T k = std::tan(M_PI * cutoff_hz / samplerate_hz) /
           std::tan(M_PI * (samplerate_hz - cutoff_hz) / samplerate_hz);
-    T denominator = k * k + 2 * k + 1;
+    T denominator = k * k + T(2) * k + T(1);
 
     T b0 = lp_coefficients->b0 / denominator;
-    T b1 = -2 * lp_coefficients->b1 / denominator;
+    T b1 = T(-2) * lp_coefficients->b1 / denominator;
     T b2 = lp_coefficients->b2 / denominator;
     T a0 = lp_coefficients->a0;
-    T a1 = (2 * (k * k - 1)) / denominator;
-    T a2 = (k * k - 2 * k + 1) / denominator;
+    T a1 = (T(2) * (k * k - T(1))) / denominator;
+    T a2 = (k * k - T(2) * k + T(1)) / denominator;
 
     IIRFilterCoefficients<T> coeffs{b0, b1, b2, a0, a1, a2};
     coeffs.normalize();
@@ -87,15 +87,15 @@ struct ChebyshevType1CoefficientStrategy : public IIRCoefficientStrategy<T> {
 
   IIRFilterCoefficients<T> notch(T cutoff_hz, T Q, T samplerate_hz) {
     IIRFilterCoefficients<T> lp_coefficients =
-        lowPass(cutoff_hz / 2, Q, samplerate_hz);
+        lowPass(cutoff_hz / T(2), Q, samplerate_hz);
     IIRFilterCoefficients<T> hp_coefficients =
-        highPass(cutoff_hz / 2, Q, samplerate_hz, lp_coefficients);
+        highPass(cutoff_hz / T(2), Q, samplerate_hz, lp_coefficients);
 
     T b0 = lp_coefficients.b0 + hp_coefficients.b0;
     T b1 = lp_coefficients.b1 + hp_coefficients.b1;
     T b2 = lp_coefficients.b2 + hp_coefficients.b2;
     T a0 = T(1);
-    T a1 = (lp_coefficients.a1 + hp_coefficients.a1) / 2;
+    T a1 = (lp_coefficients.a1 + hp_coefficients.a1) / T(2);
     T a2 = lp_coefficients.a2 * hp_coefficients.a2;
 
     IIRFilterCoefficients<T> coeffs{b0, b1, b2, a0, a1, a2};
@@ -107,16 +107,16 @@ struct ChebyshevType1CoefficientStrategy : public IIRCoefficientStrategy<T> {
   IIRFilterCoefficients<T> lowShelf(T cutoff_hz, T Q, T gain_db,
                                     T samplerate_hz) {
     IIRFilterCoefficients<T> lp_coefficients =
-        lowPass(cutoff_hz / 2, Q, samplerate_hz);
+        lowPass(cutoff_hz / T(2), Q, samplerate_hz);
     IIRFilterCoefficients<T> hp_coefficients =
-        highPass(cutoff_hz / 2, Q, samplerate_hz, lp_coefficients);
+        highPass(cutoff_hz / T(2), Q, samplerate_hz, lp_coefficients);
 
-    T linear_gain = std::pow(10, gain_db / 20);
+    T linear_gain = std::pow(T(10), gain_db / 20);
     T b0 = lp_coefficients.b0 * linear_gain + hp_coefficients.b0;
     T b1 = lp_coefficients.b1 * linear_gain + hp_coefficients.b1;
     T b2 = lp_coefficients.b2 * linear_gain + hp_coefficients.b2;
     T a0 = T(1);
-    T a1 = (lp_coefficients.a1 + hp_coefficients.a1) / 2;
+    T a1 = (lp_coefficients.a1 + hp_coefficients.a1) / T(2);
     T a2 = lp_coefficients.a2 * hp_coefficients.a2;
 
     IIRFilterCoefficients<T> coeffs{b0, b1, b2, a0, a1, a2};
@@ -127,16 +127,16 @@ struct ChebyshevType1CoefficientStrategy : public IIRCoefficientStrategy<T> {
   IIRFilterCoefficients<T> highShelf(T cutoff_hz, T Q, T gain_db,
                                      T samplerate_hz) {
     IIRFilterCoefficients<T> lp_coefficients =
-        lowPass(cutoff_hz / 2, Q, samplerate_hz);
+        lowPass(cutoff_hz / T(2), Q, samplerate_hz);
     IIRFilterCoefficients<T> hp_coefficients =
-        highPass(cutoff_hz / 2, Q, samplerate_hz, lp_coefficients);
+        highPass(cutoff_hz / T(2), Q, samplerate_hz, lp_coefficients);
 
-    T linear_gain = std::pow(10, gain_db / 20);
+    T linear_gain = std::pow(T(10), gain_db / T(20));
     T b0 = hp_coefficients.b0 * linear_gain - lp_coefficients.b0;
     T b1 = hp_coefficients.b1 * linear_gain - lp_coefficients.b1;
     T b2 = hp_coefficients.b2 * linear_gain - lp_coefficients.b2;
     T a0 = T(1);
-    T a1 = (lp_coefficients.a1 + hp_coefficients.a1) / 2;
+    T a1 = (lp_coefficients.a1 + hp_coefficients.a1) / T(2);
     T a2 = lp_coefficients.a2 * hp_coefficients.a2;
 
     IIRFilterCoefficients<T> coeffs{b0, b1, b2, a0, a1, a2};
@@ -152,19 +152,19 @@ struct ChebyshevType1CoefficientStrategy : public IIRCoefficientStrategy<T> {
         highPass(cutoff_hz, Q, samplerate_hz, lp_coefficients);
 
     T K = std::tan(M_PI * cutoff_hz / samplerate_hz);
-    T V = std::pow(10, gain_db / 20);
+    T V = std::pow(T(10), gain_db / 20);
 
-    T b0 = (1 + K / Q + V * K * K) * lp_coefficients.b0 /
-           (1 + K / Q / lp_coefficients.a1 + K * K / lp_coefficients.a2);
-    T b1 = (2 * (V * K * K - 1) * lp_coefficients.b0) /
-           (1 + K / Q / lp_coefficients.a1 + K * K / lp_coefficients.a2);
-    T b2 = ((1 - K / Q + V * K * K) * lp_coefficients.b0) /
-           (1 + K / Q / lp_coefficients.a1 + K * K / lp_coefficients.a2);
+    T b0 = (T(1) + K / Q + V * K * K) * lp_coefficients.b0 /
+           (T(1) + K / Q / lp_coefficients.a1 + K * K / lp_coefficients.a2);
+    T b1 = (T(2) * (V * K * K - T(1)) * lp_coefficients.b0) /
+           (T(1) + K / Q / lp_coefficients.a1 + K * K / lp_coefficients.a2);
+    T b2 = ((T(1) - K / Q + V * K * K) * lp_coefficients.b0) /
+           (T(1) + K / Q / lp_coefficients.a1 + K * K / lp_coefficients.a2);
     T a0 = T(1);
-    T a1 = (2 * (K * K / lp_coefficients.a2 - 1)) /
-           (1 + K / Q / lp_coefficients.a1 + K * K / lp_coefficients.a2);
-    T a2 = (K / Q / lp_coefficients.a1 + K * K / lp_coefficients.a2 - 1) /
-           (1 + K / Q / lp_coefficients.a1 + K * K / lp_coefficients.a2);
+    T a1 = (T(2) * (K * K / lp_coefficients.a2 - T(1))) /
+           (T(1) + K / Q / lp_coefficients.a1 + K * K / lp_coefficients.a2);
+    T a2 = (K / Q / lp_coefficients.a1 + K * K / lp_coefficients.a2 - T(1)) /
+           (T(1) + K / Q / lp_coefficients.a1 + K * K / lp_coefficients.a2);
 
     IIRFilterCoefficients<T> coefficients{b0, b1, b2, a0, a1, a2};
 

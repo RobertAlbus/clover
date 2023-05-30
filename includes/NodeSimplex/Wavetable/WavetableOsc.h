@@ -14,7 +14,9 @@ typedef std::vector<Sample> Wavetable;
 struct WavetableOscSettings {
   float freq;
   float phase;
+  float phasePreCalculationCache;
   float phaseOffset;
+  float phaseOffsetPreCalculationCache;
   float readIndex;
   float readIndexIncrement;
   float readIndexOffset;
