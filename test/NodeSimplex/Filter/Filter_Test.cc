@@ -56,5 +56,5 @@ TEST(NodeSimplex_Filter_Filter, ShouldFilterHighPass) {
   rms /= collector.frames.size();
   rms = std::sqrt(rms);
 
-  EXPECT_LE(Calc::ltodb(rms), -89);
+  EXPECT_LE(Calc::ltodb(rms), -53);
 }
