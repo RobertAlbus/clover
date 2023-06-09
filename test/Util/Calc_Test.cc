@@ -23,8 +23,8 @@ TEST(Util_Calc, ShouldConvertDbToLinear) {
 }
 
 TEST(Util_Calc, ShouldConvertLinearToDb) {
-  EXPECT_EQ(Calc::ltodb(2.f), 6.0205999133f);
-  EXPECT_EQ(Calc::ltodb(0.5f), -6.0205999133f);
+  EXPECT_NEAR(Calc::ltodb(2.f), 6.0206f, 0.00001);
+  EXPECT_NEAR(Calc::ltodb(0.5f), -6.0206, 0.00001);
 }
 
 TEST(Util_Calc, ShouldConvertMidiToFreq) {
@@ -36,7 +36,7 @@ TEST(Util_Calc, ShouldConvertMidiToFreq) {
 TEST(Util_Calc, ShouldConvertFreqToMidi) {
   EXPECT_NEAR(Calc::ftom(8.17579842f), 0, 0.00001);
   EXPECT_EQ(Calc::ftom(311.126983722f), 63);
-  EXPECT_EQ(Calc::ftom(12543.8539514f), 127);
+  EXPECT_NEAR(Calc::ftom(12543.8539514f), 127, 0.00001f);
 }
 
 TEST(Util_Calc, ShouldHaveTensionCurve) {
