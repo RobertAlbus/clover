@@ -13,7 +13,7 @@ float tension(float value, float tension) {
 
 float sign(float value) { return value < 0. ? -1.f : 1.f; }
 
-float ltodb(float x) { return log10f(fabs(x)) * 20.f; }
+float ltodb(float x) { return log10f(fabsf(x)) * 20.f; }
 
 float dbtol(float x) { return powf(10.f, x / 20.f); }
 
