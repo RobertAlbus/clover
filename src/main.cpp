@@ -57,9 +57,10 @@ int main(int argc, char *argv[]) {
 
   Filter::EQ<2> EQ;
   EQ.peakingEQ();
-  EQ.set(100., 0.7, 5);
+  EQ.set(80., 0.7, -22);
 
   osc >> filter >> EQ >> interface.rootNode;
+  EQ.gain(0.33);
 
   Wavetable::WavetableOsc lfo;
   lfo.sine(1024);
@@ -67,7 +68,7 @@ int main(int argc, char *argv[]) {
   lfo.phase(0.75);
   lfo >> blackHole;
 
-  Envelope::AdsrSettings adsrSettings(0, time.quat(), 0.0f, time.beat());
+  Envelope::AdsrSettings adsrSettings(time.quat(0.22), time.quat(), 0.0f, time.beat());
   Envelope::Adsr adsr(adsrSettings);
   adsr >> blackHole;
 
@@ -86,8 +87,13 @@ int main(int argc, char *argv[]) {
   OscAndStSq testPattern(time);
 
   testPattern.instrument >> interface.rootNode;
-  testPattern.stsq_pitch >> *(new Adapter::NullAdapter<0,2>) >> interface.rootNode;
-  testPattern.stsq_trigger >> *(new Adapter::NullAdapter<0,2>) >> interface.rootNode;
+  testPattern.kick >> interface.rootNode;
+  testPattern.stsq_pitch >> *(new Adapter::NullAdapter<0, 2>) >>
+      interface.rootNode;
+  testPattern.stsq_kick >> *(new Adapter::NullAdapter<0, 2>) >>
+      interface.rootNode;
+  testPattern.stsq_trigger >> *(new Adapter::NullAdapter<0, 2>) >>
+      interface.rootNode;
 
   bool isProfilingMode = false;
   if (isProfilingMode) {
@@ -119,7 +125,7 @@ int main(int argc, char *argv[]) {
       filter.set(cut, reso);
       osc.gain(envelopeValue);
 
-      float currentQuat = time.currentQuat();
+      float currentQuat = time.currentQuat() + 3.f;
 
       float currentSixteenthInTwoBeats = fmod(currentQuat, 8.f);
       if (currentSixteenthInTwoBeats == 0.f ||
@@ -129,6 +135,14 @@ int main(int argc, char *argv[]) {
         mod.phase(0);
         adsr.keyOn();
       }
+
+      float currentBar = fmod(time.currentBar(), 16);
+      if(currentBar == 0 && time.currentUnit(1) != 0) {
+        testPattern.stsq_pitch.setPattern(0);
+      } else if (currentBar == 12) {
+        testPattern.stsq_pitch.setPattern(1);
+      }
+
     });
 
     if (interface.initialize() != paNoError)
