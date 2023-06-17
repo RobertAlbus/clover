@@ -4,20 +4,20 @@
 #include <stdexcept>
 #include <vector>
 
-#include "Frame.h"
+#include "AudioFrame.h"
 #include "FrameHistory.h"
-#include "InterchangeConcept.h"
+#include "FrameConcept.h"
 
 namespace Clover::Graph {
 
-template <Interchange OutputType> class INode {
+template <Frame OutputType> class INode {
 public:
   virtual void metaTick(int currentClockTime) = 0;
   virtual const OutputType &currentFrame() = 0;
 };
 
 /// Base class for all nodes of the graph.
-template <Interchange InputType, Interchange OutputType>
+template <Frame InputType, Frame OutputType>
 class Node : public INode<OutputType> {
 public:
   float _gain;

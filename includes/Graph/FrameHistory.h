@@ -2,12 +2,12 @@
 
 #include <algorithm>
 
-#include "Graph/Frame.h"
-#include "InterchangeConcept.h"
+#include "Graph/AudioFrame.h"
+#include "FrameConcept.h"
 
 namespace Clover::Graph {
 
-template <Interchange T> class FrameHistory {
+template <Frame T> class FrameHistory {
 public:
   FrameHistory() : _hasNext(false) {}
 

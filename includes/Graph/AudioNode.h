@@ -4,7 +4,7 @@
 #include <stdexcept>
 #include <vector>
 
-#include "Frame.h"
+#include "AudioFrame.h"
 #include "FrameHistory.h"
 #include "Node.h"
 

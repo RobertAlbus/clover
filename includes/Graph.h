@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Graph/Frame.h"
+#include "Graph/AudioFrame.h"
 #include "Graph/FrameHistory.h"
 #include "Graph/Node.h"
 

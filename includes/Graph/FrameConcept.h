@@ -3,7 +3,7 @@
 #include <concepts>
 
 template <typename T>
-concept Interchange = requires(T a, const T b, const T c, const float f) {
+concept Frame = requires(T a, const T b, const T c, const float f) {
     T();
 
     { a.init() } -> std::same_as<void>;
