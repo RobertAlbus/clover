@@ -3,11 +3,11 @@
 #include <algorithm>
 
 #include "Graph/Frame.h"
-#include "InterchangeArithmeticConcept.h"
+#include "InterchangeConcept.h"
 
 namespace Clover::Graph {
 
-template <InterchangeArithmetic T> class FrameHistory {
+template <Interchange T> class FrameHistory {
 public:
   FrameHistory() : _hasNext(false) {}
 

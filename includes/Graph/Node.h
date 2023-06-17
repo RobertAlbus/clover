@@ -6,18 +6,18 @@
 
 #include "Frame.h"
 #include "FrameHistory.h"
-#include "InterchangeArithmeticConcept.h"
+#include "InterchangeConcept.h"
 
 namespace Clover::Graph {
 
-template <InterchangeArithmetic OutputType> class INode {
+template <Interchange OutputType> class INode {
 public:
   virtual void metaTick(int currentClockTime) = 0;
   virtual const OutputType &currentFrame() = 0;
 };
 
 /// Base class for all nodes of the graph.
-template <InterchangeArithmetic InputType, InterchangeArithmetic OutputType>
+template <Interchange InputType, Interchange OutputType>
 class Node : public INode<OutputType> {
 public:
   float _gain;

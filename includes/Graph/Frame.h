@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <cstdio>
 
 #include "Constants.h"
 
@@ -25,7 +26,7 @@ template <size_t __arity> struct Frame {
     return data[i];
   }
 
-  Frame<__arity> operator+(const Frame<__arity>& b) {
+  Frame<__arity> operator+(const Frame<__arity>& b) const {
     Frame<__arity> f;
     for (int i = 0; i < __arity; i++) {
       f[i] = data[i] + b[i];
@@ -33,7 +34,7 @@ template <size_t __arity> struct Frame {
     return f;
   }
 
-  Frame<__arity> operator-(const Frame<__arity>& b) {
+  Frame<__arity> operator-(const Frame<__arity>& b) const {
     Frame<__arity> f;
     for (int i = 0; i < __arity; i++) {
       f[i] = data[i] - b[i];
@@ -41,7 +42,7 @@ template <size_t __arity> struct Frame {
     return f;
   }
 
-  Frame<__arity> operator*(const Frame<__arity>& b) {
+  Frame<__arity> operator*(const Frame<__arity>& b) const {
     Frame<__arity> f;
     for (int i = 0; i < __arity; i++) {
       f[i] = data[i] * b[i];
@@ -49,7 +50,7 @@ template <size_t __arity> struct Frame {
     return f;
   }
 
-  Frame<__arity> operator/(const Frame<__arity>& b) {
+  Frame<__arity> operator/(const Frame<__arity>& b) const {
         Frame<__arity> f;
     for (int i = 0; i < __arity; i++) {
       f[i] = data[i] / b[i];

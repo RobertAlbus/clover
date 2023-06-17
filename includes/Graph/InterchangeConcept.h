@@ -3,13 +3,15 @@
 #include <concepts>
 
 template <typename T>
-concept InterchangeArithmetic = requires(T a, const T b, const float f) {
+concept Interchange = requires(T a, const T b, const T c, const float f) {
+    T();
+
     { a.init() } -> std::same_as<void>;
 
-    { a + b } -> std::same_as<T>;
-    { a - b } -> std::same_as<T>;
-    { a * b } -> std::same_as<T>;
-    { a / b } -> std::same_as<T>;
+    { b + c } -> std::same_as<T>;
+    { b - c } -> std::same_as<T>;
+    { b * c } -> std::same_as<T>;
+    { b / c } -> std::same_as<T>;
 
     { a += b } -> std::same_as<void>;
     { a -= b } -> std::same_as<void>;
