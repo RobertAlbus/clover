@@ -7,9 +7,9 @@ using namespace Clover::Util;
 
 namespace Clover::_Test {
 
-template <size_t __arityOut> class DCN : public Node<0, __arityOut> {
+template <size_t __arityOut> class DCN : public AudioNode<0, __arityOut> {
 public:
-  DCN() : Node<0, __arityOut>(), basis(0.f) {}
+  DCN() : AudioNode<0, __arityOut>(), basis(0.f) {}
 
   void indexBasis(float b) { basis = b; }
 

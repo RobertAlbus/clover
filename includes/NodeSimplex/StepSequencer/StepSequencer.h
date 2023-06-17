@@ -44,9 +44,9 @@ template <typename T> struct STSQ_Pattern {
 template <typename StepDataType, typename TargetType,
           void (*applyStepDataFunc)(const StepDataType &,
                                     std::vector<TargetType *> &)>
-struct STSQ : public Node<0, 0>, public PatternSettable {
+struct STSQ : public AudioNode<0, 0>, public PatternSettable {
 
-  STSQ() : Node(), nextIndex(0), patternIndex(0) {}
+  STSQ() : AudioNode(), nextIndex(0), patternIndex(0) {}
 
   int patternIndex;
   std::vector<STSQ_Pattern<StepDataType>> patterns;

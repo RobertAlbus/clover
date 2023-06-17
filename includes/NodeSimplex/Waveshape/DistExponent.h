@@ -9,9 +9,9 @@ using namespace Clover::Util;
 
 namespace Clover::NodeSimplex::Waveshape {
 
-template <size_t __arity> class DistExponent : public Node<__arity, __arity> {
+template <size_t __arity> class DistExponent : public AudioNode<__arity, __arity> {
 public:
-  DistExponent() : Node<__arity, __arity>(), _exponent(1) {}
+  DistExponent() : AudioNode<__arity, __arity>(), _exponent(1) {}
 
   void exponent(float e) { _exponent = e; }
   float exponent() { return _exponent; }

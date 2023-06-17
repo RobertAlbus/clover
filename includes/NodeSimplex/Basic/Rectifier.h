@@ -7,7 +7,7 @@
 
 namespace Clover::NodeSimplex::Basic {
 
-template <size_t __arity> class Rectifier : public Node<__arity, __arity> {
+template <size_t __arity> class Rectifier : public AudioNode<__arity, __arity> {
 
   Frame<__arity> tick(Frame<__arity> input) {
     Frame<__arity> f;

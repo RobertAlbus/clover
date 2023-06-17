@@ -6,10 +6,10 @@
 
 namespace Clover::NodeSimplex::Reduce {
 
-class Samplecrusher : public Node<1, 1> {
+class Samplecrusher : public AudioNode<1, 1> {
 public:
   Samplecrusher(float range = 1)
-      : Node(), range(range), amount(0), heldSample(0), samplesToHold(0) {}
+      : AudioNode(), range(range), amount(0), heldSample(0), samplesToHold(0) {}
 
   float range;
   float amount;

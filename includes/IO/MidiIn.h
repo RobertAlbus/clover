@@ -9,10 +9,10 @@
 
 namespace Clover::IO {
 
-class MidiIn : public Node<0, 256> {
+class MidiIn : public AudioNode<0, 256> {
 public:
   MidiIn(const std::string &deviceName, unsigned int queueSizeLimit = 1000)
-      : Node(), _printChange(false) {
+      : AudioNode(), _printChange(false) {
     RtMidi::Api api = RtMidi::Api::UNSPECIFIED;
     const std::string &clientName = "Clover Midi Input Client";
     controlChannel.resize(128);

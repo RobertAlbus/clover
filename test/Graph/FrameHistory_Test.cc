@@ -3,7 +3,7 @@
 #include "Clover.h"
 
 TEST(Graph_FrameHistory, ShouldInitialize) {
-  FrameHistory<1> frameHistory;
+  FrameHistory<Frame<1>> frameHistory;
 
   EXPECT_EQ(frameHistory.current[0], 0.);
   EXPECT_EQ(frameHistory.last[0], 0.);
@@ -16,7 +16,7 @@ TEST(Graph_FrameHistory, ShouldBeNextable) {
   Frame<1> frame_4{4};
   Frame<1> frame_5{5};
 
-  FrameHistory<1> frameHistory;
+  FrameHistory<Frame<1>> frameHistory;
 
   // can push
   frameHistory.push(frame_1);

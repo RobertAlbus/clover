@@ -17,7 +17,7 @@ template <size_t __arity>
 class EQ : public EQSettable,
            public CoefficientStrategySettable,
            public Base,
-           public Node<__arity, __arity> {
+           public AudioNode<__arity, __arity> {
 public:
   EQ() : biquad() { butterworthResonant(); }
 
@@ -107,8 +107,11 @@ public:
     resetCoefficients();
   }
 
-  Frame<__arity> tick(Frame<__arity> input) { return biquad.process(input); }
-
+  Frame<__arity> tick(Frame<__arity> input) { 
+    input.data = biquad.process(input.data);
+    return input;
+  }
+  
 protected:
   float freq_;
   float reso_;

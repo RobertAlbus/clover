@@ -6,9 +6,9 @@ using namespace Clover::Graph;
 
 namespace Clover::_Test {
 
-template <size_t __arityOut> class Incrementor : public Node<0, __arityOut> {
+template <size_t __arityOut> class Incrementor : public AudioNode<0, __arityOut> {
 public:
-  Incrementor(int startValue = 0) : Node<0, __arityOut>(), basis(startValue) {}
+  Incrementor(int startValue = 0) : AudioNode<0, __arityOut>(), basis(startValue) {}
 
 private:
   float basis;

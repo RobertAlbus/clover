@@ -7,9 +7,9 @@ using namespace Clover::Util;
 
 namespace Clover::_Test {
 
-template <size_t __arityIn> class HandCrank : public Node<__arityIn, 0> {
+template <size_t __arityIn> class HandCrank : public AudioNode<__arityIn, 0> {
 public:
-  HandCrank() : Node<__arityIn, 0>() {}
+  HandCrank() : AudioNode<__arityIn, 0>() {}
 
   void turn(int numberOfTicks) {
     for (int i = 0; i < numberOfTicks; i++) {

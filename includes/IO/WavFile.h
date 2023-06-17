@@ -13,10 +13,10 @@ using namespace Clover::Util;
 
 namespace Clover::IO {
 
-template <size_t __arity> class WavFile : public Node<__arity, 0> {
+template <size_t __arity> class WavFile : public AudioNode<__arity, 0> {
 public:
   WavFile(std::string filePath, int duration)
-      : Node<__arity, 0>(), _durationSamples(duration), _filePath(filePath)
+      : AudioNode<__arity, 0>(), _durationSamples(duration), _filePath(filePath)
 
   {
     content.reserve((size_t)duration * __arity);
@@ -40,7 +40,7 @@ private:
 
   Frame<0> tick(Frame<__arity> input) {
     Frame<0> f{};
-    if (Node<__arity, 0>::_currentClockTime == _durationSamples) {
+    if (AudioNode<__arity, 0>::_currentClockTime == _durationSamples) {
       // TODO: make this configurable with options
       // - normalize if small
       // - normalize if large

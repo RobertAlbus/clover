@@ -2,11 +2,11 @@
 
 #include "Clover.h"
 
-class NodeStub : public Node<1, 1> {
+class NodeStub : public AudioNode<1, 1> {
 public:
-  NodeStub() : Node<1, 1>() {}
+  NodeStub() : AudioNode<1, 1>() {}
 
-  std::vector<Clover::Graph::INode<1> *> &getInputNodes() {
+  std::vector<Clover::Graph::INode<Frame<1>> *> &getInputNodes() {
     return Node::inputNodes;
   }
 

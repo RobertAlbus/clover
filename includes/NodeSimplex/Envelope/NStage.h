@@ -7,9 +7,9 @@
 namespace Clover::NodeSimplex::Envelope {
 
 template <size_t __stages, size_t __arity>
-class NStage : public Node<__arity, __arity> {
+class NStage : public AudioNode<__arity, __arity> {
 public:
-  NStage() : Node<__arity, __arity>() {}
+  NStage() : AudioNode<__arity, __arity>() {}
 
   void setStage(int stage, float target, int duration) {}
   void keyOn() { _startTime = _currentClockTime; }

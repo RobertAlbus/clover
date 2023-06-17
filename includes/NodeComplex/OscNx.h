@@ -7,7 +7,7 @@
 using namespace Clover::NodeSimplex;
 
 template <int __numVoices>
-struct OscNx : public Clover::Graph::Node<0, 2>, Pitchable, Triggerable {
+struct OscNx : public Clover::Graph::AudioNode<0, 2>, Pitchable, Triggerable {
   struct Voice {
     Voice() : tuning_(0) {}
 

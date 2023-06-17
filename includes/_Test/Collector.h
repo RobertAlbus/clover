@@ -8,9 +8,9 @@ using namespace Clover::Util;
 
 namespace Clover::_Test {
 
-template <size_t __arity> class Collector : public Node<__arity, __arity> {
+template <size_t __arity> class Collector : public AudioNode<__arity, __arity> {
 public:
-  Collector(int preAllocateFrames) : Node<__arity, __arity>() {
+  Collector(int preAllocateFrames) : AudioNode<__arity, __arity>() {
     frames.reserve(preAllocateFrames);
   }
 

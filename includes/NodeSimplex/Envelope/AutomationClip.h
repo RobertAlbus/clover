@@ -5,7 +5,7 @@
 #include "Algorithm.h"
 #include "Graph.h"
 
-class AutomationNode : public Node<0, 1> {
+class AutomationNode : public AudioNode<0, 1> {
 public:
   AutomationNode() : _tensionScale(M_PI), _currentIndex(0), _nextIndex(1) {
     EnvelopeDefinition emptyEnvelope;

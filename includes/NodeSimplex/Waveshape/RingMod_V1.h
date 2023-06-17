@@ -6,9 +6,9 @@
 
 namespace Clover::NodeSimplex::Waveshape {
 
-template <size_t __arity> class RingMod_V1 : public Node<__arity, __arity> {
+template <size_t __arity> class RingMod_V1 : public AudioNode<__arity, __arity> {
 public:
-  RingMod_V1() : Node<__arity, __arity>(), _shape(0) {}
+  RingMod_V1() : AudioNode<__arity, __arity>(), _shape(0) {}
 
   void shape(float s) { _shape = s; }
   float shape() { return _shape; }

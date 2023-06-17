@@ -10,10 +10,10 @@ using namespace Clover::Util;
 
 namespace Clover::NodeSimplex::Reduce {
 
-class BitCrusher : public Node<1, 1> {
+class BitCrusher : public AudioNode<1, 1> {
 public:
   BitCrusher(float bits = std::numeric_limits<float>::max())
-      : Node(), bits(bits) {}
+      : AudioNode(), bits(bits) {}
 
   // generally undetectable at about 600-800
   // I should probably convert this to an "amount" control
