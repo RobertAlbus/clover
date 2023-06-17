@@ -9,7 +9,11 @@ namespace Clover::Graph {
 template <size_t __arity> struct Frame {
 
   Frame() : data() {}
-  Frame(std::initializer_list<float> init) {
+
+  Frame(std::initializer_list<Sample> init) {
+    if (init.size() != __arity) {
+      printf("\nCannot initialize AudioFrame<%zu> with %zu elements\n", __arity, init.size());
+    }
     std::copy(init.begin(), init.end(), data.begin());
   }
 
