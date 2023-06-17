@@ -11,8 +11,8 @@ DC::DC(DCSettings initialSettings) : StatefulProcessor(initialSettings) {}
 void DC::value(Sample v) { settings.current.value = v; }
 Sample DC::value() { return settings.current.value; }
 
-Frame<1> DC::tick(Frame<0> input) {
-  return Frame<1> {settings.current.value};
+AudioFrame<1> DC::tick(AudioFrame<0> input) {
+  return AudioFrame<1> {settings.current.value};
 }
 
 } // namespace Clover::NodeSimplex::Envelope

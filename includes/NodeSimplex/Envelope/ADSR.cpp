@@ -88,7 +88,7 @@ void Adsr::triggerOff() {
   keyOff();
 }
 
-Frame<1> Adsr::tick(Frame<0> input) {
+AudioFrame<1> Adsr::tick(AudioFrame<0> input) {
   AdsrSettings &s = settings.current;
 
   // should compute these times and store them in settings

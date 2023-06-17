@@ -15,8 +15,8 @@ public:
 
 private:
   float basis;
-  Frame<__arityOut> tick(Frame<0> input) {
-    Frame<__arityOut> f{};
+  AudioFrame<__arityOut> tick(AudioFrame<0> input) {
+    AudioFrame<__arityOut> f{};
 
     for (int i = 0; i < __arityOut; i++) {
       f[i] = i + basis;

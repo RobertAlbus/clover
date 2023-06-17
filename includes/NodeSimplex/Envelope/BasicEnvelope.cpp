@@ -33,15 +33,15 @@ void BasicEnvelope::setState(BasicEnvelopeSettings &s, float currentValue, float
   s.targetTime = s.startTime + s.duration - 1;
 }
 
-Frame<1> BasicEnvelope::tick(Frame<0> inputFrame) {
+AudioFrame<1> BasicEnvelope::tick(AudioFrame<0> inputFrame) {
   BasicEnvelopeSettings &s = settings.current;
   int elapsedTime = _currentClockTime - (int)s.startTime;
   float lerpAmount = (float)elapsedTime / (float)s.duration;
   if (elapsedTime < (float)s.duration) {
-    Frame<1> f{std::lerp(s.startValue, s.targetValue, lerpAmount)};
+    AudioFrame<1> f{std::lerp(s.startValue, s.targetValue, lerpAmount)};
     return f;
   }
-  return Frame<1>{s.targetValue};
+  return AudioFrame<1>{s.targetValue};
 }
 
 } // namespace Clover::NodeSimplex::Envelope

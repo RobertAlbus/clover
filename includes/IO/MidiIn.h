@@ -100,8 +100,8 @@ private:
     midiRegister->at(message->at(1)) = message->at(2);
   }
 
-  Frame<256> tick(Frame<0> input) {
-    Frame<256> f;
+  AudioFrame<256> tick(AudioFrame<0> input) {
+    AudioFrame<256> f;
 
     for (int i = 0; i < 128; i++) {
       f[i] = noteChannel[i];

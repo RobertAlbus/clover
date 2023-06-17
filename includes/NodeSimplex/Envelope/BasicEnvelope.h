@@ -27,7 +27,7 @@ protected:
   void setState(BasicEnvelopeSettings &s, float currentValue, float targetValue,
                 size_t durationTime);
 
-  Frame<1> tick(Frame<0> inputFrame);
+  AudioFrame<1> tick(AudioFrame<0> inputFrame);
 };
 
 } // namespace Clover::NodeSimplex::Envelope

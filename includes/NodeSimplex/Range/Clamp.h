@@ -30,8 +30,8 @@ public:
   void max(float maximum) { this->settings.current.max = maximum; }
 
 private:
-  Frame<__arity> tick(Frame<__arity> input) {
-    Frame<__arity> f;
+  AudioFrame<__arity> tick(AudioFrame<__arity> input) {
+    AudioFrame<__arity> f;
     for (int i = 0; i < __arity; i++) {
       ClampSettings &s;
       f[i] = std::clamp(input[i], s.min, s.max);

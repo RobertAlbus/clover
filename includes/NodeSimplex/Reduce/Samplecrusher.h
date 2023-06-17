@@ -17,13 +17,13 @@ public:
   float samplesToHold;
 
 protected:
-  Frame<1> tick(Frame<1> inputFrame) {
+  AudioFrame<1> tick(AudioFrame<1> inputFrame) {
     if (samplesToHold < 1.) {
       samplesToHold += 1 + std::max((range * amount), 0.f);
       heldSample = inputFrame[0];
     }
     samplesToHold--;
-    return Frame<1>{heldSample};
+    return AudioFrame<1>{heldSample};
   }
 };
 

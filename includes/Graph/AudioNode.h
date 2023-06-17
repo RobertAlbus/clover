@@ -12,7 +12,7 @@ namespace Clover::Graph {
 
 /// Base class for all N channel nodes of the audio graph.
 template <size_t __arityInput, size_t __arityOutput>
-class AudioNode : public Node<Frame<__arityInput>, Frame<__arityOutput>> {
+class AudioNode : public Node<AudioFrame<__arityInput>, AudioFrame<__arityOutput>> {
 
 };
 

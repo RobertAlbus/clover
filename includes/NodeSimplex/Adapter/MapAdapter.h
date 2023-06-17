@@ -78,8 +78,8 @@ public:
   }
 
 private:
-  Frame<__arityOut> tick(Frame<__arityIn> input) {
-    Frame<__arityOut> f{};
+  AudioFrame<__arityOut> tick(AudioFrame<__arityIn> input) {
+    AudioFrame<__arityOut> f{};
 
     for (int i = 0, end = this->settings.current.mappings.size(); i < end;
          i++) {

@@ -15,9 +15,9 @@ public:
 
 private:
   float _shape;
-  Frame<__arity> tick(Frame<__arity> input) {
+  AudioFrame<__arity> tick(AudioFrame<__arity> input) {
     float shape = ((_shape * 0.5) + 0.5) * M_PI;
-    Frame<__arity> f{};
+    AudioFrame<__arity> f{};
     for (int i = 0; i < __arity; i++) {
       f[i] = sin(shape * input[i]);
     }

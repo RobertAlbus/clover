@@ -6,8 +6,8 @@ namespace Clover::NodeSimplex::Adapter {
 
 template <size_t __arityOut> class MultiCast : public AudioNode<1, __arityOut> {
 
-  Frame<__arityOut> tick(Frame<1> input) {
-    Frame<__arityOut> f{};
+  AudioFrame<__arityOut> tick(AudioFrame<1> input) {
+    AudioFrame<__arityOut> f{};
 
     for (int i = 0; i < __arityOut; i++) {
       f[i] = input[0];

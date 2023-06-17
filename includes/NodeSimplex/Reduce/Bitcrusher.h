@@ -25,11 +25,11 @@ public:
   float bits;
 
 protected:
-  Frame<1> tick(Frame<1> inputFrame) {
+  AudioFrame<1> tick(AudioFrame<1> inputFrame) {
     float sign = Calc::sign(inputFrame[0]);
     float abs = fabs(inputFrame[0]);
     abs = floor(abs * bits) / bits;
-    return Frame<1>{abs * sign};
+    return AudioFrame<1>{abs * sign};
   }
 };
 

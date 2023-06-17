@@ -15,8 +15,8 @@ public:
   StatelessProcessorV2() : AudioNode<__arityIn, __arityOut>() {}
 
 protected:
-  Frame<__arityOut> tick(Frame<__arityIn> input) { return processFn(input); };
-  virtual Frame<__arityOut> processFn(Frame<__arityIn>) = 0;
+  AudioFrame<__arityOut> tick(AudioFrame<__arityIn> input) { return processFn(input); };
+  virtual AudioFrame<__arityOut> processFn(AudioFrame<__arityIn>) = 0;
 };
 
 } // namespace Clover::Graph

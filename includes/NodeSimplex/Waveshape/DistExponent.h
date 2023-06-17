@@ -18,8 +18,8 @@ public:
 
 private:
   float _exponent;
-  Frame<__arity> tick(Frame<__arity> input) {
-    Frame<__arity> f{};
+  AudioFrame<__arity> tick(AudioFrame<__arity> input) {
+    AudioFrame<__arity> f{};
     for (int i = 0; i < __arity; i++) {
       float sign = Calc::sign(input[i]);
       float abs = fabs(input[i]);

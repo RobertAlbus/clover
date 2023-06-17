@@ -27,11 +27,11 @@ public:
   float tensionScale() { return _tensionScale; }
 
 private:
-  Frame<1> tick(Frame<0>) {
+  AudioFrame<1> tick(AudioFrame<0>) {
     const EnvelopeComputation::Point &endPoint = computedEnvelope.points.back();
 
     if (_currentClockTime >= endPoint.start) {
-      return Frame<1>{endPoint.value};
+      return AudioFrame<1>{endPoint.value};
     }
 
     const EnvelopeComputation::Point &currentPoint =
@@ -53,7 +53,7 @@ private:
     _currentIndex++;
     _nextIndex++;
 
-    return Frame<1>{tensionedValue};
+    return AudioFrame<1>{tensionedValue};
   }
 
   EnvelopeComputation computedEnvelope;

@@ -38,8 +38,8 @@ private:
   std::string _filePath;
   float _signalMaxima;
 
-  Frame<0> tick(Frame<__arity> input) {
-    Frame<0> f{};
+  AudioFrame<0> tick(AudioFrame<__arity> input) {
+    AudioFrame<0> f{};
     if (AudioNode<__arity, 0>::_currentClockTime == _durationSamples) {
       // TODO: make this configurable with options
       // - normalize if small

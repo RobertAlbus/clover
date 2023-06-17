@@ -40,7 +40,7 @@ public:
   Pan1(float p = 0);
 
 private:
-  Frame<2> tick(Frame<1> input);
+  AudioFrame<2> tick(AudioFrame<1> input);
 };
 
 class Pan2 : public Pan<2> {
@@ -48,7 +48,7 @@ public:
   Pan2(float p = 0);
 
 private:
-  Frame<2> tick(Frame<2> input);
+  AudioFrame<2> tick(AudioFrame<2> input);
 };
 
 } // namespace Clover::NodeSimplex::Stereo

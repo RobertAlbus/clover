@@ -19,7 +19,7 @@ public:
   Sample value();
 
 protected:
-  Frame<1> tick(Frame<0> input);
+  AudioFrame<1> tick(AudioFrame<0> input);
 };
 
 } // namespace Clover::NodeSimplex::Envelope

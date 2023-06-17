@@ -15,7 +15,7 @@ public:
   }
 
 protected:
-  Frame<__arity> tick(Frame<__arity> input) { return input; }
+  AudioFrame<__arity> tick(AudioFrame<__arity> input) { return input; }
 };
 
 } // namespace Clover::IO

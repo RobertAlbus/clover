@@ -50,7 +50,7 @@ public:
 protected:
   BasicEnvelope envelope;
 
-  Frame<1> tick(Frame<0> input);
+  AudioFrame<1> tick(AudioFrame<0> input);
   void connectNodes();
 };
 

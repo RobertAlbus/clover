@@ -6,12 +6,12 @@ class NodeStub : public AudioNode<1, 1> {
 public:
   NodeStub() : AudioNode<1, 1>() {}
 
-  std::vector<Clover::Graph::INode<Frame<1>> *> &getInputNodes() {
+  std::vector<Clover::Graph::INode<AudioFrame<1>> *> &getInputNodes() {
     return Node::inputNodes;
   }
 
 private:
-  Frame<1> tick(Frame<1> input) { return Frame<1>{1.f + input[0]}; }
+  AudioFrame<1> tick(AudioFrame<1> input) { return AudioFrame<1>{1.f + input[0]}; }
 };
 
 TEST(Graph_Node, ShouldConnect) {

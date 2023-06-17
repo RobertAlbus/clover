@@ -49,10 +49,10 @@ public:
   float delay() { return this->settings.current.delayTime; }
 
 protected:
-  std::vector<Frame<__arity>> buffer;
+  std::vector<AudioFrame<__arity>> buffer;
   float readHead;
   int writeHead;
-  Frame<__arity> tick(Frame<__arity> input) {
+  AudioFrame<__arity> tick(AudioFrame<__arity> input) {
     int bufferCapacity = this->settings.current.bufferCapacity;
 
     // push new data to buffer
@@ -63,7 +63,7 @@ protected:
     int nextReadHead = (previousReadHead + 1) % bufferCapacity;
     float lerpAmount = readHead - (float)previousReadHead;
 
-    Frame<__arity> f{};
+    AudioFrame<__arity> f{};
     for (int i = 0; i < __arity; i++) {
       f[i] = std::lerp(buffer[previousReadHead][i], buffer[nextReadHead][i],
                        lerpAmount);

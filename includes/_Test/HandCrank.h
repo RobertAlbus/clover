@@ -21,7 +21,7 @@ public:
 private:
   Clover::Util::SampleClock clock;
 
-  Frame<0> tick(Frame<__arityIn> input) { return Frame<0>{}; }
+  AudioFrame<0> tick(AudioFrame<__arityIn> input) { return AudioFrame<0>{}; }
 };
 
 } // namespace Clover::_Test

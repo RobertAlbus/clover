@@ -9,8 +9,8 @@ namespace Clover::NodeSimplex::Basic {
 
 template <size_t __arity> class Rectifier : public AudioNode<__arity, __arity> {
 
-  Frame<__arity> tick(Frame<__arity> input) {
-    Frame<__arity> f;
+  AudioFrame<__arity> tick(AudioFrame<__arity> input) {
+    AudioFrame<__arity> f;
     for (int i = 0; i < __arity; i++) {
       f[i] = fabs(input[i]);
     }

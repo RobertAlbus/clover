@@ -53,7 +53,7 @@ struct WavetableOsc : public Base,
   void noise(int size = 1024);
 
 private:
-  Frame<1> tick(Frame<0> input) override;
+  AudioFrame<1> tick(AudioFrame<0> input) override;
 
   float normalizeReadIndex(float index);
   float normalizePhase(float phase);

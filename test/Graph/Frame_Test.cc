@@ -3,8 +3,8 @@
 #include "Clover.h"
 
 TEST(Graph_Frame, ShouldAdd) {
-  Frame<3> frame_1{1, 2, 3};
-  Frame<3> frame_2{1, 2, 3};
+  AudioFrame<3> frame_1{1, 2, 3};
+  AudioFrame<3> frame_2{1, 2, 3};
 
   frame_1 += frame_2;
 
@@ -14,8 +14,8 @@ TEST(Graph_Frame, ShouldAdd) {
 }
 
 TEST(Graph_Frame, ShouldMultiply) {
-  Frame<3> frame_1{1, 2, 3};
-  Frame<3> frame_2{1, 2, 3};
+  AudioFrame<3> frame_1{1, 2, 3};
+  AudioFrame<3> frame_2{1, 2, 3};
 
   frame_1 *= frame_2;
 

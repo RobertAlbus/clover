@@ -110,7 +110,7 @@ void WavetableOsc::noise(int size) {
   wavetable(wt);
 }
 
-Frame<1> WavetableOsc::tick(Frame<0> input) {
+AudioFrame<1> WavetableOsc::tick(AudioFrame<0> input) {
   float nextIndex =
       normalizeReadIndex(floor(settings.current.readIndex + 1));
 
@@ -121,7 +121,7 @@ Frame<1> WavetableOsc::tick(Frame<0> input) {
                 remainder(settings.current.readIndex, 1.f)
       );
 
-  Frame<1> f{value};
+  AudioFrame<1> f{value};
 
   float newIndex = settings.current.readIndex +
                     settings.current.readIndexOffset +

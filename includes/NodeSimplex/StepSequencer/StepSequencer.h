@@ -63,10 +63,10 @@ struct STSQ : public AudioNode<0, 0>, public PatternSettable {
     patterns.emplace_back(newPattern);
   }
 
-  Frame<0> tick(Frame<0> input) {
+  AudioFrame<0> tick(AudioFrame<0> input) {
     checkTimeAndPerformStep();
 
-    return Frame<0>{};
+    return AudioFrame<0>{};
   }
 
 private:

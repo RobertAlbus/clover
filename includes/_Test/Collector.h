@@ -14,7 +14,7 @@ public:
     frames.reserve(preAllocateFrames);
   }
 
-  std::vector<Frame<__arity>> frames;
+  std::vector<AudioFrame<__arity>> frames;
 
   void showBetween(size_t fromIndex, size_t toIndex) {
     // add this to the collector node to dump the buffer
@@ -32,7 +32,7 @@ public:
   }
 
 private:
-  Frame<__arity> tick(Frame<__arity> input) {
+  AudioFrame<__arity> tick(AudioFrame<__arity> input) {
     frames.emplace_back(input);
 
     return input;

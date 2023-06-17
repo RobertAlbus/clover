@@ -51,7 +51,7 @@ private:
 
   float freq_;
 
-  Frame<2> tick(Frame<0> input);
+  AudioFrame<2> tick(AudioFrame<0> input);
 
   void connectNodes();
   void updateFreq();

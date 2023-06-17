@@ -38,7 +38,7 @@ float StereoImage::spread() { return _spreadReadOnly; }
 
 void StereoImage::pan(float p) { pan2.pan(p); }
 
-Frame<2> StereoImage::tick(Frame<2> input) {
+AudioFrame<2> StereoImage::tick(AudioFrame<2> input) {
   spring.frames.next(input);
   return blackHole.frames.current;
 }

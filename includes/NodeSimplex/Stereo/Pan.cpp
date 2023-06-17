@@ -10,16 +10,16 @@ namespace Clover::NodeSimplex::Stereo {
 
 Pan1::Pan1(float p) : Pan<1>(p) {}
 
-Frame<2> Pan1::tick(Frame<1> input) {
+AudioFrame<2> Pan1::tick(AudioFrame<1> input) {
 
-  Frame<2> f{input[0] * _coefficientL, input[0] * _coefficientR};
+  AudioFrame<2> f{input[0] * _coefficientL, input[0] * _coefficientR};
   return f;
 }
 
 Pan2::Pan2(float p) : Pan<2>(p) {}
 
-Frame<2> Pan2::tick(Frame<2> input) {
-  Frame<2> f{input[0] * _coefficientL, input[1] * _coefficientR};
+AudioFrame<2> Pan2::tick(AudioFrame<2> input) {
+  AudioFrame<2> f{input[0] * _coefficientL, input[1] * _coefficientR};
   return f;
 }
 

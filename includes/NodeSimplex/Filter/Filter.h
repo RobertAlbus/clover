@@ -105,7 +105,7 @@ public:
     resetCoefficients();
   }
 
-  Frame<__arity> tick(Frame<__arity> input) { 
+  AudioFrame<__arity> tick(AudioFrame<__arity> input) { 
     input.data = biquad.process(input.data);
     return input;
   }
