@@ -28,7 +28,7 @@ void BasicEnvelope::setState(BasicEnvelopeSettings &s, float currentValue, float
               size_t durationTime) {
   s.targetValue = targetValue;
   s.startValue = currentValue;
-  s.duration = std::max(durationTime, 0UL);
+  s.duration = std::max(durationTime, static_cast<size_t>(0));
   s.startTime = _currentClockTime + 1, 0;
   s.targetTime = s.startTime + s.duration - 1;
 }
