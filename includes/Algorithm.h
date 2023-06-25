@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Algo/Envelope/DC.h"
+
 #include "Algo/Filter/IIR/ButterworthCoefficients.h"
 #include "Algo/Filter/IIR/ButterworthResonantCoefficients.h"
 #include "Algo/Filter/IIR/ChebyshevType1Coefficients.h"

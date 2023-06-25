@@ -73,28 +73,15 @@ int main(int argc, char *argv[]) {
   Envelope::Adsr adsr(adsrSettings);
   adsr >> blackHole;
 
-  Envelope::DC dc(12.);
-  Adapter::MapAdapter<1, 4> adapter1;
-
-  dc >> adapter1;
-
-  adapter1.map(0, 0);
-  adapter1.map(0, 3);
-
-  Adapter::MapAdapter<1, 4> adapter2(adapter1.settings.current);
-  Adapter::NullAdapter<4, 1> nullAdapter;
-  adapter1 >> nullAdapter >> blackHole;
-
   OscAndStSq testPattern(time);
+
+  Adapter::NullAdapter<0, 2> nullAdapter;
 
   testPattern.instrument >> interface.rootNode;
   testPattern.kick >> interface.rootNode;
-  testPattern.stsq_pitch >> *(new Adapter::NullAdapter<0, 2>) >>
-      interface.rootNode;
-  testPattern.stsq_kick >> *(new Adapter::NullAdapter<0, 2>) >>
-      interface.rootNode;
-  testPattern.stsq_trigger >> *(new Adapter::NullAdapter<0, 2>) >>
-      interface.rootNode;
+  testPattern.stsq_pitch >> nullAdapter >> interface.rootNode;
+  testPattern.stsq_kick >> nullAdapter;
+  testPattern.stsq_trigger >> nullAdapter;
 
   bool isProfilingMode = false;
   if (isProfilingMode) {

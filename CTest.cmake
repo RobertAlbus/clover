@@ -10,6 +10,8 @@ FetchContent_MakeAvailable(googletest)
 enable_testing()
 
 add_executable(clover_test
+    test/Algorithm/Envelope/DC.cc
+
     test/Graph/Frame_Test.cc
     test/Graph/FrameHistory_Test.cc
     test/Graph/Node_Test.cc
@@ -27,7 +29,6 @@ add_executable(clover_test
     test/NodeSimplex/Envelope/ADSR_Test.cc
     test/NodeSimplex/Envelope/AutomationClip_Test.cc
     test/NodeSimplex/Envelope/BasicEnvelope_Test.cc
-    test/NodeSimplex/Envelope/DC_Test.cc
     
     test/NodeSimplex/Filter/Filter_Test.cc
     
