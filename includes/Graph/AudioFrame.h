@@ -13,20 +13,17 @@ template <size_t __arity> struct AudioFrame {
 
   AudioFrame(std::initializer_list<Sample> init) {
     if (init.size() != __arity) {
-      printf("\nCannot initialize AudioFrame<%zu> with %zu elements\n", __arity, init.size());
+      printf("\nCannot initialize AudioFrame<%zu> with %zu elements\n", __arity,
+             init.size());
     }
     std::copy(init.begin(), init.end(), data.begin());
   }
 
-  float & operator[](int i) {
-    return data[i];
-  }
+  float &operator[](int i) { return data[i]; }
 
-  float operator[](int i) const {
-    return data[i];
-  }
+  float operator[](int i) const { return data[i]; }
 
-  AudioFrame<__arity> operator+(const AudioFrame<__arity>& b) const {
+  AudioFrame<__arity> operator+(const AudioFrame<__arity> &b) const {
     AudioFrame<__arity> f;
     for (int i = 0; i < __arity; i++) {
       f[i] = data[i] + b[i];
@@ -34,7 +31,7 @@ template <size_t __arity> struct AudioFrame {
     return f;
   }
 
-  AudioFrame<__arity> operator-(const AudioFrame<__arity>& b) const {
+  AudioFrame<__arity> operator-(const AudioFrame<__arity> &b) const {
     AudioFrame<__arity> f;
     for (int i = 0; i < __arity; i++) {
       f[i] = data[i] - b[i];
@@ -42,7 +39,7 @@ template <size_t __arity> struct AudioFrame {
     return f;
   }
 
-  AudioFrame<__arity> operator*(const AudioFrame<__arity>& b) const {
+  AudioFrame<__arity> operator*(const AudioFrame<__arity> &b) const {
     AudioFrame<__arity> f;
     for (int i = 0; i < __arity; i++) {
       f[i] = data[i] * b[i];
@@ -50,7 +47,7 @@ template <size_t __arity> struct AudioFrame {
     return f;
   }
 
-  AudioFrame<__arity> operator/(const AudioFrame<__arity>& b) const {
+  AudioFrame<__arity> operator/(const AudioFrame<__arity> &b) const {
     AudioFrame<__arity> f;
     for (int i = 0; i < __arity; i++) {
       f[i] = data[i] / b[i];
@@ -58,25 +55,25 @@ template <size_t __arity> struct AudioFrame {
     return f;
   }
 
-  void operator+=(const AudioFrame<__arity>& b) {
+  void operator+=(const AudioFrame<__arity> &b) {
     for (int i = 0; i < __arity; i++) {
       data[i] += b[i];
     }
   }
 
-  void operator-=(const AudioFrame<__arity>& b) {
+  void operator-=(const AudioFrame<__arity> &b) {
     for (int i = 0; i < __arity; i++) {
       data[i] -= b[i];
     }
   }
 
-  void operator*=(const AudioFrame<__arity>& b) {
+  void operator*=(const AudioFrame<__arity> &b) {
     for (int i = 0; i < __arity; i++) {
       data[i] *= b[i];
     }
   }
 
-  void operator/=(const AudioFrame<__arity>& b) {
+  void operator/=(const AudioFrame<__arity> &b) {
     for (int i = 0; i < __arity; i++) {
       data[i] /= b[i];
     }

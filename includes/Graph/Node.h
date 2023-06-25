@@ -5,8 +5,8 @@
 #include <vector>
 
 #include "AudioFrame.h"
-#include "FrameHistory.h"
 #include "FrameConcept.h"
+#include "FrameHistory.h"
 
 namespace Clover::Graph {
 
@@ -25,8 +25,7 @@ public:
   float gain() { return _gain; }
   FrameHistory<OutputType> frames;
 
-  Node()
-      : _currentClockTime(-1), _gain(1.) {
+  Node() : _currentClockTime(-1), _gain(1.) {
     inputNodes.reserve(NODE_MAX_INPUT_CAPACITY);
   }
 

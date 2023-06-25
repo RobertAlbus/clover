@@ -68,7 +68,8 @@ int main(int argc, char *argv[]) {
   lfo.phase(0.75);
   lfo >> blackHole;
 
-  Envelope::AdsrSettings adsrSettings(time.quat(0.22), time.quat(), 0.0f, time.beat());
+  Envelope::AdsrSettings adsrSettings(time.quat(0.22), time.quat(), 0.0f,
+                                      time.beat());
   Envelope::Adsr adsr(adsrSettings);
   adsr >> blackHole;
 
@@ -137,12 +138,11 @@ int main(int argc, char *argv[]) {
       }
 
       float currentBar = fmod(time.currentBar(), 16);
-      if(currentBar == 0 && time.currentUnit(1) != 0) {
+      if (currentBar == 0 && time.currentUnit(1) != 0) {
         testPattern.stsq_pitch.setPattern(0);
       } else if (currentBar == 12) {
         testPattern.stsq_pitch.setPattern(1);
       }
-
     });
 
     if (interface.initialize() != paNoError)

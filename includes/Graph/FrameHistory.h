@@ -2,8 +2,8 @@
 
 #include <algorithm>
 
-#include "Graph/AudioFrame.h"
 #include "FrameConcept.h"
+#include "Graph/AudioFrame.h"
 
 namespace Clover::Graph {
 

@@ -11,7 +11,9 @@ public:
   }
 
 private:
-  AudioFrame<1> tick(AudioFrame<1> input) { return AudioFrame<1>{1.f + input[0]}; }
+  AudioFrame<1> tick(AudioFrame<1> input) {
+    return AudioFrame<1>{1.f + input[0]};
+  }
 };
 
 TEST(Graph_Node, ShouldConnect) {
