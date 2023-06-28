@@ -116,9 +116,9 @@ AudioFrame<1> WavetableOsc::tick(AudioFrame<0> input) {
 
   Wavetable &wt = *(settings.current.wavetable);
 
+  float lerpAmount = settings.current.readIndex - static_cast<int>(settings.current.readIndex);
   float value =
-      std::lerp(wt[(int)settings.current.readIndex], wt[(int)nextIndex],
-                remainder(settings.current.readIndex, 1.f)
+      std::lerp(wt[(int)settings.current.readIndex], wt[(int)nextIndex], lerpAmount
       );
 
   AudioFrame<1> f{value};
@@ -133,12 +133,21 @@ AudioFrame<1> WavetableOsc::tick(AudioFrame<0> input) {
 }
 
 float WavetableOsc::normalizeReadIndex(float index) {
-  return fmod(index, settings.current.wavetableSize);
+  while (index > settings.current.wavetableSize) {
+    index -= settings.current.wavetableSize;
+  }
+  return index;
 }
 
-float WavetableOsc::normalizePhase(float phase) { 
-  phase = fmod(phase, 1.f);
+float WavetableOsc::normalizePhase(float phase) {
+  phase = phase - static_cast<int>(phase);
   if (phase < 0) phase += 1;
+  // while (phase > 1.f) {
+  //   phase -= 1.f;
+  // }
+  // while (phase < 0.f) {
+  //   phase += 1.f;
+  // }
 
   return phase;
 }
