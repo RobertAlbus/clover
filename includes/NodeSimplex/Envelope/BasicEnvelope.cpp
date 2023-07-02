@@ -6,42 +6,19 @@
 
 namespace Clover::NodeSimplex::Envelope {
 
-BasicEnvelope::BasicEnvelope(BasicEnvelopeSettings initialSettings)
-    : StatefulProcessor(initialSettings) {
-  set(initialSettings.startValue, initialSettings.targetValue,
-      initialSettings.duration);
+
+BasicEnvelope::BasicEnvelope(float currentValue, float targetValue, uint durationTime) {
+  set(currentValue, targetValue, durationTime);
 }
 
-BasicEnvelope::BasicEnvelope(float currentValue, float targetValue, size_t durationTime)
-    : StatefulProcessor() {
-  BasicEnvelopeSettings &s = this->settings.initial;
-  setState(s, currentValue, targetValue, durationTime);
-  settings.reset();
-}
-
-void BasicEnvelope::set(float currentValue, float targetValue, size_t durationTime) {
-  BasicEnvelopeSettings &s = settings.current;
-  setState(s, currentValue, targetValue, durationTime);
-}
-
-void BasicEnvelope::setState(BasicEnvelopeSettings &s, float currentValue, float targetValue,
-              size_t durationTime) {
-  s.targetValue = targetValue;
-  s.startValue = currentValue;
-  s.duration = std::max(durationTime, static_cast<size_t>(0));
-  s.startTime = _currentClockTime + 1, 0;
-  s.targetTime = s.startTime + s.duration - 1;
+void BasicEnvelope::set(float currentValue, float targetValue, uint durationTime) {
+  envelope.set(currentValue, targetValue, durationTime);
 }
 
 AudioFrame<1> BasicEnvelope::tick(AudioFrame<0> inputFrame) {
-  BasicEnvelopeSettings &s = settings.current;
-  int elapsedTime = _currentClockTime - (int)s.startTime;
-  float lerpAmount = (float)elapsedTime / (float)s.duration;
-  if (elapsedTime < (float)s.duration) {
-    AudioFrame<1> f{std::lerp(s.startValue, s.targetValue, lerpAmount)};
-    return f;
-  }
-  return AudioFrame<1>{s.targetValue};
+    printf("\n %i", _currentClockTime);
+
+  return AudioFrame<1>{envelope.process()};
 }
 
 } // namespace Clover::NodeSimplex::Envelope

@@ -24,9 +24,7 @@ template <FloatingPoint T> struct Basic : public AlgorithmBase<T> {
     setCommon(numSteps);
   }
 
-  void set(float to, int numSteps) {
-    set(to, static_cast<uint>(numSteps));
-  }
+  void set(float to, int numSteps) { set(to, static_cast<uint>(numSteps)); }
 
   void set(float to, uint numSteps) {
     from_ = this->processed;
