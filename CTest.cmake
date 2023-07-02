@@ -10,6 +10,8 @@ FetchContent_MakeAvailable(googletest)
 enable_testing()
 
 add_executable(clover_test
+    test/Algorithm/Envelope/ADSR.cc
+    test/Algorithm/Envelope/Basic.cc
     test/Algorithm/Envelope/DC.cc
 
     test/Graph/Frame_Test.cc

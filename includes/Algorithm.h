@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Algo/Envelope/ADSR.h"
+#include "Algo/Envelope/Basic.h"
 #include "Algo/Envelope/DC.h"
 
 #include "Algo/Filter/IIR/ButterworthCoefficients.h"
