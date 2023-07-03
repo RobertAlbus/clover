@@ -1,7 +1,7 @@
 rm -fr ./build/clover_test;
 touch build/.gitkeep
 cmake -B build -G "Unix Makefiles" -DCLOVER_BUILD_TESTS=ON;
-make -C build;
+make -C build -j8;
 
 # cd build && ctest --rerun-failed --output-on-failure && cd ..;
 cd build && ctest && cd ..;
