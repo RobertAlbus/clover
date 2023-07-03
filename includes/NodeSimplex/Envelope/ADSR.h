@@ -1,57 +1,36 @@
 #pragma once
 
-#include <algorithm>
-#include <cmath>
-
+#include "Algo/Envelope/ADSR.h"
 #include "Graph.h"
-#include "NodeSimplex.h"
 #include "NodeSimplex/StepSequencer/lib.h"
 
 namespace Clover::NodeSimplex::Envelope {
 
-struct AdsrSettings {
-  AdsrSettings(size_t a = 0, size_t d = 0, float s = 1, size_t r = 0);
-
-  size_t attack;
-  size_t decay;
-  float sustain;
-  size_t release;
-  size_t startTime;
-  bool keyOn;
-};
-
-class Adsr : public Triggerable, public StatefulSubgraph<0, 1, AdsrSettings> {
+class ADSR : public Triggerable, public AudioNode<0, 1> {
 public:
-  Adsr(size_t a = 0, size_t d = 0, float s = 1, size_t r = 0);
-  Adsr(AdsrSettings initialSettings);
+  ADSR();
+  ADSR(int a, int d, float s, int r);
 
-  void set(size_t a, size_t d, float s, size_t r);
   void set(float a, float d, float s, float r);
+  void set(int a, int d, float s, int r);
 
-  size_t attack();
-  void attack(size_t a);
-
-  size_t decay();
-  void decay(size_t d);
-
-  float sustain();
+  void attack(int a);
+  void decay(int d);
   void sustain(float s);
+  void release(int r);
 
-  size_t release();
-  void release(size_t r);
-
-  // todo: deprecate
-  void keyOn();
-  void keyOff();
+  int attack();
+  int decay();
+  float sustain();
+  int release();
 
   void triggerOn() override;
   void triggerOff() override;
 
 protected:
-  BasicEnvelope envelope;
+  Clover::Envelope::ADSR<float> envelope;
 
   AudioFrame<1> tick(AudioFrame<0> input);
-  void connectNodes();
 };
 
 } // namespace Clover::NodeSimplex::Envelope

@@ -50,7 +50,7 @@ struct OscNx : public Clover::Graph::AudioNode<0, 2>, Pitchable, Triggerable {
       lfo.gain(0);
     }
 
-    Clover::NodeSimplex::Envelope::Adsr adsr;
+    Clover::NodeSimplex::Envelope::ADSR adsr;
     Clover::NodeSimplex::Wavetable::WavetableOsc lfo;
 
     float adsrValue() { return adsr.currentFrame()[0]; }

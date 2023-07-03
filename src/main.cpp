@@ -68,9 +68,7 @@ int main(int argc, char *argv[]) {
   lfo.phase(0.75);
   lfo >> blackHole;
 
-  Envelope::AdsrSettings adsrSettings(time.quat(0.22), time.quat(), 0.0f,
-                                      time.beat());
-  Envelope::Adsr adsr(adsrSettings);
+  Envelope::ADSR adsr(time.quat(0.22), time.quat(), 0.0f, time.beat());
   adsr >> blackHole;
 
   OscAndStSq testPattern(time);
@@ -121,7 +119,7 @@ int main(int argc, char *argv[]) {
           currentSixteenthInTwoBeats == 6.f) {
         osc.phase(0);
         mod.phase(0);
-        adsr.keyOn();
+        adsr.triggerOn();
       }
 
       float currentBar = fmod(time.currentBar(), 16);
