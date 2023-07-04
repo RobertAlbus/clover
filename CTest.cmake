@@ -28,8 +28,6 @@ add_executable(clover_test
     test/NodeSimplex/Basic/Gain_Test.cc
     test/NodeSimplex/Basic/Rectifier_Test.cc
     
-    test/NodeSimplex/Delay/FractionalDelayLine_Test.cc
-    
     test/NodeSimplex/Envelope/AutomationClip_Test.cc
     test/NodeSimplex/Envelope/BasicEnvelope_Test.cc
     
@@ -41,6 +39,8 @@ add_executable(clover_test
     test/NodeSimplex/Stereo/Difference_Test.cc
     test/NodeSimplex/Stereo/Invert_Test.cc
     test/NodeSimplex/Stereo/Pan_Test.cc
+
+    test/NodeSimplex/NodeSmokeTests.cc
 
     test/Util/Calc_Test.cc
     test/Util/MusicTime.cc

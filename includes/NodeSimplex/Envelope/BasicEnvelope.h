@@ -10,8 +10,10 @@ namespace Clover::NodeSimplex::Envelope {
 
 class BasicEnvelope : public AudioNode<0, 1> {
 public:
+  BasicEnvelope();
   BasicEnvelope(float currentValue, float targetValue, uint durationTime);
 
+  void set(float targetValue, uint durationTimeSamples);
   void set(float currentValue, float targetValue, uint durationTimeSamples);
 
 protected:
