@@ -14,6 +14,8 @@ add_executable(clover_test
     test/Algorithm/Envelope/Basic.cc
     test/Algorithm/Envelope/DC.cc
 
+    test/Algorithm/Delay/Fractional.cc
+
     test/Graph/Frame_Test.cc
     test/Graph/FrameHistory_Test.cc
     test/Graph/Node_Test.cc
