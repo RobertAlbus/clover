@@ -10,6 +10,12 @@ FetchContent_MakeAvailable(googletest)
 enable_testing()
 
 add_executable(clover_test
+    test/Algorithm/Envelope/ADSR.cc
+    test/Algorithm/Envelope/Basic.cc
+    test/Algorithm/Envelope/DC.cc
+
+    test/Algorithm/Delay/Fractional.cc
+
     test/Graph/Frame_Test.cc
     test/Graph/FrameHistory_Test.cc
     test/Graph/Node_Test.cc
@@ -22,12 +28,8 @@ add_executable(clover_test
     test/NodeSimplex/Basic/Gain_Test.cc
     test/NodeSimplex/Basic/Rectifier_Test.cc
     
-    test/NodeSimplex/Delay/FractionalDelayLine_Test.cc
-    
-    test/NodeSimplex/Envelope/ADSR_Test.cc
     test/NodeSimplex/Envelope/AutomationClip_Test.cc
     test/NodeSimplex/Envelope/BasicEnvelope_Test.cc
-    test/NodeSimplex/Envelope/DC_Test.cc
     
     test/NodeSimplex/Filter/Filter_Test.cc
     
@@ -37,6 +39,8 @@ add_executable(clover_test
     test/NodeSimplex/Stereo/Difference_Test.cc
     test/NodeSimplex/Stereo/Invert_Test.cc
     test/NodeSimplex/Stereo/Pan_Test.cc
+
+    test/NodeSimplex/NodeSmokeTests.cc
 
     test/Util/Calc_Test.cc
     test/Util/MusicTime.cc

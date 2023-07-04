@@ -11,6 +11,8 @@ template <size_t __arity> struct AudioFrame {
 
   AudioFrame() : data() {}
 
+  AudioFrame(std::array<Sample, __arity> array) : data(array) {}
+
   AudioFrame(std::initializer_list<Sample> init) {
     if (init.size() != __arity) {
       printf("\nCannot initialize AudioFrame<%zu> with %zu elements\n", __arity,

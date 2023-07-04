@@ -10,8 +10,7 @@
 namespace Clover::Filter {
 
 template <FloatingPoint T, int __arity>
-class IIRFilterDF2T
-    : AlgorithmBase<std::array<T, __arity>, std::array<T, __arity>> {
+class IIRFilterDF2T : AlgorithmBase<std::array<T, __arity>> {
 public:
   IIRFilterDF2T() : inputStates_({{0}}), outputStates_({{0}}) {}
 

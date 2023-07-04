@@ -1,4 +1,5 @@
 #!/bin/bash
 
 cmake -B build -G "Unix Makefiles";
-make -C build;
+touch build/.gitkeep
+make -C build -j8;

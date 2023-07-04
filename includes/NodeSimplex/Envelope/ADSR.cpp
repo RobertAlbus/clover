@@ -1,111 +1,56 @@
-#include <algorithm>
-#include <cmath>
-
 #include "Graph.h"
-#include "NodeSimplex/Envelope/BasicEnvelope.h"
 #include "NodeSimplex/Envelope/ADSR.h"
 
 namespace Clover::NodeSimplex::Envelope {
 
-AdsrSettings::AdsrSettings(size_t a, size_t d, float s, size_t r)
-    : attack(std::max((size_t)1, a)), decay(std::max((size_t)1, d)),
-      sustain(s), release(std::max((size_t)1, r)), startTime(0),
-      keyOn(false) {}
-
-Adsr::Adsr(size_t a, size_t d, float s, size_t r)
-    : StatefulSubgraph(), envelope(0, 0, 0) {
-  this->settings.initial.attack = a;
-  this->settings.initial.decay = d;
-  this->settings.initial.sustain = s;
-  this->settings.initial.release = r;
-
-  settings.reset();
-  connectNodes();
+ADSR::ADSR()
+    : ADSR(1, 1, 1.f, 1) {
 }
 
-Adsr::Adsr(AdsrSettings initialSettings)
-    : StatefulSubgraph(initialSettings), envelope(0, 0, 0) {
-  settings.reset();
-  connectNodes();
+ADSR::ADSR(int a, int d, float s, int r)
+    : AudioNode(), envelope(a, d, s, r) {
+
 }
 
-void Adsr::set(size_t a, size_t d, float s, size_t r) {
+void ADSR::set(int a, int d, float s, int r) {
   attack(a);
   decay(d);
   sustain(s);
   release(r);
 }
 
-void Adsr::set(float a, float d, float s, float r) {
-  size_t a_rounded = (size_t) std::round(a);
-  size_t d_rounded = (size_t) std::round(a + d) - a_rounded;
-  size_t r_rounded = (size_t) std::round(r);
-  attack(a);
-  decay(d);
+void ADSR::set(float a, float d, float s, float r) {
+  int a_rounded = static_cast<int>(std::round(a));
+  int d_rounded = static_cast<int>(std::round(a + d) - a_rounded);
+  int r_rounded = static_cast<int>(std::round(r));
+
+  attack(a_rounded);
+  decay(d_rounded);
   sustain(s);
-  release(r);
+  release(r_rounded);
 }
 
-size_t Adsr::attack() { return settings.current.attack; }
-void Adsr::attack(size_t a) { settings.current.attack = std::max((size_t)1, a); }
+int ADSR::attack() { return envelope.attack(); }
+void ADSR::attack(int a) { envelope.attack(a); }
 
-size_t Adsr::decay() { return settings.current.decay; }
-void Adsr::decay(size_t d) { settings.current.decay = std::max((size_t)1, d); }
+int ADSR::decay() { return envelope.decay(); }
+void ADSR::decay(int d) { envelope.decay(d); }
 
-float Adsr::sustain() { return settings.current.sustain; }
-void Adsr::sustain(float s) { settings.current.sustain = s; }
+float ADSR::sustain() { return envelope.sustain(); }
+void ADSR::sustain(float s) { envelope.sustain(s); }
 
-size_t Adsr::release() { return settings.current.release; }
-void Adsr::release(size_t r) { settings.current.release = std::max((size_t)1, r); }
+int ADSR::release() { return envelope.release(); }
+void ADSR::release(int r) { envelope.release(r); }
 
-void Adsr::keyOn() {
-  AdsrSettings &s = settings.current;
-  envelope.set(0.f, 1.f, s.attack);
-
-  settings.current.keyOn = true;
-  settings.current.startTime = _currentClockTime;
+void ADSR::triggerOn() {
+  envelope.keyOn();
+}
+void ADSR::triggerOff() {
+  envelope.keyOff();
 }
 
-void Adsr::keyOff() {
-  AdsrSettings &s = settings.current;
-  float currentValue = frames.current[0] / _gain;
-
-  float percentOfSustain = currentValue / s.sustain;
-
-  // todo: add a test for early release scenario
-  float releaseDuration = s.release * std::min(percentOfSustain, 1.f);
-
-  envelope.set(currentValue, 0., releaseDuration);
-
-  settings.current.keyOn = false;
-  settings.current.startTime = _currentClockTime;
+AudioFrame<1> ADSR::tick(AudioFrame<0> input) {
+  return AudioFrame<1> {envelope.process()};
 }
-
-void Adsr::triggerOn() {
-  keyOn();
-}
-void Adsr::triggerOff() {
-  keyOff();
-}
-
-AudioFrame<1> Adsr::tick(AudioFrame<0> input) {
-  AdsrSettings &s = settings.current;
-
-  // should compute these times and store them in settings
-  bool isStartOfDecay =
-      s.keyOn && _currentClockTime == s.startTime + s.attack;
-  bool isStartOfSustain =
-      s.keyOn && _currentClockTime == s.startTime + s.attack + s.decay;
-
-  if (isStartOfSustain) {
-    envelope.set(s.sustain, s.sustain, 0);
-  } else if (isStartOfDecay) {
-    envelope.set(1., s.sustain, s.decay);
-  }
-
-  return blackHole.frames.current;
-}
-
-void Adsr::connectNodes() { envelope >> blackHole; }
 
 } // namespace Clover::NodeSimplex::Envelope
