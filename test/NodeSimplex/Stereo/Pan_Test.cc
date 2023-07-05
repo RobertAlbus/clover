@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
 
+#include <memory>
+
 #include "Clover.h"
 
 TEST(NodeSimplex_Stereo_Pan, ShouldPan1) {
@@ -30,14 +32,16 @@ TEST(NodeSimplex_Stereo_Pan, ShouldPan1) {
 }
 
 TEST(NodeSimplex_Stereo_Pan, ShouldPan2) {
+  std::shared_ptr<std::vector<float>> wt =
+      std::make_shared<std::vector<float>>(1.f, 1.f);
+  Clover::NodeSimplex::Wavetable::WavetableOscStereo wavetableDC;
+  wavetableDC.wavetable(wt);
+
   Clover::_Test::HandCrank<2> crank;
   Clover::_Test::Collector<2> collector(1);
   Clover::NodeSimplex::Stereo::Pan2 pan;
-  Clover::NodeSimplex::Envelope::DC dc;
-  Clover::NodeSimplex::Adapter::MultiCast<2> multicast;
-  dc.value(1);
 
-  dc >> multicast >> pan >> collector >> crank;
+  wavetableDC >> pan >> collector >> crank;
 
   pan.pan(0);
   crank.turn(1);

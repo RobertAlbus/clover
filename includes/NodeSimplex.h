@@ -1,7 +1,5 @@
 #pragma once
 
-#include "NodeSimplex/Adapter/MapAdapter.h"
-#include "NodeSimplex/Adapter/MultiCast.h"
 #include "NodeSimplex/Adapter/NullAdapter.h"
 
 #include "NodeSimplex/Basic/Gain.h"
