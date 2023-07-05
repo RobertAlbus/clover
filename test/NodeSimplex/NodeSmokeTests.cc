@@ -1,9 +1,27 @@
 #include <gtest/gtest.h>
 
-#include "Clover.h"
+#include "_Test/Collector.h"
+#include "_Test/DCN.h"
+#include "_Test/HandCrank.h"
+#include "_Test/Incrementor.h"
+
+#include "NodeSimplex/Adapter/NullAdapter.h"
 #include "NodeSimplex/Delay/FractionalDelayLine.h"
 #include "NodeSimplex/Envelope/ADSR.h"
 #include "NodeSimplex/Envelope/BasicEnvelope.h"
+
+TEST(NodeSimplex_SmokeTest, NullAdapter) {
+  Clover::_Test::HandCrank<1> crank;
+  Clover::_Test::Collector<1> collector(1);
+  Clover::NodeSimplex::Adapter::NullAdapter<4, 1> nullAdapter;
+  Clover::_Test::DCN<4> dc;
+
+  dc >> nullAdapter >> collector >> crank;
+
+  crank.turn(1);
+
+  EXPECT_EQ(collector.frames[0][0], 0.f);
+}
 
 TEST(NodeSimplex_SmokeTest, Delay_Fractional) {
   float delayTime = 1.f;

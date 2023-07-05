@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Graph.h"
+#include "Graph/AudioNode.h"
 
 using namespace Clover::Graph;
 using namespace Clover::Util;
