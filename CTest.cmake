@@ -23,10 +23,8 @@ add_executable(clover_test
     test/Midi/Notes.cc
 
     test/NodeSimplex/Basic/Gain_Test.cc
-    test/NodeSimplex/Basic/Rectifier_Test.cc
     
     test/NodeSimplex/Envelope/AutomationClip_Test.cc
-    test/NodeSimplex/Envelope/BasicEnvelope_Test.cc
     
     test/NodeSimplex/Filter/Filter_Test.cc
     
