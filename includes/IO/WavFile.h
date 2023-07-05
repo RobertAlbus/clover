@@ -8,15 +8,14 @@
 #include "Graph.h"
 #include "Util/Calc.h"
 
-using namespace Clover::Graph;
 using namespace Clover::Util;
 
 namespace Clover::IO {
 
-template <size_t __arity> class WavFile : public AudioNode<__arity, 0> {
+template <size_t __arity> class WavFile : public Graph::AudioNode<__arity, 0> {
 public:
   WavFile(std::string filePath, int duration)
-      : AudioNode<__arity, 0>(), _durationSamples(duration), _filePath(filePath)
+      : Graph::AudioNode<__arity, 0>(), _durationSamples(duration), _filePath(filePath)
 
   {
     content.reserve((size_t)duration * __arity);
@@ -38,9 +37,9 @@ private:
   std::string _filePath;
   float _signalMaxima;
 
-  AudioFrame<0> tick(AudioFrame<__arity> input) {
-    AudioFrame<0> f{};
-    if (AudioNode<__arity, 0>::_currentClockTime == _durationSamples) {
+  Graph::AudioFrame<0> tick(Graph::AudioFrame<__arity> input) {
+    Graph::AudioFrame<0> f{};
+    if (Graph::AudioNode<__arity, 0>::_currentClockTime == _durationSamples) {
       // TODO: make this configurable with options
       // - normalize if small
       // - normalize if large

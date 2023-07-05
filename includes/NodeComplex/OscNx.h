@@ -109,12 +109,12 @@ struct OscNx : public Clover::Graph::AudioNode<0, 2>, Pitchable, Triggerable {
   Clover::NodeSimplex::Adapter::NullAdapter<2, 0> blackHole2;
   Clover::NodeSimplex::Basic::Gain<2> audioSink;
 
-  AudioFrame<2> tick(AudioFrame<0> input) {
+  Clover::Graph::AudioFrame<2> tick(Clover::Graph::AudioFrame<0> input) {
     updatePitchMod();
     updateFilterMod();
     updateAmplitudeMod();
 
-    AudioFrame<2> f{audioSink.currentFrame()[0], audioSink.currentFrame()[1]};
+    Clover::Graph::AudioFrame<2> f{audioSink.currentFrame()[0], audioSink.currentFrame()[1]};
 
     float ff = filter.freq();
     float fr = filter.reso();

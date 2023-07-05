@@ -49,8 +49,8 @@ void ADSR::triggerOff() {
   envelope.keyOff();
 }
 
-AudioFrame<1> ADSR::tick(AudioFrame<0> input) {
-  return AudioFrame<1> {envelope.process()};
+Graph::AudioFrame<1> ADSR::tick(Graph::AudioFrame<0> input) {
+  return Graph::AudioFrame<1> {envelope.process()};
 }
 
 } // namespace Clover::NodeSimplex::Envelope

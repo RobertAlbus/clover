@@ -1,18 +1,18 @@
 #pragma once
 
-#include <cassert>
+#include <assert.h>
 #include <vector>
 
 #include "RtMidi.h"
 
-#include "Graph.h"
+#include "Graph/AudioNode.h"
 
 namespace Clover::IO {
 
-class MidiIn : public AudioNode<0, 256> {
+class MidiIn : public Graph::AudioNode<0, 256> {
 public:
   MidiIn(const std::string &deviceName, unsigned int queueSizeLimit = 1000)
-      : AudioNode(), _printChange(false) {
+      : Graph::AudioNode<0, 256>(), _printChange(false) {
     RtMidi::Api api = RtMidi::Api::UNSPECIFIED;
     const std::string &clientName = "Clover Midi Input Client";
     controlChannel.resize(128);
@@ -100,8 +100,8 @@ private:
     midiRegister->at(message->at(1)) = message->at(2);
   }
 
-  AudioFrame<256> tick(AudioFrame<0> input) {
-    AudioFrame<256> f;
+  Graph::AudioFrame<256> tick(Graph::AudioFrame<0> input) {
+    Graph::AudioFrame<256> f;
 
     for (int i = 0; i < 128; i++) {
       f[i] = noteChannel[i];

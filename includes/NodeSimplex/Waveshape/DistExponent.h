@@ -4,23 +4,23 @@
 
 #include "Graph.h"
 
-using namespace Clover::Graph;
+
 using namespace Clover::Util;
 
 namespace Clover::NodeSimplex::Waveshape {
 
 template <size_t __arity>
-class DistExponent : public AudioNode<__arity, __arity> {
+class DistExponent : public Graph::AudioNode<__arity, __arity> {
 public:
-  DistExponent() : AudioNode<__arity, __arity>(), _exponent(1) {}
+  DistExponent() : Graph::AudioNode<__arity, __arity>(), _exponent(1) {}
 
   void exponent(float e) { _exponent = e; }
   float exponent() { return _exponent; }
 
 private:
   float _exponent;
-  AudioFrame<__arity> tick(AudioFrame<__arity> input) {
-    AudioFrame<__arity> f{};
+  Graph::AudioFrame<__arity> tick(Graph::AudioFrame<__arity> input) {
+    Graph::AudioFrame<__arity> f{};
     for (int i = 0; i < __arity; i++) {
       float sign = Calc::sign(input[i]);
       float abs = fabs(input[i]);

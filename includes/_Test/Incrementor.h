@@ -2,20 +2,20 @@
 
 #include "Graph.h"
 
-using namespace Clover::Graph;
+
 
 namespace Clover::_Test {
 
 template <size_t __arityOut>
-class Incrementor : public AudioNode<0, __arityOut> {
+class Incrementor : public Graph::AudioNode<0, __arityOut> {
 public:
   Incrementor(int startValue = 0)
-      : AudioNode<0, __arityOut>(), basis(startValue) {}
+      : Graph::AudioNode<0, __arityOut>(), basis(startValue) {}
 
 private:
   float basis;
-  AudioFrame<__arityOut> tick(AudioFrame<0> input) {
-    AudioFrame<__arityOut> f{};
+  Graph::AudioFrame<__arityOut> tick(Graph::AudioFrame<0> input) {
+    Graph::AudioFrame<__arityOut> f{};
 
     float time = (float)this->_currentClockTime;
     for (int i = 0; i < __arityOut; i++) {

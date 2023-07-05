@@ -10,7 +10,7 @@ using namespace Clover::Util;
 
 namespace Clover::NodeSimplex::Reduce {
 
-class BitCrusher : public AudioNode<1, 1> {
+class BitCrusher : public Graph::AudioNode<1, 1> {
 public:
   BitCrusher(float bits = std::numeric_limits<float>::max())
       : AudioNode(), bits(bits) {}
@@ -25,11 +25,11 @@ public:
   float bits;
 
 protected:
-  AudioFrame<1> tick(AudioFrame<1> inputFrame) {
+  Graph::AudioFrame<1> tick(Graph::AudioFrame<1> inputFrame) {
     float sign = Calc::sign(inputFrame[0]);
     float abs = fabs(inputFrame[0]);
     abs = floor(abs * bits) / bits;
-    return AudioFrame<1>{abs * sign};
+    return Graph::AudioFrame<1>{abs * sign};
   }
 };
 

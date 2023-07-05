@@ -10,13 +10,13 @@ struct ClampSettings {
 };
 
 template <size_t __arity>
-class Clamp : public StatefulProcessor<__arity, __arity, ClampSettings> {
+class Clamp : public Graph::StatefulProcessor<__arity, __arity, ClampSettings> {
 public:
   Clamp(ClampSettings initialSettings)
-      : StatefulProcessor<__arity, __arity, ClampSettings>(initialSettings) {}
+      : Graph::StatefulProcessor<__arity, __arity, ClampSettings>(initialSettings) {}
 
   Clamp(float min, float max)
-      : StatefulProcessor<__arity, __arity, ClampSettings>() {
+      : Graph::StatefulProcessor<__arity, __arity, ClampSettings>() {
     this->settings.initial.min = min;
     this->settings.initial.max = max;
 
@@ -30,8 +30,8 @@ public:
   void max(float maximum) { this->settings.current.max = maximum; }
 
 private:
-  AudioFrame<__arity> tick(AudioFrame<__arity> input) {
-    AudioFrame<__arity> f;
+  Graph::AudioFrame<__arity> tick(Graph::AudioFrame<__arity> input) {
+    Graph::AudioFrame<__arity> f;
     for (int i = 0; i < __arity; i++) {
       ClampSettings &s;
       f[i] = std::clamp(input[i], s.min, s.max);

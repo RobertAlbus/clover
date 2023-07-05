@@ -3,9 +3,11 @@
 #include <cmath>
 
 #include "Algorithm.h"
-#include "Graph.h"
+#include "Graph/AudioFrame.h"
 
-class AutomationNode : public AudioNode<0, 1> {
+namespace Clover::NodeSimplex {
+
+class AutomationNode : public Graph::AudioNode<0, 1> {
 public:
   AutomationNode() : _tensionScale(M_PI), _currentIndex(0), _nextIndex(1) {
     EnvelopeDefinition emptyEnvelope;
@@ -27,11 +29,11 @@ public:
   float tensionScale() { return _tensionScale; }
 
 private:
-  AudioFrame<1> tick(AudioFrame<0>) {
+  Graph::AudioFrame<1> tick(Graph::AudioFrame<0>) {
     const EnvelopeComputation::Point &endPoint = computedEnvelope.points.back();
 
     if (_currentClockTime >= endPoint.start) {
-      return AudioFrame<1>{endPoint.value};
+      return Graph::AudioFrame<1>{endPoint.value};
     }
 
     const EnvelopeComputation::Point &currentPoint =
@@ -53,7 +55,7 @@ private:
     _currentIndex++;
     _nextIndex++;
 
-    return AudioFrame<1>{tensionedValue};
+    return Graph::AudioFrame<1>{tensionedValue};
   }
 
   EnvelopeComputation computedEnvelope;
@@ -61,3 +63,5 @@ private:
   int _nextIndex;
   float _tensionScale;
 };
+
+}

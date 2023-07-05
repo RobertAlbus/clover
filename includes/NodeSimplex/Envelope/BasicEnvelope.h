@@ -3,12 +3,13 @@
 #include <algorithm>
 #include <cmath>
 
-#include "Algorithm.h"
-#include "Graph.h"
+#include "Algo/Envelope/Basic.h"
+#include "Graph/AudioFrame.h"
+#include "Graph/AudioNode.h"
 
 namespace Clover::NodeSimplex::Envelope {
 
-class BasicEnvelope : public AudioNode<0, 1> {
+class BasicEnvelope : public Graph::AudioNode<0, 1> {
 public:
   BasicEnvelope();
   BasicEnvelope(float currentValue, float targetValue, uint durationTime);
@@ -17,7 +18,7 @@ public:
   void set(float currentValue, float targetValue, uint durationTimeSamples);
 
 protected:
-  AudioFrame<1> tick(AudioFrame<0> inputFrame);
+  Graph::AudioFrame<1> tick(Graph::AudioFrame<0> inputFrame);
   Clover::Envelope::Basic<Sample> envelope;
 };
 

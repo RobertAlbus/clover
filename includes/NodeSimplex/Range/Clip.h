@@ -13,12 +13,12 @@ struct ClipSettings {
 };
 
 template <size_t __arity>
-class Clip : public StatefulProcessor<__arity, __arity, ClipSettings> {
+class Clip : public Graph::StatefulProcessor<__arity, __arity, ClipSettings> {
 public:
   Clip(ClipSettings initialSettings)
-      : StatefulProcessor<__arity, __arity, ClipSettings>(initialSettings) {}
+      : Graph::StatefulProcessor<__arity, __arity, ClipSettings>(initialSettings) {}
 
-  Clip(float threshold) : StatefulProcessor<__arity, __arity, ClipSettings>() {
+  Clip(float threshold) : Graph::StatefulProcessor<__arity, __arity, ClipSettings>() {
     this->settings.initial.threshold = threshold;
     this->settings.initial.clipFunction = Clip::clipAboveFunction;
 
@@ -42,8 +42,8 @@ public:
   };
 
 private:
-  AudioFrame<__arity> tick(AudioFrame<__arity> input) {
-    AudioFrame<__arity> f;
+  Graph::AudioFrame<__arity> tick(Graph::AudioFrame<__arity> input) {
+    Graph::AudioFrame<__arity> f;
     for (int i = 0; i < __arity; i++) {
       ClipSettings &s;
       f[i] = s.clipFunction(input[i]);

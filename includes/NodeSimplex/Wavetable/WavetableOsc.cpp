@@ -110,7 +110,7 @@ void WavetableOsc::noise(int size) {
   wavetable(wt);
 }
 
-AudioFrame<1> WavetableOsc::tick(AudioFrame<0> input) {
+Graph::AudioFrame<1> WavetableOsc::tick(Graph::AudioFrame<0> input) {
   float nextIndex =
       normalizeReadIndex(floor(settings.current.readIndex + 1));
 
@@ -121,7 +121,7 @@ AudioFrame<1> WavetableOsc::tick(AudioFrame<0> input) {
       std::lerp(wt[(int)settings.current.readIndex], wt[(int)nextIndex], lerpAmount
       );
 
-  AudioFrame<1> f{value};
+  Graph::AudioFrame<1> f{value};
 
   float newIndex = settings.current.readIndex +
                     settings.current.readIndexOffset +

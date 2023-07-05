@@ -44,7 +44,7 @@ template <typename T> struct STSQ_Pattern {
 template <typename StepDataType, typename TargetType,
           void (*applyStepDataFunc)(const StepDataType &,
                                     std::vector<TargetType *> &)>
-struct STSQ : public AudioNode<0, 0>, public PatternSettable {
+struct STSQ : public Clover::Graph::AudioNode<0, 0>, public PatternSettable {
 
   STSQ() : AudioNode(), nextIndex(0), patternIndex(0) {}
 
@@ -63,10 +63,10 @@ struct STSQ : public AudioNode<0, 0>, public PatternSettable {
     patterns.emplace_back(newPattern);
   }
 
-  AudioFrame<0> tick(AudioFrame<0> input) {
+  Clover::Graph::AudioFrame<0> tick(Clover::Graph::AudioFrame<0> input) {
     checkTimeAndPerformStep();
 
-    return AudioFrame<0>{};
+    return Clover::Graph::AudioFrame<0>{};
   }
 
 private:

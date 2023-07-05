@@ -84,7 +84,7 @@ int main(int argc, char *argv[]) {
   bool isProfilingMode = false;
   if (isProfilingMode) {
     int quantity = Clover::Base::sampleRate * 360 * 10;
-    std::vector<AudioFrame<2>> benchmarkData;
+    std::vector<Clover::Graph::AudioFrame<2>> benchmarkData;
     benchmarkData.reserve(quantity);
     auto start = std::chrono::high_resolution_clock::now();
     for (int i = 0; i < quantity; i++) {

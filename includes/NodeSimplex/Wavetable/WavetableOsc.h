@@ -25,7 +25,7 @@ struct WavetableOscSettings {
 };
 
 struct WavetableOsc : public Base,
-                      public StatefulProcessor<0, 1, WavetableOscSettings>,
+                      public Graph::StatefulProcessor<0, 1, WavetableOscSettings>,
                       public WavetableOscInterface {
   WavetableOsc();
   WavetableOsc(std::shared_ptr<Wavetable> wavetable, float freq,
@@ -53,7 +53,7 @@ struct WavetableOsc : public Base,
   void noise(int size = 1024);
 
 private:
-  AudioFrame<1> tick(AudioFrame<0> input) override;
+  Graph::AudioFrame<1> tick(Graph::AudioFrame<0> input) override;
 
   float normalizeReadIndex(float index);
   float normalizePhase(float phase);

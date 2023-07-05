@@ -18,11 +18,11 @@ template <class SettingsType> struct NodeSettings {
 
 /// A Node with a transform function that maintains inter-sample state.
 template <size_t __arityIn, size_t __arityOut, class SettingsType>
-class StatefulProcessor : public AudioNode<__arityIn, __arityOut> {
+class StatefulProcessor : public Graph::AudioNode<__arityIn, __arityOut> {
 public:
-  StatefulProcessor() : AudioNode<__arityIn, __arityOut>() {}
+  StatefulProcessor() : Graph::AudioNode<__arityIn, __arityOut>() {}
   StatefulProcessor(const SettingsType &initialSettings)
-      : AudioNode<__arityIn, __arityOut>(), settings(initialSettings) {
+      : Graph::AudioNode<__arityIn, __arityOut>(), settings(initialSettings) {
     settings.reset();
   }
 

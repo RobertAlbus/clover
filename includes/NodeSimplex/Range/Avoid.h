@@ -11,13 +11,13 @@ struct AvoidSettings {
 };
 
 template <size_t __arity>
-class Avoid : public StatefulProcessor<__arity, __arity, AvoidSettings> {
+class Avoid : public Graph::StatefulProcessor<__arity, __arity, AvoidSettings> {
 public:
   Avoid(AvoidSettings initialSettings)
-      : StatefulProcessor<__arity, __arity, AvoidSettings>(initialSettings) {}
+      : Graph::StatefulProcessor<__arity, __arity, AvoidSettings>(initialSettings) {}
 
   Avoid(float minimum, float maximum)
-      : StatefulProcessor<__arity, __arity, AvoidSettings>() {
+      : Graph::StatefulProcessor<__arity, __arity, AvoidSettings>() {
     this->settings.initial.min = minimum;
     this->settings.initial.max = maximum;
     this->settings.initial.center = findCenter(minimum, maximum);
@@ -45,8 +45,8 @@ private:
     return minimum + (maximum - minimum) / 2.;
   }
 
-  AudioFrame<__arity> tick(AudioFrame<__arity> input) {
-    AudioFrame<__arity> f;
+  Graph::AudioFrame<__arity> tick(Graph::AudioFrame<__arity> input) {
+    Graph::AudioFrame<__arity> f;
     for (int i = 0; i < __arity; i++) {
       float sample = input[i];
       AvoidSettings &s = this->settings.current;
