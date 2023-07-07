@@ -22,9 +22,6 @@
 
 #include "NodeSimplex/DynamicRange/AsymClip.h"
 
-#include "NodeSimplex/Reduce/Bitcrusher.h"
-#include "NodeSimplex/Reduce/Samplecrusher.h"
-
 #include "NodeSimplex/StepSequencer/PatternSettable.h"
 #include "NodeSimplex/StepSequencer/StepSequencer.h"
 #include "NodeSimplex/StepSequencer/lib.h"
@@ -34,9 +31,6 @@
 #include "NodeSimplex/Stereo/Pan.h"
 #include "NodeSimplex/Stereo/Stereo.h"
 #include "NodeSimplex/Stereo/Sum.h"
-
-#include "NodeSimplex/Waveshape/DistExponent.h"
-#include "NodeSimplex/Waveshape/RingMod_V1.h"
 
 #include "NodeSimplex/Wavetable/WavetableOscInterface.h"
 
