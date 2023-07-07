@@ -4,6 +4,7 @@
 
 #include "Algorithm.h"
 #include "Graph/AudioFrame.h"
+#include "Util/Calc.h"
 
 namespace Clover::NodeSimplex {
 
@@ -48,7 +49,7 @@ private:
     float lerpValue =
         std::lerp(currentPoint.value, nextPoint.value, lerpAmount);
     float tensionedValue =
-        Calc::tension(lerpValue, nextPoint.tension * _tensionScale);
+        Util::Calc::tension(lerpValue, nextPoint.tension * _tensionScale);
 
     bool isNextSectionStarted = _currentClockTime == nextPoint.start;
 

@@ -1,8 +1,7 @@
 #pragma once
 
 #include "Graph.h"
-
-using namespace Clover::Util;
+#include "Util/SampleClock.h"
 
 namespace Clover::_Test {
 

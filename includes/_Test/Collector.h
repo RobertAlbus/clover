@@ -3,8 +3,6 @@
 
 #include "Graph.h"
 
-using namespace Clover::Util;
-
 namespace Clover::_Test {
 
 template <size_t __arity>
