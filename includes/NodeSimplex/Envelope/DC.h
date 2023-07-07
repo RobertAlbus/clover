@@ -5,7 +5,7 @@
 
 namespace Clover::NodeSimplex::Envelope {
 
-class DC : public AudioNode<0, 1> {
+class DC : public Graph::AudioNode<0, 1> {
 public:
   DC(Sample value = 0);
 
@@ -13,7 +13,7 @@ public:
   Sample value();
 
 protected:
-  AudioFrame<1> tick(AudioFrame<0> input);
+  Graph::AudioFrame<1> tick(Graph::AudioFrame<0> input);
   Clover::Envelope::DC<Sample> dc;
 };
 

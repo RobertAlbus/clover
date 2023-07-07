@@ -1,9 +1,28 @@
 #include <gtest/gtest.h>
 
-#include "Clover.h"
+#include "_Test/Collector.h"
+#include "_Test/DCN.h"
+#include "_Test/HandCrank.h"
+#include "_Test/Incrementor.h"
+
+#include "NodeSimplex/Adapter/NullAdapter.h"
 #include "NodeSimplex/Delay/FractionalDelayLine.h"
+#include "NodeSimplex/DynamicRange/AsymClip.h"
 #include "NodeSimplex/Envelope/ADSR.h"
 #include "NodeSimplex/Envelope/BasicEnvelope.h"
+
+TEST(NodeSimplex_SmokeTest, NullAdapter) {
+  Clover::_Test::HandCrank<1> crank;
+  Clover::_Test::Collector<1> collector(1);
+  Clover::NodeSimplex::Adapter::NullAdapter<4, 1> nullAdapter;
+  Clover::_Test::DCN<4> dc;
+
+  dc >> nullAdapter >> collector >> crank;
+
+  crank.turn(1);
+
+  EXPECT_EQ(collector.frames[0][0], 0.f);
+}
 
 TEST(NodeSimplex_SmokeTest, Delay_Fractional) {
   float delayTime = 1.f;
@@ -25,6 +44,36 @@ TEST(NodeSimplex_SmokeTest, Delay_Fractional) {
         << "If this test has failed, it's likely the "
            "Delay::FractionalDelay algorithm.";
   }
+}
+
+TEST(NodeSimplex_SmokeTest, DynamicRange_Clamp) {
+  Clover::_Test::HandCrank<1> crank;
+  Clover::_Test::Collector<1> envelopeCollector(6);
+  Clover::NodeSimplex::DynamicRange::AsymClip<1> clip;
+  Clover::_Test::DCN<1> dc;
+
+  dc >> clip >> envelopeCollector >> crank;
+
+  dc.indexBasis(-1.5f);
+  crank.turn(1);
+  dc.indexBasis(-1.0f);
+  crank.turn(1);
+  dc.indexBasis(-0.5f);
+  crank.turn(1);
+  dc.indexBasis(0.5f);
+  crank.turn(1);
+  dc.indexBasis(1.0f);
+  crank.turn(1);
+  dc.indexBasis(1.5f);
+  crank.turn(1);
+
+  EXPECT_EQ(envelopeCollector.frames[0][0], -1.f);
+  EXPECT_EQ(envelopeCollector.frames[1][0], -1.f);
+  EXPECT_EQ(envelopeCollector.frames[2][0], -0.5f);
+
+  EXPECT_EQ(envelopeCollector.frames[3][0], 0.5f);
+  EXPECT_EQ(envelopeCollector.frames[4][0], 1.f);
+  EXPECT_EQ(envelopeCollector.frames[5][0], 1.f);
 }
 
 TEST(NodeSimplex_SmokeTest, Envelope_Basic) {

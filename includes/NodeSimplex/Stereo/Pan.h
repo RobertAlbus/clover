@@ -9,10 +9,12 @@ using namespace Clover::Util;
 
 namespace Clover::NodeSimplex::Stereo {
 
-template <size_t __arityInput> class Pan : public AudioNode<__arityInput, 2> {
+template <size_t __arityInput>
+class Pan : public Graph::AudioNode<__arityInput, 2> {
 public:
   Pan(float p = 0)
-      : AudioNode<__arityInput, 2>(), _pan(0), midGain(Calc::dbtol(-4.5)) {
+      : Graph::AudioNode<__arityInput, 2>(), _pan(0),
+        midGain(Calc::dbtol(-4.5)) {
     pan(p);
   }
 
@@ -40,7 +42,7 @@ public:
   Pan1(float p = 0);
 
 private:
-  AudioFrame<2> tick(AudioFrame<1> input);
+  Graph::AudioFrame<2> tick(Graph::AudioFrame<1> input);
 };
 
 class Pan2 : public Pan<2> {
@@ -48,7 +50,7 @@ public:
   Pan2(float p = 0);
 
 private:
-  AudioFrame<2> tick(AudioFrame<2> input);
+  Graph::AudioFrame<2> tick(Graph::AudioFrame<2> input);
 };
 
 } // namespace Clover::NodeSimplex::Stereo

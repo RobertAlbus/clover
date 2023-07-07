@@ -5,28 +5,18 @@
 #include <tgmath.h>
 #include <vector>
 
+#include "Graph/AudioFrame.h"
+#include "Graph/AudioNode.h"
 #include "WavetableOscInterface.h"
 
 namespace Clover::NodeSimplex::Wavetable {
 
 typedef std::vector<Sample> Wavetable;
 
-struct WavetableOscSettings {
-  float freq;
-  float phase;
-  float phasePreCalculationCache;
-  float phaseOffset;
-  float phaseOffsetPreCalculationCache;
-  float readIndex;
-  float readIndexIncrement;
-  float readIndexOffset;
-  std::shared_ptr<Wavetable> wavetable;
-  float wavetableSize;
-};
-
-struct WavetableOsc : public Base,
-                      public StatefulProcessor<0, 1, WavetableOscSettings>,
-                      public WavetableOscInterface {
+struct WavetableOsc
+    : public Base,
+      public Graph::AudioNode<0, 1>,
+      public WavetableOscInterface {
   WavetableOsc();
   WavetableOsc(std::shared_ptr<Wavetable> wavetable, float freq,
                float phase = 0, float phaseOffset = 0);
@@ -53,15 +43,26 @@ struct WavetableOsc : public Base,
   void noise(int size = 1024);
 
 private:
-  AudioFrame<1> tick(AudioFrame<0> input) override;
+  Graph::AudioFrame<1> tick(Graph::AudioFrame<0> input) override;
 
   float normalizeReadIndex(float index);
   float normalizePhase(float phase);
   float calculateReadIndexIncrement(float freq);
   float calculateReadIndexOffset(float phaseOffset);
 
+  float freq_;
+  float phase_;
+  float phasePreCalculationCache_;
+  float phaseOffset_;
+  float phaseOffsetPreCalculationCache_;
+  float readIndex_;
+  float readIndexIncrement_;
+  float readIndexOffset_;
+  std::shared_ptr<Wavetable> wavetable_;
+  float wavetableSize_;
+
 public:
-  void printSettings(WavetableOscSettings &settings);
+  void printSettings();
 };
 
 } // namespace Clover::NodeSimplex::Wavetable

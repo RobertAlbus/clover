@@ -2,17 +2,18 @@
 
 #include "Clover.h"
 
-class NodeStub : public AudioNode<1, 1> {
+class NodeStub : public Clover::Graph::AudioNode<1, 1> {
 public:
-  NodeStub() : AudioNode<1, 1>() {}
+  NodeStub() : Clover::Graph::AudioNode<1, 1>() {}
 
-  std::vector<Clover::Graph::INode<AudioFrame<1>> *> &getInputNodes() {
+  std::vector<Clover::Graph::INode<Clover::Graph::AudioFrame<1>> *> &
+  getInputNodes() {
     return Node::inputNodes;
   }
 
 private:
-  AudioFrame<1> tick(AudioFrame<1> input) {
-    return AudioFrame<1>{1.f + input[0]};
+  Clover::Graph::AudioFrame<1> tick(Clover::Graph::AudioFrame<1> input) {
+    return Clover::Graph::AudioFrame<1>{1.f + input[0]};
   }
 };
 

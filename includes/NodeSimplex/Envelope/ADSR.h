@@ -1,12 +1,11 @@
 #pragma once
 
 #include "Algo/Envelope/ADSR.h"
-#include "Graph.h"
 #include "NodeSimplex/StepSequencer/lib.h"
 
 namespace Clover::NodeSimplex::Envelope {
 
-class ADSR : public Triggerable, public AudioNode<0, 1> {
+class ADSR : public Triggerable, public Graph::AudioNode<0, 1> {
 public:
   ADSR();
   ADSR(int a, int d, float s, int r);
@@ -30,7 +29,7 @@ public:
 protected:
   Clover::Envelope::ADSR<float> envelope;
 
-  AudioFrame<1> tick(AudioFrame<0> input);
+  Graph::AudioFrame<1> tick(Graph::AudioFrame<0> input);
 };
 
 } // namespace Clover::NodeSimplex::Envelope

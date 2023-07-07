@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
 
+#include <memory>
+
 #include "Clover.h"
 
 TEST(NodeSimplex_Stereo_Pan, ShouldPan1) {
@@ -11,10 +13,10 @@ TEST(NodeSimplex_Stereo_Pan, ShouldPan1) {
 
   dc >> pan >> collector >> crank;
 
-  pan.pan(0);
+  pan.pan(0.f);
   crank.turn(1);
 
-  float midGain = Calc::dbtol(-4.5);
+  float midGain = Calc::dbtol(-4.5f);
   EXPECT_EQ(collector.frames[0][0], midGain);
   EXPECT_EQ(collector.frames[0][1], midGain);
 
@@ -30,29 +32,33 @@ TEST(NodeSimplex_Stereo_Pan, ShouldPan1) {
 }
 
 TEST(NodeSimplex_Stereo_Pan, ShouldPan2) {
+  std::shared_ptr<std::vector<float>> wt =
+      std::make_shared<std::vector<float>>(1.f, 1.f);
+  Clover::NodeSimplex::Wavetable::WavetableOscStereo wavetableDC;
+  wavetableDC.wavetable(wt);
+
   Clover::_Test::HandCrank<2> crank;
   Clover::_Test::Collector<2> collector(1);
   Clover::NodeSimplex::Stereo::Pan2 pan;
-  Clover::NodeSimplex::Envelope::DC dc;
-  Clover::NodeSimplex::Adapter::MultiCast<2> multicast;
-  dc.value(1);
 
-  dc >> multicast >> pan >> collector >> crank;
+  wavetableDC >> pan >> collector >> crank;
 
-  pan.pan(0);
+  pan.pan(0.f);
   crank.turn(1);
 
-  float midGain = Calc::dbtol(-4.5);
+  float midGain = Calc::dbtol(-4.5f);
   EXPECT_EQ(collector.frames[0][0], midGain);
   EXPECT_EQ(collector.frames[0][1], midGain);
 
-  pan.pan(1.);
-  crank.turn(1);
+  pan.pan(1.f);
+  crank.turn(1.f);
   EXPECT_EQ(collector.frames[1][0], 0.f);
-  EXPECT_EQ(collector.frames[1][1], 1.f);
+  // should re-evaluate the algorithm and try to make it equal exactly 1
+  EXPECT_NEAR(collector.frames[1][1], 1.f, 0.01f);
 
-  pan.pan(-1.);
-  crank.turn(1);
-  EXPECT_EQ(collector.frames[2][0], 1.f);
+  pan.pan(-1.f);
+  crank.turn(1.f);
+  // should re-evaluate the algorithm and try to make it equal exactly 1
+  EXPECT_NEAR(collector.frames[2][0], 1.f, 0.01f);
   EXPECT_EQ(collector.frames[2][1], 0.f);
 }

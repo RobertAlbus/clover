@@ -10,10 +10,10 @@
 namespace Clover::NodeSimplex::Delay {
 
 template <size_t __arity>
-class FractionalDelayLine : public AudioNode<__arity, __arity> {
+class FractionalDelayLine : public Graph::AudioNode<__arity, __arity> {
 public:
   FractionalDelayLine(int bufferCapacity, float delaySamples)
-      : AudioNode<__arity, __arity>(),
+      : Graph::AudioNode<__arity, __arity>(),
         delayAlgorithm(bufferCapacity, delaySamples) {}
 
   void delay(float time) { delayAlgorithm.delay(time); }
@@ -21,8 +21,8 @@ public:
 
 protected:
   Clover::Delay::FractionalDelay<Sample, __arity> delayAlgorithm;
-  AudioFrame<__arity> tick(AudioFrame<__arity> input) {
-    return AudioFrame<__arity>{delayAlgorithm.process(input.data)};
+  Graph::AudioFrame<__arity> tick(Graph::AudioFrame<__arity> input) {
+    return Graph::AudioFrame<__arity>{delayAlgorithm.process(input.data)};
   }
 };
 

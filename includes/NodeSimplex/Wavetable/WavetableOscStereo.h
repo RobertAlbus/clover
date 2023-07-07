@@ -10,7 +10,7 @@
 namespace Clover::NodeSimplex::Wavetable {
 
 class WavetableOscStereo : public Base,
-                           public AudioNode<0, 2>,
+                           public Graph::AudioNode<0, 2>,
                            public WavetableOscInterface {
 public:
   WavetableOscStereo();
@@ -51,7 +51,7 @@ private:
 
   float freq_;
 
-  AudioFrame<2> tick(AudioFrame<0> input);
+  Graph::AudioFrame<2> tick(Graph::AudioFrame<0> input);
 
   void connectNodes();
   void updateFreq();

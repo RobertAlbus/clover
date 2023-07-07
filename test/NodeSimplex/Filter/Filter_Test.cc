@@ -24,7 +24,7 @@ TEST(NodeSimplex_Filter_Filter, ShouldFilterLowPass) {
   crank.turn(testSize);
 
   float rms = 0;
-  for (AudioFrame<1> &frame : collector.frames)
+  for (Clover::Graph::AudioFrame<1> &frame : collector.frames)
     rms += frame[0] * frame[0];
   rms /= collector.frames.size();
   rms = std::sqrt(rms);
@@ -51,7 +51,7 @@ TEST(NodeSimplex_Filter_Filter, ShouldFilterHighPass) {
   crank.turn(testSize);
 
   float rms = 0;
-  for (AudioFrame<1> &frame : collector.frames)
+  for (Clover::Graph::AudioFrame<1> &frame : collector.frames)
     rms += frame[0] * frame[0];
   rms /= collector.frames.size();
   rms = std::sqrt(rms);

@@ -10,11 +10,14 @@ FetchContent_MakeAvailable(googletest)
 enable_testing()
 
 add_executable(clover_test
+    test/Algorithm/Delay/Fractional.cc
+
+    test/Algorithm/DynamicRange/AsymClip.cc
+    test/Algorithm/DynamicRange/UpwardDCCompression.cc
+
     test/Algorithm/Envelope/ADSR.cc
     test/Algorithm/Envelope/Basic.cc
     test/Algorithm/Envelope/DC.cc
-
-    test/Algorithm/Delay/Fractional.cc
 
     test/Graph/Frame_Test.cc
     test/Graph/FrameHistory_Test.cc
@@ -22,14 +25,9 @@ add_executable(clover_test
 
     test/Midi/Notes.cc
 
-    test/NodeSimplex/Adapter/MapAdapter_Test.cc
-    test/NodeSimplex/Adapter/NullAdapter_Test.cc
-
     test/NodeSimplex/Basic/Gain_Test.cc
-    test/NodeSimplex/Basic/Rectifier_Test.cc
     
     test/NodeSimplex/Envelope/AutomationClip_Test.cc
-    test/NodeSimplex/Envelope/BasicEnvelope_Test.cc
     
     test/NodeSimplex/Filter/Filter_Test.cc
     

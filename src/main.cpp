@@ -42,22 +42,21 @@ int main(int argc, char *argv[]) {
   Wavetable::WavetableOscStereo osc;
   osc.saw(1024);
   osc.freq(70.);
+  osc.stereoDetune(-0.005f);
 
   Wavetable::WavetableOsc mod;
   mod.sine(11);
   mod.freq(71);
 
-  Clover::NodeSimplex::Range::Avoid<1> fbDestroyer(0., 0.);
-
-  mod >> fbDestroyer >> blackHole;
+  mod >> blackHole;
 
   Filter::Filter<2> filter;
   filter.lowPass();
   filter.set(200., 0.9);
 
   Filter::EQ<2> EQ;
-  EQ.peakingEQ();
-  EQ.set(80., 0.7, -22);
+  EQ.lowShelf();
+  EQ.set(80., 0.7, -10);
 
   osc >> filter >> EQ >> interface.rootNode;
   EQ.gain(0.33);
@@ -84,7 +83,7 @@ int main(int argc, char *argv[]) {
   bool isProfilingMode = false;
   if (isProfilingMode) {
     int quantity = Clover::Base::sampleRate * 360 * 10;
-    std::vector<AudioFrame<2>> benchmarkData;
+    std::vector<Clover::Graph::AudioFrame<2>> benchmarkData;
     benchmarkData.reserve(quantity);
     auto start = std::chrono::high_resolution_clock::now();
     for (int i = 0; i < quantity; i++) {
@@ -104,7 +103,7 @@ int main(int argc, char *argv[]) {
       float oscAdjusted = (osc.frames.current[0] + 1.) / 2.;
       float envelopeValue = adsr.frames.current[0];
       osc.freq(100. * (modAdjusted * 2. - 1));
-      mod.freq(100. * (oscAdjusted * 3.));
+      mod.freq(400. * (oscAdjusted * 3.));
 
       float cut = envelopeValue * (1000. * lfoAdjusted) + 200;
       float reso = envelopeValue * (-1. * lfoAdjusted) + 2;

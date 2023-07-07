@@ -29,7 +29,7 @@ protected:
 
   float _spreadReadOnly;
 
-  AudioFrame<2> tick(AudioFrame<2> input);
+  Graph::AudioFrame<2> tick(Graph::AudioFrame<2> input);
 };
 
 } // namespace Clover::NodeSimplex::Stereo

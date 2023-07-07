@@ -1,5 +1,7 @@
 #pragma once
 
+#include <assert.h>
+
 #include "Algo/AlgorithmBase.h"
 #include "Util/FloatingPointConcept.h"
 

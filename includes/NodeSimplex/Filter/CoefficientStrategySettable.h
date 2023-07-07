@@ -1,13 +1,5 @@
 #pragma once
 
-#include <array>
-#include <cmath>
-#include <functional>
-
-#include "Algorithm.h"
-#include "Base.h"
-#include "Graph.h"
-
 namespace Clover::NodeSimplex::Filter {
 
 class CoefficientStrategySettable {

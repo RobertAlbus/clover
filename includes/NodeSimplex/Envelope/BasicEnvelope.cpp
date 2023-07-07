@@ -1,7 +1,8 @@
 #include <algorithm>
 #include <cmath>
 
-#include "Graph.h"
+#include "Graph/AudioFrame.h"
+#include "Graph/AudioNode.h"
 #include "NodeSimplex/Envelope/BasicEnvelope.h"
 
 namespace Clover::NodeSimplex::Envelope {
@@ -20,10 +21,8 @@ void BasicEnvelope::set(float currentValue, float targetValue, uint durationTime
   envelope.set(currentValue, targetValue, durationTime);
 }
 
-AudioFrame<1> BasicEnvelope::tick(AudioFrame<0> inputFrame) {
-    printf("\n %i", _currentClockTime);
-
-  return AudioFrame<1>{envelope.process()};
+Graph::AudioFrame<1> BasicEnvelope::tick(Graph::AudioFrame<0> inputFrame) {
+  return Graph::AudioFrame<1>{envelope.process()};
 }
 
 } // namespace Clover::NodeSimplex::Envelope
