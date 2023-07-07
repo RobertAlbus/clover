@@ -4,7 +4,7 @@
 #include "Algo/Envelope/Basic.h"
 #include "Algo/Envelope/DC.h"
 
-#include "Algo/DynamicRange/Clip.h"
+#include "Algo/DynamicRange/AsymClip.h"
 
 #include "Algo/Filter/IIR/ButterworthCoefficients.h"
 #include "Algo/Filter/IIR/ButterworthResonantCoefficients.h"
