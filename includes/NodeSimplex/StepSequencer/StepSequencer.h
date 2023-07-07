@@ -19,9 +19,10 @@ template <typename T> struct STSQ_Pattern {
   };
   void from(const std::vector<T> &fromSteps, float stepDuration) {
     steps.clear();
-    totalDuration = stepDuration * (float)fromSteps.size();
+    size_t size = fromSteps.size();
+    totalDuration = stepDuration * static_cast<float>(size);
 
-    for (int i = 0; i < fromSteps.size(); i++) {
+    for (int i = 0, end = size; i < end; i++) {
       add(fromSteps[i], stepDuration * (float)i);
     }
   }
@@ -102,7 +103,7 @@ private:
       return;
     }
     int currentElapsedPatternTime = (int)getElapsedPatternTime();
-    for (int i = 0; i < currentPattern().size() - 1; i++) {
+    for (int i = 0, end = currentPattern().size() - 1; i < end; i++) {
       if (currentElapsedPatternTime == currentPattern()[i].start) {
         nextIndex = i;
         checkTimeAndPerformStep();
