@@ -5,5 +5,4 @@
 #include "Graph/Node.h"
 
 #include "Graph/AudioNode.h"
-#include "Graph/StatefulProcessor.h"
 #include "Graph/Subgraph.h"
