@@ -19,51 +19,49 @@ WavetableOsc::WavetableOsc()
                      200, 0, 0) {}
 
 WavetableOsc::WavetableOsc(std::shared_ptr<Wavetable> wavetable, float freq, float phase, float phaseOffset)
-    : Clover::Graph::StatefulProcessor<0, 1, WavetableOscSettings>(), WavetableOscInterface() {
-  settings.initial.wavetable = wavetable;
-  settings.initial.wavetableSize = (float)wavetable->size();
-  settings.initial.freq = freq;
-  settings.initial.phase = normalizePhase(phase);
-  settings.initial.phasePreCalculationCache = settings.initial.phase;
-  settings.initial.phaseOffset = normalizePhase(phaseOffset);
-  settings.initial.phaseOffsetPreCalculationCache = settings.initial.phaseOffset;
+    : Clover::Graph::AudioNode<0, 1>(), WavetableOscInterface() {
+  this->wavetable_ = wavetable;
+  this->wavetableSize_ = (float)wavetable->size();
+  this->freq_ = freq;
+  this->phase_ = normalizePhase(phase);
+  this->phasePreCalculationCache_ = this->phase_;
+  this->phaseOffset_ = normalizePhase(phaseOffset);
+  this->phaseOffsetPreCalculationCache_ = this->phaseOffset_;
 
-  settings.initial.readIndexIncrement = calculateReadIndexIncrement(freq);
-  settings.initial.readIndex = 0.;
-  settings.initial.readIndexOffset =
-      calculateReadIndexOffset(settings.initial.phaseOffset);
-
-  settings.reset();
+  this->readIndexIncrement_ = calculateReadIndexIncrement(freq);
+  this->readIndex_ = 0.;
+  this->readIndexOffset_ =
+      calculateReadIndexOffset(this->phaseOffset_);
 }
 
 void WavetableOsc::phase(float phase) {
-  if (phase == settings.current.phasePreCalculationCache) return;
+  if (phase == this->phasePreCalculationCache_) return;
   phase = normalizePhase(phase);
-  settings.current.phase = phase;
-  settings.current.readIndex = (settings.current.wavetableSize) * phase;
+  this->phase_ = phase;
+  this->readIndex_ = (this->wavetableSize_) * phase;
 }
 
 float WavetableOsc::phase() {
-  return settings.current.phase / settings.current.wavetableSize;
+  return this->phase_ / this->wavetableSize_;
 }
 
 void WavetableOsc::phaseOffset(float offset) {
-  if (offset == settings.current.phaseOffsetPreCalculationCache) return;
-  settings.current.phaseOffset = normalizePhase(offset);
-  settings.current.readIndexOffset = calculateReadIndexOffset(offset);
+  if (offset == this->phaseOffsetPreCalculationCache_) return;
+  this->phaseOffset_ = normalizePhase(offset);
+  this->readIndexOffset_ = calculateReadIndexOffset(offset);
 }
 
-float WavetableOsc::phaseOffset() { return settings.current.phaseOffset; }
+float WavetableOsc::phaseOffset() { return this->phaseOffset_; }
 
 void WavetableOsc::freq(float freq) {
-  if (settings.current.freq == freq || settings.current.freq == freq * -1.f) return;
+  if (this->freq_ == freq || this->freq_ == freq * -1.f) return;
 
   freq = fabs(freq);
-  settings.current.freq = freq;
-  settings.current.readIndexIncrement = calculateReadIndexIncrement(freq); 
+  this->freq_ = freq;
+  this->readIndexIncrement_ = calculateReadIndexIncrement(freq); 
 }
 
-float WavetableOsc::freq() { return settings.current.freq; }
+float WavetableOsc::freq() { return this->freq_; }
 
 void WavetableOsc::note(float midiNote) { freq(Clover::Util::Calc::mtof(midiNote)); }
 
@@ -76,13 +74,13 @@ void WavetableOsc::wavelength(float wavelengthSamples) {
 float WavetableOsc::wavelength() { return ((float)Base::sampleRate) / freq(); }
 
 void WavetableOsc::wavetable(std::shared_ptr<Wavetable> wt) {
-  settings.current.wavetable = wt;
-  settings.current.wavetableSize = (float)wt->size();
-  settings.current.readIndexIncrement =
-      calculateReadIndexIncrement(settings.current.freq);
+  this->wavetable_ = wt;
+  this->wavetableSize_ = (float)wt->size();
+  this->readIndexIncrement_ =
+      calculateReadIndexIncrement(this->freq_);
 }
 
-std::shared_ptr<Wavetable> WavetableOsc::wavetable() { return settings.current.wavetable; }
+std::shared_ptr<Wavetable> WavetableOsc::wavetable() { return this->wavetable_; }
 
 void WavetableOsc::sine(int size) {
   std::shared_ptr<Wavetable> wt = std::make_shared<std::vector<Sample>>(
@@ -112,29 +110,29 @@ void WavetableOsc::noise(int size) {
 
 Graph::AudioFrame<1> WavetableOsc::tick(Graph::AudioFrame<0> input) {
   float nextIndex =
-      normalizeReadIndex(floor(settings.current.readIndex + 1));
+      normalizeReadIndex(floor(this->readIndex_ + 1));
 
-  Wavetable &wt = *(settings.current.wavetable);
+  Wavetable &wt = *(this->wavetable_);
 
-  float lerpAmount = settings.current.readIndex - static_cast<int>(settings.current.readIndex);
+  float lerpAmount = this->readIndex_ - static_cast<int>(this->readIndex_);
   float value =
-      std::lerp(wt[(int)settings.current.readIndex], wt[(int)nextIndex], lerpAmount
+      std::lerp(wt[(int)this->readIndex_], wt[(int)nextIndex], lerpAmount
       );
 
   Graph::AudioFrame<1> f{value};
 
-  float newIndex = settings.current.readIndex +
-                    settings.current.readIndexOffset +
-                    settings.current.readIndexIncrement;
+  float newIndex = this->readIndex_ +
+                    this->readIndexOffset_ +
+                    this->readIndexIncrement_;
 
-  settings.current.readIndex = normalizeReadIndex(newIndex);
+  this->readIndex_ = normalizeReadIndex(newIndex);
 
   return f;
 }
 
 float WavetableOsc::normalizeReadIndex(float index) {
-  while (index > settings.current.wavetableSize) {
-    index -= settings.current.wavetableSize;
+  while (index > this->wavetableSize_) {
+    index -= this->wavetableSize_;
   }
   return index;
 }
@@ -153,18 +151,18 @@ float WavetableOsc::normalizePhase(float phase) {
 }
 
 float WavetableOsc::calculateReadIndexIncrement(float freq) {
-  return freq * settings.current.wavetableSize / Base::sampleRate;
+  return freq * this->wavetableSize_ / Base::sampleRate;
 }
 
 float WavetableOsc::calculateReadIndexOffset(float phaseOffset) {
-  return settings.current.wavetableSize * normalizePhase(phaseOffset);
+  return this->wavetableSize_ * normalizePhase(phaseOffset);
 }
 
-void WavetableOsc::printSettings(WavetableOscSettings &settings) {
+void WavetableOsc::printSettings() {
   printf("\n%f   - %f   - %f   - %f   - %f   - %f   - %f\n",
-          settings.readIndex, settings.readIndexIncrement,
-          settings.wavetableSize, settings.freq, settings.phase,
-          settings.phaseOffset, settings.readIndexOffset);
+          this->readIndex_, this->readIndexIncrement_,
+          this->wavetableSize_, this->freq_, this->phase_,
+          this->phaseOffset_, this->readIndexOffset_);
 }
 
 
