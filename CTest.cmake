@@ -12,7 +12,7 @@ enable_testing()
 add_executable(clover_test
     test/Algorithm/Delay/Fractional.cc
 
-    test/Algorithm/DynamicRange/Clip.cc
+    test/Algorithm/DynamicRange/AsymClip.cc
     test/Algorithm/DynamicRange/UpwardDCCompression.cc
 
     test/Algorithm/Envelope/ADSR.cc
