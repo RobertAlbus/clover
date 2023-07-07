@@ -10,11 +10,13 @@ FetchContent_MakeAvailable(googletest)
 enable_testing()
 
 add_executable(clover_test
+    test/Algorithm/Delay/Fractional.cc
+
+    test/Algorithm/DynamicRange/Clip.cc
+
     test/Algorithm/Envelope/ADSR.cc
     test/Algorithm/Envelope/Basic.cc
     test/Algorithm/Envelope/DC.cc
-
-    test/Algorithm/Delay/Fractional.cc
 
     test/Graph/Frame_Test.cc
     test/Graph/FrameHistory_Test.cc
