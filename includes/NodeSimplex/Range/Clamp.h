@@ -1,41 +1,31 @@
 #pragma once
 
-#include "Graph.h"
+#include "Graph/AudioNode.h"
 
 namespace Clover::NodeSimplex::Range {
 
-struct ClampSettings {
-  float min;
-  float max;
-};
-
 template <size_t __arity>
-class Clamp : public Graph::StatefulProcessor<__arity, __arity, ClampSettings> {
+class Clamp : public Graph::AudioNode<__arity, __arity> {
 public:
-  Clamp(ClampSettings initialSettings)
-      : Graph::StatefulProcessor<__arity, __arity, ClampSettings>(
-            initialSettings) {}
+  Clamp() : Clamp(-1.f, 1.f) {}
 
-  Clamp(float min, float max)
-      : Graph::StatefulProcessor<__arity, __arity, ClampSettings>() {
-    this->settings.initial.min = min;
-    this->settings.initial.max = max;
+  Clamp(float minimum, float maximum)
+      : Graph::AudioNode<__arity, __arity>(), min_(minimum), max_(maximum) {}
 
-    this->settings.reset();
-  }
+  float min() { return min_; }
+  float max() { return max_; }
 
-  float min() { return this->settings.current.min; }
-  float max() { return this->settings.current.max; }
-
-  void min(float minimum) { this->settings.current.min = minimum; }
-  void max(float maximum) { this->settings.current.max = maximum; }
+  void min(float minimum) { min_ = minimum; }
+  void max(float maximum) { max_ = maximum; }
 
 private:
+  float min_;
+  float max_;
+
   Graph::AudioFrame<__arity> tick(Graph::AudioFrame<__arity> input) {
     Graph::AudioFrame<__arity> f;
     for (int i = 0; i < __arity; i++) {
-      ClampSettings &s;
-      f[i] = std::clamp(input[i], s.min, s.max);
+      f[i] = std::clamp(input[i], min_, max_);
     }
     return f;
   }
