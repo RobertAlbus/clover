@@ -20,7 +20,6 @@
 #include "NodeSimplex/Filter/EQ.h"
 #include "NodeSimplex/Filter/Filter.h"
 
-#include "NodeSimplex/Range/Avoid.h"
 #include "NodeSimplex/Range/Clamp.h"
 
 #include "NodeSimplex/Reduce/Bitcrusher.h"

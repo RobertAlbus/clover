@@ -47,9 +47,7 @@ int main(int argc, char *argv[]) {
   mod.sine(11);
   mod.freq(71);
 
-  Clover::NodeSimplex::Range::Avoid<1> fbDestroyer(0., 0.);
-
-  mod >> fbDestroyer >> blackHole;
+  mod >> blackHole;
 
   Filter::Filter<2> filter;
   filter.lowPass();
