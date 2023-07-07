@@ -42,6 +42,7 @@ int main(int argc, char *argv[]) {
   Wavetable::WavetableOscStereo osc;
   osc.saw(1024);
   osc.freq(70.);
+  osc.stereoDetune(-0.005f);
 
   Wavetable::WavetableOsc mod;
   mod.sine(11);
@@ -54,8 +55,8 @@ int main(int argc, char *argv[]) {
   filter.set(200., 0.9);
 
   Filter::EQ<2> EQ;
-  EQ.peakingEQ();
-  EQ.set(80., 0.7, -22);
+  EQ.lowShelf();
+  EQ.set(80., 0.7, -10);
 
   osc >> filter >> EQ >> interface.rootNode;
   EQ.gain(0.33);
@@ -102,7 +103,7 @@ int main(int argc, char *argv[]) {
       float oscAdjusted = (osc.frames.current[0] + 1.) / 2.;
       float envelopeValue = adsr.frames.current[0];
       osc.freq(100. * (modAdjusted * 2. - 1));
-      mod.freq(100. * (oscAdjusted * 3.));
+      mod.freq(400. * (oscAdjusted * 3.));
 
       float cut = envelopeValue * (1000. * lfoAdjusted) + 200;
       float reso = envelopeValue * (-1. * lfoAdjusted) + 2;
