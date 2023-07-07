@@ -4,7 +4,8 @@
 
 namespace Clover::IO {
 
-template <size_t __arity> class RootNode : public Graph::AudioNode<__arity, __arity> {
+template <size_t __arity>
+class RootNode : public Graph::AudioNode<__arity, __arity> {
 public:
   /// RootNode exposes metaTick publicly as the starting point of the signal
   /// graph
@@ -13,7 +14,9 @@ public:
   }
 
 protected:
-  Graph::AudioFrame<__arity> tick(Graph::AudioFrame<__arity> input) { return input; }
+  Graph::AudioFrame<__arity> tick(Graph::AudioFrame<__arity> input) {
+    return input;
+  }
 };
 
 } // namespace Clover::IO

@@ -2,12 +2,12 @@
 
 #include "Graph.h"
 
-
 using namespace Clover::Util;
 
 namespace Clover::_Test {
 
-template <size_t __arityIn> class HandCrank : public Graph::AudioNode<__arityIn, 0> {
+template <size_t __arityIn>
+class HandCrank : public Graph::AudioNode<__arityIn, 0> {
 public:
   HandCrank() : Graph::AudioNode<__arityIn, 0>() {}
 
@@ -21,7 +21,9 @@ public:
 private:
   Clover::Util::SampleClock clock;
 
-  Graph::AudioFrame<0> tick(Graph::AudioFrame<__arityIn> input) { return Graph::AudioFrame<0>{}; }
+  Graph::AudioFrame<0> tick(Graph::AudioFrame<__arityIn> input) {
+    return Graph::AudioFrame<0>{};
+  }
 };
 
 } // namespace Clover::_Test

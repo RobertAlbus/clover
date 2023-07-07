@@ -3,12 +3,12 @@
 
 #include "Graph.h"
 
-
 using namespace Clover::Util;
 
 namespace Clover::_Test {
 
-template <size_t __arity> class Collector : public Graph::AudioNode<__arity, __arity> {
+template <size_t __arity>
+class Collector : public Graph::AudioNode<__arity, __arity> {
 public:
   Collector(int preAllocateFrames) : Graph::AudioNode<__arity, __arity>() {
     frames.reserve(preAllocateFrames);

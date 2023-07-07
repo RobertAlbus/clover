@@ -2,12 +2,12 @@
 
 #include "Graph/AudioNode.h"
 
-
 using namespace Clover::Util;
 
 namespace Clover::_Test {
 
-template <size_t __arityOut> class DCN : public Graph::AudioNode<0, __arityOut> {
+template <size_t __arityOut>
+class DCN : public Graph::AudioNode<0, __arityOut> {
 public:
   DCN() : Graph::AudioNode<0, __arityOut>(), basis(0.f) {}
 

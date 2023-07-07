@@ -6,7 +6,8 @@ class NodeStub : public Clover::Graph::AudioNode<1, 1> {
 public:
   NodeStub() : Clover::Graph::AudioNode<1, 1>() {}
 
-  std::vector<Clover::Graph::INode<Clover::Graph::AudioFrame<1>> *> &getInputNodes() {
+  std::vector<Clover::Graph::INode<Clover::Graph::AudioFrame<1>> *> &
+  getInputNodes() {
     return Node::inputNodes;
   }
 

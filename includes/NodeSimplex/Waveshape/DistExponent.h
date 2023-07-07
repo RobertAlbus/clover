@@ -4,7 +4,6 @@
 
 #include "Graph.h"
 
-
 using namespace Clover::Util;
 
 namespace Clover::NodeSimplex::Waveshape {

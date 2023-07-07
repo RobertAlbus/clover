@@ -15,8 +15,8 @@ template <size_t __arity> struct AudioFrame {
 
   AudioFrame(std::initializer_list<Sample> init) {
     if (init.size() != __arity) {
-      printf("\nCannot initialize Graph::AudioFrame<%zu> with %zu elements\n", __arity,
-             init.size());
+      printf("\nCannot initialize Graph::AudioFrame<%zu> with %zu elements\n",
+             __arity, init.size());
     }
     std::copy(init.begin(), init.end(), data.begin());
   }
@@ -25,7 +25,8 @@ template <size_t __arity> struct AudioFrame {
 
   float operator[](int i) const { return data[i]; }
 
-  Graph::AudioFrame<__arity> operator+(const Graph::AudioFrame<__arity> &b) const {
+  Graph::AudioFrame<__arity>
+  operator+(const Graph::AudioFrame<__arity> &b) const {
     Graph::AudioFrame<__arity> f;
     for (int i = 0; i < __arity; i++) {
       f[i] = data[i] + b[i];
@@ -33,7 +34,8 @@ template <size_t __arity> struct AudioFrame {
     return f;
   }
 
-  Graph::AudioFrame<__arity> operator-(const Graph::AudioFrame<__arity> &b) const {
+  Graph::AudioFrame<__arity>
+  operator-(const Graph::AudioFrame<__arity> &b) const {
     Graph::AudioFrame<__arity> f;
     for (int i = 0; i < __arity; i++) {
       f[i] = data[i] - b[i];
@@ -41,7 +43,8 @@ template <size_t __arity> struct AudioFrame {
     return f;
   }
 
-  Graph::AudioFrame<__arity> operator*(const Graph::AudioFrame<__arity> &b) const {
+  Graph::AudioFrame<__arity>
+  operator*(const Graph::AudioFrame<__arity> &b) const {
     Graph::AudioFrame<__arity> f;
     for (int i = 0; i < __arity; i++) {
       f[i] = data[i] * b[i];
@@ -49,7 +52,8 @@ template <size_t __arity> struct AudioFrame {
     return f;
   }
 
-  Graph::AudioFrame<__arity> operator/(const Graph::AudioFrame<__arity> &b) const {
+  Graph::AudioFrame<__arity>
+  operator/(const Graph::AudioFrame<__arity> &b) const {
     Graph::AudioFrame<__arity> f;
     for (int i = 0; i < __arity; i++) {
       f[i] = data[i] / b[i];

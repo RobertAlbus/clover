@@ -15,7 +15,8 @@ namespace Clover::IO {
 template <size_t __arity> class WavFile : public Graph::AudioNode<__arity, 0> {
 public:
   WavFile(std::string filePath, int duration)
-      : Graph::AudioNode<__arity, 0>(), _durationSamples(duration), _filePath(filePath)
+      : Graph::AudioNode<__arity, 0>(), _durationSamples(duration),
+        _filePath(filePath)
 
   {
     content.reserve((size_t)duration * __arity);

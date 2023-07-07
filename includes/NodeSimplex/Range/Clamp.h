@@ -13,7 +13,8 @@ template <size_t __arity>
 class Clamp : public Graph::StatefulProcessor<__arity, __arity, ClampSettings> {
 public:
   Clamp(ClampSettings initialSettings)
-      : Graph::StatefulProcessor<__arity, __arity, ClampSettings>(initialSettings) {}
+      : Graph::StatefulProcessor<__arity, __arity, ClampSettings>(
+            initialSettings) {}
 
   Clamp(float min, float max)
       : Graph::StatefulProcessor<__arity, __arity, ClampSettings>() {

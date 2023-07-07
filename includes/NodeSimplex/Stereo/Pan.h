@@ -9,10 +9,12 @@ using namespace Clover::Util;
 
 namespace Clover::NodeSimplex::Stereo {
 
-template <size_t __arityInput> class Pan : public Graph::AudioNode<__arityInput, 2> {
+template <size_t __arityInput>
+class Pan : public Graph::AudioNode<__arityInput, 2> {
 public:
   Pan(float p = 0)
-      : Graph::AudioNode<__arityInput, 2>(), _pan(0), midGain(Calc::dbtol(-4.5)) {
+      : Graph::AudioNode<__arityInput, 2>(), _pan(0),
+        midGain(Calc::dbtol(-4.5)) {
     pan(p);
   }
 

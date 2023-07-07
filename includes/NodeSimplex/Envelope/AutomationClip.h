@@ -64,4 +64,4 @@ private:
   float _tensionScale;
 };
 
-}
+} // namespace Clover::NodeSimplex

@@ -24,9 +24,10 @@ struct WavetableOscSettings {
   float wavetableSize;
 };
 
-struct WavetableOsc : public Base,
-                      public Graph::StatefulProcessor<0, 1, WavetableOscSettings>,
-                      public WavetableOscInterface {
+struct WavetableOsc
+    : public Base,
+      public Graph::StatefulProcessor<0, 1, WavetableOscSettings>,
+      public WavetableOscInterface {
   WavetableOsc();
   WavetableOsc(std::shared_ptr<Wavetable> wavetable, float freq,
                float phase = 0, float phaseOffset = 0);
