@@ -9,6 +9,7 @@
 #include "NodeSimplex/Delay/FractionalDelayLine.h"
 #include "NodeSimplex/Envelope/ADSR.h"
 #include "NodeSimplex/Envelope/BasicEnvelope.h"
+#include "NodeSimplex/Range/Clamp.h"
 
 TEST(NodeSimplex_SmokeTest, NullAdapter) {
   Clover::_Test::HandCrank<1> crank;
@@ -90,4 +91,34 @@ TEST(NodeSimplex_SmokeTest, Envelope_ADSR) {
   EXPECT_EQ(envelopeCollector.frames[34][0], 0.5f);
   EXPECT_EQ(envelopeCollector.frames[44][0], 0.f);
   EXPECT_EQ(envelopeCollector.frames[54][0], 0.f);
+}
+
+TEST(NodeSimplex_SmokeTest, Range_Clamp) {
+  Clover::_Test::HandCrank<1> crank;
+  Clover::_Test::Collector<1> envelopeCollector(6);
+  Clover::NodeSimplex::Range::Clamp<1> clamp;
+  Clover::_Test::DCN<1> dc;
+
+  dc >> clamp >> envelopeCollector >> crank;
+
+  dc.indexBasis(-1.5f);
+  crank.turn(1);
+  dc.indexBasis(-1.0f);
+  crank.turn(1);
+  dc.indexBasis(-0.5f);
+  crank.turn(1);
+  dc.indexBasis(0.5f);
+  crank.turn(1);
+  dc.indexBasis(1.0f);
+  crank.turn(1);
+  dc.indexBasis(1.5f);
+  crank.turn(1);
+
+  EXPECT_EQ(envelopeCollector.frames[0][0], -1.f);
+  EXPECT_EQ(envelopeCollector.frames[1][0], -1.f);
+  EXPECT_EQ(envelopeCollector.frames[2][0], -0.5f);
+
+  EXPECT_EQ(envelopeCollector.frames[3][0], 0.5f);
+  EXPECT_EQ(envelopeCollector.frames[4][0], 1.f);
+  EXPECT_EQ(envelopeCollector.frames[5][0], 1.f);
 }
