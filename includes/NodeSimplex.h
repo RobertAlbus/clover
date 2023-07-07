@@ -22,7 +22,6 @@
 
 #include "NodeSimplex/Range/Avoid.h"
 #include "NodeSimplex/Range/Clamp.h"
-#include "NodeSimplex/Range/Clip.h"
 
 #include "NodeSimplex/Reduce/Bitcrusher.h"
 #include "NodeSimplex/Reduce/Samplecrusher.h"
