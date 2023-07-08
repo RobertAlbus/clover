@@ -37,7 +37,6 @@ add_executable(clover_test
     test/NodeSimplex/StepSequencer/STSQ_Test.cc
     test/NodeSimplex/StepSequencer/STSQ_Pattern_Test.cc
     
-    test/NodeSimplex/Stereo/Invert_Test.cc
     test/NodeSimplex/Stereo/Pan_Test.cc
 
     test/NodeSimplex/NodeSmokeTests.cc
