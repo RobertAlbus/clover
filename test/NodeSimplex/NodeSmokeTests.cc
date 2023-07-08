@@ -10,6 +10,7 @@
 #include "NodeSimplex/DynamicRange/AsymClip.h"
 #include "NodeSimplex/Envelope/ADSR.h"
 #include "NodeSimplex/Envelope/BasicEnvelope.h"
+#include "NodeSimplex/Stereo/Difference.h"
 
 TEST(NodeSimplex_SmokeTest, NullAdapter) {
   Clover::_Test::HandCrank<1> crank;
@@ -121,4 +122,19 @@ TEST(NodeSimplex_SmokeTest, Envelope_ADSR) {
   EXPECT_EQ(envelopeCollector.frames[34][0], 0.5f);
   EXPECT_EQ(envelopeCollector.frames[44][0], 0.f);
   EXPECT_EQ(envelopeCollector.frames[54][0], 0.f);
+}
+
+TEST(NodeSimplex_SmokeTest, Stereo_Difference) {
+  Clover::_Test::HandCrank<2> crank;
+  Clover::_Test::Collector<2> collector(2);
+  Clover::NodeSimplex::Stereo::Difference difference;
+  Clover::_Test::DCN<2> dc;
+
+  dc >> difference >> collector >> crank;
+
+  dc.indexBasis(0); // [0,1]
+  crank.turn(1);
+
+  EXPECT_FLOAT_EQ(collector.frames[0][0], -0.5f);
+  EXPECT_FLOAT_EQ(collector.frames[0][1], 0.5f);
 }

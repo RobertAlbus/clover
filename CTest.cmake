@@ -19,6 +19,8 @@ add_executable(clover_test
     test/Algorithm/Envelope/Basic.cc
     test/Algorithm/Envelope/DC.cc
 
+    test/Algorithm/Stereo/Difference.cc
+
     test/Graph/Frame_Test.cc
     test/Graph/FrameHistory_Test.cc
     test/Graph/Node_Test.cc
@@ -34,7 +36,6 @@ add_executable(clover_test
     test/NodeSimplex/StepSequencer/STSQ_Test.cc
     test/NodeSimplex/StepSequencer/STSQ_Pattern_Test.cc
     
-    test/NodeSimplex/Stereo/Difference_Test.cc
     test/NodeSimplex/Stereo/Invert_Test.cc
     test/NodeSimplex/Stereo/Pan_Test.cc
 
