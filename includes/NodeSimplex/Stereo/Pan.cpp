@@ -1,10 +1,7 @@
 #include <cmath> // lerp
 
 #include "Graph.h"
-#include "Util/Calc.h"
 #include "NodeSimplex/Stereo/Pan.h"
-
-using namespace Clover::Util;
 
 namespace Clover::NodeSimplex::Stereo {
 

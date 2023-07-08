@@ -7,7 +7,6 @@
 #include "NodeSimplex/Stereo/Pan.h"
 #include "NodeSimplex/Stereo/Sum.h"
 
-using namespace Clover::Util;
 namespace Clover::NodeSimplex::Stereo {
 
 StereoImage::StereoImage(float s, float p) : Subgraph(), pan2(p) {
@@ -26,7 +25,7 @@ void StereoImage::spread(float s) {
   _spreadReadOnly = s;
 
   s = fabs(_spreadReadOnly);
-  float neutralGain = Calc::dbtol(-4.5f);
+  float neutralGain = Util::Calc::dbtol(-4.5f);
   float gainUp = std::lerp(neutralGain, 0.f, s);
   float gainDown = std::lerp(neutralGain, 1.f, s);
 

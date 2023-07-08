@@ -35,7 +35,7 @@ int main(int argc, char *argv[]) {
 
   Interface interface;
   interface.rootNode.gain(0.5);
-  Time time(160, Clover::Base::sampleRate, &interface.clock);
+  Clover::Util::Time time(160, Clover::Base::sampleRate, &interface.clock);
   Clover::NodeSimplex::Adapter::NullAdapter<1, 2> blackHole;
   blackHole >> interface.rootNode;
 

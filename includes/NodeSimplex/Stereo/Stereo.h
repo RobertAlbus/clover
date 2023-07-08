@@ -5,8 +5,6 @@
 #include "NodeSimplex/Stereo/Pan.h"
 #include "NodeSimplex/Stereo/Sum.h"
 
-using namespace Clover::Util;
-
 namespace Clover::NodeSimplex::Stereo {
 
 class StereoImage : public Subgraph<2, 2> {

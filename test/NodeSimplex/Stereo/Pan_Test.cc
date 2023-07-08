@@ -16,7 +16,7 @@ TEST(NodeSimplex_Stereo_Pan, ShouldPan1) {
   pan.pan(0.f);
   crank.turn(1);
 
-  float midGain = Calc::dbtol(-4.5f);
+  float midGain = Clover::Util::Calc::dbtol(-4.5f);
   EXPECT_EQ(collector.frames[0][0], midGain);
   EXPECT_EQ(collector.frames[0][1], midGain);
 
@@ -46,7 +46,7 @@ TEST(NodeSimplex_Stereo_Pan, ShouldPan2) {
   pan.pan(0.f);
   crank.turn(1);
 
-  float midGain = Calc::dbtol(-4.5f);
+  float midGain = Clover::Util::Calc::dbtol(-4.5f);
   EXPECT_EQ(collector.frames[0][0], midGain);
   EXPECT_EQ(collector.frames[0][1], midGain);
 
