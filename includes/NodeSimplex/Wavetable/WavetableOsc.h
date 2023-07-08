@@ -13,10 +13,9 @@ namespace Clover::NodeSimplex::Wavetable {
 
 typedef std::vector<Sample> Wavetable;
 
-struct WavetableOsc
-    : public Base,
-      public Graph::AudioNode<0, 1>,
-      public WavetableOscInterface {
+struct WavetableOsc : public Base,
+                      public Graph::AudioNode<0, 1>,
+                      public WavetableOscInterface {
   WavetableOsc();
   WavetableOsc(std::shared_ptr<Wavetable> wavetable, float freq,
                float phase = 0, float phaseOffset = 0);
