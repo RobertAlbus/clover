@@ -11,6 +11,7 @@
 #include "NodeSimplex/Envelope/ADSR.h"
 #include "NodeSimplex/Envelope/BasicEnvelope.h"
 #include "NodeSimplex/Stereo/Difference.h"
+#include "NodeSimplex/Stereo/Sum.h"
 
 TEST(NodeSimplex_SmokeTest, NullAdapter) {
   Clover::_Test::HandCrank<1> crank;
@@ -136,5 +137,34 @@ TEST(NodeSimplex_SmokeTest, Stereo_Difference) {
   crank.turn(1);
 
   EXPECT_FLOAT_EQ(collector.frames[0][0], -0.5f);
+  EXPECT_FLOAT_EQ(collector.frames[0][1], 0.5f);
+}
+
+TEST(NodeSimplex_SmokeTest, Sum_Mono) {
+  Clover::_Test::HandCrank<1> crank;
+  Clover::_Test::Collector<1> collector(1);
+  Clover::NodeSimplex::Stereo::Sum1 sum;
+  Clover::_Test::DCN<2> dc;
+
+  dc >> sum >> collector >> crank;
+
+  dc.indexBasis(0); // [0,1]
+  crank.turn(1);
+
+  EXPECT_FLOAT_EQ(collector.frames[0][0], 0.5f);
+}
+
+TEST(NodeSimplex_SmokeTest, Sum_Stereo) {
+  Clover::_Test::HandCrank<2> crank;
+  Clover::_Test::Collector<2> collector(1);
+  Clover::NodeSimplex::Stereo::Sum2 sum;
+  Clover::_Test::DCN<2> dc;
+
+  dc >> sum >> collector >> crank;
+
+  dc.indexBasis(0); // [0,1]
+  crank.turn(1);
+
+  EXPECT_FLOAT_EQ(collector.frames[0][0], 0.5f);
   EXPECT_FLOAT_EQ(collector.frames[0][1], 0.5f);
 }

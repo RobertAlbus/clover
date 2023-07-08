@@ -5,11 +5,11 @@
 namespace Clover::NodeSimplex::Stereo {
 
 Graph::AudioFrame<1> Sum1::tick(Graph::AudioFrame<2> input) {
-  return Graph::AudioFrame<1>{(input[0] + input[1]) * 0.5f};
+  return Graph::AudioFrame<1>{sum.process(input.data)};
 };
 
 Graph::AudioFrame<2> Sum2::tick(Graph::AudioFrame<2> input) {
-  return Graph::AudioFrame<2>{(input[0] + input[1]) * 0.5f, (input[0] + input[1]) * 0.5f};
+  return Graph::AudioFrame<2>{sum.process(input.data)};
 };
 
 } // namespace Clover::NodeSimplex::Stereo

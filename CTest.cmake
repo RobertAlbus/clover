@@ -20,6 +20,7 @@ add_executable(clover_test
     test/Algorithm/Envelope/DC.cc
 
     test/Algorithm/Stereo/Difference.cc
+    test/Algorithm/Stereo/Sum.cc
 
     test/Graph/Frame_Test.cc
     test/Graph/FrameHistory_Test.cc
