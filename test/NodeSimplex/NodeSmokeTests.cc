@@ -11,6 +11,7 @@
 #include "NodeSimplex/Envelope/ADSR.h"
 #include "NodeSimplex/Envelope/BasicEnvelope.h"
 #include "NodeSimplex/Stereo/Difference.h"
+#include "NodeSimplex/Stereo/MidSideBalance.h"
 #include "NodeSimplex/Stereo/Pan.h"
 #include "NodeSimplex/Stereo/Sum.h"
 #include "NodeSimplex/Wavetable/WavetableOscStereo.h"
@@ -142,33 +143,28 @@ TEST(NodeSimplex_SmokeTest, Stereo_Difference) {
   EXPECT_FLOAT_EQ(collector.frames[0][1], 0.5f);
 }
 
-TEST(NodeSimplex_SmokeTest, Sum_Mono) {
-  Clover::_Test::HandCrank<1> crank;
-  Clover::_Test::Collector<1> collector(1);
-  Clover::NodeSimplex::Stereo::Sum1 sum;
-  Clover::_Test::DCN<2> dc;
-
-  dc >> sum >> collector >> crank;
-
-  dc.indexBasis(0); // [0,1]
-  crank.turn(1);
-
-  EXPECT_FLOAT_EQ(collector.frames[0][0], 0.5f);
-}
-
-TEST(NodeSimplex_SmokeTest, Sum_Stereo) {
+TEST(NodeSimplex_SmokeTest, Stereo_MidSideBalance) {
   Clover::_Test::HandCrank<2> crank;
-  Clover::_Test::Collector<2> collector(1);
-  Clover::NodeSimplex::Stereo::Sum2 sum;
+  Clover::_Test::Collector<2> collector(3);
+  Clover::NodeSimplex::Stereo::MidSideBalance ms;
   Clover::_Test::DCN<2> dc;
 
-  dc >> sum >> collector >> crank;
+  dc >> ms >> collector >> crank;
 
   dc.indexBasis(0); // [0,1]
+  ms.spread(0);
+  crank.turn(1);
+  ms.spread(1);
+  crank.turn(1);
+  ms.spread(-1);
   crank.turn(1);
 
-  EXPECT_FLOAT_EQ(collector.frames[0][0], 0.5f);
-  EXPECT_FLOAT_EQ(collector.frames[0][1], 0.5f);
+  EXPECT_FLOAT_EQ(collector.frames[0][0], 0.f);
+  EXPECT_FLOAT_EQ(collector.frames[0][1], 1.f);
+  EXPECT_FLOAT_EQ(collector.frames[1][0], -0.5f);
+  EXPECT_FLOAT_EQ(collector.frames[1][1], 0.5f);
+  EXPECT_FLOAT_EQ(collector.frames[2][0], 0.5f);
+  EXPECT_FLOAT_EQ(collector.frames[2][1], 0.5f);
 }
 
 TEST(NodeSimplex_SmokeTest, Stereo_Pan1) {
@@ -225,4 +221,33 @@ TEST(NodeSimplex_SmokeTest, Stereo_Pan2) {
   EXPECT_EQ(collector.frames[1][1], 1.f);
   EXPECT_EQ(collector.frames[2][0], 1.f);
   EXPECT_EQ(collector.frames[2][1], 0.f);
+}
+
+TEST(NodeSimplex_SmokeTest, Sum_Mono) {
+  Clover::_Test::HandCrank<1> crank;
+  Clover::_Test::Collector<1> collector(1);
+  Clover::NodeSimplex::Stereo::Sum1 sum;
+  Clover::_Test::DCN<2> dc;
+
+  dc >> sum >> collector >> crank;
+
+  dc.indexBasis(0); // [0,1]
+  crank.turn(1);
+
+  EXPECT_FLOAT_EQ(collector.frames[0][0], 0.5f);
+}
+
+TEST(NodeSimplex_SmokeTest, Sum_Stereo) {
+  Clover::_Test::HandCrank<2> crank;
+  Clover::_Test::Collector<2> collector(1);
+  Clover::NodeSimplex::Stereo::Sum2 sum;
+  Clover::_Test::DCN<2> dc;
+
+  dc >> sum >> collector >> crank;
+
+  dc.indexBasis(0); // [0,1]
+  crank.turn(1);
+
+  EXPECT_FLOAT_EQ(collector.frames[0][0], 0.5f);
+  EXPECT_FLOAT_EQ(collector.frames[0][1], 0.5f);
 }

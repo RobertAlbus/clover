@@ -20,6 +20,7 @@ add_executable(clover_test
     test/Algorithm/Envelope/DC.cc
 
     test/Algorithm/Stereo/Difference.cc
+    test/Algorithm/Stereo/MidSideBalance.cc
     test/Algorithm/Stereo/Pan.cc
     test/Algorithm/Stereo/Sum.cc
 
