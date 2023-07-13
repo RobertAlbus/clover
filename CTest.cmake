@@ -24,6 +24,14 @@ add_executable(clover_test
     test/Algorithm/Stereo/Pan.cc
     test/Algorithm/Stereo/Sum.cc
 
+    test/Algorithm/Wavetable/Generators/Lerp.cc
+    test/Algorithm/Wavetable/Generators/NoiseWhite.cc
+    test/Algorithm/Wavetable/Generators/Pulse.cc
+    test/Algorithm/Wavetable/Generators/Saw.cc
+    test/Algorithm/Wavetable/Generators/Sine.cc
+    test/Algorithm/Wavetable/Generators/Square.cc
+    test/Algorithm/Wavetable/Generators/Tri.cc
+
     test/Graph/Frame_Test.cc
     test/Graph/FrameHistory_Test.cc
     test/Graph/Node_Test.cc

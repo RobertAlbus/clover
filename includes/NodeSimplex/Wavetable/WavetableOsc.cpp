@@ -9,13 +9,14 @@
 #include "Util.h"
 
 #include "WavetableOsc.h"
+#include "Algo/Wavetable/Generators.h"
 
 namespace Clover::NodeSimplex::Wavetable {
 
 
 WavetableOsc::WavetableOsc()
       : WavetableOsc(std::make_shared<std::vector<Sample>>(
-                         Util::GenerateWavetable::Sine(256)),
+                         Clover::Wavetable::Sine<Sample>(256)),
                      200, 0, 0) {}
 
 WavetableOsc::WavetableOsc(std::shared_ptr<Wavetable> wavetable, float freq, float phase, float phaseOffset)
@@ -84,27 +85,27 @@ std::shared_ptr<Wavetable> WavetableOsc::wavetable() { return this->wavetable_; 
 
 void WavetableOsc::sine(int size) {
   std::shared_ptr<Wavetable> wt = std::make_shared<std::vector<Sample>>(
-      Util::GenerateWavetable::Sine(size));
+      Clover::Wavetable::Sine<Sample>(size));
   wavetable(wt);
 }
 void WavetableOsc::square(int size) {
   std::shared_ptr<Wavetable> wt = std::make_shared<std::vector<Sample>>(
-      Util::GenerateWavetable::Square(size));
+      Clover::Wavetable::Square<Sample>(size));
   wavetable(wt);
 }
 void WavetableOsc::saw(int size) {
   std::shared_ptr<Wavetable> wt = std::make_shared<std::vector<Sample>>(
-      Util::GenerateWavetable::Saw(size));
+      Clover::Wavetable::Saw<Sample>(size));
   wavetable(wt);
 }
 void WavetableOsc::tri(int size) {
   std::shared_ptr<Wavetable> wt = std::make_shared<std::vector<Sample>>(
-      Util::GenerateWavetable::Tri(size));
+      Clover::Wavetable::Tri<Sample>(size));
   wavetable(wt);
 }
 void WavetableOsc::noise(int size) {
   std::shared_ptr<Wavetable> wt = std::make_shared<std::vector<Sample>>(
-      Util::GenerateWavetable::NoiseWhite(size));
+      Clover::Wavetable::NoiseWhite<Sample>(size));
   wavetable(wt);
 }
 
