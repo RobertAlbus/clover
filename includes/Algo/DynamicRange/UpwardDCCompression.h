@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <cmath>
 
 #include "Algo/AlgorithmBase.h"
 #include "Util/FloatingPointConcept.h"
