@@ -8,6 +8,10 @@
 
 namespace Clover::Wavetable {
 
+// TODO
+// - convert these to return shared_pointer
+//--------------------------------
+
 // reciprocal = gain / max abs x
 // y = x * reciprocal
 template <FloatingPoint T>

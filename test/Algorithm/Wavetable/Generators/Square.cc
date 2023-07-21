@@ -5,13 +5,6 @@
 
 #include "Algo/Wavetable/Generators.h"
 
-// TESTS
-/*
-    - square is 50/50
-  - saw decreases for each value
-  - noise - ??
-*/
-
 TEST(Algorithm_Wavetable_Generator_Square, ShouldBeSquare) {
   float size = 4096;
   std::vector<float> squareTable = Clover::Wavetable::Square<float>(size);
