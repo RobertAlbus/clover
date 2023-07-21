@@ -12,24 +12,22 @@ namespace Clover::Wavetable {
 // check Wavetable::Generate::Tri to see it in use
 template <FloatingPoint T>
 std::vector<T> LerpTable(int outputSize, std::vector<T> rawTable) {
-  // TODO:
-  // Update this to treat the last item in the raw table as the final element,
-  // instead of lerping to outputSize+1.
-  // This will require updating the usage in the triangle generator.
-
-  T scaleFactor = static_cast<T>(outputSize) / static_cast<T>(rawTable.size());
+  T increment =
+      static_cast<T>(rawTable.size() - 1) / static_cast<T>(outputSize - 1);
 
   std::vector<T> wavetable;
   wavetable.reserve(outputSize);
-  for (int i = 0; i < outputSize; i++) {
-    T scaledIndex = static_cast<T>(i) / scaleFactor;
-    int truncatedIndex = static_cast<int>(scaledIndex);
-    int nextIndex = truncatedIndex + 1;
-    T weight = scaledIndex - truncatedIndex;
+
+  for (int i = 0, end = outputSize; i < end; i++) {
+    T rawIndex = increment * static_cast<T>(i);
+    int truncatedRawIndex = static_cast<int>(rawIndex);
+    int nextRawIndex = truncatedRawIndex + 1;
+    T weight = rawIndex - static_cast<T>(truncatedRawIndex);
 
     wavetable.emplace_back(
-        std::lerp(rawTable[truncatedIndex], rawTable[nextIndex], weight));
+        std::lerp(rawTable[truncatedRawIndex], rawTable[nextRawIndex], weight));
   }
+
   return wavetable;
 }
 

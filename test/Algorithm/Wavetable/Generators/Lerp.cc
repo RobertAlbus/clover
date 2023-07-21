@@ -16,10 +16,11 @@ TEST(Algorithm_Wavetable_Generator_Lerp, ShouldBeCorrectSize) {
 
 TEST(Algorithm_Wavetable_Generator_Lerp, ShouldLerp) {
   std::vector<float> rawTable{-1, 0, 0, 1};
+  int newSize = 7;
   std::vector<float> lerpTable =
-      Clover::Wavetable::LerpTable<float>(8, rawTable);
+      Clover::Wavetable::LerpTable<float>(newSize, rawTable);
 
-  EXPECT_EQ(lerpTable.size(), 8);
+  EXPECT_EQ(lerpTable.size(), newSize);
 
   EXPECT_FLOAT_EQ(lerpTable[0], -1.f);
   EXPECT_FLOAT_EQ(lerpTable[1], -0.5f);
@@ -28,5 +29,4 @@ TEST(Algorithm_Wavetable_Generator_Lerp, ShouldLerp) {
   EXPECT_FLOAT_EQ(lerpTable[4], 0.f);
   EXPECT_FLOAT_EQ(lerpTable[5], 0.5f);
   EXPECT_FLOAT_EQ(lerpTable[6], 1.f);
-  EXPECT_FLOAT_EQ(lerpTable[7], 0.5f);
 }
