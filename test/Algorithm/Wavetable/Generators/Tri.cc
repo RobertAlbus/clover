@@ -27,3 +27,17 @@ TEST(Algorithm_Wavetable_Generator_Tri, ShouldBeTriangle) {
   EXPECT_FLOAT_EQ(table103[76], -1.f);
   EXPECT_FLOAT_EQ(table103[102], 0.f);
 }
+
+TEST(Algorithm_Wavetable_Generator_Tri, ShouldBeNormalized) {
+  int size = 88;
+  std::vector<float> table = Clover::Wavetable::Tri<float>(size);
+
+  float absMaxima = 0.f;
+  for (int i = 0; i < size; i++) {
+    float abs = fabsf(table[i]);
+    if (abs > absMaxima)
+      absMaxima = abs;
+  }
+
+  EXPECT_FLOAT_EQ(absMaxima, 1.f);
+}

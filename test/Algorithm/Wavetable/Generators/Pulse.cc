@@ -36,3 +36,18 @@ TEST(Algorithm_Wavetable_Generator_Pulse, ShouldBeWithinSignalBoundaries) {
     EXPECT_GE(table[i], -1.f);
   }
 }
+
+TEST(Algorithm_Wavetable_Generator_Pulse, ShouldBeNormalized) {
+  int tableSize = 4096;
+  float pulseWidth = 0.25f;
+  std::vector<float> table =
+      Clover::Wavetable::Pulse<float>(tableSize, pulseWidth);
+
+  float absMaxima = 0.f;
+  for (int i = 0, end = table.size(); i < end; i++) {
+    if (fabs(table[i]) > absMaxima)
+      absMaxima = table[i];
+  }
+
+  EXPECT_FLOAT_EQ(absMaxima, 1.f);
+}

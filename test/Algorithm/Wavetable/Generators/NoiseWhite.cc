@@ -36,3 +36,16 @@ TEST(Algorithm_Wavetable_Generator_NoiseWhite, ShouldBeWithinSignalBoundaries) {
     EXPECT_GE(sineTable[i], -1.f);
   }
 }
+
+TEST(Algorithm_Wavetable_Generator_NoiseWhite, ShouldBeNormalized) {
+  int size = 127;
+  std::vector<float> table = Clover::Wavetable::NoiseWhite<float>(size);
+
+  float absMaxima = 0.f;
+  for (int i = 0, end = table.size(); i < end; i++) {
+    if (fabs(table[i]) > absMaxima)
+      absMaxima = table[i];
+  }
+
+  EXPECT_FLOAT_EQ(absMaxima, 1.f);
+}

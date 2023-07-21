@@ -8,6 +8,23 @@
 
 namespace Clover::Wavetable {
 
+// reciprocal = gain / max abs x
+// y = x * reciprocal
+template <FloatingPoint T>
+void normalizeTable(std::vector<T> &table, T gain = T(1)) {
+  T absMaxima = T(0);
+  for (const T &sample : table) {
+    T abs = fabs(sample);
+    if (abs > absMaxima)
+      absMaxima = abs;
+  }
+
+  T reciprocal = gain / absMaxima;
+  for (T &sample : table) {
+    sample *= reciprocal;
+  }
+}
+
 // linear interpolation to create a larger wavetable from a smaller wavetable
 // check Wavetable::Generate::Tri to see it in use
 template <FloatingPoint T>
@@ -40,6 +57,7 @@ template <FloatingPoint T> std::vector<T> Sine(int size) {
     T i_ = static_cast<T>(i);
     wavetable.emplace_back(static_cast<T>(sin((i_ / size_) * M_PI * 2.)));
   }
+  normalizeTable<T>(wavetable);
 
   return wavetable;
 }
@@ -81,9 +99,13 @@ template <FloatingPoint T> std::vector<T> Saw(int size) {
 }
 
 // Generate a wavetable for a triangle wave.
-template <FloatingPoint T> std::vector<T> Tri(int size) {
+template <FloatingPoint T> std::vector<T> Tri(int size = 5) {
   std::vector<T> lerpTable = {0, 1, 0, -1, 0};
-  return LerpTable<T>(size, lerpTable);
+  std::vector<T> fullTable = LerpTable<T>(size, lerpTable);
+
+  normalizeTable<T>(fullTable);
+
+  return fullTable;
 }
 
 // Generate a wavetable for a white noise wave.
@@ -96,6 +118,8 @@ template <FloatingPoint T> std::vector<T> NoiseWhite(int size) {
   for (int i = 0; i < size; i++) {
     wavetable.emplace_back(distribution(generator));
   }
+
+  normalizeTable<T>(wavetable);
 
   return wavetable;
 }
