@@ -32,10 +32,10 @@ struct OscillatorIndexCalculator : public OscillatorInterface<T>,
     freqHz = normalizeFreq(freqHz);
     if (freq_ == freqHz)
       return;
+
     freq_ = freqHz;
-    freqReciprocal_ = T(0);
-    if (freq_ > T(0))
-      freqReciprocal_ = T(1) / freq_;
+    freqReciprocal_ = freq_ == T(0) ? T(0) : T(1) / freq_;
+
     readIndexIncrementSamples_ = calculateReadIndexIncrement(freq_);
   }
 
@@ -49,6 +49,7 @@ struct OscillatorIndexCalculator : public OscillatorInterface<T>,
 
   T phase() override {
     T deOffsetIndex = readIndex_ - phaseOffsetSamples_;
+
     if (deOffsetIndex < T(0))
       deOffsetIndex += wavetableSize_;
 
@@ -57,9 +58,12 @@ struct OscillatorIndexCalculator : public OscillatorInterface<T>,
 
   void phaseOffset(T offsetPercent) override {
     readIndex_ -= phaseOffsetSamples_;
+
     phaseOffsetPercent_ = normalizePhase(offsetPercent);
     phaseOffsetSamples_ = wavetableSize_ * phaseOffsetPercent_;
+
     readIndex_ += phaseOffsetSamples_;
+
     if (readIndex_ < T(0))
       readIndex_ += wavetableSize_;
   }
@@ -75,13 +79,7 @@ struct OscillatorIndexCalculator : public OscillatorInterface<T>,
 
   void period(T periodSamples) override { freq(sampleRate_ / periodSamples); }
 
-  T period() override {
-    if (readIndexIncrementSamples_ == T(0)) {
-      return T(0);
-    } else {
-      return sampleRate_ * freqReciprocal_;
-    }
-  }
+  T period() override { return sampleRate_ * freqReciprocal_; }
 
   T sampleRate() override { return sampleRate_; }
   int size() override { return wavetableSize_; }
@@ -96,9 +94,7 @@ private:
 
   void sampleRate(T rateHz) {
     sampleRate_ = normalizeSampleRate(rateHz);
-    sampleRateReciprocal_ = T(0);
-    if (sampleRate_ > T(0))
-      sampleRateReciprocal_ = T(1) / sampleRate_;
+    sampleRateReciprocal_ = sampleRate_ == T(0) ? T(0) : T(1) / sampleRate_;
   }
 
   T normalizePhase(T phase) {
@@ -122,6 +118,7 @@ private:
     while (index >= wavetableSize_) {
       index -= wavetableSize_;
     }
+
     return index;
   }
 
