@@ -7,7 +7,6 @@
 #include "Algo/AlgorithmBase.h"
 #include "OscillatorInterface.h"
 
-#include "Util/Calc.h"
 #include "Util/FloatingPointConcept.h"
 
 namespace Clover::Wavetable {
