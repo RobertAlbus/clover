@@ -93,9 +93,8 @@ add_library(${PROJECT_NAME} STATIC
     ${CMAKE_CURRENT_LIST_DIR}/includes/NodeSimplex/StepSequencer/lib/Triggerable.cpp
 
     ${CMAKE_CURRENT_LIST_DIR}/includes/NodeSimplex/Stereo/Difference.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/includes/NodeSimplex/Stereo/Invert.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/includes/NodeSimplex/Stereo/MidSideBalance.cpp
     ${CMAKE_CURRENT_LIST_DIR}/includes/NodeSimplex/Stereo/Pan.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/includes/NodeSimplex/Stereo/Stereo.cpp
     ${CMAKE_CURRENT_LIST_DIR}/includes/NodeSimplex/Stereo/Sum.cpp
 
     ${CMAKE_CURRENT_LIST_DIR}/includes/NodeSimplex/Wavetable/WavetableOsc.cpp
@@ -104,7 +103,6 @@ add_library(${PROJECT_NAME} STATIC
     ${CMAKE_CURRENT_LIST_DIR}/includes/Util/Calc.cpp
     ${CMAKE_CURRENT_LIST_DIR}/includes/Util/MusicTime.cpp
     ${CMAKE_CURRENT_LIST_DIR}/includes/Util/SampleClock.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/includes/Util/Wavetable.cpp
 )
 
 target_include_directories(${PROJECT_NAME}

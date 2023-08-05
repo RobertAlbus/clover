@@ -19,6 +19,22 @@ add_executable(clover_test
     test/Algorithm/Envelope/Basic.cc
     test/Algorithm/Envelope/DC.cc
 
+    test/Algorithm/Stereo/Difference.cc
+    test/Algorithm/Stereo/MidSideBalance.cc
+    test/Algorithm/Stereo/Pan.cc
+    test/Algorithm/Stereo/Sum.cc
+
+    test/Algorithm/Wavetable/Generators/Lerp.cc
+    test/Algorithm/Wavetable/Generators/NoiseWhite.cc
+    test/Algorithm/Wavetable/Generators/Pulse.cc
+    test/Algorithm/Wavetable/Generators/Saw.cc
+    test/Algorithm/Wavetable/Generators/Sine.cc
+    test/Algorithm/Wavetable/Generators/Square.cc
+    test/Algorithm/Wavetable/Generators/Tri.cc
+
+    test/Algorithm/Wavetable/OscillatorIndexCalculator.cc
+    test/Algorithm/Wavetable/WavetableOscillatorMono.cc
+
     test/Graph/Frame_Test.cc
     test/Graph/FrameHistory_Test.cc
     test/Graph/Node_Test.cc
@@ -34,10 +50,6 @@ add_executable(clover_test
     test/NodeSimplex/StepSequencer/STSQ_Test.cc
     test/NodeSimplex/StepSequencer/STSQ_Pattern_Test.cc
     
-    test/NodeSimplex/Stereo/Difference_Test.cc
-    test/NodeSimplex/Stereo/Invert_Test.cc
-    test/NodeSimplex/Stereo/Pan_Test.cc
-
     test/NodeSimplex/NodeSmokeTests.cc
 
     test/Util/Calc_Test.cc

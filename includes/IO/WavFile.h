@@ -8,8 +8,6 @@
 #include "Graph.h"
 #include "Util/Calc.h"
 
-using namespace Clover::Util;
-
 namespace Clover::IO {
 
 template <size_t __arity> class WavFile : public Graph::AudioNode<__arity, 0> {
@@ -59,7 +57,7 @@ private:
   }
 
   void normalizeContent() {
-    float minusThreeDb = Calc::dbtol(-3.);
+    float minusThreeDb = Util::Calc::dbtol(-3.);
     for (int i = 0, end = content.size(); i < end; i++) {
       content[i] = content[i] / _signalMaxima * minusThreeDb;
     }

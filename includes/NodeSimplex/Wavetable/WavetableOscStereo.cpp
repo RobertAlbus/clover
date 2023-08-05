@@ -53,15 +53,15 @@ void WavetableOscStereo::freq(float freq) {
 }
 
 void WavetableOscStereo::updateFreq() {
-  oscL.freq(Calc::freqBySemitoneDifference(freq_, stereoDetune_L_semi));
-  oscR.freq(Calc::freqBySemitoneDifference(freq_, stereoDetune_R_semi));
+  oscL.freq(Util::Calc::freqBySemitoneDifference(freq_, stereoDetune_L_semi));
+  oscR.freq(Util::Calc::freqBySemitoneDifference(freq_, stereoDetune_R_semi));
 }
 
 float WavetableOscStereo::freq() { return freq_; }
 
-void WavetableOscStereo::note(float midiNote) { freq(Clover::Util::Calc::mtof(midiNote)); }
+void WavetableOscStereo::note(float midiNote) { freq(Util::Calc::mtof(midiNote)); }
 
-float WavetableOscStereo::note() { return Clover::Util::Calc::ftom(freq()); }
+float WavetableOscStereo::note() { return Util::Calc::ftom(freq()); }
 
 void WavetableOscStereo::wavelength(float wavelengthSamples) {
   freq(((float)Base::sampleRate) / wavelengthSamples);
@@ -93,7 +93,7 @@ void WavetableOscStereo::tri(int size) {
   oscR.wavetable(oscL.wavetable());
 }
 void WavetableOscStereo::noise(int size) {
-  oscL.noise(size);
+  oscL.noiseWhite(size);
   oscR.wavetable(oscL.wavetable());
 }
 

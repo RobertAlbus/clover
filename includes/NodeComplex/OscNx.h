@@ -4,8 +4,6 @@
 #include "Graph.h"
 #include "NodeSimplex.h"
 
-using namespace Clover::NodeSimplex;
-
 template <int __numVoices>
 struct OscNx : public Clover::Graph::AudioNode<0, 2>, Pitchable, Triggerable {
   struct Voice {

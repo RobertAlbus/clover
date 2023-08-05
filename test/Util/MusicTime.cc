@@ -9,8 +9,8 @@ TEST(Util_MusicTime, ShouldProvideCorrectTime) {
 
   float beatLength = minute / bpm;
 
-  SampleClock clock;
-  Time time(bpm, (int)sampleRate, &clock);
+  Clover::Util::SampleClock clock;
+  Clover::Util::Time time(bpm, (int)sampleRate, &clock);
 
   int duration_two_and_a_half_beats = (int)(beatLength * 2.5);
   for (int i = 0; i < duration_two_and_a_half_beats; i++) {

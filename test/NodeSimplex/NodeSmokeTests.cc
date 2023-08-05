@@ -10,6 +10,11 @@
 #include "NodeSimplex/DynamicRange/AsymClip.h"
 #include "NodeSimplex/Envelope/ADSR.h"
 #include "NodeSimplex/Envelope/BasicEnvelope.h"
+#include "NodeSimplex/Stereo/Difference.h"
+#include "NodeSimplex/Stereo/MidSideBalance.h"
+#include "NodeSimplex/Stereo/Pan.h"
+#include "NodeSimplex/Stereo/Sum.h"
+#include "NodeSimplex/Wavetable/WavetableOscStereo.h"
 
 TEST(NodeSimplex_SmokeTest, NullAdapter) {
   Clover::_Test::HandCrank<1> crank;
@@ -121,4 +126,128 @@ TEST(NodeSimplex_SmokeTest, Envelope_ADSR) {
   EXPECT_EQ(envelopeCollector.frames[34][0], 0.5f);
   EXPECT_EQ(envelopeCollector.frames[44][0], 0.f);
   EXPECT_EQ(envelopeCollector.frames[54][0], 0.f);
+}
+
+TEST(NodeSimplex_SmokeTest, Stereo_Difference) {
+  Clover::_Test::HandCrank<2> crank;
+  Clover::_Test::Collector<2> collector(2);
+  Clover::NodeSimplex::Stereo::Difference difference;
+  Clover::_Test::DCN<2> dc;
+
+  dc >> difference >> collector >> crank;
+
+  dc.indexBasis(0); // [0,1]
+  crank.turn(1);
+
+  EXPECT_FLOAT_EQ(collector.frames[0][0], -0.5f);
+  EXPECT_FLOAT_EQ(collector.frames[0][1], 0.5f);
+}
+
+TEST(NodeSimplex_SmokeTest, Stereo_MidSideBalance) {
+  Clover::_Test::HandCrank<2> crank;
+  Clover::_Test::Collector<2> collector(3);
+  Clover::NodeSimplex::Stereo::MidSideBalance ms;
+  Clover::_Test::DCN<2> dc;
+
+  dc >> ms >> collector >> crank;
+
+  dc.indexBasis(0); // [0,1]
+  ms.spread(0);
+  crank.turn(1);
+  ms.spread(1);
+  crank.turn(1);
+  ms.spread(-1);
+  crank.turn(1);
+
+  EXPECT_FLOAT_EQ(collector.frames[0][0], 0.f);
+  EXPECT_FLOAT_EQ(collector.frames[0][1], 1.f);
+  EXPECT_FLOAT_EQ(collector.frames[1][0], -0.5f);
+  EXPECT_FLOAT_EQ(collector.frames[1][1], 0.5f);
+  EXPECT_FLOAT_EQ(collector.frames[2][0], 0.5f);
+  EXPECT_FLOAT_EQ(collector.frames[2][1], 0.5f);
+}
+
+TEST(NodeSimplex_SmokeTest, Stereo_Pan1) {
+  std::vector<float> wtRaw = {1.f, 1.f, 1.f};
+  std::shared_ptr<std::vector<float>> wt =
+      std::make_shared<std::vector<float>>(wtRaw);
+  Clover::NodeSimplex::Wavetable::WavetableOsc wavetableDC;
+  wavetableDC.wavetable(wt);
+
+  Clover::_Test::HandCrank<2> crank;
+  Clover::_Test::Collector<2> collector(3);
+  Clover::NodeSimplex::Stereo::Pan1 pan;
+
+  wavetableDC >> pan >> collector >> crank;
+
+  pan.pan(0.f);
+  crank.turn(1);
+  pan.pan(1.f);
+  crank.turn(1);
+  pan.pan(-1.f);
+  crank.turn(1);
+
+  EXPECT_LE(collector.frames[0][0], 1.f);
+  EXPECT_LE(collector.frames[0][1], 1.f);
+  EXPECT_EQ(collector.frames[1][0], 0.f);
+  EXPECT_EQ(collector.frames[1][1], 1.f);
+  EXPECT_EQ(collector.frames[2][0], 1.f);
+  EXPECT_EQ(collector.frames[2][1], 0.f);
+}
+
+TEST(NodeSimplex_SmokeTest, Stereo_Pan2) {
+  std::vector<float> wtRaw = {1.f, 1.f, 1.f};
+  std::shared_ptr<std::vector<float>> wt =
+      std::make_shared<std::vector<float>>(wtRaw);
+  Clover::NodeSimplex::Wavetable::WavetableOscStereo wavetableDC;
+  wavetableDC.wavetable(wt);
+
+  Clover::_Test::HandCrank<2> crank;
+  Clover::_Test::Collector<2> collector(3);
+  Clover::NodeSimplex::Stereo::Pan2 pan;
+
+  wavetableDC >> pan >> collector >> crank;
+
+  pan.pan(0.f);
+  crank.turn(1);
+  pan.pan(1.f);
+  crank.turn(1);
+  pan.pan(-1.f);
+  crank.turn(1);
+
+  EXPECT_LE(collector.frames[0][0], 1.f);
+  EXPECT_LE(collector.frames[0][1], 1.f);
+  EXPECT_EQ(collector.frames[1][0], 0.f);
+  EXPECT_EQ(collector.frames[1][1], 1.f);
+  EXPECT_EQ(collector.frames[2][0], 1.f);
+  EXPECT_EQ(collector.frames[2][1], 0.f);
+}
+
+TEST(NodeSimplex_SmokeTest, Sum_Mono) {
+  Clover::_Test::HandCrank<1> crank;
+  Clover::_Test::Collector<1> collector(1);
+  Clover::NodeSimplex::Stereo::Sum1 sum;
+  Clover::_Test::DCN<2> dc;
+
+  dc >> sum >> collector >> crank;
+
+  dc.indexBasis(0); // [0,1]
+  crank.turn(1);
+
+  EXPECT_FLOAT_EQ(collector.frames[0][0], 0.5f);
+}
+
+TEST(NodeSimplex_SmokeTest, Sum_Stereo) {
+  Clover::_Test::HandCrank<2> crank;
+  Clover::_Test::Collector<2> collector(1);
+  Clover::NodeSimplex::Stereo::Sum2 sum;
+  Clover::_Test::DCN<2> dc;
+
+  dc >> sum >> collector >> crank;
+
+  dc.indexBasis(0); // [0,1]
+  crank.turn(1);
+
+  EXPECT_FLOAT_EQ(collector.frames[0][0], 0.5f);
+  EXPECT_FLOAT_EQ(collector.frames[0][1], 0.5f);
 }

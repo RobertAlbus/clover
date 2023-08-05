@@ -29,7 +29,7 @@ public:
   virtual void sine(int size = 512) = 0;
   virtual void square(int size = 512) = 0;
   virtual void saw(int size = 512) = 0;
-  virtual void tri(int size = 512) = 0;
+  virtual void tri(int size = 5) = 0;
   virtual void noise(int size = 1024) = 0;
 };
 

@@ -6,8 +6,6 @@
 #include "Graph.h"
 #include "Util/Calc.h"
 
-using namespace Clover::Util;
-
 namespace Clover::NodeSimplex::Reduce {
 
 class BitCrusher : public Graph::AudioNode<1, 1> {
@@ -26,7 +24,7 @@ public:
 
 protected:
   Graph::AudioFrame<1> tick(Graph::AudioFrame<1> inputFrame) {
-    float sign = Calc::sign(inputFrame[0]);
+    float sign = Util::Calc::sign(inputFrame[0]);
     float abs = fabs(inputFrame[0]);
     abs = floor(abs * bits) / bits;
     return Graph::AudioFrame<1>{abs * sign};
