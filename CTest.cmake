@@ -33,6 +33,7 @@ add_executable(clover_test
     test/Algorithm/Wavetable/Generators/Tri.cc
 
     test/Algorithm/Wavetable/OscillatorIndexCalculator.cc
+    test/Algorithm/Wavetable/WavetableOscillatorMono.cc
 
     test/Graph/Frame_Test.cc
     test/Graph/FrameHistory_Test.cc

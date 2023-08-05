@@ -18,9 +18,18 @@ TEST(Algorithm_Wavetable_Oscillator_Index_Calculator, ShouldInitialize) {
   ASSERT_FLOAT_EQ(calculator.phase(), 0.f);
   ASSERT_FLOAT_EQ(calculator.phaseOffset(), 0.f);
 
-  ASSERT_FLOAT_EQ(calculator.last(), 0.f);
-  ASSERT_FLOAT_EQ(calculator.process(), 0.f);
-  ASSERT_FLOAT_EQ(calculator.process(), 0.f);
+  ASSERT_FLOAT_EQ(calculator.last().indexA, 0.f);
+  ASSERT_FLOAT_EQ(calculator.last().indexB, 0.f);
+  ASSERT_FLOAT_EQ(calculator.last().lerpAmount, 0.f);
+
+  calculator.process();
+  ASSERT_FLOAT_EQ(calculator.last().indexA, 0.f);
+  ASSERT_FLOAT_EQ(calculator.last().indexB, 1.f);
+  ASSERT_FLOAT_EQ(calculator.last().lerpAmount, 0.f);
+  calculator.process();
+  ASSERT_FLOAT_EQ(calculator.last().indexA, 0.f);
+  ASSERT_FLOAT_EQ(calculator.last().indexB, 1.f);
+  ASSERT_FLOAT_EQ(calculator.last().lerpAmount, 0.f);
 }
 
 TEST(Algorithm_Wavetable_Oscillator_Index_Calculator, ShouldBeSettable) {
@@ -55,14 +64,25 @@ TEST(Algorithm_Wavetable_Oscillator_Index_Calculator, ShouldWalkThroughIndex) {
   Clover::Wavetable::OscillatorIndexCalculator<float> calculator(sampleRate,
                                                                  size);
   calculator.freq(1.f);
-  ASSERT_FLOAT_EQ(calculator.process(), 0.f);
-  ASSERT_FLOAT_EQ(calculator.process(), 1.f);
-  ASSERT_FLOAT_EQ(calculator.process(), 2.f);
+
+  calculator.process();
+  ASSERT_FLOAT_EQ(calculator.last().indexA, 0.f);
+  ASSERT_FLOAT_EQ(calculator.last().indexB, 1.f);
+  ASSERT_FLOAT_EQ(calculator.last().lerpAmount, 0.f);
+  calculator.process();
+  ASSERT_FLOAT_EQ(calculator.last().indexA, 1.f);
+  ASSERT_FLOAT_EQ(calculator.last().indexB, 2.f);
+  ASSERT_FLOAT_EQ(calculator.last().lerpAmount, 0.f);
+  calculator.process();
+  ASSERT_FLOAT_EQ(calculator.last().indexA, 2.f);
+  ASSERT_FLOAT_EQ(calculator.last().indexB, 3.f);
+  ASSERT_FLOAT_EQ(calculator.last().lerpAmount, 0.f);
 
   calculator.freq(2.f);
-  ASSERT_FLOAT_EQ(calculator.process(), 3.f); // one sample of latency
-  ASSERT_FLOAT_EQ(calculator.process(), 5.f);
-  ASSERT_FLOAT_EQ(calculator.process(), 7.f);
+  calculator.process();
+  ASSERT_FLOAT_EQ(calculator.last().indexA, 3.f);
+  ASSERT_FLOAT_EQ(calculator.last().indexB, 4.f);
+  ASSERT_FLOAT_EQ(calculator.last().lerpAmount, 0.f);
 }
 
 TEST(Algorithm_Wavetable_Oscillator_Index_Calculator,
@@ -75,15 +95,15 @@ TEST(Algorithm_Wavetable_Oscillator_Index_Calculator,
 
   // immediately changes index
   calculator.phase(0.25f);
-  ASSERT_FLOAT_EQ(calculator.process(), 25.f);
-  ASSERT_FLOAT_EQ(calculator.process(), 26.f);
+  ASSERT_FLOAT_EQ(calculator.process().indexA, 25.f);
+  ASSERT_FLOAT_EQ(calculator.process().indexA, 26.f);
 
   // phase percent wraps
   calculator.phase(1.25f);
-  ASSERT_FLOAT_EQ(calculator.process(), 25.f);
+  ASSERT_FLOAT_EQ(calculator.process().indexA, 25.f);
 
   calculator.phase(-0.25f);
-  ASSERT_FLOAT_EQ(calculator.process(), 75.f);
+  ASSERT_FLOAT_EQ(calculator.process().indexA, 75.f);
 }
 
 TEST(Algorithm_Wavetable_Oscillator_Index_Calculator,
@@ -95,9 +115,9 @@ TEST(Algorithm_Wavetable_Oscillator_Index_Calculator,
   calculator.phaseOffset(0.25f);
   calculator.freq(1.f);
   ASSERT_FLOAT_EQ(calculator.phase(), 0.f);
-  ASSERT_FLOAT_EQ(calculator.process(), 25.f);
+  ASSERT_FLOAT_EQ(calculator.process().indexA, 25.f);
 
   calculator.phase(0.25f);
-  ASSERT_FLOAT_EQ(calculator.process(), 50.f);
-  ASSERT_FLOAT_EQ(calculator.process(), 51.f);
+  ASSERT_FLOAT_EQ(calculator.process().indexA, 50.f);
+  ASSERT_FLOAT_EQ(calculator.process().indexA, 51.f);
 }

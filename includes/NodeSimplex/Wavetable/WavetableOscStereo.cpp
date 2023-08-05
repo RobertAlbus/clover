@@ -93,7 +93,7 @@ void WavetableOscStereo::tri(int size) {
   oscR.wavetable(oscL.wavetable());
 }
 void WavetableOscStereo::noise(int size) {
-  oscL.noise(size);
+  oscL.noiseWhite(size);
   oscR.wavetable(oscL.wavetable());
 }
 

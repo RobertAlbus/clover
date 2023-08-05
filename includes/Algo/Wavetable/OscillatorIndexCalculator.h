@@ -11,10 +11,18 @@
 
 namespace Clover::Wavetable {
 
+template <FloatingPoint T> struct OscillatorIndexCalculatorResult {
+  int indexA;
+  int indexB;
+  T lerpAmount;
+};
+
 template <FloatingPoint T>
-struct OscillatorIndexCalculator : public OscillatorInterface<T>,
-                                   public AlgorithmBase<T> {
-  OscillatorIndexCalculator(T sampleRateHz, int wavetableSize)
+struct OscillatorIndexCalculator
+    : public OscillatorIndexCalculculatorInterface<T>,
+      public AlgorithmBase<OscillatorIndexCalculatorResult<T>> {
+
+  OscillatorIndexCalculator(T sampleRateHz, int wavetableSize = 0)
       : // clang-format off
       freq_(T(0)),
       freqReciprocal_(T(0)),
@@ -36,7 +44,7 @@ struct OscillatorIndexCalculator : public OscillatorInterface<T>,
     freq_ = freqHz;
     freqReciprocal_ = freq_ == T(0) ? T(0) : T(1) / freq_;
 
-    readIndexIncrementSamples_ = calculateReadIndexIncrement(freq_);
+    calculateReadIndexIncrement();
   }
 
   T freq() override { return freq_; }
@@ -70,8 +78,11 @@ struct OscillatorIndexCalculator : public OscillatorInterface<T>,
 
   T phaseOffset() override { return phaseOffsetPercent_; }
 
-  T process() {
-    this->processed = readIndex_;
+  OscillatorIndexCalculatorResult<T> process() {
+    this->processed.indexA = static_cast<int>(readIndex_);
+    this->processed.indexB =
+        static_cast<int>(normalizeReadIndex(this->processed.indexA + 1));
+    this->processed.lerpAmount = getFractionalComponent(readIndex_);
     readIndex_ = normalizeReadIndex(readIndex_ + readIndexIncrementSamples_);
 
     return this->processed;
@@ -83,25 +94,27 @@ struct OscillatorIndexCalculator : public OscillatorInterface<T>,
 
   T sampleRate() override { return sampleRate_; }
   int size() override { return wavetableSize_; }
-
-private:
   void size(int sizeSamples) {
     sizeSamples = normalizeSize(sizeSamples);
     wavetableSize_ = static_cast<T>(sizeSamples);
     wavetableSizeResciprocal_ =
         wavetableSize_ == T(0) ? T(0) : T(1) / wavetableSize_;
+    calculateReadIndexIncrement();
   }
 
+private:
   void sampleRate(T rateHz) {
     sampleRate_ = normalizeSampleRate(rateHz);
     sampleRateReciprocal_ = sampleRate_ == T(0) ? T(0) : T(1) / sampleRate_;
   }
 
-  T normalizePhase(T phase) {
-    phase = phase - static_cast<int>(phase);
-    if (phase < T(0))
-      phase += T(1);
-    return phase;
+  T normalizePhase(T phase) { return getFractionalComponent(phase); }
+
+  T getFractionalComponent(T num) {
+    num = num - static_cast<int>(num);
+    if (num < T(0))
+      num += T(1);
+    return num;
   }
 
   T normalizeFreq(T freq) {
@@ -122,8 +135,8 @@ private:
     return index;
   }
 
-  T calculateReadIndexIncrement(T freq) {
-    return freq_ * wavetableSize_ * sampleRateReciprocal_;
+  void calculateReadIndexIncrement() {
+    readIndexIncrementSamples_ = freq_ * wavetableSize_ * sampleRateReciprocal_;
   }
 
   int normalizeSize(int size) { return std::max(0, size); }
