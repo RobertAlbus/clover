@@ -5,13 +5,16 @@
 #include <tgmath.h>
 #include <vector>
 
+#include "Graph/AudioFrame.h"
+#include "Graph/AudioNode.h"
+#include "Graph/NullFrame.h"
 #include "NodeSimplex.h"
 #include "WavetableOsc.h"
 
 namespace Clover::NodeSimplex::Wavetable {
 
 class WavetableOscStereo : public Base,
-                           public Graph::AudioNode<0, 2>,
+                           public Graph::AudioOutNode<2>,
                            public WavetableOscInterface {
 public:
   WavetableOscStereo();
@@ -44,7 +47,7 @@ public:
 private:
   WavetableOsc oscL;
   WavetableOsc oscR;
-  Adapter::NullAdapter<1, 0> blackHole;
+  Adapter::NullOutAdapter<1> blackHole;
 
   float stereoDetune_L_semi;
   float stereoDetune_R_semi;
@@ -52,7 +55,7 @@ private:
 
   float freq_;
 
-  Graph::AudioFrame<2> tick(Graph::AudioFrame<0> input);
+  Graph::AudioFrame<2> tick(Graph::NullFrame input);
 
   void connectNodes();
   void updateFreq();

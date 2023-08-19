@@ -1,11 +1,14 @@
 #pragma once
 
 #include "Clover.h"
-#include "Graph.h"
+#include "Graph/AudioFrame.h"
+#include "Graph/AudioNode.h"
+#include "Graph/NullFrame.h"
 #include "NodeSimplex.h"
+#include "NodeSimplex/Adapter/NullAdapter.h"
 
 template <int __numVoices>
-struct OscNx : public Clover::Graph::AudioNode<0, 2>, Pitchable, Triggerable {
+struct OscNx : public Clover::Graph::AudioOutNode<2>, Pitchable, Triggerable {
   struct Voice {
     Voice() : tuning_(0) {}
 
@@ -103,11 +106,11 @@ struct OscNx : public Clover::Graph::AudioNode<0, 2>, Pitchable, Triggerable {
 
   float currentMidiNoteFreq;
 
-  Clover::NodeSimplex::Adapter::NullAdapter<1, 0> blackHole1;
-  Clover::NodeSimplex::Adapter::NullAdapter<2, 0> blackHole2;
+  Clover::NodeSimplex::Adapter::NullOutAdapter<1> blackHole1;
+  Clover::NodeSimplex::Adapter::NullOutAdapter<2> blackHole2;
   Clover::NodeSimplex::Basic::Gain<2> audioSink;
 
-  Clover::Graph::AudioFrame<2> tick(Clover::Graph::AudioFrame<0> input) {
+  Clover::Graph::AudioFrame<2> tick(Clover::Graph::NullFrame input) {
     updatePitchMod();
     updateFilterMod();
     updateAmplitudeMod();

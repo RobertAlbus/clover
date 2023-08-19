@@ -1,4 +1,5 @@
 #pragma once
+
 #include <cmath>
 #include <functional>
 #include <memory>
@@ -9,14 +10,15 @@
 #include "Algo/Wavetable/WavetableOscillatorMono.h"
 #include "Graph/AudioFrame.h"
 #include "Graph/AudioNode.h"
+#include "Graph/NullFrame.h"
 #include "WavetableOscInterface.h"
 
 namespace Clover::NodeSimplex::Wavetable {
 
 typedef std::vector<Sample> Wavetable;
 
-struct WavetableOsc : public Base,
-                      public Graph::AudioNode<0, 1>,
+struct WavetableOsc : public Graph::AudioOutNode<1>,
+                      public Base,
                       public Clover::Wavetable::WavetableOscInterface<float> {
   WavetableOsc();
   WavetableOsc(std::shared_ptr<Wavetable> wavetable, float freq,
@@ -47,7 +49,7 @@ struct WavetableOsc : public Base,
   void noiseWhite(int size = 1024);
 
 private:
-  Graph::AudioFrame<1> tick(Graph::AudioFrame<0> input) override;
+  Graph::AudioFrame<1> tick(Graph::NullFrame input) override;
   Clover::Wavetable::WavetableOscillatorMono<Sample> osc;
 };
 

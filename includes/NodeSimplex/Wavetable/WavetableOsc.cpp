@@ -5,7 +5,9 @@
 #include <vector>
 
 #include "Base.h"
-#include "Graph.h"
+#include "Graph/AudioNode.h"
+#include "Graph/AudioFrame.h"
+#include "Graph/NullFrame.h"
 #include "Util.h"
 
 #include "WavetableOsc.h"
@@ -21,7 +23,7 @@ WavetableOsc::WavetableOsc()
                      200, 0, 0) {}
 
 WavetableOsc::WavetableOsc(std::shared_ptr<Wavetable> wavetable, float freq, float phase, float phaseOffset)
-    : Clover::Graph::AudioNode<0, 1>(), osc(Base::sampleRate, wavetable) {
+    : Clover::Graph::AudioOutNode<1>(), osc(Base::sampleRate, wavetable) {
 }
 
 void WavetableOsc::phase(float phasePercent) {
@@ -96,7 +98,7 @@ void WavetableOsc::noiseWhite(int size) {
   osc.noiseWhite(size);
 }
 
-Graph::AudioFrame<1> WavetableOsc::tick(Graph::AudioFrame<0> input) {
+Graph::AudioFrame<1> WavetableOsc::tick(Graph::NullFrame input) {
   return Graph::AudioFrame<1> { osc.process() };
 }
 

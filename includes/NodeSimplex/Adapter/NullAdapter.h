@@ -1,16 +1,25 @@
 #pragma once
 
-#include "Graph.h"
+#include "Graph/AudioFrame.h"
+#include "Graph/AudioNode.h"
+#include "Graph/NullFrame.h"
 
 namespace Clover::NodeSimplex::Adapter {
 
-// I am not a fan of this Node, but as for now it is required in order to
-// create a block hole for signals. Think /dev/null for signals.
-template <size_t __arityIn, size_t __arityOut>
-class NullAdapter : public Graph::AudioNode<__arityIn, __arityOut> {
+// Think /dev/null for signals.
+template <size_t __arityOut>
+class NullInAdapter : public Graph::AudioOutNode<__arityOut> {
 
-  Graph::AudioFrame<__arityOut> tick(Graph::AudioFrame<__arityIn> input) {
+  Graph::AudioFrame<__arityOut> tick(Graph::NullFrame input) {
     return Graph::AudioFrame<__arityOut>{};
+  }
+};
+
+template <size_t __arityIn>
+class NullOutAdapter : public Graph::AudioInNode<__arityIn> {
+
+  Graph::NullFrame tick(Graph::AudioFrame<__arityIn> input) {
+    return Graph::NullFrame{};
   }
 };
 

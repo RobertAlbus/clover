@@ -97,7 +97,7 @@ void WavetableOscStereo::noise(int size) {
   oscR.wavetable(oscL.wavetable());
 }
 
-Graph::AudioFrame<2> WavetableOscStereo::tick(Graph::AudioFrame<0> input) {
+Graph::AudioFrame<2> WavetableOscStereo::tick(Graph::NullFrame input) {
   return Graph::AudioFrame<2>{oscL.frames.current[0], oscR.frames.current[0]};
 }
 

@@ -34,7 +34,7 @@ TEST(Graph_Node, ShouldConnect) {
 
 TEST(Graph_Node, ShouldSumAndGain) {
 
-  Clover::_Test::HandCrank<1> crank;
+  Clover::_Test::HandCrank crank;
   Clover::_Test::Collector<1> collector(1);
 
   NodeStub stub1;
