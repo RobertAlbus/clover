@@ -6,7 +6,7 @@ Accepted
 
 ## Context
 
-Clover exposes base classes for creating Nodes in a Directed Graph. Algorithms have implemented as subclasses of the Graph Node. These algorithms are also useful outside of the graph-based context.
+Clover exposes base classes for creating Nodes in a Directed Graph. Since inception of the library, algorithms have been implemented as subclasses of the Graph Node. These algorithms are also useful outside of the graph-based context. Perhaps multiple algorithms might be useful in conjunction with each other, but the overhead of setting up a graph might be excessive.
 
 ## Decision
 
