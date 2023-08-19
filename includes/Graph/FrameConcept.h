@@ -2,6 +2,7 @@
 
 #include <concepts>
 
+// clang-format off
 template <typename T>
 concept Frame = requires(T a, const T b, const T c, const float f) {
                   T();
@@ -23,3 +24,4 @@ concept Frame = requires(T a, const T b, const T c, const float f) {
                   { a *= f } -> std::same_as<void>;
                   { a /= f } -> std::same_as<void>;
                 };
+// clang-format on

@@ -16,23 +16,10 @@
 #include "NodeSimplex/Stereo/Sum.h"
 #include "NodeSimplex/Wavetable/WavetableOscStereo.h"
 
-TEST(NodeSimplex_SmokeTest, NullAdapter) {
-  Clover::_Test::HandCrank<1> crank;
-  Clover::_Test::Collector<1> collector(1);
-  Clover::NodeSimplex::Adapter::NullAdapter<4, 1> nullAdapter;
-  Clover::_Test::DCN<4> dc;
-
-  dc >> nullAdapter >> collector >> crank;
-
-  crank.turn(1);
-
-  EXPECT_EQ(collector.frames[0][0], 0.f);
-}
-
 TEST(NodeSimplex_SmokeTest, Delay_Fractional) {
   float delayTime = 1.f;
   int testSize = delayTime + 10;
-  Clover::_Test::HandCrank<1> crank;
+  Clover::_Test::HandCrank crank;
   Clover::NodeSimplex::Delay::FractionalDelayLine<1> delay(testSize, delayTime);
   Clover::_Test::Collector<1> delayCollector(testSize);
   Clover::_Test::Incrementor<1> incrementor(1);
@@ -52,7 +39,7 @@ TEST(NodeSimplex_SmokeTest, Delay_Fractional) {
 }
 
 TEST(NodeSimplex_SmokeTest, DynamicRange_Clamp) {
-  Clover::_Test::HandCrank<1> crank;
+  Clover::_Test::HandCrank crank;
   Clover::_Test::Collector<1> envelopeCollector(6);
   Clover::NodeSimplex::DynamicRange::AsymClip<1> clip;
   Clover::_Test::DCN<1> dc;
@@ -82,7 +69,7 @@ TEST(NodeSimplex_SmokeTest, DynamicRange_Clamp) {
 }
 
 TEST(NodeSimplex_SmokeTest, Envelope_Basic) {
-  Clover::_Test::HandCrank<1> crank;
+  Clover::_Test::HandCrank crank;
   Clover::NodeSimplex::Envelope::BasicEnvelope envelope;
   Clover::_Test::Collector<1> envelopeCollector(100);
 
@@ -106,7 +93,7 @@ TEST(NodeSimplex_SmokeTest, Envelope_Basic) {
 }
 
 TEST(NodeSimplex_SmokeTest, Envelope_ADSR) {
-  Clover::_Test::HandCrank<1> crank;
+  Clover::_Test::HandCrank crank;
   Clover::NodeSimplex::Envelope::ADSR envelope;
   Clover::_Test::Collector<1> envelopeCollector(100);
 
@@ -129,7 +116,7 @@ TEST(NodeSimplex_SmokeTest, Envelope_ADSR) {
 }
 
 TEST(NodeSimplex_SmokeTest, Stereo_Difference) {
-  Clover::_Test::HandCrank<2> crank;
+  Clover::_Test::HandCrank crank;
   Clover::_Test::Collector<2> collector(2);
   Clover::NodeSimplex::Stereo::Difference difference;
   Clover::_Test::DCN<2> dc;
@@ -144,7 +131,7 @@ TEST(NodeSimplex_SmokeTest, Stereo_Difference) {
 }
 
 TEST(NodeSimplex_SmokeTest, Stereo_MidSideBalance) {
-  Clover::_Test::HandCrank<2> crank;
+  Clover::_Test::HandCrank crank;
   Clover::_Test::Collector<2> collector(3);
   Clover::NodeSimplex::Stereo::MidSideBalance ms;
   Clover::_Test::DCN<2> dc;
@@ -174,7 +161,7 @@ TEST(NodeSimplex_SmokeTest, Stereo_Pan1) {
   Clover::NodeSimplex::Wavetable::WavetableOsc wavetableDC;
   wavetableDC.wavetable(wt);
 
-  Clover::_Test::HandCrank<2> crank;
+  Clover::_Test::HandCrank crank;
   Clover::_Test::Collector<2> collector(3);
   Clover::NodeSimplex::Stereo::Pan1 pan;
 
@@ -202,7 +189,7 @@ TEST(NodeSimplex_SmokeTest, Stereo_Pan2) {
   Clover::NodeSimplex::Wavetable::WavetableOscStereo wavetableDC;
   wavetableDC.wavetable(wt);
 
-  Clover::_Test::HandCrank<2> crank;
+  Clover::_Test::HandCrank crank;
   Clover::_Test::Collector<2> collector(3);
   Clover::NodeSimplex::Stereo::Pan2 pan;
 
@@ -224,7 +211,7 @@ TEST(NodeSimplex_SmokeTest, Stereo_Pan2) {
 }
 
 TEST(NodeSimplex_SmokeTest, Sum_Mono) {
-  Clover::_Test::HandCrank<1> crank;
+  Clover::_Test::HandCrank crank;
   Clover::_Test::Collector<1> collector(1);
   Clover::NodeSimplex::Stereo::Sum1 sum;
   Clover::_Test::DCN<2> dc;
@@ -238,7 +225,7 @@ TEST(NodeSimplex_SmokeTest, Sum_Mono) {
 }
 
 TEST(NodeSimplex_SmokeTest, Sum_Stereo) {
-  Clover::_Test::HandCrank<2> crank;
+  Clover::_Test::HandCrank crank;
   Clover::_Test::Collector<2> collector(1);
   Clover::NodeSimplex::Stereo::Sum2 sum;
   Clover::_Test::DCN<2> dc;

@@ -4,7 +4,8 @@
 #include <functional>
 #include <vector>
 
-#include "Graph.h"
+#include "Graph/NullFrame.h"
+#include "Graph/NullNode.h"
 
 struct PatternSettable {
   virtual void setPattern(int i);
@@ -45,9 +46,9 @@ template <typename T> struct STSQ_Pattern {
 template <typename StepDataType, typename TargetType,
           void (*applyStepDataFunc)(const StepDataType &,
                                     std::vector<TargetType *> &)>
-struct STSQ : public Clover::Graph::AudioNode<0, 0>, public PatternSettable {
+struct STSQ : public Clover::Graph::NullNode, public PatternSettable {
 
-  STSQ() : AudioNode(), nextIndex(0), patternIndex(0) {}
+  STSQ() : NullNode(), nextIndex(0), patternIndex(0) {}
 
   int patternIndex;
   std::vector<STSQ_Pattern<StepDataType>> patterns;
@@ -64,10 +65,10 @@ struct STSQ : public Clover::Graph::AudioNode<0, 0>, public PatternSettable {
     patterns.emplace_back(newPattern);
   }
 
-  Clover::Graph::AudioFrame<0> tick(Clover::Graph::AudioFrame<0> input) {
+  Clover::Graph::NullFrame tick(Clover::Graph::NullFrame input) {
     checkTimeAndPerformStep();
 
-    return Clover::Graph::AudioFrame<0>{};
+    return input;
   }
 
 private:

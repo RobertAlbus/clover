@@ -4,7 +4,7 @@
 
 TEST(NodeSimplex_Envelope_AutomationClip, ShouldOutputEnvelope) {
 
-  Clover::_Test::HandCrank<1> crank;
+  Clover::_Test::HandCrank crank;
   Clover::_Test::Collector<1> collector(1000);
   Clover::NodeSimplex::AutomationNode automationClip;
 
@@ -31,7 +31,7 @@ TEST(NodeSimplex_Envelope_AutomationClip, ShouldOutputEnvelope) {
 
 TEST(NodeSimplex_Envelope_AutomationClip, ShouldHaveDefaultEnvelope) {
 
-  Clover::_Test::HandCrank<1> crank;
+  Clover::_Test::HandCrank crank;
   Clover::_Test::Collector<1> collector(10);
   Clover::NodeSimplex::AutomationNode automationClip;
 
@@ -47,7 +47,7 @@ TEST(NodeSimplex_Envelope_AutomationClip, ShouldHaveDefaultEnvelope) {
 
 TEST(NodeSimplex_Envelope_AutomationClip, ShouldHoldLastValue) {
 
-  Clover::_Test::HandCrank<1> crank;
+  Clover::_Test::HandCrank crank;
   Clover::_Test::Collector<1> collector(10);
   Clover::NodeSimplex::AutomationNode automationClip;
 

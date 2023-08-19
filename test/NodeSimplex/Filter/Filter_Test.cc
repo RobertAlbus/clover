@@ -8,7 +8,7 @@
 TEST(NodeSimplex_Filter_Filter, ShouldFilterLowPass) {
 
   int testSize = 10000;
-  Clover::_Test::HandCrank<1> crank;
+  Clover::_Test::HandCrank crank;
   Clover::_Test::Collector<1> collector(testSize);
   Clover::NodeSimplex::Filter::Filter<1> filter;
   Clover::NodeSimplex::Wavetable::WavetableOsc osc;
@@ -35,7 +35,7 @@ TEST(NodeSimplex_Filter_Filter, ShouldFilterLowPass) {
 TEST(NodeSimplex_Filter_Filter, ShouldFilterHighPass) {
 
   int testSize = 10000;
-  Clover::_Test::HandCrank<1> crank;
+  Clover::_Test::HandCrank crank;
   Clover::_Test::Collector<1> collector(testSize);
   Clover::NodeSimplex::Filter::Filter<1> filter;
   Clover::NodeSimplex::Wavetable::WavetableOsc osc;

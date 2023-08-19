@@ -36,8 +36,10 @@ int main(int argc, char *argv[]) {
   Interface interface;
   interface.rootNode.gain(0.5);
   Clover::Util::Time time(160, Clover::Base::sampleRate, &interface.clock);
-  Clover::NodeSimplex::Adapter::NullAdapter<1, 2> blackHole;
-  blackHole >> interface.rootNode;
+  Clover::NodeSimplex::Adapter::NullInAdapter<2> nullSink;
+  Clover::NodeSimplex::Adapter::NullOutAdapter<1> blackHole1;
+
+  blackHole1 >> nullSink >> interface.rootNode;
 
   Wavetable::WavetableOscStereo osc;
   osc.saw(1024);
@@ -48,7 +50,7 @@ int main(int argc, char *argv[]) {
   mod.sine(11);
   mod.freq(71);
 
-  mod >> blackHole;
+  mod >> blackHole1;
 
   Filter::Filter<2> filter;
   filter.lowPass();
@@ -65,20 +67,18 @@ int main(int argc, char *argv[]) {
   lfo.sine(1024);
   lfo.freq(0.25);
   lfo.phase(0.75);
-  lfo >> blackHole;
+  lfo >> blackHole1;
 
   Envelope::ADSR adsr(time.quat(0.22), time.quat(), 0.0f, time.beat());
-  adsr >> blackHole;
+  adsr >> blackHole1;
 
   OscAndStSq testPattern(time);
 
-  Adapter::NullAdapter<0, 2> nullAdapter;
-
   testPattern.instrument >> interface.rootNode;
   testPattern.kick >> interface.rootNode;
-  testPattern.stsq_pitch >> nullAdapter >> interface.rootNode;
-  testPattern.stsq_kick >> nullAdapter;
-  testPattern.stsq_trigger >> nullAdapter;
+  testPattern.stsq_pitch >> nullSink;
+  testPattern.stsq_kick >> nullSink;
+  testPattern.stsq_trigger >> nullSink;
 
   bool isProfilingMode = false;
   if (isProfilingMode) {

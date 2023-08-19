@@ -1,14 +1,15 @@
 #pragma once
 #include <string>
 
-#include "Graph.h"
+#include "Graph/AudioFrame.h"
+#include "Graph/AudioNode.h"
+#include "Graph/NullFrame.h"
 
 namespace Clover::_Test {
 
-template <size_t __arity>
-class Collector : public Graph::AudioNode<__arity, __arity> {
+template <size_t __arity> class Collector : public Graph::AudioInNode<__arity> {
 public:
-  Collector(int preAllocateFrames) : Graph::AudioNode<__arity, __arity>() {
+  Collector(int preAllocateFrames) : Graph::AudioInNode<__arity>() {
     frames.reserve(preAllocateFrames);
   }
 
@@ -30,10 +31,10 @@ public:
   }
 
 private:
-  Graph::AudioFrame<__arity> tick(Graph::AudioFrame<__arity> input) {
+  Graph::NullFrame tick(Graph::AudioFrame<__arity> input) {
     frames.emplace_back(input);
 
-    return input;
+    return Graph::NullFrame{};
   }
 };
 

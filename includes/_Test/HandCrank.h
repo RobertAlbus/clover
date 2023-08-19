@@ -1,14 +1,14 @@
 #pragma once
 
-#include "Graph.h"
+#include "Graph/NullFrame.h"
+#include "Graph/NullNode.h"
 #include "Util/SampleClock.h"
 
 namespace Clover::_Test {
 
-template <size_t __arityIn>
-class HandCrank : public Graph::AudioNode<__arityIn, 0> {
+class HandCrank : public Graph::NullNode {
 public:
-  HandCrank() : Graph::AudioNode<__arityIn, 0>() {}
+  HandCrank() : Graph::NullNode() {}
 
   void turn(int numberOfTicks) {
     for (int i = 0; i < numberOfTicks; i++) {
@@ -20,9 +20,7 @@ public:
 private:
   Clover::Util::SampleClock clock;
 
-  Graph::AudioFrame<0> tick(Graph::AudioFrame<__arityIn> input) {
-    return Graph::AudioFrame<0>{};
-  }
+  Graph::NullFrame tick(Graph::NullFrame input) { return Graph::NullFrame{}; }
 };
 
 } // namespace Clover::_Test

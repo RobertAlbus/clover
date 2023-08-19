@@ -1,18 +1,20 @@
 #pragma once
 
-#include "Graph.h"
+#include "Graph/AudioFrame.h"
+#include "Graph/AudioNode.h"
+#include "Graph/NullFrame.h"
 
 namespace Clover::_Test {
 
 template <size_t __arityOut>
-class Incrementor : public Graph::AudioNode<0, __arityOut> {
+class Incrementor : public Graph::AudioOutNode<__arityOut> {
 public:
   Incrementor(int startValue = 0)
-      : Graph::AudioNode<0, __arityOut>(), basis(startValue) {}
+      : Graph::AudioOutNode<__arityOut>(), basis(startValue) {}
 
 private:
   float basis;
-  Graph::AudioFrame<__arityOut> tick(Graph::AudioFrame<0> input) {
+  Graph::AudioFrame<__arityOut> tick(Graph::NullFrame input) {
     Graph::AudioFrame<__arityOut> f{};
 
     float time = (float)this->_currentClockTime;
