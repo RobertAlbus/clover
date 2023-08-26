@@ -1,4 +1,4 @@
 #!/bin/bash
 
-rm -fr ./build/CloverDemo;
+rm -fr ./build
 sh scripts/build.sh
