@@ -30,7 +30,6 @@
 #include "Midi.h"
 #include "Nodes.h"
 
-#include "NodeComplex.h"
 #include "Util.h"
 
 #include "_Test.h"

@@ -24,8 +24,11 @@
 #include "Graph/AudioFrame.h"
 #include "Graph/AudioNode.h"
 #include "Graph/NullFrame.h"
-#include "Nodes.h"
+#include "Nodes/Wavetable/WavetableOsc.h"
+#include "Nodes/Wavetable/WavetableOscStereo.h"
 #include "Nodes/Adapter/NullAdapter.h"
+
+namespace Clover::Nodes::Synth {
 
 template <int __numVoices>
 struct OscNx : public Clover::Graph::AudioOutNode<2>, Pitchable, Triggerable {
@@ -186,3 +189,5 @@ struct OscNx : public Clover::Graph::AudioOutNode<2>, Pitchable, Triggerable {
     audioSink.gain(amplitude.adsrValue() + amplitude.lfoValue());
   }
 };
+
+}

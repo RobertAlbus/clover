@@ -51,6 +51,8 @@
 #include "Nodes/Stereo/Pan.h"
 #include "Nodes/Stereo/Sum.h"
 
+#include "Nodes/Synth/OscNx.h"
+
 #include "Nodes/Wavetable/WavetableOscInterface.h"
 
 #include "Nodes/Wavetable/WavetableOsc.h"
