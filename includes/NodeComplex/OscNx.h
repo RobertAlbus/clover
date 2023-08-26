@@ -139,9 +139,6 @@ struct OscNx : public Clover::Graph::AudioOutNode<2>, Pitchable, Triggerable {
     Clover::Graph::AudioFrame<2> f{audioSink.currentFrame()[0],
                                    audioSink.currentFrame()[1]};
 
-    float ff = filter.freq();
-    float fr = filter.reso();
-
     return f;
   }
 

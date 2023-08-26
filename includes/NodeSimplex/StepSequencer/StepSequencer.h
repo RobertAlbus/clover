@@ -71,13 +71,13 @@ struct STSQ : public Clover::Graph::NullNode, public PatternSettable {
 
   STSQ() : NullNode(), nextIndex(0), patternIndex(0) {}
 
-  int patternIndex;
   std::vector<STSQ_Pattern<StepDataType>> patterns;
   std::vector<TargetType *> targets;
   int nextIndex;
+  int patternIndex;
 
   void setPattern(int i) override {
-    // should add bounds checking here
+    // TODO: should add bounds checking here
     patternIndex = i;
     updateIndexForNewPattern();
   }

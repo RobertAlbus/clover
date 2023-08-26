@@ -36,7 +36,7 @@ struct UpwardDCCompression : public AlgorithmBase<std::array<T, __arity>> {
 
   std::array<T, __arity> process(std::array<T, __arity> input) {
     std::array<T, __arity> frame{};
-    for (int i = 0; i < __arity; i++) {
+    for (size_t i = 0; i < __arity; i++) {
       T sign = input[i] < T(0) ? T(-1) : T(1);
       T offset = threshold_ * sign;
       T result = input[i] * scaleAmount_ + offset;

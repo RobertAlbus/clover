@@ -81,7 +81,7 @@ protected:
         (previousReadHead + 1) % static_cast<int>(bufferCapacity);
 
     Frame f{};
-    for (int i = 0; i < __arity; i++) {
+    for (size_t i = 0; i < __arity; i++) {
       T previous = buffer[previousReadHead][i];
       T next = buffer[nextReadHead][i];
       f[i] = std::lerp(previous, next, lerpAmount);

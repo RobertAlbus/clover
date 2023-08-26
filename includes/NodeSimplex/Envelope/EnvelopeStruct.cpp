@@ -37,7 +37,7 @@ void EnvelopeDefinition::validate() const {
     throw "Envelope must have at least one point.";
   if (points[0].start != 0.)
     throw "Envelope must start with a point at sample 0";
-  for (int i = 1; i < size; i++) {
+  for (size_t i = 1; i < size; i++) {
     if (points[i].start < points[i-1].start)
       throw "Envelope must have ordered points";
   }

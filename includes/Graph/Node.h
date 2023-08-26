@@ -42,9 +42,6 @@ template <Frame InputType, Frame OutputType>
 class Node : public INode<OutputType> {
 public:
   int NODE_MAX_INPUT_CAPACITY = 10;
-  float _gain;
-  void gain(float gainOut) { _gain = gainOut; }
-  float gain() { return _gain; }
   FrameHistory<OutputType> frames;
 
   Node() : _currentClockTime(-1), _gain(1.) {
@@ -53,6 +50,10 @@ public:
 
   std::vector<INode<InputType> *> inputNodes;
   int _currentClockTime;
+  float _gain;
+
+  void gain(float gainOut) { _gain = gainOut; }
+  float gain() { return _gain; }
 
   /// User-defined sample processing method with fallback implementation
   //

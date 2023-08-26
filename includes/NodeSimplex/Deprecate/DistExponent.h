@@ -39,7 +39,7 @@ private:
   float _exponent;
   Graph::AudioFrame<__arity> tick(Graph::AudioFrame<__arity> input) {
     Graph::AudioFrame<__arity> f{};
-    for (int i = 0; i < __arity; i++) {
+    for (size_t i = 0; i < __arity; i++) {
       float sign = Util::Calc::sign(input[i]);
       float abs = fabs(input[i]);
       f[i] = pow(abs, 1.f - _exponent) * sign;

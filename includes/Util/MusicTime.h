@@ -52,8 +52,6 @@ public:
   int beat_i(float multiplier = 1.);
   int bar_i(float multiplier = 1.);
 
-  SampleClock *sampleClock;
-
   // // for example, every N bars
   // bool isMultipleOfDuration(float duration) {
   //   float currentSample = (float)sampleClock->currentSample();
@@ -82,6 +80,8 @@ private:
   float _trip;
   float _beat;
   float _bar;
+
+  SampleClock *sampleClock;
 
   void initMusicTime();
 };

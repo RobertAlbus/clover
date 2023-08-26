@@ -39,7 +39,7 @@ private:
     Graph::AudioFrame<__arityOut> f{};
 
     float time = (float)this->_currentClockTime;
-    for (int i = 0; i < __arityOut; i++) {
+    for (size_t i = 0; i < __arityOut; i++) {
       f[i] = time + basis;
     }
 

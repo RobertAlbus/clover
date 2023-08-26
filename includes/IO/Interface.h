@@ -138,8 +138,8 @@ private:
     }
 
     for (i = 0; i < framesPerBuffer; i++) {
-      *out--;
-      *out--;
+      --out;
+      --out;
     }
 
     for (i = 0; i < framesPerBuffer; i++) {

@@ -49,7 +49,7 @@ template <size_t __arity> struct AudioFrame {
   Graph::AudioFrame<__arity>
   operator+(const Graph::AudioFrame<__arity> &b) const {
     Graph::AudioFrame<__arity> f;
-    for (int i = 0; i < __arity; i++) {
+    for (size_t i = 0; i < __arity; i++) {
       f[i] = data[i] + b[i];
     }
     return f;
@@ -58,7 +58,7 @@ template <size_t __arity> struct AudioFrame {
   Graph::AudioFrame<__arity>
   operator-(const Graph::AudioFrame<__arity> &b) const {
     Graph::AudioFrame<__arity> f;
-    for (int i = 0; i < __arity; i++) {
+    for (size_t i = 0; i < __arity; i++) {
       f[i] = data[i] - b[i];
     }
     return f;
@@ -67,7 +67,7 @@ template <size_t __arity> struct AudioFrame {
   Graph::AudioFrame<__arity>
   operator*(const Graph::AudioFrame<__arity> &b) const {
     Graph::AudioFrame<__arity> f;
-    for (int i = 0; i < __arity; i++) {
+    for (size_t i = 0; i < __arity; i++) {
       f[i] = data[i] * b[i];
     }
     return f;
@@ -76,62 +76,62 @@ template <size_t __arity> struct AudioFrame {
   Graph::AudioFrame<__arity>
   operator/(const Graph::AudioFrame<__arity> &b) const {
     Graph::AudioFrame<__arity> f;
-    for (int i = 0; i < __arity; i++) {
+    for (size_t i = 0; i < __arity; i++) {
       f[i] = data[i] / b[i];
     }
     return f;
   }
 
   void operator+=(const Graph::AudioFrame<__arity> &b) {
-    for (int i = 0; i < __arity; i++) {
+    for (size_t i = 0; i < __arity; i++) {
       data[i] += b[i];
     }
   }
 
   void operator-=(const Graph::AudioFrame<__arity> &b) {
-    for (int i = 0; i < __arity; i++) {
+    for (size_t i = 0; i < __arity; i++) {
       data[i] -= b[i];
     }
   }
 
   void operator*=(const Graph::AudioFrame<__arity> &b) {
-    for (int i = 0; i < __arity; i++) {
+    for (size_t i = 0; i < __arity; i++) {
       data[i] *= b[i];
     }
   }
 
   void operator/=(const Graph::AudioFrame<__arity> &b) {
-    for (int i = 0; i < __arity; i++) {
+    for (size_t i = 0; i < __arity; i++) {
       data[i] /= b[i];
     }
   }
 
   void operator+=(const float b) {
-    for (int i = 0; i < __arity; i++) {
+    for (size_t i = 0; i < __arity; i++) {
       data[i] += b;
     }
   }
 
   void operator-=(const float b) {
-    for (int i = 0; i < __arity; i++) {
+    for (size_t i = 0; i < __arity; i++) {
       data[i] -= b;
     }
   }
 
   void operator*=(const float b) {
-    for (int i = 0; i < __arity; i++) {
+    for (size_t i = 0; i < __arity; i++) {
       data[i] *= b;
     }
   }
 
   void operator/=(const float b) {
-    for (int i = 0; i < __arity; i++) {
+    for (size_t i = 0; i < __arity; i++) {
       data[i] /= b;
     }
   }
 
   void init() {
-    for (int i = 0; i < __arity; i++) {
+    for (size_t i = 0; i < __arity; i++) {
       data[i] = 0;
     }
   }

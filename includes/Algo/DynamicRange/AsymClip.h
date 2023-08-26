@@ -36,7 +36,7 @@ struct AsymClip : public AlgorithmBase<std::array<T, __arity>> {
       : minimum_(minimum), maximum_(maximum) {}
 
   std::array<T, __arity> process(std::array<T, __arity> input) {
-    for (int i = 0; i < __arity; i++) {
+    for (size_t i = 0; i < __arity; i++) {
       T sign = Util::Calc::sign(input[i]);
       if (sign < 0) {
         this->processed[i] = std::max(minimum_, input[i]);

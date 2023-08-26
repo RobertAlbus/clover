@@ -71,7 +71,7 @@ struct WavetableOscillatorMono : public WavetableOscInterface<T>,
   void wavetable(std::shared_ptr<Wavetable<T>> wt) override {
     wavetable_ = wt;
 
-    if (calculator.size() == wt->size())
+    if (calculator.size() == static_cast<int>(wt->size()))
       return;
 
     calculator.size(wt->size());

@@ -39,7 +39,7 @@ private:
   Graph::AudioFrame<__arityOut> tick(Graph::NullFrame input) {
     Graph::AudioFrame<__arityOut> f{};
 
-    for (int i = 0; i < __arityOut; i++) {
+    for (size_t i = 0; i < __arityOut; i++) {
       f[i] = i + basis;
     }
 

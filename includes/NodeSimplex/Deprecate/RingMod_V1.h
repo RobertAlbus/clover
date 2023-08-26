@@ -40,7 +40,7 @@ private:
   Graph::AudioFrame<__arity> tick(Graph::AudioFrame<__arity> input) {
     float shape = ((_shape * 0.5) + 0.5) * M_PI;
     Graph::AudioFrame<__arity> f{};
-    for (int i = 0; i < __arity; i++) {
+    for (size_t i = 0; i < __arity; i++) {
       f[i] = sin(shape * input[i]);
     }
 

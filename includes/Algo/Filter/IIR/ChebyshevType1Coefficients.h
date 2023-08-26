@@ -169,8 +169,6 @@ struct ChebyshevType1CoefficientStrategy : public IIRCoefficientStrategy<T> {
                                      T samplerate_hz) {
     IIRFilterCoefficients<T> lp_coefficients =
         lowPass(cutoff_hz, Q, samplerate_hz);
-    IIRFilterCoefficients<T> hp_coefficients =
-        highPass(cutoff_hz, Q, samplerate_hz, lp_coefficients);
 
     T K = std::tan(M_PI * cutoff_hz / samplerate_hz);
     T V = std::pow(T(10), gain_db / 20);

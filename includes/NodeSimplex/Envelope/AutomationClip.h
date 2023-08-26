@@ -72,8 +72,6 @@ private:
     float tensionedValue =
         Util::Calc::tension(lerpValue, nextPoint.tension * _tensionScale);
 
-    bool isNextSectionStarted = _currentClockTime == nextPoint.start;
-
     _currentIndex++;
     _nextIndex++;
 
@@ -81,9 +79,9 @@ private:
   }
 
   EnvelopeComputation computedEnvelope;
+  float _tensionScale;
   int _currentIndex;
   int _nextIndex;
-  float _tensionScale;
 };
 
 } // namespace Clover::NodeSimplex

@@ -114,7 +114,7 @@ int main(int argc, char *argv[]) {
     auto end = std::chrono::high_resolution_clock::now();
 
     auto duration = duration_cast<std::chrono::milliseconds>(end - start);
-    printf("\n\nTHIS MANY   %i\n\n", duration);
+    printf("\n\nTHIS MANY   %i\n\n", static_cast<int>(duration.count()));
     exit(0);
   } else {
     interface.clock.registerTickCallback([&](int currentTime) -> void {
