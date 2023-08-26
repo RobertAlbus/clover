@@ -42,5 +42,7 @@ void TriggerableFacilitator(const TriggerState &data, std::vector<Triggerable*> 
       for (Triggerable* target : targets)
         target->triggerOff();
       break;
+    case TriggerState::Pass:
+      break;
   }
 }
