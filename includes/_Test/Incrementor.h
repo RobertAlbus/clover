@@ -3,12 +3,12 @@
 /*
  * /////////
  * // Clover
- * 
+ *
  * Audio processing algorithms and DAG with feedback loops that do not break
  * acyclicity.
- * 
+ *
  * Copyright (C) 2023 Rob W. Albus
- *  
+ *
  * This program is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
  * Foundation, either version 3 of the License, or (at your option) any later
@@ -17,9 +17,8 @@
  * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details. You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  */
-
 
 #include "Graph/AudioFrame.h"
 #include "Graph/AudioNode.h"
@@ -39,7 +38,7 @@ private:
     Graph::AudioFrame<__arityOut> f{};
 
     float time = (float)this->_currentClockTime;
-    for (int i = 0; i < __arityOut; i++) {
+    for (size_t i = 0; i < __arityOut; i++) {
       f[i] = time + basis;
     }
 

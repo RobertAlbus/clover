@@ -3,12 +3,12 @@
 /*
  * /////////
  * // Clover
- * 
+ *
  * Audio processing algorithms and DAG with feedback loops that do not break
  * acyclicity.
- * 
+ *
  * Copyright (C) 2023 Rob W. Albus
- *  
+ *
  * This program is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
  * Foundation, either version 3 of the License, or (at your option) any later
@@ -17,9 +17,8 @@
  * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details. You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  */
-
 
 #include <algorithm>
 #include <array>
@@ -169,8 +168,6 @@ struct ChebyshevType1CoefficientStrategy : public IIRCoefficientStrategy<T> {
                                      T samplerate_hz) {
     IIRFilterCoefficients<T> lp_coefficients =
         lowPass(cutoff_hz, Q, samplerate_hz);
-    IIRFilterCoefficients<T> hp_coefficients =
-        highPass(cutoff_hz, Q, samplerate_hz, lp_coefficients);
 
     T K = std::tan(M_PI * cutoff_hz / samplerate_hz);
     T V = std::pow(T(10), gain_db / 20);
