@@ -20,17 +20,36 @@
  *
  */
 
+#include <array>
+#include <cmath>
+#include <functional>
+
 #include "Algorithm.h"
 #include "Base.h"
-#include "Config.h"
-#include "Constants.h"
-#include "Exception.h"
 #include "Graph.h"
-#include "IO.h"
-#include "Midi.h"
-#include "Nodes.h"
 
-#include "NodeComplex.h"
-#include "Util.h"
+#include "CoefficientStrategySettable.h"
+#include "FilterSettable.h"
 
-#include "_Test.h"
+namespace Clover::Nodes::Filter {
+
+class EQSettable {
+public:
+  void set(float f, float Q, float dbGain);
+
+  void freq(float f);
+  float freq();
+
+  void reso(float Q);
+  float reso();
+
+  void dbGain(float dbGain);
+
+  void lowShelf();
+
+  void highShelf();
+
+  void peakingEQ();
+};
+
+} // namespace Clover::Nodes::Filter

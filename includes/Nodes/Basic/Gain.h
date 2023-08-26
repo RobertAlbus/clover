@@ -20,17 +20,16 @@
  *
  */
 
-#include "Algorithm.h"
-#include "Base.h"
-#include "Config.h"
-#include "Constants.h"
-#include "Exception.h"
 #include "Graph.h"
-#include "IO.h"
-#include "Midi.h"
-#include "Nodes.h"
 
-#include "NodeComplex.h"
-#include "Util.h"
+namespace Clover::Nodes::Basic {
 
-#include "_Test.h"
+template <size_t __arity>
+class Gain : public Graph::AudioNode<__arity, __arity> {
+
+  Graph::AudioFrame<__arity> tick(Graph::AudioFrame<__arity> input) {
+    return input;
+  };
+};
+
+} // namespace Clover::Nodes::Basic

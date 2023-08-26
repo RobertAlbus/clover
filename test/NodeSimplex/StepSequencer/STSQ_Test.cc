@@ -39,7 +39,7 @@ void TestFacilitator(const int &data, std::vector<TestTarget *> &targets) {
   }
 }
 
-TEST(NodeSimplex_StepSequencer, ShouldStepCorrectly) {
+TEST(Nodes_StepSequencer, ShouldStepCorrectly) {
 
   Clover::_Test::HandCrank crank;
   STSQ<int, TestTarget, TestFacilitator> stepSequencer;
@@ -66,7 +66,7 @@ TEST(NodeSimplex_StepSequencer, ShouldStepCorrectly) {
   EXPECT_EQ(target.accumulator, 4);
 }
 
-TEST(NodeSimplex_StepSequencer, ShouldBeAbleToChangePattern) {
+TEST(Nodes_StepSequencer, ShouldBeAbleToChangePattern) {
 
   Clover::_Test::HandCrank crank;
   STSQ<int, TestTarget, TestFacilitator> stepSequencer;

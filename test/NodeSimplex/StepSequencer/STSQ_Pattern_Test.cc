@@ -24,7 +24,7 @@
 
 #include "Clover.h"
 
-TEST(NodeSimplex_StepSequencer_Pattern, ShouldCreatePatternFromVector) {
+TEST(Nodes_StepSequencer_Pattern, ShouldCreatePatternFromVector) {
 
   STSQ_Pattern<float> pattern;
 
@@ -39,7 +39,7 @@ TEST(NodeSimplex_StepSequencer_Pattern, ShouldCreatePatternFromVector) {
   EXPECT_EQ(pattern[4].data, 4.f);
 }
 
-TEST(NodeSimplex_StepSequencer_Pattern,
+TEST(Nodes_StepSequencer_Pattern,
      ShouldRoundStartTimesToNearestWholeNumber) {
 
   STSQ_Pattern<float> pattern;
@@ -55,7 +55,7 @@ TEST(NodeSimplex_StepSequencer_Pattern,
   EXPECT_EQ(pattern[4].start, 401);
 }
 
-TEST(NodeSimplex_StepSequencer_Pattern,
+TEST(Nodes_StepSequencer_Pattern,
      ShouldIdenticalWhenInitializedFromAnother) {
 
   std::vector<STSQ_Pattern<float>> patterns;
@@ -79,7 +79,7 @@ TEST(NodeSimplex_StepSequencer_Pattern,
   }
 }
 
-TEST(NodeSimplex_StepSequencer_Pattern, TotalDurationShouldNotBeRounded) {
+TEST(Nodes_StepSequencer_Pattern, TotalDurationShouldNotBeRounded) {
   STSQ_Pattern<float> pattern;
   std::vector<float> stepData{0, 1, 2};
 
@@ -89,7 +89,7 @@ TEST(NodeSimplex_StepSequencer_Pattern, TotalDurationShouldNotBeRounded) {
   EXPECT_EQ(pattern.totalDuration, duration * pattern.size());
 }
 
-TEST(NodeSimplex_StepSequencer_Pattern, ShouldBeIndexable) {
+TEST(Nodes_StepSequencer_Pattern, ShouldBeIndexable) {
   STSQ_Pattern<float> pattern;
   std::vector<float> stepData{0, 1};
 
@@ -102,7 +102,7 @@ TEST(NodeSimplex_StepSequencer_Pattern, ShouldBeIndexable) {
   EXPECT_EQ(pattern[1].start, 100);
 }
 
-TEST(NodeSimplex_StepSequencer_Pattern, ShouldHaveExpectedMembers) {
+TEST(Nodes_StepSequencer_Pattern, ShouldHaveExpectedMembers) {
   STSQ_Pattern<float> pattern;
   std::vector<float> stepData{0, 1};
 

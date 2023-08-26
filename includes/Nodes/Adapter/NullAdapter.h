@@ -20,17 +20,27 @@
  *
  */
 
-#include "Algorithm.h"
-#include "Base.h"
-#include "Config.h"
-#include "Constants.h"
-#include "Exception.h"
-#include "Graph.h"
-#include "IO.h"
-#include "Midi.h"
-#include "Nodes.h"
+#include "Graph/AudioFrame.h"
+#include "Graph/AudioNode.h"
+#include "Graph/NullFrame.h"
 
-#include "NodeComplex.h"
-#include "Util.h"
+namespace Clover::Nodes::Adapter {
 
-#include "_Test.h"
+// Think /dev/null for signals.
+template <size_t __arityOut>
+class NullInAdapter : public Graph::AudioOutNode<__arityOut> {
+
+  Graph::AudioFrame<__arityOut> tick(Graph::NullFrame input) {
+    return Graph::AudioFrame<__arityOut>{};
+  }
+};
+
+template <size_t __arityIn>
+class NullOutAdapter : public Graph::AudioInNode<__arityIn> {
+
+  Graph::NullFrame tick(Graph::AudioFrame<__arityIn> input) {
+    return Graph::NullFrame{};
+  }
+};
+
+} // namespace Clover::Nodes::Adapter

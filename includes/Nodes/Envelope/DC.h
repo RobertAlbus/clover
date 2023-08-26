@@ -20,17 +20,21 @@
  *
  */
 
-#include "Algorithm.h"
-#include "Base.h"
-#include "Config.h"
-#include "Constants.h"
-#include "Exception.h"
+#include "Algo/Envelope/DC.h"
 #include "Graph.h"
-#include "IO.h"
-#include "Midi.h"
-#include "Nodes.h"
 
-#include "NodeComplex.h"
-#include "Util.h"
+namespace Clover::Nodes::Envelope {
 
-#include "_Test.h"
+class DC : public Graph::AudioNode<0, 1> {
+public:
+  DC(Sample value = 0);
+
+  void value(Sample v);
+  Sample value();
+
+protected:
+  Graph::AudioFrame<1> tick(Graph::AudioFrame<0> input);
+  Clover::Envelope::DC<Sample> dc;
+};
+
+} // namespace Clover::Nodes::Envelope

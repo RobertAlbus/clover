@@ -24,8 +24,8 @@
 #include "Graph/AudioFrame.h"
 #include "Graph/AudioNode.h"
 #include "Graph/NullFrame.h"
-#include "NodeSimplex.h"
-#include "NodeSimplex/Adapter/NullAdapter.h"
+#include "Nodes.h"
+#include "Nodes/Adapter/NullAdapter.h"
 
 template <int __numVoices>
 struct OscNx : public Clover::Graph::AudioOutNode<2>, Pitchable, Triggerable {
@@ -45,11 +45,11 @@ struct OscNx : public Clover::Graph::AudioOutNode<2>, Pitchable, Triggerable {
     void gain(float g) { osc.gain(g); }
 
     void
-    wavetable(std::shared_ptr<Clover::NodeSimplex::Wavetable::Wavetable> wt) {
+    wavetable(std::shared_ptr<Clover::Nodes::Wavetable::Wavetable> wt) {
       osc.wavetable(wt);
     }
 
-    std::shared_ptr<Clover::NodeSimplex::Wavetable::Wavetable> wavetable() {
+    std::shared_ptr<Clover::Nodes::Wavetable::Wavetable> wavetable() {
       return osc.wavetable();
     }
 
@@ -61,7 +61,7 @@ struct OscNx : public Clover::Graph::AudioOutNode<2>, Pitchable, Triggerable {
 
   private:
     friend OscNx;
-    Clover::NodeSimplex::Wavetable::WavetableOscStereo osc;
+    Clover::Nodes::Wavetable::WavetableOscStereo osc;
     float tuning_;
   };
 
@@ -71,8 +71,8 @@ struct OscNx : public Clover::Graph::AudioOutNode<2>, Pitchable, Triggerable {
       lfo.gain(0);
     }
 
-    Clover::NodeSimplex::Envelope::ADSR adsr;
-    Clover::NodeSimplex::Wavetable::WavetableOsc lfo;
+    Clover::Nodes::Envelope::ADSR adsr;
+    Clover::Nodes::Wavetable::WavetableOsc lfo;
 
     float adsrValue() { return adsr.currentFrame()[0]; }
 
@@ -111,14 +111,14 @@ struct OscNx : public Clover::Graph::AudioOutNode<2>, Pitchable, Triggerable {
   }
 
   std::array<Voice, __numVoices> voices;
-  Clover::NodeSimplex::Filter::Filter<2> filter;
-  Clover::NodeSimplex::Stereo::Pan2 pan_;
+  Clover::Nodes::Filter::Filter<2> filter;
+  Clover::Nodes::Stereo::Pan2 pan_;
 
   Mod amplitude;
   Mod filterCut;
   Mod filterQ;
   Mod pitch;
-  Clover::NodeSimplex::Filter::Filter<4> modSmoothing;
+  Clover::Nodes::Filter::Filter<4> modSmoothing;
 
   float filterCutoff_ = 21000.f;
   float filterReso_ = 0.707f;
@@ -126,9 +126,9 @@ struct OscNx : public Clover::Graph::AudioOutNode<2>, Pitchable, Triggerable {
 
   float currentMidiNoteFreq;
 
-  Clover::NodeSimplex::Adapter::NullOutAdapter<1> blackHole1;
-  Clover::NodeSimplex::Adapter::NullOutAdapter<2> blackHole2;
-  Clover::NodeSimplex::Basic::Gain<2> audioSink;
+  Clover::Nodes::Adapter::NullOutAdapter<1> blackHole1;
+  Clover::Nodes::Adapter::NullOutAdapter<2> blackHole2;
+  Clover::Nodes::Basic::Gain<2> audioSink;
 
   Clover::Graph::AudioFrame<2> tick(Clover::Graph::NullFrame input) {
     updatePitchMod();

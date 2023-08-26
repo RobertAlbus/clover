@@ -20,17 +20,31 @@
  *
  */
 
-#include "Algorithm.h"
-#include "Base.h"
-#include "Config.h"
-#include "Constants.h"
-#include "Exception.h"
+#include <cmath>
+
 #include "Graph.h"
-#include "IO.h"
-#include "Midi.h"
-#include "Nodes.h"
 
-#include "NodeComplex.h"
-#include "Util.h"
+namespace Clover::Nodes::Waveshape {
 
-#include "_Test.h"
+template <size_t __arity>
+class RingMod_V1 : public Graph::AudioNode<__arity, __arity> {
+public:
+  RingMod_V1() : Graph::AudioNode<__arity, __arity>(), _shape(0) {}
+
+  void shape(float s) { _shape = s; }
+  float shape() { return _shape; }
+
+private:
+  float _shape;
+  Graph::AudioFrame<__arity> tick(Graph::AudioFrame<__arity> input) {
+    float shape = ((_shape * 0.5) + 0.5) * M_PI;
+    Graph::AudioFrame<__arity> f{};
+    for (size_t i = 0; i < __arity; i++) {
+      f[i] = sin(shape * input[i]);
+    }
+
+    return f;
+  }
+};
+
+} // namespace Clover::Nodes::Waveshape

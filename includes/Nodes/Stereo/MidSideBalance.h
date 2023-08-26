@@ -20,17 +20,23 @@
  *
  */
 
-#include "Algorithm.h"
-#include "Base.h"
-#include "Config.h"
-#include "Constants.h"
-#include "Exception.h"
-#include "Graph.h"
-#include "IO.h"
-#include "Midi.h"
-#include "Nodes.h"
+#include "Algo/Stereo/MidSideBalance.h"
 
-#include "NodeComplex.h"
-#include "Util.h"
+#include "Graph/AudioFrame.h"
+#include "Graph/AudioNode.h"
 
-#include "_Test.h"
+namespace Clover::Nodes::Stereo {
+
+class MidSideBalance : public Graph::AudioNode<2, 2> {
+public:
+  MidSideBalance(float s = 0);
+
+  float spread();
+  void spread(float s);
+
+protected:
+  Graph::AudioFrame<2> tick(Graph::AudioFrame<2> input);
+  Clover::Stereo::MidSideBalance<float> msBalance;
+};
+
+} // namespace Clover::Nodes::Stereo

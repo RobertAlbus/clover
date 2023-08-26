@@ -84,23 +84,23 @@ list(APPEND EXTRA_LIBS rtmidi)
 add_library(${PROJECT_NAME} STATIC 
     ${CMAKE_CURRENT_LIST_DIR}/includes/Base/CloverBase.cpp
 
-    ${CMAKE_CURRENT_LIST_DIR}/includes/NodeSimplex/Envelope/EnvelopeStruct.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/includes/NodeSimplex/Envelope/ADSR.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/includes/NodeSimplex/Envelope/BasicEnvelope.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/includes/NodeSimplex/Envelope/DC.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/includes/Nodes/Envelope/EnvelopeStruct.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/includes/Nodes/Envelope/ADSR.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/includes/Nodes/Envelope/BasicEnvelope.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/includes/Nodes/Envelope/DC.cpp
 
-    ${CMAKE_CURRENT_LIST_DIR}/includes/NodeSimplex/StepSequencer/PatternSettable.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/includes/NodeSimplex/StepSequencer/StepSequencer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/includes/NodeSimplex/StepSequencer/lib/Pitchable.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/includes/NodeSimplex/StepSequencer/lib/Triggerable.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/includes/Nodes/StepSequencer/PatternSettable.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/includes/Nodes/StepSequencer/StepSequencer.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/includes/Nodes/StepSequencer/lib/Pitchable.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/includes/Nodes/StepSequencer/lib/Triggerable.cpp
 
-    ${CMAKE_CURRENT_LIST_DIR}/includes/NodeSimplex/Stereo/Difference.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/includes/NodeSimplex/Stereo/MidSideBalance.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/includes/NodeSimplex/Stereo/Pan.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/includes/NodeSimplex/Stereo/Sum.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/includes/Nodes/Stereo/Difference.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/includes/Nodes/Stereo/MidSideBalance.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/includes/Nodes/Stereo/Pan.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/includes/Nodes/Stereo/Sum.cpp
 
-    ${CMAKE_CURRENT_LIST_DIR}/includes/NodeSimplex/Wavetable/WavetableOsc.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/includes/NodeSimplex/Wavetable/WavetableOscStereo.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/includes/Nodes/Wavetable/WavetableOsc.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/includes/Nodes/Wavetable/WavetableOscStereo.cpp
 
     ${CMAKE_CURRENT_LIST_DIR}/includes/Util/Calc.cpp
     ${CMAKE_CURRENT_LIST_DIR}/includes/Util/MusicTime.cpp

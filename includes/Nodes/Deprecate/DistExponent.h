@@ -20,17 +20,32 @@
  *
  */
 
-#include "Algorithm.h"
-#include "Base.h"
-#include "Config.h"
-#include "Constants.h"
-#include "Exception.h"
+#include <cmath>
+
 #include "Graph.h"
-#include "IO.h"
-#include "Midi.h"
-#include "Nodes.h"
 
-#include "NodeComplex.h"
-#include "Util.h"
+namespace Clover::Nodes::Waveshape {
 
-#include "_Test.h"
+template <size_t __arity>
+class DistExponent : public Graph::AudioNode<__arity, __arity> {
+public:
+  DistExponent() : Graph::AudioNode<__arity, __arity>(), _exponent(1) {}
+
+  void exponent(float e) { _exponent = e; }
+  float exponent() { return _exponent; }
+
+private:
+  float _exponent;
+  Graph::AudioFrame<__arity> tick(Graph::AudioFrame<__arity> input) {
+    Graph::AudioFrame<__arity> f{};
+    for (size_t i = 0; i < __arity; i++) {
+      float sign = Util::Calc::sign(input[i]);
+      float abs = fabs(input[i]);
+      f[i] = pow(abs, 1.f - _exponent) * sign;
+    }
+
+    return f;
+  }
+};
+
+} // namespace Clover::Nodes::Waveshape

@@ -20,17 +20,30 @@
  *
  */
 
-#include "Algorithm.h"
-#include "Base.h"
-#include "Config.h"
-#include "Constants.h"
-#include "Exception.h"
+#include <algorithm>
+#include <math.h>
+#include <vector>
+
+#include "Algo/Delay/Fractional.h"
 #include "Graph.h"
-#include "IO.h"
-#include "Midi.h"
-#include "Nodes.h"
 
-#include "NodeComplex.h"
-#include "Util.h"
+namespace Clover::Nodes::Delay {
 
-#include "_Test.h"
+template <size_t __arity>
+class FractionalDelayLine : public Graph::AudioNode<__arity, __arity> {
+public:
+  FractionalDelayLine(int bufferCapacity, float delaySamples)
+      : Graph::AudioNode<__arity, __arity>(),
+        delayAlgorithm(bufferCapacity, delaySamples) {}
+
+  void delay(float time) { delayAlgorithm.delay(time); }
+  float delay() { return delayAlgorithm.delay(); }
+
+protected:
+  Clover::Delay::FractionalDelay<Sample, __arity> delayAlgorithm;
+  Graph::AudioFrame<__arity> tick(Graph::AudioFrame<__arity> input) {
+    return Graph::AudioFrame<__arity>{delayAlgorithm.process(input.data)};
+  }
+};
+
+} // namespace Clover::Nodes::Delay

@@ -20,17 +20,35 @@
  *
  */
 
-#include "Algorithm.h"
-#include "Base.h"
-#include "Config.h"
-#include "Constants.h"
-#include "Exception.h"
-#include "Graph.h"
-#include "IO.h"
-#include "Midi.h"
-#include "Nodes.h"
+#include "Algo/Stereo/Pan.h"
+#include "Graph/AudioFrame.h"
+#include "Graph/AudioNode.h"
+#include "Util/Calc.h"
 
-#include "NodeComplex.h"
-#include "Util.h"
+namespace Clover::Nodes::Stereo {
 
-#include "_Test.h"
+class Pan1 : public Graph::AudioNode<1, 2> {
+public:
+  Pan1(float p = 0.f);
+
+  void pan(float p);
+  float pan();
+
+private:
+  Graph::AudioFrame<2> tick(Graph::AudioFrame<1> input);
+  Clover::Stereo::PanMono<float> pan_;
+};
+
+class Pan2 : public Graph::AudioNode<2, 2> {
+public:
+  Pan2(float p = 0.f);
+
+  void pan(float p);
+  float pan();
+
+private:
+  Graph::AudioFrame<2> tick(Graph::AudioFrame<2> input);
+  Clover::Stereo::PanStereo<float> pan_;
+};
+
+} // namespace Clover::Nodes::Stereo

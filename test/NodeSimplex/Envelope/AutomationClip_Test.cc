@@ -22,11 +22,11 @@
 
 #include "Clover.h"
 
-TEST(NodeSimplex_Envelope_AutomationClip, ShouldOutputEnvelope) {
+TEST(Nodes_Envelope_AutomationClip, ShouldOutputEnvelope) {
 
   Clover::_Test::HandCrank crank;
   Clover::_Test::Collector<1> collector(1000);
-  Clover::NodeSimplex::AutomationNode automationClip;
+  Clover::Nodes::AutomationNode automationClip;
 
   automationClip >> collector >> crank;
 
@@ -49,11 +49,11 @@ TEST(NodeSimplex_Envelope_AutomationClip, ShouldOutputEnvelope) {
   EXPECT_EQ(collector.frames[300][0], 0.5f);
 }
 
-TEST(NodeSimplex_Envelope_AutomationClip, ShouldHaveDefaultEnvelope) {
+TEST(Nodes_Envelope_AutomationClip, ShouldHaveDefaultEnvelope) {
 
   Clover::_Test::HandCrank crank;
   Clover::_Test::Collector<1> collector(10);
-  Clover::NodeSimplex::AutomationNode automationClip;
+  Clover::Nodes::AutomationNode automationClip;
 
   automationClip >> collector >> crank;
 
@@ -65,11 +65,11 @@ TEST(NodeSimplex_Envelope_AutomationClip, ShouldHaveDefaultEnvelope) {
   EXPECT_EQ(collector.frames[9][0], 0.f);
 }
 
-TEST(NodeSimplex_Envelope_AutomationClip, ShouldHoldLastValue) {
+TEST(Nodes_Envelope_AutomationClip, ShouldHoldLastValue) {
 
   Clover::_Test::HandCrank crank;
   Clover::_Test::Collector<1> collector(10);
-  Clover::NodeSimplex::AutomationNode automationClip;
+  Clover::Nodes::AutomationNode automationClip;
 
   automationClip >> collector >> crank;
 

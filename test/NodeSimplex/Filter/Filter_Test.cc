@@ -25,13 +25,13 @@
 
 #include "Clover.h"
 
-TEST(NodeSimplex_Filter_Filter, ShouldFilterLowPass) {
+TEST(Nodes_Filter_Filter, ShouldFilterLowPass) {
 
   int testSize = 10000;
   Clover::_Test::HandCrank crank;
   Clover::_Test::Collector<1> collector(testSize);
-  Clover::NodeSimplex::Filter::Filter<1> filter;
-  Clover::NodeSimplex::Wavetable::WavetableOsc osc;
+  Clover::Nodes::Filter::Filter<1> filter;
+  Clover::Nodes::Wavetable::WavetableOsc osc;
 
   osc >> filter >> collector >> crank;
 
@@ -52,13 +52,13 @@ TEST(NodeSimplex_Filter_Filter, ShouldFilterLowPass) {
   EXPECT_LE(Clover::Util::Calc::ltodb(rms), -60);
 }
 
-TEST(NodeSimplex_Filter_Filter, ShouldFilterHighPass) {
+TEST(Nodes_Filter_Filter, ShouldFilterHighPass) {
 
   int testSize = 10000;
   Clover::_Test::HandCrank crank;
   Clover::_Test::Collector<1> collector(testSize);
-  Clover::NodeSimplex::Filter::Filter<1> filter;
-  Clover::NodeSimplex::Wavetable::WavetableOsc osc;
+  Clover::Nodes::Filter::Filter<1> filter;
+  Clover::Nodes::Wavetable::WavetableOsc osc;
 
   osc >> filter >> collector >> crank;
 

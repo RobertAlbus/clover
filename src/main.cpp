@@ -39,7 +39,7 @@
 #include "NxOscStsqDemo.h"
 
 using namespace Clover::IO;
-using namespace Clover::NodeSimplex;
+using namespace Clover::Nodes;
 
 float getRandomFloat(int max) {
   return static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / max));
@@ -56,8 +56,8 @@ int main(int argc, char *argv[]) {
   Interface interface;
   interface.rootNode.gain(0.5);
   Clover::Util::Time time(160, Clover::Base::sampleRate, &interface.clock);
-  Clover::NodeSimplex::Adapter::NullInAdapter<2> nullSink;
-  Clover::NodeSimplex::Adapter::NullOutAdapter<1> blackHole1;
+  Clover::Nodes::Adapter::NullInAdapter<2> nullSink;
+  Clover::Nodes::Adapter::NullOutAdapter<1> blackHole1;
 
   blackHole1 >> nullSink >> interface.rootNode;
 

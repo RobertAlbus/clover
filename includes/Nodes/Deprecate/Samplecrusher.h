@@ -20,17 +20,31 @@
  *
  */
 
-#include "Algorithm.h"
-#include "Base.h"
-#include "Config.h"
-#include "Constants.h"
-#include "Exception.h"
+#include <algorithm>
+
 #include "Graph.h"
-#include "IO.h"
-#include "Midi.h"
-#include "Nodes.h"
 
-#include "NodeComplex.h"
-#include "Util.h"
+namespace Clover::Nodes::Reduce {
 
-#include "_Test.h"
+class Samplecrusher : public Graph::AudioNode<1, 1> {
+public:
+  Samplecrusher(float range = 1)
+      : AudioNode(), range(range), amount(0), heldSample(0), samplesToHold(0) {}
+
+  float range;
+  float amount;
+  Sample heldSample;
+  float samplesToHold;
+
+protected:
+  Graph::AudioFrame<1> tick(Graph::AudioFrame<1> inputFrame) {
+    if (samplesToHold < 1.) {
+      samplesToHold += 1 + std::max((range * amount), 0.f);
+      heldSample = inputFrame[0];
+    }
+    samplesToHold--;
+    return Graph::AudioFrame<1>{heldSample};
+  }
+};
+
+} // namespace Clover::Nodes::Reduce

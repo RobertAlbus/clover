@@ -20,17 +20,17 @@
  *
  */
 
-#include "Algorithm.h"
-#include "Base.h"
-#include "Config.h"
-#include "Constants.h"
-#include "Exception.h"
-#include "Graph.h"
-#include "IO.h"
-#include "Midi.h"
-#include "Nodes.h"
+namespace Clover::Nodes::Filter {
 
-#include "NodeComplex.h"
-#include "Util.h"
+class CoefficientStrategySettable {
+public:
+  virtual void butterworthResonant() = 0;
 
-#include "_Test.h"
+  virtual void butterworth() = 0;
+
+  virtual void chebyshevType1() = 0;
+
+  virtual void chebyshevType2() = 0;
+};
+
+} // namespace Clover::Nodes::Filter

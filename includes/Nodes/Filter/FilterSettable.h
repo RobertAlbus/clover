@@ -20,17 +20,33 @@
  *
  */
 
+#include <array>
+#include <cmath>
+#include <functional>
+
 #include "Algorithm.h"
 #include "Base.h"
-#include "Config.h"
-#include "Constants.h"
-#include "Exception.h"
 #include "Graph.h"
-#include "IO.h"
-#include "Midi.h"
-#include "Nodes.h"
 
-#include "NodeComplex.h"
-#include "Util.h"
+namespace Clover::Nodes::Filter {
 
-#include "_Test.h"
+class FilterSettable {
+public:
+  virtual void set(float f, float Q) = 0;
+
+  virtual void freq(float f) = 0;
+  virtual float freq() = 0;
+
+  virtual void reso(float Q) = 0;
+  virtual float reso() = 0;
+
+  virtual void lowPass() = 0;
+
+  virtual void highPass() = 0;
+
+  virtual void notch() = 0;
+
+  virtual void bandPass() = 0;
+};
+
+} // namespace Clover::Nodes::Filter

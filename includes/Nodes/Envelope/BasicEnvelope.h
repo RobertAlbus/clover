@@ -20,17 +20,26 @@
  *
  */
 
-#include "Algorithm.h"
-#include "Base.h"
-#include "Config.h"
-#include "Constants.h"
-#include "Exception.h"
-#include "Graph.h"
-#include "IO.h"
-#include "Midi.h"
-#include "Nodes.h"
+#include <algorithm>
+#include <cmath>
 
-#include "NodeComplex.h"
-#include "Util.h"
+#include "Algo/Envelope/Basic.h"
+#include "Graph/AudioFrame.h"
+#include "Graph/AudioNode.h"
 
-#include "_Test.h"
+namespace Clover::Nodes::Envelope {
+
+class BasicEnvelope : public Graph::AudioNode<0, 1> {
+public:
+  BasicEnvelope();
+  BasicEnvelope(float currentValue, float targetValue, uint durationTime);
+
+  void set(float targetValue, uint durationTimeSamples);
+  void set(float currentValue, float targetValue, uint durationTimeSamples);
+
+protected:
+  Graph::AudioFrame<1> tick(Graph::AudioFrame<0> inputFrame);
+  Clover::Envelope::Basic<Sample> envelope;
+};
+
+} // namespace Clover::Nodes::Envelope

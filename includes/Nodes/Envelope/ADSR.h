@@ -20,17 +20,36 @@
  *
  */
 
-#include "Algorithm.h"
-#include "Base.h"
-#include "Config.h"
-#include "Constants.h"
-#include "Exception.h"
-#include "Graph.h"
-#include "IO.h"
-#include "Midi.h"
-#include "Nodes.h"
+#include "Algo/Envelope/ADSR.h"
+#include "Nodes/StepSequencer/lib.h"
 
-#include "NodeComplex.h"
-#include "Util.h"
+namespace Clover::Nodes::Envelope {
 
-#include "_Test.h"
+class ADSR : public Triggerable, public Graph::AudioNode<0, 1> {
+public:
+  ADSR();
+  ADSR(int a, int d, float s, int r);
+
+  void set(float a, float d, float s, float r);
+  void set(int a, int d, float s, int r);
+
+  void attack(int a);
+  void decay(int d);
+  void sustain(float s);
+  void release(int r);
+
+  int attack();
+  int decay();
+  float sustain();
+  int release();
+
+  void triggerOn() override;
+  void triggerOff() override;
+
+protected:
+  Clover::Envelope::ADSR<float> envelope;
+
+  Graph::AudioFrame<1> tick(Graph::AudioFrame<0> input);
+};
+
+} // namespace Clover::Nodes::Envelope

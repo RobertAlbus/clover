@@ -20,17 +20,15 @@
  *
  */
 
-#include "Algorithm.h"
-#include "Base.h"
-#include "Config.h"
-#include "Constants.h"
-#include "Exception.h"
-#include "Graph.h"
-#include "IO.h"
-#include "Midi.h"
-#include "Nodes.h"
+#include "Algo/Stereo/Difference.h"
+#include "Graph/AudioFrame.h"
+#include "Graph/AudioNode.h"
 
-#include "NodeComplex.h"
-#include "Util.h"
+namespace Clover::Nodes::Stereo {
 
-#include "_Test.h"
+class Difference : public Graph::AudioNode<2, 2> {
+  Graph::AudioFrame<2> tick(Graph::AudioFrame<2> input);
+  Clover::Stereo::Difference<Sample> difference;
+};
+
+} // namespace Clover::Nodes::Stereo

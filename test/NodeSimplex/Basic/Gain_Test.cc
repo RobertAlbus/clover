@@ -22,10 +22,10 @@
 
 #include "Clover.h"
 
-TEST(NodeSimplex_Basic_Gain, ShouldNotModify) {
+TEST(Nodes_Basic_Gain, ShouldNotModify) {
   Clover::_Test::HandCrank crank;
   Clover::_Test::Collector<1> collector(1);
-  Clover::NodeSimplex::Basic::Gain<1> g;
+  Clover::Nodes::Basic::Gain<1> g;
   Clover::_Test::DCN<1> dc;
 
   dc >> g >> collector >> crank;
@@ -40,10 +40,10 @@ TEST(NodeSimplex_Basic_Gain, ShouldNotModify) {
   EXPECT_EQ(collector.frames[1][0], 1.f);
 }
 
-TEST(NodeSimplex_Basic_Gain, ShouldModify) {
+TEST(Nodes_Basic_Gain, ShouldModify) {
   Clover::_Test::HandCrank crank;
   Clover::_Test::Collector<1> collector(3);
-  Clover::NodeSimplex::Basic::Gain<1> g;
+  Clover::Nodes::Basic::Gain<1> g;
   Clover::_Test::DCN<1> dc;
 
   dc >> g >> collector >> crank;
