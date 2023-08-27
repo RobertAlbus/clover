@@ -1,0 +1,7 @@
+Checks: '-*,bugprone-unused-raii'
+HeaderFilterRegex: '^(?!.*(build|dependencies)).*'
+
+---
+-std=c++20
+-extra-arg=-Iincludes
+
