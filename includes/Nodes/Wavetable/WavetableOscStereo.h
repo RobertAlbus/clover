@@ -28,7 +28,6 @@
 #include "Graph/AudioFrame.h"
 #include "Graph/AudioNode.h"
 #include "Graph/NullFrame.h"
-#include "Nodes.h"
 #include "WavetableOsc.h"
 
 namespace Clover::Nodes::Wavetable {
