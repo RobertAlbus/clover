@@ -26,6 +26,8 @@
 #include <tgmath.h>
 #include <vector>
 
+#include "Constants.h"
+
 namespace Clover::Nodes::Wavetable {
 
 typedef std::vector<Sample> Wavetable;

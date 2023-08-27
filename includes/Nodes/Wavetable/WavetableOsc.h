@@ -28,6 +28,7 @@
 
 #include "Algo/Wavetable/OscillatorInterface.h"
 #include "Algo/Wavetable/WavetableOscillatorMono.h"
+#include "Base/CloverBase.h"
 #include "Graph/AudioFrame.h"
 #include "Graph/AudioNode.h"
 #include "Graph/NullFrame.h"

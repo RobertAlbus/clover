@@ -23,6 +23,7 @@
 #include <array>
 #include <cmath>
 #include <functional>
+#include <memory>
 
 #include "Algorithm.h"
 #include "Base.h"

@@ -21,6 +21,7 @@
  */
 
 #include "Algo/Envelope/ADSR.h"
+#include "Graph/AudioNode.h"
 #include "Nodes/StepSequencer/lib.h"
 
 namespace Clover::Nodes::Envelope {

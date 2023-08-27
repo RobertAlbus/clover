@@ -20,13 +20,18 @@
  *
  */
 
-#include "Clover.h"
 #include "Graph/AudioFrame.h"
 #include "Graph/AudioNode.h"
 #include "Graph/NullFrame.h"
+#include "Nodes/Adapter/NullAdapter.h"
+#include "Nodes/Basic/Gain.h"
+#include "Nodes/Envelope/ADSR.h"
+#include "Nodes/Filter/Filter.h"
+#include "Nodes/Stereo/Pan.h"
+#include "Nodes/StepSequencer/lib.h"
+#include "Nodes/Wavetable/WavetableOscInterface.h"
 #include "Nodes/Wavetable/WavetableOsc.h"
 #include "Nodes/Wavetable/WavetableOscStereo.h"
-#include "Nodes/Adapter/NullAdapter.h"
 
 namespace Clover::Nodes::Synth {
 
@@ -48,11 +53,11 @@ struct OscNx : public Clover::Graph::AudioOutNode<2>, Pitchable, Triggerable {
     void gain(float g) { osc.gain(g); }
 
     void
-    wavetable(std::shared_ptr<Clover::Nodes::Wavetable::Wavetable> wt) {
+    wavetable(std::shared_ptr<Wavetable::Wavetable> wt) {
       osc.wavetable(wt);
     }
 
-    std::shared_ptr<Clover::Nodes::Wavetable::Wavetable> wavetable() {
+    std::shared_ptr<Wavetable::Wavetable> wavetable() {
       return osc.wavetable();
     }
 
@@ -64,7 +69,7 @@ struct OscNx : public Clover::Graph::AudioOutNode<2>, Pitchable, Triggerable {
 
   private:
     friend OscNx;
-    Clover::Nodes::Wavetable::WavetableOscStereo osc;
+    Wavetable::WavetableOscStereo osc;
     float tuning_;
   };
 

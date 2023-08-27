@@ -23,6 +23,7 @@
 #include <cmath>
 
 #include "Graph.h"
+#include "Util/Calc.h"
 
 namespace Clover::Nodes::Waveshape {
 

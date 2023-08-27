@@ -22,6 +22,8 @@
 
 #include <vector>
 
+#include "../StepSequencer.h"
+
 struct Triggerable {
   virtual void triggerOn();
   virtual void triggerOff();

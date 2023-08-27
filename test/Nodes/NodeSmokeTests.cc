@@ -34,6 +34,7 @@
 #include "Nodes/Stereo/MidSideBalance.h"
 #include "Nodes/Stereo/Pan.h"
 #include "Nodes/Stereo/Sum.h"
+#include "Nodes/Wavetable/WavetableOsc.h"
 #include "Nodes/Wavetable/WavetableOscStereo.h"
 
 TEST(Nodes_SmokeTest, Delay_Fractional) {

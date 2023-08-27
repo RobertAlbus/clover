@@ -23,7 +23,9 @@
 #include <cmath>
 
 #include "Algorithm.h"
+#include "EnvelopeStruct.h"
 #include "Graph/AudioFrame.h"
+#include "Graph/AudioNode.h"
 #include "Util/Calc.h"
 
 namespace Clover::Nodes {

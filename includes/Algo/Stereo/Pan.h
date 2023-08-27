@@ -21,6 +21,7 @@
  */
 
 #include <algorithm>
+#include <array>
 
 #include "Algo/AlgorithmBase.h"
 #include "Util/Calc.h"
