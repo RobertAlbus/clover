@@ -21,6 +21,11 @@
 #include <vector>
 
 #include "PatternSettable.h"
+#include "Exception/NotImplemented.h"
+
+void PatternSettable::setPattern(int i) {
+  throw NotImplementedException("PatternSettable:setPattern(int)");
+}
 
 void PatternSettableFacilitator(const int &data, std::vector<PatternSettable*> &targets) {
   for (PatternSettable* target : targets)
