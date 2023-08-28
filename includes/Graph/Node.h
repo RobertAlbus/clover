@@ -41,15 +41,14 @@ template <Frame InputType, Frame OutputType>
 class Node : public INode<OutputType> {
 public:
   int NODE_MAX_INPUT_CAPACITY = 10;
+  float _gain;
   FrameHistory<OutputType> frames;
-
-  Node() : _currentClockTime(-1), _gain(1.) {
-    inputNodes.reserve(NODE_MAX_INPUT_CAPACITY);
-  }
-
   std::vector<INode<InputType> *> inputNodes;
   int _currentClockTime;
-  float _gain;
+
+  Node() : _gain(1.f), frames({}), inputNodes({}), _currentClockTime(-1) {
+    inputNodes.reserve(NODE_MAX_INPUT_CAPACITY);
+  }
 
   void gain(float gainOut) { _gain = gainOut; }
   float gain() { return _gain; }
@@ -80,7 +79,7 @@ public:
 
     accumulationFrame.init();
 
-    for (int i = 0, end = inputNodes.size(); i < end; i++) {
+    for (size_t i = 0, end = inputNodes.size(); i < end; i++) {
       accumulationFrame += (inputNodes.at(i))->currentFrame();
     }
 
@@ -94,11 +93,11 @@ public:
 
 private:
   InputType accumulationFrame = {};
-  OutputType processedFrame{};
+  OutputType processedFrame = {};
   /// Advance time for all input nodes
   ///
   void tickInputs(int currentClockTime) {
-    for (int i = 0, end = inputNodes.size(); i < end; i++) {
+    for (size_t i = 0, end = inputNodes.size(); i < end; i++) {
       (inputNodes.at(i))->metaTick(currentClockTime);
     }
   }
