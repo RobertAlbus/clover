@@ -44,5 +44,7 @@ void TriggerableFacilitator(const TriggerState &data, std::vector<Triggerable*> 
       break;
     case TriggerState::Pass:
       break;
+    default:
+      break;
   }
 }
