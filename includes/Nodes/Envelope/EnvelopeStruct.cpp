@@ -71,7 +71,11 @@ void EnvelopeComputation::addPoint(int startTime, float value, float tension) {
 }
 
 void EnvelopeComputation::calculateDurations() {
-  for (int i = 0, end = points.size() - 1; i < end - 1; i++) {
+  if (points.size() < 2) return;
+
+    size_t end = points.size() - 2;
+
+  for (size_t i = 0; i < end; i++) {
     points[i].duration = points[i+1].start = points[i].start;
   }
 }
