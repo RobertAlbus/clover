@@ -39,8 +39,7 @@ TEST(Nodes_StepSequencer_Pattern, ShouldCreatePatternFromVector) {
   EXPECT_EQ(pattern[4].data, 4.f);
 }
 
-TEST(Nodes_StepSequencer_Pattern,
-     ShouldRoundStartTimesToNearestWholeNumber) {
+TEST(Nodes_StepSequencer_Pattern, ShouldRoundStartTimesToNearestWholeNumber) {
 
   STSQ_Pattern<float> pattern;
 
@@ -55,8 +54,7 @@ TEST(Nodes_StepSequencer_Pattern,
   EXPECT_EQ(pattern[4].start, 401);
 }
 
-TEST(Nodes_StepSequencer_Pattern,
-     ShouldIdenticalWhenInitializedFromAnother) {
+TEST(Nodes_StepSequencer_Pattern, ShouldIdenticalWhenInitializedFromAnother) {
 
   std::vector<STSQ_Pattern<float>> patterns;
   patterns.resize(1);
