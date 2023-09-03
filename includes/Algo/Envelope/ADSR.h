@@ -126,11 +126,11 @@ protected:
   int releaseSamples;
 
   int elapsedSamples;
-  bool isKeyOn;
   T velocity_;
+  bool isKeyOn;
 
   std::function<void(const ADSR<T> *)> onCompleteCallback =
-      [](const ADSR<T> *self) { return; };
+      [](const ADSR<T> *self) noexcept { return; };
 
   Clover::Envelope::Basic<T> envelope;
 

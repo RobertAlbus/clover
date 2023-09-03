@@ -41,16 +41,16 @@ add_executable(clover_test
 
     test/Midi/Notes.cc
 
-    test/NodeSimplex/Basic/Gain_Test.cc
+    test/Nodes/Basic/Gain_Test.cc
     
-    test/NodeSimplex/Envelope/AutomationClip_Test.cc
+    test/Nodes/Envelope/AutomationClip_Test.cc
     
-    test/NodeSimplex/Filter/Filter_Test.cc
+    test/Nodes/Filter/Filter_Test.cc
     
-    test/NodeSimplex/StepSequencer/STSQ_Test.cc
-    test/NodeSimplex/StepSequencer/STSQ_Pattern_Test.cc
+    test/Nodes/StepSequencer/STSQ_Test.cc
+    test/Nodes/StepSequencer/STSQ_Pattern_Test.cc
     
-    test/NodeSimplex/NodeSmokeTests.cc
+    test/Nodes/NodeSmokeTests.cc
 
     test/Util/Calc_Test.cc
     test/Util/MusicTime.cc

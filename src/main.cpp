@@ -32,32 +32,28 @@
 #include "RtMidi.h"
 #include "portaudio.h"
 
-#include "Config.h"
+// #include "Config.h"
 
 #include "Clover.h"
 
 #include "NxOscStsqDemo.h"
 
 using namespace Clover::IO;
-using namespace Clover::NodeSimplex;
-
-float getRandomFloat(int max) {
-  return static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / max));
-}
+using namespace Clover::Nodes;
 
 int main(int argc, char *argv[]) {
   ////////////////////////////////////////////////////////////////
   // CLOVER POC
 
-  printf("\nClover Version %d.%d\n", Clover_VERSION_MAJOR,
-         Clover_VERSION_MINOR);
-  printf("\nDefault Audio Device Index: %d\n", Pa_GetDefaultOutputDevice());
+  // printf("\nClover Version %d.%d\n", Clover_VERSION_MAJOR,
+  //        Clover_VERSION_MINOR);
+  // printf("\nDefault Audio Device Index: %d\n", Pa_GetDefaultOutputDevice());
 
   Interface interface;
   interface.rootNode.gain(0.5);
   Clover::Util::Time time(160, Clover::Base::sampleRate, &interface.clock);
-  Clover::NodeSimplex::Adapter::NullInAdapter<2> nullSink;
-  Clover::NodeSimplex::Adapter::NullOutAdapter<1> blackHole1;
+  Clover::Nodes::Adapter::NullInAdapter<2> nullSink;
+  Clover::Nodes::Adapter::NullOutAdapter<1> blackHole1;
 
   blackHole1 >> nullSink >> interface.rootNode;
 

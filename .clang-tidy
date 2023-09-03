@@ -1,0 +1,14 @@
+Checks: >
+    -*,
+    bugprone-unused-raii,
+    misc-header-include-cycle,
+    misc-include-cleaner,
+
+WarningsAsErrors: true
+
+HeaderFilterRegex: '^(?!.*(build|dependencies)).*'
+
+---
+-std=c++20
+-extra-arg=-Iincludes
+

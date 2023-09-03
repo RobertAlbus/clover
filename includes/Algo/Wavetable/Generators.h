@@ -20,6 +20,7 @@
  *
  */
 
+#include <algorithm>
 #include <cmath>
 #include <random>
 #include <vector>

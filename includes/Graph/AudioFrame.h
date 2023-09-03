@@ -41,9 +41,9 @@ template <size_t __arity> struct AudioFrame {
     std::copy(init.begin(), init.end(), data.begin());
   }
 
-  float &operator[](int i) { return data[i]; }
+  float &operator[](int i) { return data[static_cast<size_t>(i)]; }
 
-  float operator[](int i) const { return data[i]; }
+  float operator[](int i) const { return data[static_cast<size_t>(i)]; }
 
   Graph::AudioFrame<__arity>
   operator+(const Graph::AudioFrame<__arity> &b) const {

@@ -177,11 +177,11 @@ struct OscAndStSq {
     kick.gain(0.9);
   }
 
-  OscNx<3> instrument;
+  Clover::Nodes::Synth::OscNx<3> instrument;
   STSQ_Pitchable stsq_pitch;
   STSQ_Triggerable stsq_trigger;
 
   STSQ_Triggerable stsq_kick;
   
-  OscNx<3> kick;
+  Clover::Nodes::Synth::OscNx<3> kick;
 };

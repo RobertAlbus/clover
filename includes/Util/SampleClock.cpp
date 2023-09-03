@@ -32,7 +32,7 @@ SampleClock::SampleClock() {
 int SampleClock::currentSample() { return _currentSample; }
 
 void SampleClock::tick() {
-  for (int i = 0, end = callbacks.size(); i < end; i++) {
+  for (size_t i = 0, end = callbacks.size(); i < end; i++) {
     callbacks[i](_currentSample);
   }
   _currentSample++;
