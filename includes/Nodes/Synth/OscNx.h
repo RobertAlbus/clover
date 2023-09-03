@@ -27,10 +27,10 @@
 #include "Nodes/Basic/Gain.h"
 #include "Nodes/Envelope/ADSR.h"
 #include "Nodes/Filter/Filter.h"
-#include "Nodes/Stereo/Pan.h"
 #include "Nodes/StepSequencer/lib.h"
-#include "Nodes/Wavetable/WavetableOscInterface.h"
+#include "Nodes/Stereo/Pan.h"
 #include "Nodes/Wavetable/WavetableOsc.h"
+#include "Nodes/Wavetable/WavetableOscInterface.h"
 #include "Nodes/Wavetable/WavetableOscStereo.h"
 
 namespace Clover::Nodes::Synth {
@@ -52,8 +52,7 @@ struct OscNx : public Clover::Graph::AudioOutNode<2>, Pitchable, Triggerable {
 
     void gain(float g) { osc.gain(g); }
 
-    void
-    wavetable(std::shared_ptr<Wavetable::Wavetable> wt) {
+    void wavetable(std::shared_ptr<Wavetable::Wavetable> wt) {
       osc.wavetable(wt);
     }
 
@@ -195,4 +194,4 @@ struct OscNx : public Clover::Graph::AudioOutNode<2>, Pitchable, Triggerable {
   }
 };
 
-}
+} // namespace Clover::Nodes::Synth

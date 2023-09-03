@@ -30,6 +30,7 @@ class HandCrank : public Graph::NullNode {
 public:
   HandCrank() : Graph::NullNode() {}
 
+  void turn(size_t numberOfTicks) { turn(static_cast<int>(numberOfTicks)); }
   void turn(int numberOfTicks) {
     for (int i = 0; i < numberOfTicks; i++) {
       this->metaTick(clock.currentSample());

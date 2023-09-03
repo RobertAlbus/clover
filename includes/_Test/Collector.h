@@ -30,7 +30,10 @@ namespace Clover::_Test {
 
 template <size_t __arity> class Collector : public Graph::AudioInNode<__arity> {
 public:
-  Collector(int preAllocateFrames) : Graph::AudioInNode<__arity>() {
+  Collector(int preAllocateFrames)
+      : Collector(static_cast<size_t>(preAllocateFrames)) {}
+
+  Collector(size_t preAllocateFrames) : Graph::AudioInNode<__arity>() {
     frames.reserve(preAllocateFrames);
   }
 

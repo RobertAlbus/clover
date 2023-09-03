@@ -43,8 +43,8 @@ template <typename T> struct STSQ_Pattern {
     size_t size = fromSteps.size();
     totalDuration = stepDuration * static_cast<float>(size);
 
-    for (int i = 0, end = size; i < end; i++) {
-      add(fromSteps[i], stepDuration * (float)i);
+    for (size_t i = 0, end = size; i < end; i++) {
+      add(fromSteps[i], stepDuration * static_cast<float>(i));
     }
   }
 
@@ -104,11 +104,13 @@ private:
   }
 
   float getElapsedPatternTime() {
-    return fmod((float)_currentClockTime, currentPattern().totalDuration);
+    return fmod(static_cast<float>(_currentClockTime),
+                currentPattern().totalDuration);
   }
 
   bool isStartOfNextStep() {
-    return ((int)getElapsedPatternTime()) == currentPattern()[nextIndex].start;
+    return static_cast<int>(getElapsedPatternTime()) ==
+           currentPattern()[nextIndex].start;
   }
 
   void performStep() {
@@ -123,7 +125,7 @@ private:
       nextIndex = 0;
       return;
     }
-    int currentElapsedPatternTime = (int)getElapsedPatternTime();
+    int currentElapsedPatternTime = static_cast<int>(getElapsedPatternTime());
     for (int i = 0, end = currentPattern().size() - 1; i < end; i++) {
       if (currentElapsedPatternTime == currentPattern()[i].start) {
         nextIndex = i;

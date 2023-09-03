@@ -55,7 +55,7 @@ private:
   Graph::AudioFrame<1> tick(Graph::AudioFrame<0>) {
     const EnvelopeComputation::Point &endPoint = computedEnvelope.points.back();
 
-    if (_currentClockTime >= endPoint.start) {
+    if (this->_currentClockTime >= endPoint.start) {
       return Graph::AudioFrame<1>{endPoint.value};
     }
 

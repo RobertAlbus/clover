@@ -46,15 +46,16 @@ TEST(Nodes_Filter_Filter, ShouldFilterLowPass) {
   float rms = 0;
   for (Clover::Graph::AudioFrame<1> &frame : collector.frames)
     rms += frame[0] * frame[0];
-  rms /= collector.frames.size();
+  rms /= static_cast<float>(collector.frames.size());
   rms = std::sqrt(rms);
 
+  EXPECT_GT(static_cast<float>(collector.frames.size()), 0.f);
   EXPECT_LE(Clover::Util::Calc::ltodb(rms), -60);
 }
 
 TEST(Nodes_Filter_Filter, ShouldFilterHighPass) {
 
-  int testSize = 10000;
+  size_t testSize = 10000;
   Clover::_Test::HandCrank crank;
   Clover::_Test::Collector<1> collector(testSize);
   Clover::Nodes::Filter::Filter<1> filter;
@@ -71,10 +72,12 @@ TEST(Nodes_Filter_Filter, ShouldFilterHighPass) {
   crank.turn(testSize);
 
   float rms = 0;
-  for (Clover::Graph::AudioFrame<1> &frame : collector.frames)
+  for (Clover::Graph::AudioFrame<1> &frame : collector.frames) {
     rms += frame[0] * frame[0];
-  rms /= collector.frames.size();
+  }
+  rms /= static_cast<float>(collector.frames.size());
   rms = std::sqrt(rms);
 
+  EXPECT_GT(static_cast<float>(collector.frames.size()), 0.f);
   EXPECT_LE(Clover::Util::Calc::ltodb(rms), -53);
 }

@@ -40,7 +40,7 @@ public:
 template <Frame InputType, Frame OutputType>
 class Node : public INode<OutputType> {
 public:
-  int NODE_MAX_INPUT_CAPACITY = 10;
+  size_t NODE_MAX_INPUT_CAPACITY = 10;
   float _gain;
   FrameHistory<OutputType> frames;
   std::vector<INode<InputType> *> inputNodes;
