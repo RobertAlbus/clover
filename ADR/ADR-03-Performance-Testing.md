@@ -30,7 +30,3 @@ In response to performance concerns and in the interest of maintaining a high-qu
 
 - **Development Commitment:** Developers will need to allocate time to craft additional code for the performance test suite.
 - **Benchmark Complexity:** Establishing acceptable performance benchmark values, especially across varying profiles or architectures, may present challenges.
-
-In conclusion, opting to establish a performance test suite presents several advantages in terms of ensuring performance and identifying regressions. However, this decision needs to be balanced against the supplementary development effort required and the intricacies associated with defining acceptable performance benchmarks across diverse profiles or architectures.
-
-This ADR functions as a comprehensive guide for shaping the performance testing strategy within the realm of your real-time audio system.
