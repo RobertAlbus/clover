@@ -20,7 +20,6 @@ set(CLOVER_BUILD_DEMO ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 
 if(NOT PROFILING_MODE)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Ofast")
@@ -77,6 +76,11 @@ set(RTMIDI_TARGETNAME_UNINSTALL "uninstall_rtmidi" CACHE STRING "Name of 'uninst
 add_subdirectory(dependencies/rtmidi)
 list(APPEND EXTRA_LIBS rtmidi)
 
+set_target_properties(PortAudio PROPERTIES QUIET TRUE)
+set_target_properties(wave PROPERTIES QUIET TRUE)
+set_target_properties(rtmidi PROPERTIES QUIET TRUE)
+
+
 
 ########
 # internal libraries
@@ -127,3 +131,48 @@ if(CLOVER_BUILD_DEMO)
     target_link_libraries(${PROJECT_NAME}Demo PUBLIC ${PROJECT_NAME})
 endif()
 
+if(ENABLE_WARNINGS)
+    target_compile_options(${PROJECT_NAME} PRIVATE
+        # -Werror # enable this to interpret warnings as errors
+        -pedantic
+        -Wall
+        -Wextra
+        -Wcast-align
+        -Wcast-qual
+        -Wctor-dtor-privacy
+        -Wdisabled-optimization
+        -Wformat=2
+        -Winit-self
+        -Wlogical-op
+        -Wmissing-declarations
+        -Wmissing-include-dirs
+        -Wnoexcept
+        -Wold-style-cast
+        -Woverloaded-virtual
+        -Wredundant-decls
+        -Wshadow
+        -Wsign-conversion
+        -Wsign-promo
+        -Wstrict-null-sentinel
+        -Wstrict-overflow=5
+        -Wswitch-default
+        -Wundef
+        -Wno-unused
+    )
+endif()
+
+
+function(print_all_targets DIR)
+    get_property(TGTS DIRECTORY "${DIR}" PROPERTY BUILDSYSTEM_TARGETS)
+    foreach(TGT IN LISTS TGTS)
+        message(STATUS "Target: ${TGT}")
+        # TODO: Do something about it
+    endforeach()
+
+    get_property(SUBDIRS DIRECTORY "${DIR}" PROPERTY SUBDIRECTORIES)
+    foreach(SUBDIR IN LISTS SUBDIRS)
+        print_all_targets("${SUBDIR}")
+    endforeach()
+endfunction()
+
+print_all_targets(.)
