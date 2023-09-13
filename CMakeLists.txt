@@ -7,6 +7,8 @@ configure_file(includes/Config.h.in Config.h)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 
+include(CMakeLists.commands.txt)
+
 ########
 # Clover variables
 
@@ -63,7 +65,7 @@ link_libraries(m)
 link_libraries(pthread)
 
 # PortAudio
-add_subdirectory(dependencies/portaudio EXCLUDE_FROM_ALL)
+add_subdirectory(dependencies/portaudio)
 list(APPEND EXTRA_LIBS PortAudio)
 
 # wave
@@ -119,6 +121,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC ${EXTRA_LIBS})
 
 ########
 # tests
+option(CLOVER_BUILD_TESTS "Enable building tests" ON)
 if(CLOVER_BUILD_TESTS)
     include(${CMAKE_CURRENT_SOURCE_DIR}/CTest.cmake)
 endif()
@@ -130,6 +133,13 @@ if(CLOVER_BUILD_DEMO)
     add_executable(${PROJECT_NAME}Demo src/main.cpp)
     target_link_libraries(${PROJECT_NAME}Demo PUBLIC ${PROJECT_NAME})
 endif()
+
+add_custom_target(demo
+  COMMAND ${CMAKE_CURRENT_BINARY_DIR}/CloverDemo
+  DEPENDS CloverDemo
+  COMMENT "Running CloverDemo"
+  USES_TERMINAL
+)
 
 if(ENABLE_WARNINGS)
     target_compile_options(${PROJECT_NAME} PRIVATE

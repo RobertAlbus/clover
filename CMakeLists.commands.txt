@@ -1,0 +1,40 @@
+find_program(CTEST_EXECUTABLE ctest)
+if(NOT CTEST_EXECUTABLE)
+    message(FATAL_ERROR "ctest not found!")
+endif()
+
+
+
+add_custom_target(build
+  COMMAND ${CMAKE_MAKE_PROGRAM} -j8
+)
+
+add_custom_target(run
+    COMMAND ${CMAKE_BINARY_DIR}/CloverDemo
+    DEPENDS build CloverDemo
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+    USES_TERMINAL
+)
+
+find_program(
+  CLANG_FORMAT_BIN
+  NAMES "clang-format"
+)
+
+if(CLANG_FORMAT_BIN)
+  file(GLOB_RECURSE FORMAT_SOURCE_LIST
+    src/*.cpp src/*.h
+    includes/*.cpp includes/*.h
+    test/*.cc
+  )
+
+  # Create custom target
+  add_custom_target(
+    fmt
+    COMMAND ${CLANG_FORMAT_BIN}
+    -i
+    -style=file
+    ${FORMAT_SOURCE_LIST}
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  )
+endif()
