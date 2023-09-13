@@ -17,10 +17,8 @@ add_custom_target(run
 )
 
 find_program(
-  CLANG_FORMAT_BIN
-  NAMES "clang-format"
+  CLANG_FORMAT_BIN clang-format
 )
-
 if(CLANG_FORMAT_BIN)
   file(GLOB_RECURSE FORMAT_SOURCE_LIST
     src/*.cpp src/*.h
@@ -37,4 +35,9 @@ if(CLANG_FORMAT_BIN)
     ${FORMAT_SOURCE_LIST}
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
   )
+else()
+    add_custom_target(
+        fmt
+        COMMAND ${CMAKE_COMMAND} -E echo "clang-format binary could not be found"
+    )
 endif()
