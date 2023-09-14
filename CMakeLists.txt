@@ -87,30 +87,12 @@ set_target_properties(rtmidi PROPERTIES QUIET TRUE)
 ########
 # internal libraries
 
-add_library(${PROJECT_NAME} STATIC 
-    ${CMAKE_CURRENT_LIST_DIR}/includes/Base/CloverBase.cpp
-
-    ${CMAKE_CURRENT_LIST_DIR}/includes/Nodes/Envelope/EnvelopeStruct.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/includes/Nodes/Envelope/ADSR.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/includes/Nodes/Envelope/BasicEnvelope.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/includes/Nodes/Envelope/DC.cpp
-
-    ${CMAKE_CURRENT_LIST_DIR}/includes/Nodes/StepSequencer/PatternSettable.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/includes/Nodes/StepSequencer/lib/Pitchable.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/includes/Nodes/StepSequencer/lib/Triggerable.cpp
-
-    ${CMAKE_CURRENT_LIST_DIR}/includes/Nodes/Stereo/Difference.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/includes/Nodes/Stereo/MidSideBalance.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/includes/Nodes/Stereo/Pan.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/includes/Nodes/Stereo/Sum.cpp
-
-    ${CMAKE_CURRENT_LIST_DIR}/includes/Nodes/Wavetable/WavetableOsc.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/includes/Nodes/Wavetable/WavetableOscStereo.cpp
-
-    ${CMAKE_CURRENT_LIST_DIR}/includes/Util/Calc.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/includes/Util/MusicTime.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/includes/Util/SampleClock.cpp
+file(GLOB_RECURSE SOURCE_LIST
+    CONFIGURE_DEPENDS
+    includes/*.cpp
 )
+
+add_library(${PROJECT_NAME} STATIC ${SOURCE_LIST})
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC
