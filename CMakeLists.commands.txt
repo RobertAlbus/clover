@@ -55,16 +55,15 @@ else()
 endif()
 
 find_program(PPROF_BIN pprof)
-find_file(PROF_SO_FILE /usr/local/lib/prof.so)
-
-if(PROF_SO_FILE AND PPROF_BIN)
+if(PPROF_BIN)
   add_custom_target(profile_call_graph
     DEPENDS build
-    COMMAND env LD_PRELOAD=${PROF_SO_FILE} CPUPROFILE_FREQUENCY=48000 CPUPROFILE=./test.prof ${CMAKE_BINARY_DIR}/CloverDemo
-    COMMAND ${PPROF_BIN} -web -cum ${CMAKE_BINARY_DIR}/CloverDemo ./test.prof
+    COMMAND env CPUPROFILE_FREQUENCY=48000 CPUPROFILE=./test.prof ${CMAKE_BINARY_DIR}/Clover_Demo_Profiling   
+    COMMAND env ${PPROF_BIN} -web -cum ./build/Clover_Demo_Profiling ./test.prof
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
   )
 else()
   add_custom_target(profile_call_graph
-    COMMAND ${CMAKE_COMMAND} -E echo "Either /usr/local/lib/prof.so or pprof not found."
+    COMMAND ${CMAKE_COMMAND} -E echo "pprof not found."
   )
 endif()
