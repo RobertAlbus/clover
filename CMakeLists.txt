@@ -20,15 +20,6 @@ set(CLOVER_BUILD_DEMO ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-
-if(NOT PROFILING_MODE)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Ofast")
-else()
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -lprofiler")
-set(CMAKE_BUILD_TYPE Debug)
-# set(CMAKE_BUILD_TYPE RelWithDebInfo)
-endif()
-
 set(CMAKE_BUILD_PARALLEL_LEVEL 8 CACHE STRING "Number of cores used for compilation")
 
 # Enable SSE, AVX if the target architecture supports it
@@ -91,7 +82,7 @@ file(GLOB_RECURSE SOURCE_LIST
 )
 
 add_library(${PROJECT_NAME} STATIC ${SOURCE_LIST})
-
+target_compile_options(${PROJECT_NAME} PRIVATE -Ofast)
 target_include_directories(${PROJECT_NAME}
     PUBLIC
         ${PROJECT_BINARY_DIR}
@@ -99,19 +90,29 @@ target_include_directories(${PROJECT_NAME}
 )
 target_link_libraries(${PROJECT_NAME} PUBLIC ${EXTRA_LIBS})
 
+add_library(${PROJECT_NAME}_Profiling STATIC ${SOURCE_LIST})
+target_compile_options(${PROJECT_NAME}_Profiling PRIVATE -Ofast -g)
+target_link_libraries(${PROJECT_NAME}_Profiling PRIVATE profiler)
+target_include_directories(${PROJECT_NAME}_Profiling
+    PUBLIC
+        ${PROJECT_BINARY_DIR}
+        ${CMAKE_CURRENT_LIST_DIR}/includes
+)
+target_link_libraries(${PROJECT_NAME}_Profiling PUBLIC ${EXTRA_LIBS})
+
 
 ########
 # libs, linking, etc
 
-if(CLOVER_BUILD_DEMO)
-    add_executable(${PROJECT_NAME}Demo src/main.cpp)
-    target_link_libraries(${PROJECT_NAME}Demo PUBLIC ${PROJECT_NAME})
-endif()
+add_executable(${PROJECT_NAME}_Demo src/main.cpp)
+target_link_libraries(${PROJECT_NAME}_Demo PUBLIC ${PROJECT_NAME})
+
+add_executable(${PROJECT_NAME}_Demo_Profiling src/main.cpp)
+target_link_libraries(${PROJECT_NAME}_Demo_Profiling PUBLIC ${PROJECT_NAME}_Profiling)
 
 add_custom_target(demo
-  COMMAND ${CMAKE_CURRENT_BINARY_DIR}/CloverDemo
+  COMMAND ${CMAKE_CURRENT_BINARY_DIR}/Clover_Demo
   DEPENDS CloverDemo
-  COMMENT "Running CloverDemo"
   USES_TERMINAL
 )
 
