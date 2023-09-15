@@ -168,5 +168,5 @@ endfunction()
 
 print_all_targets(.)
 
-include(CMakeLists.commands.txt)
+include(commands/CMakeLists.commands.txt)
 include(CMakeLists.tests.txt)
