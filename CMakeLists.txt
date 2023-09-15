@@ -76,12 +76,12 @@ set_target_properties(rtmidi PROPERTIES QUIET TRUE)
 ########
 # internal libraries
 
-file(GLOB_RECURSE SOURCE_LIST
+file(GLOB_RECURSE CLOVER_LIB_SOURCE_LIST
     CONFIGURE_DEPENDS
     includes/*.cpp
 )
 
-add_library(${PROJECT_NAME} STATIC ${SOURCE_LIST})
+add_library(${PROJECT_NAME} STATIC ${CLOVER_LIB_SOURCE_LIST})
 target_compile_options(${PROJECT_NAME} PRIVATE -Ofast)
 target_include_directories(${PROJECT_NAME}
     PUBLIC
@@ -90,7 +90,7 @@ target_include_directories(${PROJECT_NAME}
 )
 target_link_libraries(${PROJECT_NAME} PUBLIC ${EXTRA_LIBS})
 
-add_library(${PROJECT_NAME}_Profiling STATIC ${SOURCE_LIST})
+add_library(${PROJECT_NAME}_Profiling STATIC ${CLOVER_LIB_SOURCE_LIST})
 target_compile_options(${PROJECT_NAME}_Profiling PRIVATE -Ofast -g)
 target_link_libraries(${PROJECT_NAME}_Profiling PRIVATE profiler)
 target_include_directories(${PROJECT_NAME}_Profiling
@@ -100,7 +100,7 @@ target_include_directories(${PROJECT_NAME}_Profiling
 )
 target_link_libraries(${PROJECT_NAME}_Profiling PUBLIC ${EXTRA_LIBS})
 
-add_library(${PROJECT_NAME}_Strict STATIC EXCLUDE_FROM_ALL ${SOURCE_LIST})
+add_library(${PROJECT_NAME}_Strict STATIC EXCLUDE_FROM_ALL ${CLOVER_LIB_SOURCE_LIST})
 target_compile_options(${PROJECT_NAME}_Strict PRIVATE -Ofast)
 target_include_directories(${PROJECT_NAME}_Strict
     PUBLIC
