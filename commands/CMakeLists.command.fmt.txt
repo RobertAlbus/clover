@@ -3,6 +3,7 @@ find_program(
 )
 if(CLANG_FORMAT_BIN)
   file(GLOB_RECURSE FORMAT_SOURCE_LIST
+    CONFIGURE_DEPENDS
     src/*.cpp src/*.h
     includes/*.cpp includes/*.h
     test/*.cc
