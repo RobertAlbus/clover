@@ -100,6 +100,42 @@ target_include_directories(${PROJECT_NAME}_Profiling
 )
 target_link_libraries(${PROJECT_NAME}_Profiling PUBLIC ${EXTRA_LIBS})
 
+add_library(${PROJECT_NAME}_Strict STATIC EXCLUDE_FROM_ALL ${SOURCE_LIST})
+target_compile_options(${PROJECT_NAME}_Strict PRIVATE -Ofast)
+target_include_directories(${PROJECT_NAME}_Strict
+    PUBLIC
+        ${PROJECT_BINARY_DIR}
+        ${CMAKE_CURRENT_LIST_DIR}/includes
+)
+target_link_libraries(${PROJECT_NAME}_Strict PUBLIC ${EXTRA_LIBS})
+target_compile_options(${PROJECT_NAME}_Strict PRIVATE
+    -Werror # enable this to interpret warnings as errors
+    -pedantic
+    -Wall
+    -Wextra
+    -Wcast-align
+    -Wcast-qual
+    -Wctor-dtor-privacy
+    -Wdisabled-optimization
+    -Wformat=2
+    -Winit-self
+    -Wlogical-op
+    -Wmissing-declarations
+    -Wmissing-include-dirs
+    -Wnoexcept
+    -Wold-style-cast
+    -Woverloaded-virtual
+    -Wredundant-decls
+    -Wshadow
+    -Wsign-conversion
+    -Wsign-promo
+    -Wstrict-null-sentinel
+    -Wstrict-overflow=5
+    -Wswitch-default
+    -Wundef
+    -Wno-unused
+)
+
 
 ########
 # libs, linking, etc
@@ -115,36 +151,6 @@ add_custom_target(demo
   DEPENDS CloverDemo
   USES_TERMINAL
 )
-
-if(ENABLE_WARNINGS)
-    target_compile_options(${PROJECT_NAME} PRIVATE
-        # -Werror # enable this to interpret warnings as errors
-        -pedantic
-        -Wall
-        -Wextra
-        -Wcast-align
-        -Wcast-qual
-        -Wctor-dtor-privacy
-        -Wdisabled-optimization
-        -Wformat=2
-        -Winit-self
-        -Wlogical-op
-        -Wmissing-declarations
-        -Wmissing-include-dirs
-        -Wnoexcept
-        -Wold-style-cast
-        -Woverloaded-virtual
-        -Wredundant-decls
-        -Wshadow
-        -Wsign-conversion
-        -Wsign-promo
-        -Wstrict-null-sentinel
-        -Wstrict-overflow=5
-        -Wswitch-default
-        -Wundef
-        -Wno-unused
-    )
-endif()
 
 
 function(print_all_targets DIR)
