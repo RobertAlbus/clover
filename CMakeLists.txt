@@ -7,8 +7,6 @@ configure_file(includes/Config.h.in Config.h)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 
-include(CMakeLists.commands.txt)
-
 ########
 # Clover variables
 
@@ -101,12 +99,6 @@ target_include_directories(${PROJECT_NAME}
 )
 target_link_libraries(${PROJECT_NAME} PUBLIC ${EXTRA_LIBS})
 
-########
-# tests
-option(CLOVER_BUILD_TESTS "Enable building tests" ON)
-if(CLOVER_BUILD_TESTS)
-    include(${CMAKE_CURRENT_SOURCE_DIR}/CTest.cmake)
-endif()
 
 ########
 # libs, linking, etc
@@ -168,3 +160,6 @@ function(print_all_targets DIR)
 endfunction()
 
 print_all_targets(.)
+
+include(CMakeLists.commands.txt)
+include(CMakeLists.tests.txt)
