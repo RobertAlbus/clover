@@ -1,0 +1,11 @@
+find_program(CTEST_EXECUTABLE ctest)
+if(NOT CTEST_EXECUTABLE)
+    message(FATAL_ERROR "ctest not found!")
+endif()
+
+include(commands/CMakeLists.command.build.txt)
+include(commands/CMakeLists.command.cloc.txt)
+include(commands/CMakeLists.command.fmt.txt)
+include(commands/CMakeLists.command.profile_call_graph.txt)
+include(commands/CMakeLists.command.run.txt)
+include(commands/CMakeLists.command.tidy.txt)

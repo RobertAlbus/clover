@@ -1,0 +1,25 @@
+
+find_program(CLANG_TIDY_BIN clang-tidy)
+file(GLOB_RECURSE TIDY_SOURCE_LIST
+    CONFIGURE_DEPENDS
+    ${CMAKE_SOURCE_DIR}/includes/*.[h;cpp]
+    ${CMAKE_SOURCE_DIR}/test/*.cc
+)
+
+if(CLANG_TIDY_BIN)
+    add_custom_target(tidy
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        COMMAND ${CLANG_TIDY_BIN}
+        -p ${CMAKE_BINARY_DIR}
+        -extra-arg=-std=c++20
+        -extra-arg=-I/usr/include/c++/13.2.1/
+        -extra-arg=-I/usr/lib/clang/15.0.7/include
+        -extra-arg=-I/usr/local/include
+        -extra-arg=-I/usr/include
+        ${TIDY_SOURCE_LIST}
+    )
+else()
+    add_custom_target(tidy
+        COMMAND echo "clang-tidy binary not found."
+    )
+endif()

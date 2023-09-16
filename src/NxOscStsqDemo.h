@@ -3,12 +3,12 @@
 /*
  * /////////
  * // Clover
- * 
+ *
  * Audio processing algorithms and DAG with feedback loops that do not break
  * acyclicity.
- * 
+ *
  * Copyright (C) 2023 Rob W. Albus
- *  
+ *
  * This program is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
  * Foundation, either version 3 of the License, or (at your option) any later
@@ -17,9 +17,8 @@
  * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details. You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  */
-
 
 #include <vector>
 
@@ -27,10 +26,9 @@
 
 using namespace Clover::Midi::Note;
 
-
 struct OscAndStSq {
 
-  OscAndStSq(Clover::Util::Time& time) {
+  OscAndStSq(Clover::Util::Time &time) {
     patchTheSynth(time);
     patchTheKick(time);
 
@@ -38,7 +36,8 @@ struct OscAndStSq {
     stsq_pitch.addPattern(notePatterns[0]);
     stsq_pitch.addPattern(notePatterns[1]);
 
-    std::vector<STSQ_Pattern<TriggerState>> triggerPatterns = getTriggerPatterns(time);
+    std::vector<STSQ_Pattern<TriggerState>> triggerPatterns =
+        getTriggerPatterns(time);
     stsq_trigger.addPattern(triggerPatterns[0]);
     stsq_trigger.addPattern(triggerPatterns[1]);
 
@@ -51,7 +50,7 @@ struct OscAndStSq {
     stsq_kick.targets.emplace_back(&kick);
   }
 
-  std::vector<STSQ_Pattern<float>> getNotePatterns(Clover::Util::Time& time) {
+  std::vector<STSQ_Pattern<float>> getNotePatterns(Clover::Util::Time &time) {
     std::vector<STSQ_Pattern<float>> patterns;
 
     // clang-format off
@@ -77,7 +76,7 @@ struct OscAndStSq {
     return patterns;
   }
 
-  STSQ_Pattern<TriggerState> getKickPatterns(Clover::Util::Time& time) {
+  STSQ_Pattern<TriggerState> getKickPatterns(Clover::Util::Time &time) {
 
     STSQ_Pattern<TriggerState> pattern1;
     pattern1.totalDuration = time.beat(4);
@@ -91,7 +90,8 @@ struct OscAndStSq {
     return pattern1;
   }
 
-  std::vector<STSQ_Pattern<TriggerState>> getTriggerPatterns(Clover::Util::Time& time) {
+  std::vector<STSQ_Pattern<TriggerState>>
+  getTriggerPatterns(Clover::Util::Time &time) {
     std::vector<STSQ_Pattern<TriggerState>> patterns;
 
     // clang-format off
@@ -115,7 +115,7 @@ struct OscAndStSq {
     return patterns;
   }
 
-  void patchTheSynth(Clover::Util::Time& time) {
+  void patchTheSynth(Clover::Util::Time &time) {
     instrument.voices[0].sine();
     instrument.voices[1].square();
     instrument.voices[2].square();
@@ -138,14 +138,15 @@ struct OscAndStSq {
     instrument.filter.lowPass();
     instrument.filterCutoff_ = 10;
     instrument.filterReso_ = 2;
-    instrument.filterCut.adsr.set(time.beat(0.5), time.beat(0.1), 0.5, time.beat(2));
+    instrument.filterCut.adsr.set(time.beat(0.5), time.beat(0.1), 0.5,
+                                  time.beat(2));
     instrument.filterCut.adsr.gain(4000);
 
     instrument.amplitude.adsr.set(time.quat(0.8), 0.f, 1.f, time.beat(2));
     instrument.gain(0.1);
   }
 
-  void patchTheKick(Clover::Util::Time& time) {
+  void patchTheKick(Clover::Util::Time &time) {
     kick.voices[0].sine();
     kick.voices[1].sine();
     kick.voices[2].sine();
@@ -182,6 +183,6 @@ struct OscAndStSq {
   STSQ_Triggerable stsq_trigger;
 
   STSQ_Triggerable stsq_kick;
-  
+
   Clover::Nodes::Synth::OscNx<3> kick;
 };

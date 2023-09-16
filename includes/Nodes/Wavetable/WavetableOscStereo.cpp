@@ -1,12 +1,12 @@
 /*
  * /////////
  * // Clover
- * 
+ *
  * Audio processing algorithms and DAG with feedback loops that do not break
  * acyclicity.
- * 
+ *
  * Copyright (C) 2023 Rob W. Albus
- *  
+ *
  * This program is free software: you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
  * Foundation, either version 3 of the License, or (at your option) any later
@@ -15,7 +15,7 @@
  * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details. You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
- * 
+ *
  */
 
 #include <cmath>
@@ -39,8 +39,9 @@ WavetableOscStereo::WavetableOscStereo()
 
 // detune from each other
 void WavetableOscStereo::stereoDetune(float semitones) {
-  if (semitones == stereoDetuneSemitones) return;
-  
+  if (semitones == stereoDetuneSemitones)
+    return;
+
   stereoDetuneSemitones = semitones;
   stereoDetune_R_semi = 0.5 * semitones;
   stereoDetune_L_semi = stereoDetune_R_semi * -1;
@@ -67,7 +68,8 @@ void WavetableOscStereo::phaseOffset(float offset) {
 float WavetableOscStereo::phaseOffset() { return oscL.phaseOffset(); }
 
 void WavetableOscStereo::freq(float freq) {
-  if (freq == freq_) return;
+  if (freq == freq_)
+    return;
   freq_ = freq;
   updateFreq();
 }
@@ -79,7 +81,9 @@ void WavetableOscStereo::updateFreq() {
 
 float WavetableOscStereo::freq() { return freq_; }
 
-void WavetableOscStereo::note(float midiNote) { freq(Util::Calc::mtof(midiNote)); }
+void WavetableOscStereo::note(float midiNote) {
+  freq(Util::Calc::mtof(midiNote));
+}
 
 float WavetableOscStereo::note() { return Util::Calc::ftom(freq()); }
 
@@ -87,14 +91,18 @@ void WavetableOscStereo::wavelength(float wavelengthSamples) {
   freq(((float)Base::sampleRate) / wavelengthSamples);
 }
 
-float WavetableOscStereo::wavelength() { return ((float)Base::sampleRate) / freq(); }
+float WavetableOscStereo::wavelength() {
+  return ((float)Base::sampleRate) / freq();
+}
 
 void WavetableOscStereo::wavetable(std::shared_ptr<Wavetable> wt) {
   oscL.wavetable(wt);
   oscR.wavetable(wt);
 }
 
-std::shared_ptr<Wavetable> WavetableOscStereo::wavetable() { return oscL.wavetable(); }
+std::shared_ptr<Wavetable> WavetableOscStereo::wavetable() {
+  return oscL.wavetable();
+}
 
 void WavetableOscStereo::sine(int size) {
   oscL.sine(size);
@@ -125,6 +133,5 @@ void WavetableOscStereo::connectNodes() {
   oscL >> blackHole >> this;
   oscR >> blackHole;
 }
-
 
 } // namespace Clover::Nodes::Wavetable

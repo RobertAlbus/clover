@@ -20,15 +20,6 @@ set(CLOVER_BUILD_DEMO ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-
-if(NOT PROFILING_MODE)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Ofast")
-else()
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -lprofiler")
-set(CMAKE_BUILD_TYPE Debug)
-# set(CMAKE_BUILD_TYPE RelWithDebInfo)
-endif()
-
 set(CMAKE_BUILD_PARALLEL_LEVEL 8 CACHE STRING "Number of cores used for compilation")
 
 # Enable SSE, AVX if the target architecture supports it
@@ -63,7 +54,7 @@ link_libraries(m)
 link_libraries(pthread)
 
 # PortAudio
-add_subdirectory(dependencies/portaudio EXCLUDE_FROM_ALL)
+add_subdirectory(dependencies/portaudio)
 list(APPEND EXTRA_LIBS PortAudio)
 
 # wave
@@ -85,31 +76,13 @@ set_target_properties(rtmidi PROPERTIES QUIET TRUE)
 ########
 # internal libraries
 
-add_library(${PROJECT_NAME} STATIC 
-    ${CMAKE_CURRENT_LIST_DIR}/includes/Base/CloverBase.cpp
-
-    ${CMAKE_CURRENT_LIST_DIR}/includes/Nodes/Envelope/EnvelopeStruct.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/includes/Nodes/Envelope/ADSR.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/includes/Nodes/Envelope/BasicEnvelope.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/includes/Nodes/Envelope/DC.cpp
-
-    ${CMAKE_CURRENT_LIST_DIR}/includes/Nodes/StepSequencer/PatternSettable.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/includes/Nodes/StepSequencer/lib/Pitchable.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/includes/Nodes/StepSequencer/lib/Triggerable.cpp
-
-    ${CMAKE_CURRENT_LIST_DIR}/includes/Nodes/Stereo/Difference.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/includes/Nodes/Stereo/MidSideBalance.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/includes/Nodes/Stereo/Pan.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/includes/Nodes/Stereo/Sum.cpp
-
-    ${CMAKE_CURRENT_LIST_DIR}/includes/Nodes/Wavetable/WavetableOsc.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/includes/Nodes/Wavetable/WavetableOscStereo.cpp
-
-    ${CMAKE_CURRENT_LIST_DIR}/includes/Util/Calc.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/includes/Util/MusicTime.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/includes/Util/SampleClock.cpp
+file(GLOB_RECURSE CLOVER_LIB_SOURCE_LIST
+    CONFIGURE_DEPENDS
+    includes/*.cpp
 )
 
+add_library(${PROJECT_NAME} STATIC ${CLOVER_LIB_SOURCE_LIST})
+target_compile_options(${PROJECT_NAME} PRIVATE -Ofast)
 target_include_directories(${PROJECT_NAME}
     PUBLIC
         ${PROJECT_BINARY_DIR}
@@ -117,49 +90,67 @@ target_include_directories(${PROJECT_NAME}
 )
 target_link_libraries(${PROJECT_NAME} PUBLIC ${EXTRA_LIBS})
 
-########
-# tests
-if(CLOVER_BUILD_TESTS)
-    include(${CMAKE_CURRENT_SOURCE_DIR}/CTest.cmake)
-endif()
+add_library(${PROJECT_NAME}_Profiling STATIC ${CLOVER_LIB_SOURCE_LIST})
+target_compile_options(${PROJECT_NAME}_Profiling PRIVATE -Ofast -g)
+target_link_libraries(${PROJECT_NAME}_Profiling PRIVATE profiler)
+target_include_directories(${PROJECT_NAME}_Profiling
+    PUBLIC
+        ${PROJECT_BINARY_DIR}
+        ${CMAKE_CURRENT_LIST_DIR}/includes
+)
+target_link_libraries(${PROJECT_NAME}_Profiling PUBLIC ${EXTRA_LIBS})
+
+add_library(${PROJECT_NAME}_Strict STATIC EXCLUDE_FROM_ALL ${CLOVER_LIB_SOURCE_LIST})
+target_compile_options(${PROJECT_NAME}_Strict PRIVATE -Ofast)
+target_include_directories(${PROJECT_NAME}_Strict
+    PUBLIC
+        ${PROJECT_BINARY_DIR}
+        ${CMAKE_CURRENT_LIST_DIR}/includes
+)
+target_link_libraries(${PROJECT_NAME}_Strict PUBLIC ${EXTRA_LIBS})
+target_compile_options(${PROJECT_NAME}_Strict PRIVATE
+    -Werror # enable this to interpret warnings as errors
+    -pedantic
+    -Wall
+    -Wextra
+    -Wcast-align
+    -Wcast-qual
+    -Wctor-dtor-privacy
+    -Wdisabled-optimization
+    -Wformat=2
+    -Winit-self
+    -Wlogical-op
+    -Wmissing-declarations
+    -Wmissing-include-dirs
+    -Wnoexcept
+    -Wold-style-cast
+    -Woverloaded-virtual
+    -Wredundant-decls
+    -Wshadow
+    -Wsign-conversion
+    -Wsign-promo
+    -Wstrict-null-sentinel
+    -Wstrict-overflow=5
+    -Wswitch-default
+    -Wundef
+    -Wno-unused
+)
+
 
 ########
 # libs, linking, etc
 
-if(CLOVER_BUILD_DEMO)
-    add_executable(${PROJECT_NAME}Demo src/main.cpp)
-    target_link_libraries(${PROJECT_NAME}Demo PUBLIC ${PROJECT_NAME})
-endif()
+add_executable(${PROJECT_NAME}_Demo src/main.cpp)
+target_link_libraries(${PROJECT_NAME}_Demo PUBLIC ${PROJECT_NAME})
 
-if(ENABLE_WARNINGS)
-    target_compile_options(${PROJECT_NAME} PRIVATE
-        # -Werror # enable this to interpret warnings as errors
-        -pedantic
-        -Wall
-        -Wextra
-        -Wcast-align
-        -Wcast-qual
-        -Wctor-dtor-privacy
-        -Wdisabled-optimization
-        -Wformat=2
-        -Winit-self
-        -Wlogical-op
-        -Wmissing-declarations
-        -Wmissing-include-dirs
-        -Wnoexcept
-        -Wold-style-cast
-        -Woverloaded-virtual
-        -Wredundant-decls
-        -Wshadow
-        -Wsign-conversion
-        -Wsign-promo
-        -Wstrict-null-sentinel
-        -Wstrict-overflow=5
-        -Wswitch-default
-        -Wundef
-        -Wno-unused
-    )
-endif()
+add_executable(${PROJECT_NAME}_Demo_Profiling src/main.cpp)
+target_link_libraries(${PROJECT_NAME}_Demo_Profiling PUBLIC ${PROJECT_NAME}_Profiling)
+
+add_custom_target(demo
+  COMMAND ${CMAKE_CURRENT_BINARY_DIR}/Clover_Demo
+  DEPENDS CloverDemo
+  USES_TERMINAL
+)
 
 
 function(print_all_targets DIR)
@@ -176,3 +167,6 @@ function(print_all_targets DIR)
 endfunction()
 
 print_all_targets(.)
+
+include(commands/CMakeLists.commands.txt)
+include(CMakeLists.tests.txt)
