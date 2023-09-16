@@ -1,15 +1,17 @@
 #--------------------------------
-# Clover: Composable Signal Graphs for Creative Sound Coding
+# Clover
+# 
+# Composable Signal Graphs for Creative Sound Coding
+#--------------------------------
 
-cmake_minimum_required(VERSION 3.14)
-project(Clover VERSION 2.1)
-configure_file(includes/Config.h.in Config.h)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+project(Clover)
 
 
 #--------------------------------
 # cmake variables
 
+cmake_minimum_required(VERSION 3.14)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_BUILD_PARALLEL_LEVEL 8 CACHE STRING "Number of cores used for compilation")
