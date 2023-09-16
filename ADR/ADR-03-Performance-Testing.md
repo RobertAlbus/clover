@@ -15,7 +15,7 @@ In response to performance concerns and in the interest of maintaining a high-qu
 - Develop a dedicated test suite to precisely measure the execution time of performance-critical components.
 - Ensure that the execution time of these components remains within acceptable limits aligned with the specific profile.
 - Use Google Test, consistent with the existing test suites already used for correctness tests. This decision should be re-addressed if a broader decision regarding testing libraries is made.
-- Existing tests should be moved to `test/unit`
+- Existing tests should be moved to `test/functional`
 - Performance tests should be created under `test/performance`
 
 ## Consequences

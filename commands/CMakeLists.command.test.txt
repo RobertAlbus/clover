@@ -1,0 +1,12 @@
+# The custom target `test` already is created implicitly by gtest
+# when `enable_testing()` is invoked in test/CMakeLists.tests.txt
+
+add_custom_target(test-unit
+    COMMAND ${CTEST_EXECUTABLE} -L unit
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+add_custom_target(test-performance
+    COMMAND ${CTEST_EXECUTABLE} -L performance
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+)

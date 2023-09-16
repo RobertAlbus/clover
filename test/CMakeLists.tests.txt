@@ -15,8 +15,15 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(googletest)
 enable_testing()
 
-add_executable(clover_test ${SOURCE_LIST_TEST_CC})
+add_executable(clover_test ${SOURCE_LIST_TEST_FUNCTIONAL_CC})
 target_link_libraries(clover_test
+    PRIVATE
+        Clover
+        gtest_main
+)
+
+add_executable(clover_test_performance ${SOURCE_LIST_TEST_PERFORMANCE_CC})
+target_link_libraries(clover_test_performance
     PRIVATE
         Clover
         gtest_main
@@ -26,3 +33,7 @@ include(GoogleTest)
 gtest_discover_tests(clover_test
                      PROPERTIES
                      LABELS "unit")
+
+gtest_discover_tests(clover_test_performance
+                     PROPERTIES
+                     LABELS "performance")
