@@ -23,4 +23,6 @@ target_link_libraries(clover_test
 )
 
 include(GoogleTest)
-gtest_discover_tests(clover_test)
+gtest_discover_tests(clover_test
+                     PROPERTIES
+                     LABELS "unit")
