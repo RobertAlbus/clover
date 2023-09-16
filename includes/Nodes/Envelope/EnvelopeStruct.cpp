@@ -74,6 +74,6 @@ void EnvelopeComputation::calculateDurations() {
   size_t end = points.size() - 2;
 
   for (size_t i = 0; i < end; i++) {
-    points[i].duration = points[i + 1].start = points[i].start;
+    points[i].duration = points[i + 1].start - points[i].start;
   }
 }

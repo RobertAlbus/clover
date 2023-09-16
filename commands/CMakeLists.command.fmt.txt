@@ -2,25 +2,21 @@ find_program(
   CLANG_FORMAT_BIN clang-format
 )
 if(CLANG_FORMAT_BIN)
-  file(GLOB_RECURSE FORMAT_SOURCE_LIST
-    CONFIGURE_DEPENDS
-    src/*.cpp src/*.h
-    includes/*.cpp includes/*.h
-    test/*.cc
-  )
-
-  # Create custom target
   add_custom_target(
     fmt
     COMMAND ${CLANG_FORMAT_BIN}
     -i
     -style=file
-    ${FORMAT_SOURCE_LIST}
+    ${SOURCE_LIST_INCLUDES_CPP}
+    ${SOURCE_LIST_INCLUDES_H} 
+    ${SOURCE_LIST_SRC_CPP}
+    ${SOURCE_LIST_SRC_H}
+    ${SOURCE_LIST_TEST_CC}
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
   )
 else()
-    add_custom_target(
-        fmt
-        COMMAND ${CMAKE_COMMAND} -E echo "clang-format binary not found."
-    )
+  add_custom_target(
+    fmt
+    COMMAND ${CMAKE_COMMAND} -E echo "clang-format binary not found."
+  )
 endif()
