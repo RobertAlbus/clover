@@ -45,10 +45,6 @@ int main(int argc, char *argv[]) {
   ////////////////////////////////////////////////////////////////
   // CLOVER POC
 
-  // printf("\nClover Version %d.%d\n", Clover_VERSION_MAJOR,
-  //        Clover_VERSION_MINOR);
-  // printf("\nDefault Audio Device Index: %d\n", Pa_GetDefaultOutputDevice());
-
   Interface interface;
   interface.rootNode.gain(0.5);
   Clover::Util::Time time(160, Clover::Base::sampleRate, &interface.clock);
