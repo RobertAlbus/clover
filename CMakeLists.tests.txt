@@ -1,5 +1,11 @@
-########
+#--------------------------------
 # testing
+
+find_program(CTEST_EXECUTABLE ctest)
+if(NOT CTEST_EXECUTABLE)
+    message(FATAL_ERROR "ctest not found!")
+endif()
+
 include(FetchContent)
 FetchContent_Declare(
   googletest
