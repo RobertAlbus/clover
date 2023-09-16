@@ -158,4 +158,4 @@ include(commands/CMakeLists.commands.txt)
 #--------------------------------
 # tests
 
-include(CMakeLists.tests.txt)
+include(test/CMakeLists.tests.txt)
