@@ -9,12 +9,7 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(googletest)
 enable_testing()
 
-file(GLOB_RECURSE CLOVER_TEST_SOURCE_LIST
-    CONFIGURE_DEPENDS
-    test/*.cc
-)
-
-add_executable(clover_test ${CLOVER_TEST_SOURCE_LIST})
+add_executable(clover_test ${SOURCE_LIST_TEST_CC})
 target_link_libraries(clover_test
     PRIVATE
         Clover

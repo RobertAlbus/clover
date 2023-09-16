@@ -1,10 +1,6 @@
 
 find_program(CLANG_TIDY_BIN clang-tidy)
-file(GLOB_RECURSE TIDY_SOURCE_LIST
-    CONFIGURE_DEPENDS
-    ${CMAKE_SOURCE_DIR}/includes/*.[h;cpp]
-    ${CMAKE_SOURCE_DIR}/test/*.cc
-)
+
 
 if(CLANG_TIDY_BIN)
     add_custom_target(tidy
@@ -16,7 +12,7 @@ if(CLANG_TIDY_BIN)
         -extra-arg=-I/usr/lib/clang/15.0.7/include
         -extra-arg=-I/usr/local/include
         -extra-arg=-I/usr/include
-        ${TIDY_SOURCE_LIST}
+        ${SOURCE_LIST_INCLUDES_CPP} ${SOURCE_LIST_INCLUDES_H} ${SOURCE_LIST_TEST_CC}
     )
 else()
     add_custom_target(tidy
