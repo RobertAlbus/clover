@@ -64,8 +64,10 @@ private:
     const EnvelopeComputation::Point &nextPoint =
         computedEnvelope.points[_nextIndex];
 
-    float elapsedSectionTime = static_cast<float>(_currentClockTime - currentPoint.start);
-    float sectionDuration = static_cast<float>(nextPoint.start - currentPoint.start);
+    float elapsedSectionTime =
+        static_cast<float>(_currentClockTime - currentPoint.start);
+    float sectionDuration =
+        static_cast<float>(nextPoint.start - currentPoint.start);
 
     float lerpAmount = elapsedSectionTime / sectionDuration;
     float lerpValue =
@@ -73,7 +75,7 @@ private:
     float tensionedValue =
         Util::Calc::tension(lerpValue, nextPoint.tension * _tensionScale);
 
-    if (_currentClockTime >= nextPoint.start){
+    if (_currentClockTime >= nextPoint.start) {
       _currentIndex++;
       _nextIndex++;
     }
