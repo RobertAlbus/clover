@@ -45,7 +45,7 @@ TEST(Nodes_Envelope_AutomationClip, ShouldOutputEnvelope) {
   EXPECT_EQ(collector.frames[0][0], 0.f);
   EXPECT_EQ(collector.frames[100][0], 0.f);
   EXPECT_EQ(collector.frames[200][0], 1.f);
-  EXPECT_EQ(collector.frames[250][0], 1.5f);
+  EXPECT_EQ(collector.frames[250][0], 0.75f);
   EXPECT_EQ(collector.frames[300][0], 0.5f);
 }
 
