@@ -148,8 +148,8 @@ add_executable(${PROJECT_NAME}_Demo_Profiling src/main.cpp)
 target_link_libraries(${PROJECT_NAME}_Demo_Profiling PUBLIC ${PROJECT_NAME}_Profiling)
 
 add_custom_target(demo
-  COMMAND ${CMAKE_CURRENT_BINARY_DIR}/Clover_Demo
-  DEPENDS CloverDemo
+  COMMAND ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}_Demo
+  DEPENDS ${PROJECT_NAME}_Demo
   USES_TERMINAL
 )
 
