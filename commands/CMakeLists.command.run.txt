@@ -1,6 +1,6 @@
 add_custom_target(run
-    COMMAND ${CMAKE_BINARY_DIR}/CloverDemo
-    DEPENDS build CloverDemo
+    COMMAND ${CMAKE_BINARY_DIR}/Clover_Demo
+    DEPENDS build Clover_Demo
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
     USES_TERMINAL
 )
