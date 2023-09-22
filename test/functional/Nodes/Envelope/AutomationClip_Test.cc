@@ -20,7 +20,10 @@
 
 #include <gtest/gtest.h>
 
-#include "Clover.h"
+#include "Nodes/Envelope/AutomationClip.h"
+#include "Nodes/Envelope/EnvelopeStruct.h"
+#include "_Test.h"
+
 
 TEST(Nodes_Envelope_AutomationClip, ShouldOutputEnvelope) {
 

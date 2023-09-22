@@ -22,7 +22,7 @@
 
 #include <gtest/gtest.h>
 
-#include "Clover.h"
+#include "Nodes/StepSequencer/StepSequencer.h"
 
 TEST(Nodes_StepSequencer_Pattern, ShouldCreatePatternFromVector) {
 
