@@ -24,8 +24,8 @@ link_libraries(m)
 link_libraries(pthread)
 
 # PortAudio
-add_subdirectory(dependencies/portaudio)
-list(APPEND EXTRA_LIBS PortAudio)
+find_package(portaudio CONFIG REQUIRED)
+list(APPEND EXTRA_LIBS portaudio)
 
 # wave
 option(wave_enable_tests "Build Unit tests" OFF)
@@ -37,7 +37,6 @@ set(RTMIDI_TARGETNAME_UNINSTALL "uninstall_rtmidi" CACHE STRING "Name of 'uninst
 add_subdirectory(dependencies/rtmidi)
 list(APPEND EXTRA_LIBS rtmidi)
 
-set_target_properties(PortAudio PROPERTIES QUIET TRUE)
 set_target_properties(wave PROPERTIES QUIET TRUE)
 set_target_properties(rtmidi PROPERTIES QUIET TRUE)
 
