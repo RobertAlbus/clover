@@ -3,6 +3,7 @@
 # 
 # Composable Signal Graphs for Creative Sound Coding
 #--------------------------------
+include(CMakeLists.vcpkg.txt)
 cmake_minimum_required(VERSION 3.14)
 project(Clover)
 

@@ -4,3 +4,4 @@ experiments
 *.prof 
 callgrind*
 renders/*
+vcpkg_installed
