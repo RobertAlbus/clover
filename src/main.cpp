@@ -38,11 +38,27 @@
 using namespace Clover::IO;
 using namespace Clover::Nodes;
 
+Interface* globalInterface = nullptr;
+extern "C" void handleInterrupt(int sig)
+{
+  if (globalInterface != nullptr)
+  {
+    globalInterface->stop();
+    globalInterface->close();
+  }
+  exit(0);
+}
+
 int main(int argc, char *argv[]) {
   ////////////////////////////////////////////////////////////////
   // CLOVER POC
 
+  Clover::IO::MidiIn::printPorts();
+
   Interface interface;
+  globalInterface = &interface;
+  signal(SIGINT, handleInterrupt);
+
   interface.rootNode.gain(0.5);
   Clover::Util::Time time(160, Clover::Base::sampleRate, &interface.clock);
   Clover::Nodes::Adapter::NullInAdapter<2> nullSink;
