@@ -23,7 +23,12 @@
 #include <assert.h>
 #include <vector>
 
-#include "RtMidi.h"
+// I hate this
+// - rtmidi is kind buggy for me as it is
+// - this include path is unacceptable and I can't manage to work around it
+// - it seems to be rtmidi specific, and won't be the case with PortMidi
+// - TODO: Migrate to PortMidi or something
+#include "vcpkg_installed/x64-linux/include/rtmidi/RtMidi.h"
 
 #include "Graph/AudioNode.h"
 

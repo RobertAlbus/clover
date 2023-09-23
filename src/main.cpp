@@ -29,10 +29,7 @@
 #include <numbers>
 #include <thread>
 
-#include "RtMidi.h"
 #include "portaudio.h"
-
-// #include "Config.h"
 
 #include "Clover.h"
 

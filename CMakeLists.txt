@@ -33,12 +33,10 @@ add_subdirectory(dependencies/wave)
 list(APPEND EXTRA_LIBS wave)
 
 # rtmidi
-set(RTMIDI_TARGETNAME_UNINSTALL "uninstall_rtmidi" CACHE STRING "Name of 'uninstall' build target")
-add_subdirectory(dependencies/rtmidi)
-list(APPEND EXTRA_LIBS rtmidi)
+find_package(rtmidi CONFIG REQUIRED)
+list(APPEND EXTRA_LIBS RtMidi::rtmidi)
 
 set_target_properties(wave PROPERTIES QUIET TRUE)
-set_target_properties(rtmidi PROPERTIES QUIET TRUE)
 
 
 #--------------------------------
@@ -94,6 +92,8 @@ target_include_directories(${PROJECT_NAME}
     PUBLIC
         ${PROJECT_BINARY_DIR}
         ${CMAKE_CURRENT_LIST_DIR}/includes
+        ${CMAKE_SOURCE_DIR}/vcpkg/**/includes/*.h
+        ${CMAKE_SOURCE_DIR}/vcpkg/**/includes/**/*.h
 )
 target_link_libraries(${PROJECT_NAME} PUBLIC ${EXTRA_LIBS})
 
@@ -104,6 +104,8 @@ target_include_directories(${PROJECT_NAME}_Profiling
     PUBLIC
         ${PROJECT_BINARY_DIR}
         ${CMAKE_CURRENT_LIST_DIR}/includes
+        ${CMAKE_SOURCE_DIR}/vcpkg/**/includes/*.h
+        ${CMAKE_SOURCE_DIR}/vcpkg/**/includes/**/*.h
 )
 target_link_libraries(${PROJECT_NAME}_Profiling PUBLIC ${EXTRA_LIBS})
 
@@ -113,6 +115,7 @@ target_include_directories(${PROJECT_NAME}_Strict
     PUBLIC
         ${PROJECT_BINARY_DIR}
         ${CMAKE_CURRENT_LIST_DIR}/includes
+        ${CMAKE_SOURCE_DIR}/vcpkg/**/includes/**
 )
 target_link_libraries(${PROJECT_NAME}_Strict PUBLIC ${EXTRA_LIBS})
 target_compile_options(${PROJECT_NAME}_Strict PRIVATE ${COMMON_ARCH_FLAGS}
