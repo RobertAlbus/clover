@@ -103,7 +103,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC ${EXTRA_LIBS})
 
 
 # Clover - profiling
-add_library(${PROJECT_NAME}_Profiling STATIC ${SOURCE_LIST_INCLUDES_CPP})
+add_library(${PROJECT_NAME}_Profiling STATIC EXCLUDE_FROM_ALL ${SOURCE_LIST_INCLUDES_CPP})
 target_compile_options(${PROJECT_NAME}_Profiling PRIVATE -Ofast -g ${COMMON_ARCH_FLAGS})
 target_link_libraries(${PROJECT_NAME}_Profiling PRIVATE profiler)
 target_include_directories(${PROJECT_NAME}_Profiling
@@ -154,7 +154,7 @@ target_compile_options(${PROJECT_NAME}_Strict PRIVATE ${COMMON_ARCH_FLAGS}
 add_executable(${PROJECT_NAME}_Demo src/main.cpp)
 target_link_libraries(${PROJECT_NAME}_Demo PUBLIC ${PROJECT_NAME})
 
-add_executable(${PROJECT_NAME}_Demo_Profiling src/main.cpp)
+add_executable(${PROJECT_NAME}_Demo_Profiling EXCLUDE_FROM_ALL src/main.cpp)
 target_link_libraries(${PROJECT_NAME}_Demo_Profiling PUBLIC ${PROJECT_NAME}_Profiling)
 
 
