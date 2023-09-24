@@ -86,12 +86,15 @@ endif()
 #--------------------------------
 # libraries
 
+list(APPEND CLOVER_INCLUDE_DIRECTORIES
+    ${PROJECT_BINARY_DIR}
+    ${CMAKE_CURRENT_LIST_DIR}/includes
+)
+
 add_library(${PROJECT_NAME} STATIC ${SOURCE_LIST_INCLUDES_CPP})
 target_compile_options(${PROJECT_NAME} PRIVATE -Ofast ${COMMON_ARCH_FLAGS})
 target_include_directories(${PROJECT_NAME}
-    PUBLIC
-        ${PROJECT_BINARY_DIR}
-        ${CMAKE_CURRENT_LIST_DIR}/includes
+PUBLIC ${CLOVER_INCLUDE_DIRECTORIES}
 )
 target_link_libraries(${PROJECT_NAME} PUBLIC ${EXTRA_LIBS})
 
@@ -99,18 +102,14 @@ add_library(${PROJECT_NAME}_Profiling STATIC ${SOURCE_LIST_INCLUDES_CPP})
 target_compile_options(${PROJECT_NAME}_Profiling PRIVATE -Ofast -g ${COMMON_ARCH_FLAGS})
 target_link_libraries(${PROJECT_NAME}_Profiling PRIVATE profiler)
 target_include_directories(${PROJECT_NAME}_Profiling
-    PUBLIC
-        ${PROJECT_BINARY_DIR}
-        ${CMAKE_CURRENT_LIST_DIR}/includes
+PUBLIC ${CLOVER_INCLUDE_DIRECTORIES}
 )
 target_link_libraries(${PROJECT_NAME}_Profiling PUBLIC ${EXTRA_LIBS})
 
 add_library(${PROJECT_NAME}_Strict STATIC EXCLUDE_FROM_ALL ${SOURCE_LIST_INCLUDES_CPP})
 target_compile_options(${PROJECT_NAME}_Strict PRIVATE -Ofast ${COMMON_ARCH_FLAGS})
 target_include_directories(${PROJECT_NAME}_Strict
-    PUBLIC
-        ${PROJECT_BINARY_DIR}
-        ${CMAKE_CURRENT_LIST_DIR}/includes
+    PUBLIC ${CLOVER_INCLUDE_DIRECTORIES}
 )
 target_link_libraries(${PROJECT_NAME}_Strict PUBLIC ${EXTRA_LIBS})
 target_compile_options(${PROJECT_NAME}_Strict PRIVATE ${COMMON_ARCH_FLAGS}
