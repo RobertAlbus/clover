@@ -88,6 +88,7 @@ endif()
 
 list(APPEND CLOVER_INCLUDE_DIRECTORIES
     ${PROJECT_BINARY_DIR}
+    ${PROJECT_BINARY_DIR}/vcpkg_installed/${VCPKG_TARGET_TRIPLET}/include
     ${CMAKE_CURRENT_LIST_DIR}/includes
 )
 

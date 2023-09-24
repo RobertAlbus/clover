@@ -28,7 +28,7 @@
 // - this import path is not reasonable and is due to a lack of configuration on the upstream code.
 // - requesting vcpkg to see if they can fix it:
 //     - https://github.com/microsoft/vcpkg/issues/33969
-#include "vcpkg_installed/x64-linux/include/rtmidi/RtMidi.h"
+#include "rtmidi/RtMidi.h"
 
 #include "Graph/AudioNode.h"
 
