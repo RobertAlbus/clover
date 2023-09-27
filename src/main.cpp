@@ -157,6 +157,8 @@ int main(int argc, char *argv[]) {
     if (interface.initialize() != paNoError)
       return 1;
 
+    interface.hostInfo();
+
     if (interface.openDevice(Pa_GetDefaultOutputDevice()) != paNoError)
       return 1;
 

@@ -48,6 +48,28 @@ public:
     dup2(saved_stderr, STDERR_FILENO);
   }
 
+  void hostInfo() {
+    printf("\n\nHOST INFO");
+    printf("\nNumber of hosts: %i", (int)Pa_GetHostApiCount());
+
+    int numHostApis = Pa_GetHostApiCount();
+    for (PaHostApiIndex i = 0; i < numHostApis; ++i) {
+      const PaHostApiInfo *hostInfo = Pa_GetHostApiInfo(i);
+      printf("\nHost name: %s", hostInfo->name);
+    }
+
+    printf("\n\n");
+  }
+
+  void terminate() {
+    if (stream != 0) {
+      resultValidation(Pa_AbortStream(stream));
+      stream = 0;
+    }
+
+    resultValidation(Pa_Terminate());
+  }
+
   PaError openDevice(PaDeviceIndex index) {
     PaStreamParameters outputParameters;
 
