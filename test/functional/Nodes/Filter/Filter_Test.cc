@@ -28,7 +28,6 @@
 #include "Util/Calc.h"
 #include "_Test.h"
 
-
 TEST(Nodes_Filter_Filter, ShouldFilterLowPass) {
 
   int testSize = 10000;

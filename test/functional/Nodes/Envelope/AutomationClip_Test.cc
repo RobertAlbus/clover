@@ -24,7 +24,6 @@
 #include "Nodes/Envelope/EnvelopeStruct.h"
 #include "_Test.h"
 
-
 TEST(Nodes_Envelope_AutomationClip, ShouldOutputEnvelope) {
 
   Clover::_Test::HandCrank crank;

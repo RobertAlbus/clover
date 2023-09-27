@@ -35,16 +35,16 @@ TEST(Algorithm_Wavetable_Oscillator_Mono, ShouldBeFast) {
 
   auto start = std::chrono::high_resolution_clock::now();
   for (int i = 0; i < testTimeInSamples; i++) {
-      osc.process();
+    osc.process();
   }
   auto end = std::chrono::high_resolution_clock::now();
 
   std::chrono::minutes audioTime(minutesOfAudio);
   std::chrono::milliseconds audioTimeMilliseconds(audioTime);
-  std::chrono::milliseconds computedTime = 
-    std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-  
-  printf("\nAudio Time: %i milliseconds", audioTimeMilliseconds.count());  
+  std::chrono::milliseconds computedTime =
+      std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+
+  printf("\nAudio Time: %i milliseconds", audioTimeMilliseconds.count());
   printf("\nComputed Time: %i milliseconds", computedTime.count());
 
   bool isRealTime = computedTime < audioTime;

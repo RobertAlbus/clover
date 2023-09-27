@@ -23,7 +23,6 @@
 #include "Nodes/Basic/Gain.h"
 #include "_Test.h"
 
-
 TEST(Nodes_Basic_Gain, ShouldNotModify) {
   Clover::_Test::HandCrank crank;
   Clover::_Test::Collector<1> collector(1);
