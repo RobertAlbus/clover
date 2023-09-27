@@ -68,13 +68,12 @@ public:
         Pa_GetDeviceInfo(outputParameters.device)->defaultLowOutputLatency;
     outputParameters.hostApiSpecificStreamInfo = NULL;
 
-    PaError err = Pa_OpenStream(
-        &stream, NULL, /* no input */
-        &outputParameters, Base::sampleRate, paFramesPerBufferUnspecified,
-        paClipOff, /* we won't output out of range samples so don't bother
-                      clipping them */
-        &Interface::paCallback, this /* Using 'this' for userData so we can cast
-                                        to Interface* in paCallback method */
+    PaError err = Pa_OpenStream(&stream, NULL, /* no input */
+                                &outputParameters, Base::sampleRate,
+                                paFramesPerBufferUnspecified, paNoFlag,
+                                &Interface::paCallback, this
+                                /* Using 'this' for userData so we can cast to
+                                   Interface* paCallback method */
     );
 
     if (err != paNoError) {
