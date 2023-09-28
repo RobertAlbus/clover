@@ -20,6 +20,7 @@
  *
  */
 
+#include <filesystem> // for std::filesystem::remove
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -125,6 +126,8 @@ struct AudioFileRepositoryWav : public AudioFileRepository {
   }
 
   void Delete(const std::string &filePath) override {
-    // Implementation using standard C++ file operations
+    if (!std::filesystem::remove(filePath)) {
+      throw std::runtime_error("Failed to delete the audio file.");
+    }
   }
 };

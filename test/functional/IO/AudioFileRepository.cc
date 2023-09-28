@@ -18,6 +18,8 @@
  *
  */
 
+#include <filesystem>
+
 #include <gtest/gtest.h>
 
 #include "Algo/Wavetable/WavetableOscillatorMono.h"
@@ -26,6 +28,7 @@
 
 TEST(AudioFileRepository_Wav, ShouldWrite) {
   int samplerate = 48000;
+  std::string path = "./TEST.wav";
 
   AudioFileRepositoryWav repository;
   AudioFile file;
@@ -45,8 +48,8 @@ TEST(AudioFileRepository_Wav, ShouldWrite) {
     file.audioData.emplace_back(signal); // R
   }
 
-  repository.Write("./TEST.wav", file);
-  AudioFile readFile = repository.Read("./TEST.wav");
+  repository.Write(path, file);
+  AudioFile readFile = repository.Read(path);
 
   ASSERT_EQ(file.channelConfig, readFile.channelConfig);
   ASSERT_EQ(file.sampleRateHz, readFile.sampleRateHz);
@@ -59,4 +62,8 @@ TEST(AudioFileRepository_Wav, ShouldWrite) {
   for (int i = 0; i < twoSeconds; i++) {
     ASSERT_FLOAT_EQ(file.audioData.at(i), readFile.audioData.at(i));
   }
+
+  ASSERT_TRUE(std::filesystem::exists(path));
+  repository.Delete(path);
+  ASSERT_FALSE(std::filesystem::exists(path));
 }
