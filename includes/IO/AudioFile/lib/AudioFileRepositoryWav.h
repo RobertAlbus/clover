@@ -31,7 +31,44 @@
 
 struct AudioFileRepositoryWav : public AudioFileRepository {
   void Write(const std::string &filePath, const AudioFile &audioFile) override {
-    // Implementation using libsndfile
+    SF_INFO sfinfo;
+    sfinfo.samplerate = audioFile.sampleRateHz;
+    sfinfo.channels = static_cast<int>(audioFile.channelConfig);
+    sfinfo.format = SF_FORMAT_WAV | SF_FORMAT_FLOAT;
+
+    SNDFILE *outfile = sf_open(filePath.c_str(), SFM_WRITE, &sfinfo);
+    if (!outfile) {
+      int err = sf_error(outfile);
+      if (err != SF_ERR_NO_ERROR) {
+        throw std::runtime_error(sf_strerror(outfile));
+      }
+    }
+
+    sf_count_t count = sf_write_float(outfile, audioFile.audioData.data(),
+                                      audioFile.audioData.size());
+
+    if (count != static_cast<sf_count_t>(audioFile.audioData.size())) {
+      int err = sf_error(outfile);
+      sf_close(outfile);
+      if (err != SF_ERR_NO_ERROR) {
+        throw std::runtime_error(sf_strerror(outfile));
+      }
+    }
+
+    std::vector<SF_CUE_POINT> cuePoints;
+    cuePoints.reserve(audioFile.cuePoints.size());
+    for (auto &point : audioFile.cuePoints) {
+      SF_CUE_POINT cuePoint;
+      cuePoint.position = point;
+      cuePoints.push_back(cuePoint);
+    }
+    sf_command(outfile, SFC_SET_CUE, cuePoints.data(), cuePoints.size() * sizeof(SF_CUE_POINT));
+
+    sf_write_sync(outfile);
+    int err = sf_close(outfile);
+    if (err != SF_ERR_NO_ERROR) {
+      throw std::runtime_error(sf_strerror(outfile));
+    }
   }
 
   AudioFile Read(const std::string &filePath) override {
