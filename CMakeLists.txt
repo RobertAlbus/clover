@@ -32,6 +32,10 @@ option(wave_enable_tests "Build Unit tests" OFF)
 add_subdirectory(dependencies/wave)
 list(APPEND EXTRA_LIBS wave)
 
+# libsndfile
+find_package(SndFile CONFIG REQUIRED)
+list(APPEND EXTRA_LIBS SndFile::sndfile)
+
 # rtmidi
 find_package(rtmidi CONFIG REQUIRED)
 list(APPEND EXTRA_LIBS RtMidi::rtmidi)
