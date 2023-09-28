@@ -62,7 +62,8 @@ struct AudioFileRepositoryWav : public AudioFileRepository {
       cuePoint.position = point;
       cuePoints.push_back(cuePoint);
     }
-    sf_command(outfile, SFC_SET_CUE, cuePoints.data(), cuePoints.size() * sizeof(SF_CUE_POINT));
+    sf_command(outfile, SFC_SET_CUE, cuePoints.data(),
+               cuePoints.size() * sizeof(SF_CUE_POINT));
 
     sf_write_sync(outfile);
     int err = sf_close(outfile);
@@ -72,9 +73,50 @@ struct AudioFileRepositoryWav : public AudioFileRepository {
   }
 
   AudioFile Read(const std::string &filePath) override {
-    // Implementation using libsndfile
-    AudioFile f;
-    return f;
+    AudioFile audioFile;
+    SF_INFO sfinfo;
+    SNDFILE *infile = sf_open(filePath.c_str(), SFM_READ, &sfinfo);
+    if (!infile) {
+      int err = sf_error(infile);
+      if (err != SF_ERR_NO_ERROR) {
+        throw std::runtime_error(sf_strerror(infile));
+      }
+    }
+
+    audioFile.sampleRateHz = sfinfo.samplerate;
+    audioFile.channelConfig =
+        static_cast<ChannelConfiguration>(sfinfo.channels);
+
+    std::vector<float> tempAudioData(sfinfo.frames * sfinfo.channels);
+    sf_count_t count =
+        sf_read_float(infile, tempAudioData.data(), tempAudioData.size());
+
+    if (count != static_cast<sf_count_t>(tempAudioData.size())) {
+      int err = sf_error(infile);
+      if (err != SF_ERR_NO_ERROR) {
+        sf_close(infile);
+        throw std::runtime_error(sf_strerror(infile));
+      }
+    }
+
+    audioFile.audioData = std::move(tempAudioData);
+
+    // Reading cue points
+    SF_CUES cues;
+    if (sf_command(infile, SFC_GET_CUE, &cues, sizeof(cues)) == SF_TRUE) {
+      for (unsigned i = 0; i < cues.cue_count; ++i) {
+        audioFile.cuePoints.push_back(cues.cue_points[i].sample_offset);
+      }
+    }
+
+    if (sf_close(infile) != 0) {
+      int err = sf_error(infile);
+      if (err != SF_ERR_NO_ERROR) {
+        throw std::runtime_error(sf_strerror(infile));
+      }
+    }
+
+    return audioFile;
   }
 
   void Append(const std::string &filePath,

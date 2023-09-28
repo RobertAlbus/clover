@@ -46,4 +46,17 @@ TEST(AudioFileRepository_Wav, ShouldWrite) {
   }
 
   repository.Write("./TEST.wav", file);
+  AudioFile readFile = repository.Read("./TEST.wav");
+
+  ASSERT_EQ(file.channelConfig, readFile.channelConfig);
+  ASSERT_EQ(file.sampleRateHz, readFile.sampleRateHz);
+  ASSERT_EQ(file.cuePoints.size(), readFile.cuePoints.size());
+
+  for (int i = 0, end = file.cuePoints.size(); i < end; i++) {
+    ASSERT_FLOAT_EQ(file.cuePoints.at(i), readFile.cuePoints.at(i));
+  }
+
+  for (int i = 0; i < twoSeconds; i++) {
+    ASSERT_FLOAT_EQ(file.audioData.at(i), readFile.audioData.at(i));
+  }
 }
