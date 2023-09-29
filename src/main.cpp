@@ -29,23 +29,42 @@
 #include <numbers>
 #include <thread>
 
-#include "RtMidi.h"
 #include "portaudio.h"
-
-// #include "Config.h"
 
 #include "Clover.h"
 
 #include "NxOscStsqDemo.h"
 
+// keypress terminator
+#include <sys/select.h>
+#include <sys/time.h>
+#include <termios.h>
+#include <unistd.h>
+
 using namespace Clover::IO;
 using namespace Clover::Nodes;
+
+Interface *globalInterface = nullptr;
+extern "C" void handleInterrupt(int sig) {
+  if (globalInterface != nullptr) {
+    globalInterface->stop();
+    globalInterface->close();
+    globalInterface->terminate();
+  }
+  globalInterface = 0;
+  exit(0);
+}
 
 int main(int argc, char *argv[]) {
   ////////////////////////////////////////////////////////////////
   // CLOVER POC
 
+  Clover::IO::MidiIn::printPorts();
+
   Interface interface;
+  globalInterface = &interface;
+  signal(SIGINT, handleInterrupt);
+
   interface.rootNode.gain(0.5);
   Clover::Util::Time time(160, Clover::Base::sampleRate, &interface.clock);
   Clover::Nodes::Adapter::NullInAdapter<2> nullSink;
@@ -144,6 +163,8 @@ int main(int argc, char *argv[]) {
     if (interface.initialize() != paNoError)
       return 1;
 
+    interface.hostInfo();
+
     if (interface.openDevice(Pa_GetDefaultOutputDevice()) != paNoError)
       return 1;
 
@@ -159,9 +180,38 @@ int main(int argc, char *argv[]) {
     // TODO: need a way to determine the composition length but this will do for
     // now. I should be able to compute this value once I have composition-level
     // utilities.
-    std::this_thread::sleep_for(std::chrono::seconds(NUM_SECONDS));
+
+    struct termios oldt, newt;
+    tcgetattr(STDIN_FILENO, &oldt);
+    newt = oldt;
+    newt.c_lflag &= ~(ICANON | ECHO);
+    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+
+    while (true) {
+      fd_set readfds;
+      FD_ZERO(&readfds);
+      FD_SET(STDIN_FILENO, &readfds);
+
+      struct timeval tv;
+      tv.tv_sec = 1;
+      tv.tv_usec = 0;
+
+      if (select(STDIN_FILENO + 1, &readfds, nullptr, nullptr, &tv) > 0) {
+        char c;
+        read(STDIN_FILENO, &c, 1);
+        if (c) {
+          break; // Breaks the loop if a key is pressed
+        }
+      }
+    }
+
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+    // std::this_thread::sleep_for(std::chrono::seconds(NUM_SECONDS));
 
     interface.stop();
+    interface.terminate();
+    globalInterface = 0;
+
     return paNoError;
   }
 }

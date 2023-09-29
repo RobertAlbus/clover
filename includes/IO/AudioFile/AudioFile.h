@@ -1,3 +1,5 @@
+#pragma once
+
 /*
  * /////////
  * // Clover
@@ -18,28 +20,19 @@
  *
  */
 
-#include <gtest/gtest.h>
+#include <cstdint> // for std::int32_t
+#include <vector>
 
-#include "Algo/Envelope/DC.h"
+namespace Clover::IO::AudioFile {
 
-TEST(Algorithm_Envelope_DC, ShouldInitializeAtZero) {
-  Clover::Envelope::DC<float> dc;
+struct AudioFile {
+  AudioFile() : audioData(), channelCount(0), cuePoints(), sampleRateHz(0) {}
 
-  EXPECT_EQ(dc.process(), 0.f);
-  EXPECT_EQ(dc.process(), 0.f);
-  EXPECT_EQ(dc.process(), 0.f);
-}
+  std::vector<float> audioData;
+  std::vector<std::int32_t> cuePoints;
 
-TEST(Algorithm_Envelope_DC, ShouldOutputDC) {
-  Clover::Envelope::DC<float> dc(1.);
+  int channelCount;
+  std::int32_t sampleRateHz;
+};
 
-  EXPECT_EQ(dc.process(), 1.f);
-  EXPECT_EQ(dc.process(), 1.f);
-  EXPECT_EQ(dc.process(), 1.f);
-
-  dc.value(2.);
-
-  EXPECT_EQ(dc.process(), 2.f);
-  EXPECT_EQ(dc.process(), 2.f);
-  EXPECT_EQ(dc.process(), 2.f);
-}
+} // namespace Clover::IO::AudioFile

@@ -37,6 +37,15 @@ namespace Clover::IO {
 class Interface : public Base {
 public:
   Interface() : stream(0) {}
+  ~Interface() {
+    if (stream != 0) {
+      stop();
+      close();
+      stream = 0;
+    }
+
+    Pa_Terminate();
+  }
 
   PaError initialize() {
     int saved_stderr = dup(STDERR_FILENO);
@@ -46,6 +55,28 @@ public:
     return resultValidation(Pa_Initialize());
 
     dup2(saved_stderr, STDERR_FILENO);
+  }
+
+  void hostInfo() {
+    printf("\n\nHOST INFO");
+    printf("\nNumber of hosts: %i", (int)Pa_GetHostApiCount());
+
+    int numHostApis = Pa_GetHostApiCount();
+    for (PaHostApiIndex i = 0; i < numHostApis; ++i) {
+      const PaHostApiInfo *hostInfo = Pa_GetHostApiInfo(i);
+      printf("\nHost name: %s", hostInfo->name);
+    }
+
+    printf("\n\n");
+  }
+
+  void terminate() {
+    if (stream != 0) {
+      resultValidation(Pa_AbortStream(stream));
+      stream = 0;
+    }
+
+    resultValidation(Pa_Terminate());
   }
 
   PaError openDevice(PaDeviceIndex index) {
@@ -68,13 +99,12 @@ public:
         Pa_GetDeviceInfo(outputParameters.device)->defaultLowOutputLatency;
     outputParameters.hostApiSpecificStreamInfo = NULL;
 
-    PaError err = Pa_OpenStream(
-        &stream, NULL, /* no input */
-        &outputParameters, Base::sampleRate, paFramesPerBufferUnspecified,
-        paClipOff, /* we won't output out of range samples so don't bother
-                      clipping them */
-        &Interface::paCallback, this /* Using 'this' for userData so we can cast
-                                        to Interface* in paCallback method */
+    PaError err = Pa_OpenStream(&stream, NULL, /* no input */
+                                &outputParameters, Base::sampleRate,
+                                paFramesPerBufferUnspecified, paNoFlag,
+                                &Interface::paCallback, this
+                                /* Using 'this' for userData so we can cast to
+                                   Interface* paCallback method */
     );
 
     if (err != paNoError) {

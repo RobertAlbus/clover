@@ -20,7 +20,8 @@
 
 #include <gtest/gtest.h>
 
-#include "Clover.h"
+#include "Graph/AudioFrame.h"
+#include "Graph/FrameHistory.h"
 
 TEST(Graph_FrameHistory, ShouldInitialize) {
   Clover::Graph::FrameHistory<Clover::Graph::AudioFrame<1>> frameHistory;

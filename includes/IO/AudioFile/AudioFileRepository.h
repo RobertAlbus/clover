@@ -1,3 +1,5 @@
+#pragma once
+
 /*
  * /////////
  * // Clover
@@ -18,28 +20,23 @@
  *
  */
 
-#include <gtest/gtest.h>
+#include <string>
+#include <vector>
 
-#include "Algo/Envelope/DC.h"
+#include "AudioFile.h"
+#include "AudioFileWriteSettings.h"
 
-TEST(Algorithm_Envelope_DC, ShouldInitializeAtZero) {
-  Clover::Envelope::DC<float> dc;
+namespace Clover::IO::AudioFile {
 
-  EXPECT_EQ(dc.process(), 0.f);
-  EXPECT_EQ(dc.process(), 0.f);
-  EXPECT_EQ(dc.process(), 0.f);
-}
+struct AudioFileRepository {
+  virtual ~AudioFileRepository() = default;
 
-TEST(Algorithm_Envelope_DC, ShouldOutputDC) {
-  Clover::Envelope::DC<float> dc(1.);
+  virtual void Write(const WriteSpec &writeSpec,
+                     const AudioFile &audioFile) = 0;
+  virtual AudioFile Read(const std::string &filePath) = 0;
+  virtual void Append(const WriteSpec &writeSpec,
+                      const AudioFile &audioFile) = 0;
+  virtual void Delete(const std::string &filePath) = 0;
+};
 
-  EXPECT_EQ(dc.process(), 1.f);
-  EXPECT_EQ(dc.process(), 1.f);
-  EXPECT_EQ(dc.process(), 1.f);
-
-  dc.value(2.);
-
-  EXPECT_EQ(dc.process(), 2.f);
-  EXPECT_EQ(dc.process(), 2.f);
-  EXPECT_EQ(dc.process(), 2.f);
-}
+} // namespace Clover::IO::AudioFile

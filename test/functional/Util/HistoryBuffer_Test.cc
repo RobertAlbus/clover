@@ -20,7 +20,7 @@
 
 #include <gtest/gtest.h>
 
-#include "Clover.h"
+#include "Util/HistoryBuffer.h"
 
 TEST(Util_HistoryBuffer, ShouldHaveSize) {
   HistoryBuffer<float> buff(3);

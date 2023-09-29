@@ -20,7 +20,8 @@
 
 #include <gtest/gtest.h>
 
-#include "Clover.h"
+#include "Util/MusicTime.h"
+#include "Util/SampleClock.h"
 
 TEST(Util_MusicTime, ShouldProvideCorrectTime) {
   float sampleRate = 48000.0;

@@ -23,7 +23,17 @@
 #include <assert.h>
 #include <vector>
 
-#include "RtMidi.h"
+// clang-format off
+
+// - rtmidi is kind buggy for me
+// - this import path is only possible because I added vcpkg to the include dirs in cmake
+//   - otherwise import is a full relative path to vcpkg_installed path for RtMidi
+//   - obviously not reasonable and is due to a lack of configuration on the upstream code
+// - requesting vcpkg to see if they can fix it:
+//     - https://github.com/microsoft/vcpkg/issues/33969
+
+// clang-format on
+#include "rtmidi/RtMidi.h"
 
 #include "Graph/AudioNode.h"
 
@@ -72,7 +82,7 @@ public:
     }
   }
 
-  void printChange(bool shouldPrint) { _printChange = shouldPrint; }
+  void printChange(bool shouldPrint);
   bool printChange() { return _printChange; }
 
   int getPortNumberByName(const std::string &selectedDeveiceName) {

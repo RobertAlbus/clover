@@ -20,7 +20,7 @@
 
 #include <gtest/gtest.h>
 
-#include "Clover.h"
+#include "Util/Calc.h"
 
 TEST(Util_Calc, ShouldCalculateFreqDifferenceBySemitone) {
   EXPECT_EQ(Clover::Util::Calc::freqBySemitoneDifference(1000, 12), 2000);

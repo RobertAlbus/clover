@@ -1,0 +1,15 @@
+#--------------------------------
+# vcpkg package manager
+
+find_program(VCPKG_BIN vcpkg)
+if(NOT VCPKG_BIN)
+    message(FATAL_ERROR "vcpkg must be installed")
+endif()
+if(NOT DEFINED ENV{VCPKG_ROOT})
+    message(FATAL_ERROR "Environment variable VCPKG_ROOT is not defined. Please set it to the vcpkg directory.")
+endif()
+if(NOT EXISTS "$ENV{VCPKG_ROOT}")
+    message(FATAL_ERROR "The vcpkg directory specified by VCPKG_ROOT ('$ENV{VCPKG_ROOT}') does not exist. Please ensure it points to a valid vcpkg installation.")
+endif()
+
+set(CMAKE_TOOLCHAIN_FILE "$ENV{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
