@@ -27,11 +27,6 @@ link_libraries(pthread)
 find_package(portaudio CONFIG REQUIRED)
 list(APPEND EXTRA_LIBS portaudio)
 
-# wave
-option(wave_enable_tests "Build Unit tests" OFF)
-add_subdirectory(dependencies/wave)
-list(APPEND EXTRA_LIBS wave)
-
 # libsndfile
 find_package(SndFile CONFIG REQUIRED)
 list(APPEND EXTRA_LIBS SndFile::sndfile)
@@ -39,9 +34,6 @@ list(APPEND EXTRA_LIBS SndFile::sndfile)
 # rtmidi
 find_package(rtmidi CONFIG REQUIRED)
 list(APPEND EXTRA_LIBS RtMidi::rtmidi)
-
-set_target_properties(wave PROPERTIES QUIET TRUE)
-
 
 #--------------------------------
 # source globs
