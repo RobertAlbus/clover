@@ -24,7 +24,7 @@
 
 #include "Algo/Wavetable/WavetableOscillatorMono.h"
 #include "IO/AudioFile/AudioFile.h"
-#include "IO/AudioFile/lib/AudioFileRepositoryWav.h"
+#include "IO/AudioFile/lib/AudioFileRepository_libsndfile.h"
 
 TEST(AudioFileRepository_Wav, ShouldWrite) {
   int samplerate = 48000;
