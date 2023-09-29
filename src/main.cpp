@@ -38,14 +38,14 @@
 using namespace Clover::IO;
 using namespace Clover::Nodes;
 
-Interface* globalInterface = nullptr;
-extern "C" void handleInterrupt(int sig)
-{
-  if (globalInterface != nullptr)
-  {
+Interface *globalInterface = nullptr;
+extern "C" void handleInterrupt(int sig) {
+  if (globalInterface != nullptr) {
     globalInterface->stop();
     globalInterface->close();
+    globalInterface->terminate();
   }
+  globalInterface = 0;
   exit(0);
 }
 
