@@ -38,22 +38,13 @@ struct AudioFileRepositoryWav : public AudioFileRepository {
     sfinfo.format = SF_FORMAT_WAV | SF_FORMAT_FLOAT;
 
     SNDFILE *file = sf_open(filePath.c_str(), SFM_WRITE, &sfinfo);
-    if (!file) {
-      int err = sf_error(file);
-      if (err != SF_ERR_NO_ERROR) {
-        throw std::runtime_error(sf_strerror(file));
-      }
-    }
+    throwIfFails(file, sf_error(file));
 
     sf_count_t count = sf_write_float(file, audioFile.audioData.data(),
                                       audioFile.audioData.size());
 
     if (count != static_cast<sf_count_t>(audioFile.audioData.size())) {
-      int err = sf_error(file);
-      sf_close(file);
-      if (err != SF_ERR_NO_ERROR) {
-        throw std::runtime_error(sf_strerror(file));
-      }
+      throwIfFails(file, sf_error(file));
     }
 
     std::vector<SF_CUE_POINT> cuePoints;
@@ -67,51 +58,39 @@ struct AudioFileRepositoryWav : public AudioFileRepository {
                cuePoints.size() * sizeof(SF_CUE_POINT));
 
     sf_write_sync(file);
-    int err = sf_close(file);
-    if (err != SF_ERR_NO_ERROR) {
-      throw std::runtime_error(sf_strerror(file));
-    }
+    throwIfFails(file, sf_close(file));
   }
 
   AudioFile Read(const std::string &filePath) override {
     AudioFile audioFile;
     SF_INFO sfinfo;
-    SNDFILE *infile = sf_open(filePath.c_str(), SFM_READ, &sfinfo);
-    if (!infile || sf_error(infile) != SF_ERR_NO_ERROR) {
-      int err = sf_error(infile);
-      if (err != SF_ERR_NO_ERROR) {
-        throw std::runtime_error(sf_strerror(infile));
-      }
-    }
+    SNDFILE *file = sf_open(filePath.c_str(), SFM_READ, &sfinfo);
+    throwIfFails(file, sf_error(file));
 
     audioFile.sampleRateHz = sfinfo.samplerate;
     audioFile.channelConfig =
         static_cast<ChannelConfiguration>(sfinfo.channels);
 
     audioFile.audioData.resize(sfinfo.frames * sfinfo.channels);
-    sf_count_t count = sf_read_float(infile, audioFile.audioData.data(),
+    sf_count_t count = sf_read_float(file, audioFile.audioData.data(),
                                      audioFile.audioData.size());
 
     if (count != static_cast<sf_count_t>(audioFile.audioData.size())) {
-      int err = sf_error(infile);
-      if (err != SF_ERR_NO_ERROR) {
-        sf_close(infile);
-        throw std::runtime_error(sf_strerror(infile));
-      }
+      throwIfFails(file, sf_error(file));
     }
 
     // Reading cue points
     SF_CUES cues;
-    if (sf_command(infile, SFC_GET_CUE, &cues, sizeof(cues)) == SF_TRUE) {
+    if (sf_command(file, SFC_GET_CUE, &cues, sizeof(cues)) == SF_TRUE) {
       for (unsigned i = 0; i < cues.cue_count; ++i) {
         audioFile.cuePoints.push_back(cues.cue_points[i].sample_offset);
       }
     }
 
-    if (sf_close(infile) != 0) {
-      int err = sf_error(infile);
+    if (sf_close(file) != 0) {
+      int err = sf_error(file);
       if (err != SF_ERR_NO_ERROR) {
-        throw std::runtime_error(sf_strerror(infile));
+        throw std::runtime_error(sf_strerror(file));
       }
     }
 
@@ -123,12 +102,7 @@ struct AudioFileRepositoryWav : public AudioFileRepository {
     SF_INFO sfinfo;
     SNDFILE *file = sf_open(filePath.c_str(), SFM_RDWR, &sfinfo);
 
-    if (!file) {
-      int err = sf_error(file);
-      if (err != SF_ERR_NO_ERROR) {
-        throw std::runtime_error(sf_strerror(file));
-      }
-    }
+    throwIfFails(file, sf_error(file));
 
     bool sampleRatesMismatch = sfinfo.samplerate != audioFile.sampleRateHz;
     if (sampleRatesMismatch) {
@@ -152,23 +126,31 @@ struct AudioFileRepositoryWav : public AudioFileRepository {
                                       audioFile.audioData.size());
 
     if (count != static_cast<sf_count_t>(audioFile.audioData.size())) {
-      int err = sf_error(file);
-      sf_close(file);
-      if (err != SF_ERR_NO_ERROR) {
-        throw std::runtime_error(sf_strerror(file));
-      }
+      throwIfFails(file, sf_error(file));
     }
 
     sf_write_sync(file);
-    int err = sf_close(file);
-    if (err != SF_ERR_NO_ERROR) {
-      throw std::runtime_error(sf_strerror(file));
-    }
+    throwIfFails(file, sf_close(file));
   }
 
   void Delete(const std::string &filePath) override {
     if (!std::filesystem::remove(filePath)) {
       throw std::runtime_error("Failed to delete the audio file.");
+    }
+  }
+
+private:
+  void throwIfFails(SNDFILE *sndfile, int resultCode) {
+    bool hasError = resultCode != SF_ERR_NO_ERROR;
+    bool hasFile = !!sndfile;
+
+    const char *errorMessage = sf_strerror(sndfile);
+
+    if (hasFile && hasError) {
+      sf_close(sndfile);
+    }
+    if (hasError) {
+      throw std::runtime_error(errorMessage);
     }
   }
 };
