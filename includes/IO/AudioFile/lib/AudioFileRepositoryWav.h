@@ -122,7 +122,50 @@ struct AudioFileRepositoryWav : public AudioFileRepository {
 
   void Append(const std::string &filePath,
               const AudioFile &audioFile) override {
-    // Implementation using libsndfile
+    SF_INFO sfinfo;
+    SNDFILE *file = sf_open(filePath.c_str(), SFM_RDWR, &sfinfo);
+
+    if (!file) {
+      int err = sf_error(file);
+      if (err != SF_ERR_NO_ERROR) {
+        throw std::runtime_error(sf_strerror(file));
+      }
+    }
+
+    bool sampleRatesMismatch = sfinfo.samplerate != audioFile.sampleRateHz;
+    if (sampleRatesMismatch) {
+      sf_close(file);
+      throw std::runtime_error(
+          "Incompatible sample rate when appending audio to file: path=[" +
+          filePath + "]");
+    }
+
+    bool channelCountMismatch =
+        sfinfo.channels != static_cast<int>(audioFile.channelConfig);
+    if (channelCountMismatch) {
+      sf_close(file);
+      throw std::runtime_error(
+          "Incompatible channel count when appending audio to file: path=[" +
+          filePath + "]");
+    }
+
+    sf_seek(file, 0, SEEK_END);
+    sf_count_t count = sf_write_float(file, audioFile.audioData.data(),
+                                      audioFile.audioData.size());
+
+    if (count != static_cast<sf_count_t>(audioFile.audioData.size())) {
+      int err = sf_error(file);
+      sf_close(file);
+      if (err != SF_ERR_NO_ERROR) {
+        throw std::runtime_error(sf_strerror(file));
+      }
+    }
+
+    sf_write_sync(file);
+    int err = sf_close(file);
+    if (err != SF_ERR_NO_ERROR) {
+      throw std::runtime_error(sf_strerror(file));
+    }
   }
 
   void Delete(const std::string &filePath) override {

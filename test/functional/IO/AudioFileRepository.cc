@@ -59,8 +59,24 @@ TEST(AudioFileRepository_Wav, ShouldWrite) {
     ASSERT_FLOAT_EQ(file.cuePoints.at(i), readFile.cuePoints.at(i));
   }
 
-  for (int i = 0; i < twoSeconds; i++) {
-    ASSERT_FLOAT_EQ(file.audioData.at(i), readFile.audioData.at(i));
+  for (int i = 0; i < twoSeconds * channelCount; i++) {
+    float fileData = readFile.audioData.at(i);
+    float audioData = file.audioData.at(i);
+    EXPECT_FLOAT_EQ(fileData, audioData);
+  }
+
+  repository.Append(path, file);
+  readFile = repository.Read(path);
+
+  int fourSeconds = twoSeconds * 2;
+
+  int dataSize = fourSeconds * channelCount;
+  EXPECT_EQ(readFile.audioData.size(), dataSize);
+  for (int i = 0; i < dataSize; i++) {
+    float fileData = readFile.audioData.at(i);
+    float audioData = file.audioData.at(i % (twoSeconds * channelCount));
+
+    EXPECT_FLOAT_EQ(fileData, audioData) << "???";
   }
 
   ASSERT_TRUE(std::filesystem::exists(path));
