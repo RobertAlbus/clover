@@ -30,7 +30,7 @@
 #include "../AudioFile.h"
 #include "../AudioFileRepository.h"
 
-struct AudioFileRepositoryWav : public AudioFileRepository {
+struct AudioFileRepository_libsndfile : public AudioFileRepository {
   void Write(const AudioFileWriteSpec &writeSpec,
              const AudioFile &audioFile) override {
     const char *filePath = writeSpec.first;

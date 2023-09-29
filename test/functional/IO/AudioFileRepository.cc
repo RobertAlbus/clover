@@ -32,7 +32,7 @@ TEST(AudioFileRepository_Wav, ShouldWrite) {
   std::string path = "./TEST.wav";
   int channelCount = 2;
 
-  AudioFileRepositoryWav repository;
+  AudioFileRepository_libsndfile repository;
   AudioFile file;
 
   file.channelCount = 2;
