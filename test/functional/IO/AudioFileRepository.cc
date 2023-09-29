@@ -29,6 +29,7 @@
 TEST(AudioFileRepository_Wav, ShouldWrite) {
   int samplerate = 48000;
   std::string path = "./TEST.wav";
+  int channelCount = 2;
 
   AudioFileRepositoryWav repository;
   AudioFile file;
@@ -51,12 +52,12 @@ TEST(AudioFileRepository_Wav, ShouldWrite) {
   repository.Write(path, file);
   AudioFile readFile = repository.Read(path);
 
-  ASSERT_EQ(file.channelConfig, readFile.channelConfig);
-  ASSERT_EQ(file.sampleRateHz, readFile.sampleRateHz);
-  ASSERT_EQ(file.cuePoints.size(), readFile.cuePoints.size());
+  EXPECT_EQ(file.channelConfig, readFile.channelConfig);
+  EXPECT_EQ(file.sampleRateHz, readFile.sampleRateHz);
+  EXPECT_EQ(file.cuePoints.size(), readFile.cuePoints.size());
 
   for (int i = 0, end = file.cuePoints.size(); i < end; i++) {
-    ASSERT_FLOAT_EQ(file.cuePoints.at(i), readFile.cuePoints.at(i));
+    EXPECT_FLOAT_EQ(file.cuePoints.at(i), readFile.cuePoints.at(i));
   }
 
   for (int i = 0; i < twoSeconds * channelCount; i++) {
@@ -79,7 +80,7 @@ TEST(AudioFileRepository_Wav, ShouldWrite) {
     EXPECT_FLOAT_EQ(fileData, audioData) << "???";
   }
 
-  ASSERT_TRUE(std::filesystem::exists(path));
+  EXPECT_TRUE(std::filesystem::exists(path));
   repository.Delete(path);
-  ASSERT_FALSE(std::filesystem::exists(path));
+  EXPECT_FALSE(std::filesystem::exists(path));
 }

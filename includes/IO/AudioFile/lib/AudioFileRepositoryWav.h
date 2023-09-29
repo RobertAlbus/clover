@@ -37,22 +37,22 @@ struct AudioFileRepositoryWav : public AudioFileRepository {
     sfinfo.channels = static_cast<int>(audioFile.channelConfig);
     sfinfo.format = SF_FORMAT_WAV | SF_FORMAT_FLOAT;
 
-    SNDFILE *outfile = sf_open(filePath.c_str(), SFM_WRITE, &sfinfo);
-    if (!outfile) {
-      int err = sf_error(outfile);
+    SNDFILE *file = sf_open(filePath.c_str(), SFM_WRITE, &sfinfo);
+    if (!file) {
+      int err = sf_error(file);
       if (err != SF_ERR_NO_ERROR) {
-        throw std::runtime_error(sf_strerror(outfile));
+        throw std::runtime_error(sf_strerror(file));
       }
     }
 
-    sf_count_t count = sf_write_float(outfile, audioFile.audioData.data(),
+    sf_count_t count = sf_write_float(file, audioFile.audioData.data(),
                                       audioFile.audioData.size());
 
     if (count != static_cast<sf_count_t>(audioFile.audioData.size())) {
-      int err = sf_error(outfile);
-      sf_close(outfile);
+      int err = sf_error(file);
+      sf_close(file);
       if (err != SF_ERR_NO_ERROR) {
-        throw std::runtime_error(sf_strerror(outfile));
+        throw std::runtime_error(sf_strerror(file));
       }
     }
 
@@ -63,13 +63,13 @@ struct AudioFileRepositoryWav : public AudioFileRepository {
       cuePoint.position = point;
       cuePoints.push_back(cuePoint);
     }
-    sf_command(outfile, SFC_SET_CUE, cuePoints.data(),
+    sf_command(file, SFC_SET_CUE, cuePoints.data(),
                cuePoints.size() * sizeof(SF_CUE_POINT));
 
-    sf_write_sync(outfile);
-    int err = sf_close(outfile);
+    sf_write_sync(file);
+    int err = sf_close(file);
     if (err != SF_ERR_NO_ERROR) {
-      throw std::runtime_error(sf_strerror(outfile));
+      throw std::runtime_error(sf_strerror(file));
     }
   }
 
@@ -77,7 +77,7 @@ struct AudioFileRepositoryWav : public AudioFileRepository {
     AudioFile audioFile;
     SF_INFO sfinfo;
     SNDFILE *infile = sf_open(filePath.c_str(), SFM_READ, &sfinfo);
-    if (!infile) {
+    if (!infile || sf_error(infile) != SF_ERR_NO_ERROR) {
       int err = sf_error(infile);
       if (err != SF_ERR_NO_ERROR) {
         throw std::runtime_error(sf_strerror(infile));
@@ -88,19 +88,17 @@ struct AudioFileRepositoryWav : public AudioFileRepository {
     audioFile.channelConfig =
         static_cast<ChannelConfiguration>(sfinfo.channels);
 
-    std::vector<float> tempAudioData(sfinfo.frames * sfinfo.channels);
-    sf_count_t count =
-        sf_read_float(infile, tempAudioData.data(), tempAudioData.size());
+    audioFile.audioData.resize(sfinfo.frames * sfinfo.channels);
+    sf_count_t count = sf_read_float(infile, audioFile.audioData.data(),
+                                     audioFile.audioData.size());
 
-    if (count != static_cast<sf_count_t>(tempAudioData.size())) {
+    if (count != static_cast<sf_count_t>(audioFile.audioData.size())) {
       int err = sf_error(infile);
       if (err != SF_ERR_NO_ERROR) {
         sf_close(infile);
         throw std::runtime_error(sf_strerror(infile));
       }
     }
-
-    audioFile.audioData = std::move(tempAudioData);
 
     // Reading cue points
     SF_CUES cues;
