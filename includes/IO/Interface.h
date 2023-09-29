@@ -37,6 +37,15 @@ namespace Clover::IO {
 class Interface : public Base {
 public:
   Interface() : stream(0) {}
+  ~Interface() {
+    if (stream != 0) {
+      stop();
+      close();
+      stream = 0;
+    }
+
+    Pa_Terminate();
+  }
 
   PaError initialize() {
     int saved_stderr = dup(STDERR_FILENO);
