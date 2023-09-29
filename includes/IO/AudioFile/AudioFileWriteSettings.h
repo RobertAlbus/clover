@@ -106,3 +106,6 @@ private:
 
 using AudioFileWriteSettings =
     std::variant<AudioFileWriteSettingsPcm, AudioFileWriteSettingsMp3>;
+
+using AudioFileWriteSpec =
+    std::pair<const char *, const AudioFileWriteSettings>;

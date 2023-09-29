@@ -24,14 +24,15 @@
 #include <vector>
 
 #include "AudioFile.h"
+#include "AudioFileWriteSettings.h"
 
 struct AudioFileRepository {
   virtual ~AudioFileRepository() = default;
 
-  virtual void Write(const std::string &filePath,
+  virtual void Write(const AudioFileWriteSpec &writeSpec,
                      const AudioFile &audioFile) = 0;
   virtual AudioFile Read(const std::string &filePath) = 0;
-  virtual void Append(const std::string &filePath,
+  virtual void Append(const AudioFileWriteSpec &writeSpec,
                       const AudioFile &audioFile) = 0;
   virtual void Delete(const std::string &filePath) = 0;
 };

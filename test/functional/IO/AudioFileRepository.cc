@@ -24,6 +24,7 @@
 
 #include "Algo/Wavetable/WavetableOscillatorMono.h"
 #include "IO/AudioFile/AudioFile.h"
+#include "IO/AudioFile/AudioFileWriteSettings.h"
 #include "IO/AudioFile/lib/AudioFileRepository_libsndfile.h"
 
 TEST(AudioFileRepository_Wav, ShouldWrite) {
@@ -49,7 +50,9 @@ TEST(AudioFileRepository_Wav, ShouldWrite) {
     file.audioData.emplace_back(signal); // R
   }
 
-  repository.Write(path, file);
+  auto writeSettings =
+      std::make_pair(path.c_str(), AudioFileWriteSettingsPcm::cd());
+  repository.Write(writeSettings, file);
   AudioFile readFile = repository.Read(path);
 
   EXPECT_EQ(file.channelCount, readFile.channelCount);
@@ -66,7 +69,7 @@ TEST(AudioFileRepository_Wav, ShouldWrite) {
     EXPECT_FLOAT_EQ(fileData, audioData);
   }
 
-  repository.Append(path, file);
+  repository.Append(writeSettings, file);
   readFile = repository.Read(path);
 
   int fourSeconds = twoSeconds * 2;

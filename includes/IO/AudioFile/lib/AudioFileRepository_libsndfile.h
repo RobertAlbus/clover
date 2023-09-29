@@ -31,13 +31,16 @@
 #include "../AudioFileRepository.h"
 
 struct AudioFileRepositoryWav : public AudioFileRepository {
-  void Write(const std::string &filePath, const AudioFile &audioFile) override {
+  void Write(const AudioFileWriteSpec &writeSpec,
+             const AudioFile &audioFile) override {
+    const char *filePath = writeSpec.first;
+
     SF_INFO sfinfo;
     sfinfo.samplerate = audioFile.sampleRateHz;
     sfinfo.channels = audioFile.channelCount;
     sfinfo.format = SF_FORMAT_WAV | SF_FORMAT_FLOAT;
 
-    SNDFILE *file = sf_open(filePath.c_str(), SFM_WRITE, &sfinfo);
+    SNDFILE *file = sf_open(filePath, SFM_WRITE, &sfinfo);
     throwIfFails(file, sf_error(file));
 
     sf_count_t count = sf_write_float(file, audioFile.audioData.data(),
@@ -96,10 +99,11 @@ struct AudioFileRepositoryWav : public AudioFileRepository {
     return audioFile;
   }
 
-  void Append(const std::string &filePath,
+  void Append(const AudioFileWriteSpec &writeSpec,
               const AudioFile &audioFile) override {
+    const char *filePath = writeSpec.first;
     SF_INFO sfinfo;
-    SNDFILE *file = sf_open(filePath.c_str(), SFM_RDWR, &sfinfo);
+    SNDFILE *file = sf_open(filePath, SFM_RDWR, &sfinfo);
 
     throwIfFails(file, sf_error(file));
 
@@ -108,7 +112,7 @@ struct AudioFileRepositoryWav : public AudioFileRepository {
       sf_close(file);
       throw std::runtime_error(
           "Incompatible sample rate when appending audio to file: path=[" +
-          filePath + "]");
+          std::string(filePath) + "]");
     }
 
     bool channelCountMismatch = sfinfo.channels != audioFile.channelCount;
@@ -116,7 +120,7 @@ struct AudioFileRepositoryWav : public AudioFileRepository {
       sf_close(file);
       throw std::runtime_error(
           "Incompatible channel count when appending audio to file: path=[" +
-          filePath + "]");
+          std::string(filePath) + "]");
     }
 
     sf_seek(file, 0, SEEK_END);
