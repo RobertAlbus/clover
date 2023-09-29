@@ -34,7 +34,7 @@ TEST(AudioFileRepository_Wav, ShouldWrite) {
   AudioFileRepositoryWav repository;
   AudioFile file;
 
-  file.channelConfig = ChannelConfiguration::Stereo;
+  file.channelCount = 2;
   file.sampleRateHz = samplerate;
 
   Clover::Wavetable::WavetableOscillatorMono<float> osc(samplerate);
@@ -52,7 +52,7 @@ TEST(AudioFileRepository_Wav, ShouldWrite) {
   repository.Write(path, file);
   AudioFile readFile = repository.Read(path);
 
-  EXPECT_EQ(file.channelConfig, readFile.channelConfig);
+  EXPECT_EQ(file.channelCount, readFile.channelCount);
   EXPECT_EQ(file.sampleRateHz, readFile.sampleRateHz);
   EXPECT_EQ(file.cuePoints.size(), readFile.cuePoints.size());
 

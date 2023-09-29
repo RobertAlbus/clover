@@ -23,21 +23,12 @@
 #include <cstdint> // for std::int32_t
 #include <vector>
 
-enum struct ChannelConfiguration {
-  None = 0,
-  Mono = 1,
-  Stereo = 2,
-  Quadraphonic = 4,
-  Surround5_1 = 6
-};
-
 struct AudioFile {
-  AudioFile()
-      : audioData(), channelConfig(ChannelConfiguration::None), cuePoints(),
-        sampleRateHz(0) {}
+  AudioFile() : audioData(), channelCount(0), cuePoints(), sampleRateHz(0) {}
 
   std::vector<float> audioData;
-  ChannelConfiguration channelConfig;
   std::vector<std::int32_t> cuePoints;
+
+  int channelCount;
   std::int32_t sampleRateHz;
 };

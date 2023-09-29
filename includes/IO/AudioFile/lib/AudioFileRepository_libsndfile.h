@@ -34,7 +34,7 @@ struct AudioFileRepositoryWav : public AudioFileRepository {
   void Write(const std::string &filePath, const AudioFile &audioFile) override {
     SF_INFO sfinfo;
     sfinfo.samplerate = audioFile.sampleRateHz;
-    sfinfo.channels = static_cast<int>(audioFile.channelConfig);
+    sfinfo.channels = audioFile.channelCount;
     sfinfo.format = SF_FORMAT_WAV | SF_FORMAT_FLOAT;
 
     SNDFILE *file = sf_open(filePath.c_str(), SFM_WRITE, &sfinfo);
@@ -68,8 +68,7 @@ struct AudioFileRepositoryWav : public AudioFileRepository {
     throwIfFails(file, sf_error(file));
 
     audioFile.sampleRateHz = sfinfo.samplerate;
-    audioFile.channelConfig =
-        static_cast<ChannelConfiguration>(sfinfo.channels);
+    audioFile.channelCount = sfinfo.channels;
 
     audioFile.audioData.resize(sfinfo.frames * sfinfo.channels);
     sf_count_t count = sf_read_float(file, audioFile.audioData.data(),
@@ -112,8 +111,7 @@ struct AudioFileRepositoryWav : public AudioFileRepository {
           filePath + "]");
     }
 
-    bool channelCountMismatch =
-        sfinfo.channels != static_cast<int>(audioFile.channelConfig);
+    bool channelCountMismatch = sfinfo.channels != audioFile.channelCount;
     if (channelCountMismatch) {
       sf_close(file);
       throw std::runtime_error(
