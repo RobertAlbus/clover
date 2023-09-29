@@ -22,90 +22,79 @@
 
 #include <variant>
 
+namespace Clover::IO::AudioFile {
+
 // clang-format off
-enum struct AudioFilePcmBitDepth {
+enum struct PcmBitDepth {
   _16 = 16,
   _24 = 24,
   _32 = 32
 };
 
-enum struct AudioFilePcmSampleRate {
+enum struct PcmSampleRate {
   _441 = 44100,
   _48  = 48000,
   _96  = 96000,
   _192 = 192000,
 };
 
-enum struct AudioFilePcmType {
+enum struct PcmFileType {
   Flac,
   Wav,
 };
 // clang-format on
 
-struct AudioFileWriteSettingsPcm {
-  AudioFileWriteSettingsPcm(AudioFilePcmBitDepth _bitDepth,
-                            AudioFilePcmSampleRate _sampleRate,
-                            AudioFilePcmType _pcmFileType)
+struct WriteSettingsPcm {
+  WriteSettingsPcm(PcmBitDepth _bitDepth, PcmSampleRate _sampleRate,
+                   PcmFileType _pcmFileType)
       : bitDepth(_bitDepth), sampleRate(static_cast<int>(_sampleRate)),
         pcmFileType(_pcmFileType) {}
 
-  AudioFileWriteSettingsPcm(AudioFilePcmBitDepth _bitDepth, int _sampleRate,
-                            AudioFilePcmType _pcmFileType)
+  WriteSettingsPcm(PcmBitDepth _bitDepth, int _sampleRate,
+                   PcmFileType _pcmFileType)
       : bitDepth(_bitDepth), sampleRate(_sampleRate),
         pcmFileType(_pcmFileType) {}
 
-  AudioFilePcmBitDepth bitDepth;
+  PcmBitDepth bitDepth;
   int sampleRate;
-  AudioFilePcmType pcmFileType;
+  PcmFileType pcmFileType;
 
-  static AudioFileWriteSettingsPcm
-  cd(AudioFilePcmType _pcmFileType = AudioFilePcmType::Wav) {
-    return AudioFileWriteSettingsPcm(
-        AudioFilePcmBitDepth::_16, AudioFilePcmSampleRate::_441, _pcmFileType);
+  static WriteSettingsPcm cd(PcmFileType _pcmFileType = PcmFileType::Wav) {
+    return WriteSettingsPcm(PcmBitDepth::_16, PcmSampleRate::_441,
+                            _pcmFileType);
   }
 
-  static AudioFileWriteSettingsPcm
-  hq(AudioFilePcmType _pcmFileType = AudioFilePcmType::Wav) {
-    return AudioFileWriteSettingsPcm(AudioFilePcmBitDepth::_24,
-                                     AudioFilePcmSampleRate::_48, _pcmFileType);
+  static WriteSettingsPcm hq(PcmFileType _pcmFileType = PcmFileType::Wav) {
+    return WriteSettingsPcm(PcmBitDepth::_24, PcmSampleRate::_48, _pcmFileType);
   }
 
-  static AudioFileWriteSettingsPcm
-  master(AudioFilePcmType _pcmFileType = AudioFilePcmType::Wav) {
-    return AudioFileWriteSettingsPcm(
-        AudioFilePcmBitDepth::_32, AudioFilePcmSampleRate::_192, _pcmFileType);
+  static WriteSettingsPcm master(PcmFileType _pcmFileType = PcmFileType::Wav) {
+    return WriteSettingsPcm(PcmBitDepth::_32, PcmSampleRate::_192,
+                            _pcmFileType);
   }
 
 private:
-  AudioFileWriteSettingsPcm() {}
+  WriteSettingsPcm() {}
 };
 
-struct AudioFileWriteSettingsMp3 {
-  AudioFileWriteSettingsMp3(int _bitRate) : bitRate(_bitRate) {}
+struct WriteSettingsMp3 {
+  WriteSettingsMp3(int _bitRate) : bitRate(_bitRate) {}
   int bitRate;
 
-  static AudioFileWriteSettingsMp3 _320() {
-    return AudioFileWriteSettingsMp3(320000);
-  }
+  static WriteSettingsMp3 _320() { return WriteSettingsMp3(320000); }
 
-  static AudioFileWriteSettingsMp3 _256() {
-    return AudioFileWriteSettingsMp3(256000);
-  }
+  static WriteSettingsMp3 _256() { return WriteSettingsMp3(256000); }
 
-  static AudioFileWriteSettingsMp3 _196() {
-    return AudioFileWriteSettingsMp3(196000);
-  }
+  static WriteSettingsMp3 _196() { return WriteSettingsMp3(196000); }
 
-  static AudioFileWriteSettingsMp3 _96() {
-    return AudioFileWriteSettingsMp3(96000);
-  }
+  static WriteSettingsMp3 _96() { return WriteSettingsMp3(96000); }
 
 private:
-  AudioFileWriteSettingsMp3() {}
+  WriteSettingsMp3() {}
 };
 
-using AudioFileWriteSettings =
-    std::variant<AudioFileWriteSettingsPcm, AudioFileWriteSettingsMp3>;
+using WriteSettings = std::variant<WriteSettingsPcm, WriteSettingsMp3>;
 
-using AudioFileWriteSpec =
-    std::pair<const char *, const AudioFileWriteSettings>;
+using WriteSpec = std::pair<const char *, const WriteSettings>;
+
+} // namespace Clover::IO::AudioFile

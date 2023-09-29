@@ -27,6 +27,8 @@
 #include "IO/AudioFile/AudioFileWriteSettings.h"
 #include "IO/AudioFile/lib/AudioFileRepository_libsndfile.h"
 
+using namespace Clover::IO::AudioFile;
+
 TEST(AudioFileRepository_Wav, ShouldWrite) {
   int samplerate = 48000;
   std::string path = "./TEST.wav";
@@ -50,8 +52,7 @@ TEST(AudioFileRepository_Wav, ShouldWrite) {
     file.audioData.emplace_back(signal); // R
   }
 
-  auto writeSettings =
-      std::make_pair(path.c_str(), AudioFileWriteSettingsPcm::cd());
+  auto writeSettings = std::make_pair(path.c_str(), WriteSettingsPcm::cd());
   repository.Write(writeSettings, file);
   AudioFile readFile = repository.Read(path);
 

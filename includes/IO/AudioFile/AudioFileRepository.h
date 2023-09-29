@@ -26,13 +26,17 @@
 #include "AudioFile.h"
 #include "AudioFileWriteSettings.h"
 
+namespace Clover::IO::AudioFile {
+
 struct AudioFileRepository {
   virtual ~AudioFileRepository() = default;
 
-  virtual void Write(const AudioFileWriteSpec &writeSpec,
+  virtual void Write(const WriteSpec &writeSpec,
                      const AudioFile &audioFile) = 0;
   virtual AudioFile Read(const std::string &filePath) = 0;
-  virtual void Append(const AudioFileWriteSpec &writeSpec,
+  virtual void Append(const WriteSpec &writeSpec,
                       const AudioFile &audioFile) = 0;
   virtual void Delete(const std::string &filePath) = 0;
 };
+
+} // namespace Clover::IO::AudioFile

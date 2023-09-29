@@ -30,9 +30,10 @@
 #include "../AudioFile.h"
 #include "../AudioFileRepository.h"
 
+namespace Clover::IO::AudioFile {
+
 struct AudioFileRepository_libsndfile : public AudioFileRepository {
-  void Write(const AudioFileWriteSpec &writeSpec,
-             const AudioFile &audioFile) override {
+  void Write(const WriteSpec &writeSpec, const AudioFile &audioFile) override {
     const char *filePath = writeSpec.first;
 
     SF_INFO sfinfo;
@@ -99,8 +100,7 @@ struct AudioFileRepository_libsndfile : public AudioFileRepository {
     return audioFile;
   }
 
-  void Append(const AudioFileWriteSpec &writeSpec,
-              const AudioFile &audioFile) override {
+  void Append(const WriteSpec &writeSpec, const AudioFile &audioFile) override {
     const char *filePath = writeSpec.first;
     SF_INFO sfinfo;
     SNDFILE *file = sf_open(filePath, SFM_RDWR, &sfinfo);
@@ -156,3 +156,5 @@ private:
     }
   }
 };
+
+} // namespace Clover::IO::AudioFile

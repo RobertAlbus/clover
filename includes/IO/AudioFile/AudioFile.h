@@ -23,6 +23,8 @@
 #include <cstdint> // for std::int32_t
 #include <vector>
 
+namespace Clover::IO::AudioFile {
+
 struct AudioFile {
   AudioFile() : audioData(), channelCount(0), cuePoints(), sampleRateHz(0) {}
 
@@ -32,3 +34,5 @@ struct AudioFile {
   int channelCount;
   std::int32_t sampleRateHz;
 };
+
+} // namespace Clover::IO::AudioFile
