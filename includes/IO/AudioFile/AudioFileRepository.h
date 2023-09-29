@@ -1,3 +1,5 @@
+#pragma once
+
 /*
  * /////////
  * // Clover
@@ -18,6 +20,23 @@
  *
  */
 
-#include "IO/Interface.h"
-#include "IO/MidiIn.h"
-#include "IO/RootNode.h"
+#include <string>
+#include <vector>
+
+#include "AudioFile.h"
+#include "AudioFileWriteSettings.h"
+
+namespace Clover::IO::AudioFile {
+
+struct AudioFileRepository {
+  virtual ~AudioFileRepository() = default;
+
+  virtual void Write(const WriteSpec &writeSpec,
+                     const AudioFile &audioFile) = 0;
+  virtual AudioFile Read(const std::string &filePath) = 0;
+  virtual void Append(const WriteSpec &writeSpec,
+                      const AudioFile &audioFile) = 0;
+  virtual void Delete(const std::string &filePath) = 0;
+};
+
+} // namespace Clover::IO::AudioFile

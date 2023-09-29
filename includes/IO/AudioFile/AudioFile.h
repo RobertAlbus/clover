@@ -1,3 +1,5 @@
+#pragma once
+
 /*
  * /////////
  * // Clover
@@ -18,6 +20,19 @@
  *
  */
 
-#include "IO/Interface.h"
-#include "IO/MidiIn.h"
-#include "IO/RootNode.h"
+#include <cstdint> // for std::int32_t
+#include <vector>
+
+namespace Clover::IO::AudioFile {
+
+struct AudioFile {
+  AudioFile() : audioData(), channelCount(0), cuePoints(), sampleRateHz(0) {}
+
+  std::vector<float> audioData;
+  std::vector<std::int32_t> cuePoints;
+
+  int channelCount;
+  std::int32_t sampleRateHz;
+};
+
+} // namespace Clover::IO::AudioFile
