@@ -1,4 +1,4 @@
-# ADR 05: Scirpts Are Make Targets
+# ADR 05: Scripts Are Make Targets
 
 2023-09-13
 
