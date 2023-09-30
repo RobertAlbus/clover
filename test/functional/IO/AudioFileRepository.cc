@@ -29,7 +29,7 @@
 
 using namespace Clover::IO::AudioFile;
 
-TEST(AudioFileRepository_Wav, ShouldWrite) {
+TEST(AudioFileRepository_libsndfile, Integration) {
   int samplerate = 48000;
   std::string path = "./TEST.wav";
   int channelCount = 2;
