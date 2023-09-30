@@ -26,9 +26,11 @@ namespace Clover::IO::AudioFile {
 
 // clang-format off
 enum struct PcmBitDepth {
-  _16 = 16,
-  _24 = 24,
-  _32 = 32
+  _16,
+  _24,
+  _32,
+  _float,
+  _double,
 };
 
 enum struct PcmSampleRate {
@@ -81,13 +83,13 @@ struct WriteSettingsMp3 {
   WriteSettingsMp3(int _bitRate) : bitRate(_bitRate) {}
   int bitRate;
 
-  static WriteSettingsMp3 _320() { return WriteSettingsMp3(320000); }
+  static WriteSettingsMp3 _320() { return WriteSettingsMp3(320); }
 
-  static WriteSettingsMp3 _256() { return WriteSettingsMp3(256000); }
+  static WriteSettingsMp3 _256() { return WriteSettingsMp3(256); }
 
-  static WriteSettingsMp3 _196() { return WriteSettingsMp3(196000); }
+  static WriteSettingsMp3 _196() { return WriteSettingsMp3(196); }
 
-  static WriteSettingsMp3 _96() { return WriteSettingsMp3(96000); }
+  static WriteSettingsMp3 _96() { return WriteSettingsMp3(96); }
 
 private:
   WriteSettingsMp3() {}

@@ -52,8 +52,10 @@ TEST(AudioFileRepository_libsndfile, Integration) {
     file.audioData.emplace_back(signal); // R
   }
 
-  auto writeSettings = std::make_pair(path.c_str(), WriteSettingsPcm::cd());
-  repository.Write(writeSettings, file);
+  auto writeSpec = std::make_pair(
+      path.c_str(), WriteSettingsPcm(PcmBitDepth::_float, PcmSampleRate::_48,
+                                     PcmFileType::Wav));
+  repository.Write(writeSpec, file);
   AudioFile readFile = repository.Read(path);
 
   EXPECT_EQ(file.channelCount, readFile.channelCount);
@@ -67,10 +69,10 @@ TEST(AudioFileRepository_libsndfile, Integration) {
   for (int i = 0; i < twoSeconds * channelCount; i++) {
     float fileData = readFile.audioData.at(i);
     float audioData = file.audioData.at(i);
-    EXPECT_FLOAT_EQ(fileData, audioData);
+    EXPECT_FLOAT_EQ(fileData, audioData) << i;
   }
 
-  repository.Append(writeSettings, file);
+  repository.Append(writeSpec, file);
   readFile = repository.Read(path);
 
   int fourSeconds = twoSeconds * 2;

@@ -20,140 +20,89 @@
  *
  */
 
-#include <filesystem> // for std::filesystem::remove
 #include <stdexcept>
 #include <string>
-#include <vector>
-
-#include "sndfile.h"
+#include <variant>
 
 #include "../AudioFile.h"
 #include "../AudioFileRepository.h"
+
+#include "filesystem_Delete.h"
+#include "lamemp3_Write.h"
+#include "libsndfile_Append.h"
+#include "libsndfile_Read.h"
+#include "libsndfile_Write.h"
 
 namespace Clover::IO::AudioFile {
 
 struct AudioFileRepository_libsndfile : public AudioFileRepository {
   void Write(const WriteSpec &writeSpec, const AudioFile &audioFile) override {
-    const char *filePath = writeSpec.first;
+    const char *path = getPath(writeSpec);
+    const WriteSettings writeSettings = getWriteSettings(writeSpec);
 
-    SF_INFO sfinfo;
-    sfinfo.samplerate = audioFile.sampleRateHz;
-    sfinfo.channels = audioFile.channelCount;
-    sfinfo.format = SF_FORMAT_WAV | SF_FORMAT_FLOAT;
+    std::visit(
+        [path, audioFile](auto &&arg) {
+          using T = std::decay_t<decltype(arg)>;
 
-    SNDFILE *file = sf_open(filePath, SFM_WRITE, &sfinfo);
-    throwIfFails(file, sf_error(file));
+          if constexpr (std::is_same_v<T, WriteSettingsPcm>) {
+            auto settings = static_cast<WriteSettingsPcm>(arg);
+            impl::libsndfile_Write(path, settings, audioFile);
 
-    sf_count_t count = sf_write_float(file, audioFile.audioData.data(),
-                                      audioFile.audioData.size());
+          } else if constexpr (std::is_same_v<T, WriteSettingsMp3 &>) {
+            auto settings = static_cast<WriteSettingsMp3>(arg);
+            impl::lamemp3_Write(path, settings, audioFile);
 
-    if (count != static_cast<sf_count_t>(audioFile.audioData.size())) {
-      throwIfFails(file, sf_error(file));
-    }
-
-    std::vector<SF_CUE_POINT> cuePoints;
-    cuePoints.reserve(audioFile.cuePoints.size());
-    for (auto &point : audioFile.cuePoints) {
-      SF_CUE_POINT cuePoint;
-      cuePoint.position = point;
-      cuePoints.push_back(cuePoint);
-    }
-    sf_command(file, SFC_SET_CUE, cuePoints.data(),
-               cuePoints.size() * sizeof(SF_CUE_POINT));
-
-    sf_write_sync(file);
-    throwIfFails(file, sf_close(file));
+          } else {
+            throw std::runtime_error("Unhandled WriteSettings variant for "
+                                     "AudioFileRepository.Write");
+          }
+        },
+        writeSettings);
   }
 
-  AudioFile Read(const std::string &filePath) override {
-    AudioFile audioFile;
-    SF_INFO sfinfo;
-    SNDFILE *file = sf_open(filePath.c_str(), SFM_READ, &sfinfo);
-    throwIfFails(file, sf_error(file));
-
-    audioFile.sampleRateHz = sfinfo.samplerate;
-    audioFile.channelCount = sfinfo.channels;
-
-    audioFile.audioData.resize(sfinfo.frames * sfinfo.channels);
-    sf_count_t count = sf_read_float(file, audioFile.audioData.data(),
-                                     audioFile.audioData.size());
-
-    if (count != static_cast<sf_count_t>(audioFile.audioData.size())) {
-      throwIfFails(file, sf_error(file));
-    }
-
-    // Reading cue points
-    SF_CUES cues;
-    if (sf_command(file, SFC_GET_CUE, &cues, sizeof(cues)) == SF_TRUE) {
-      for (unsigned i = 0; i < cues.cue_count; ++i) {
-        audioFile.cuePoints.push_back(cues.cue_points[i].sample_offset);
-      }
-    }
-
-    if (sf_close(file) != 0) {
-      int err = sf_error(file);
-      if (err != SF_ERR_NO_ERROR) {
-        throw std::runtime_error(sf_strerror(file));
-      }
-    }
-
-    return audioFile;
+  AudioFile Read(const std::string &path) override {
+    return impl::libsndfile_Read(path.c_str());
   }
 
   void Append(const WriteSpec &writeSpec, const AudioFile &audioFile) override {
-    const char *filePath = writeSpec.first;
-    SF_INFO sfinfo;
-    SNDFILE *file = sf_open(filePath, SFM_RDWR, &sfinfo);
 
-    throwIfFails(file, sf_error(file));
+    const char *path = getPath(writeSpec);
+    const WriteSettings writeSettings = getWriteSettings(writeSpec);
 
-    bool sampleRatesMismatch = sfinfo.samplerate != audioFile.sampleRateHz;
-    if (sampleRatesMismatch) {
-      sf_close(file);
-      throw std::runtime_error(
-          "Incompatible sample rate when appending audio to file: path=[" +
-          std::string(filePath) + "]");
-    }
+    std::visit(
+        [path, audioFile](auto &&arg) {
+          using T = std::decay_t<decltype(arg)>;
 
-    bool channelCountMismatch = sfinfo.channels != audioFile.channelCount;
-    if (channelCountMismatch) {
-      sf_close(file);
-      throw std::runtime_error(
-          "Incompatible channel count when appending audio to file: path=[" +
-          std::string(filePath) + "]");
-    }
+          if constexpr (std::is_same_v<T, WriteSettingsPcm>) {
+            auto settings = static_cast<WriteSettingsPcm>(arg);
+            impl::libsndfile_Append(path, settings, audioFile);
 
-    sf_seek(file, 0, SEEK_END);
-    sf_count_t count = sf_write_float(file, audioFile.audioData.data(),
-                                      audioFile.audioData.size());
+          } else if constexpr (std::is_same_v<T, WriteSettingsMp3 &>) {
+            auto settings = static_cast<WriteSettingsMp3>(arg);
+            throw std::runtime_error("WriteSettingsMp3 variant not supported "
+                                     "for AudioFileRepository.Append.");
 
-    if (count != static_cast<sf_count_t>(audioFile.audioData.size())) {
-      throwIfFails(file, sf_error(file));
-    }
-
-    sf_write_sync(file);
-    throwIfFails(file, sf_close(file));
+          } else {
+            throw std::runtime_error("Unhandled WriteSettings variant for "
+                                     "AudioFileRepository.Append");
+          }
+        },
+        writeSettings);
   }
 
-  void Delete(const std::string &filePath) override {
-    if (!std::filesystem::remove(filePath)) {
-      throw std::runtime_error("Failed to delete the audio file.");
-    }
+  void Delete(const std::string &path) override {
+    Read(path); // validate that it's an audio file
+    impl::filesystem_Delete(path);
   }
 
 private:
-  void throwIfFails(SNDFILE *sndfile, int resultCode) {
-    bool hasError = resultCode != SF_ERR_NO_ERROR;
-    bool hasFile = !!sndfile;
+  const char *getPath(const WriteSpec &writeSpec) {
+    return writeSpec.first;
+    const WriteSettings writeSettings = writeSpec.second;
+  }
 
-    const char *errorMessage = sf_strerror(sndfile);
-
-    if (hasFile && hasError) {
-      sf_close(sndfile);
-    }
-    if (hasError) {
-      throw std::runtime_error(errorMessage);
-    }
+  WriteSettings getWriteSettings(const WriteSpec &writeSpec) {
+    return writeSpec.second;
   }
 };
 
