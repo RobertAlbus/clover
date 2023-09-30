@@ -1,5 +1,3 @@
-#pragma once
-
 /*
  * /////////
  * // Clover
@@ -21,7 +19,6 @@
  */
 
 #include <stdexcept>
-#include <string>
 #include <vector>
 
 #include "sndfile.h"
@@ -33,6 +30,34 @@
 namespace Clover::IO::AudioFile::impl {
 
 void libsndfile_Write(const char *path, const WriteSettingsPcm &writeSettings,
-                      const AudioFile &audioFile);
+                      const AudioFile &audioFile) {
+  SF_INFO sfinfo;
+  sfinfo.samplerate = writeSettings.sampleRate;
+  sfinfo.channels = audioFile.channelCount;
+  sfinfo.format = getWriteSettingsFormat(writeSettings);
+
+  SNDFILE *file = sf_open(path, SFM_WRITE, &sfinfo);
+  throwIfFails(file, sf_error(file));
+
+  sf_count_t count = sf_write_float(file, audioFile.audioData.data(),
+                                    audioFile.audioData.size());
+
+  if (count != static_cast<sf_count_t>(audioFile.audioData.size())) {
+    throwIfFails(file, sf_error(file));
+  }
+
+  std::vector<SF_CUE_POINT> cuePoints;
+  cuePoints.reserve(audioFile.cuePoints.size());
+  for (auto &point : audioFile.cuePoints) {
+    SF_CUE_POINT cuePoint;
+    cuePoint.position = point;
+    cuePoints.push_back(cuePoint);
+  }
+  sf_command(file, SFC_SET_CUE, cuePoints.data(),
+             cuePoints.size() * sizeof(SF_CUE_POINT));
+
+  sf_write_sync(file);
+  throwIfFails(file, sf_close(file));
+}
 
 } // namespace Clover::IO::AudioFile::impl

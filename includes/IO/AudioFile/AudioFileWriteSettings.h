@@ -48,51 +48,35 @@ enum struct PcmFileType {
 
 struct WriteSettingsPcm {
   WriteSettingsPcm(PcmBitDepth _bitDepth, PcmSampleRate _sampleRate,
-                   PcmFileType _pcmFileType)
-      : bitDepth(_bitDepth), sampleRate(static_cast<int>(_sampleRate)),
-        pcmFileType(_pcmFileType) {}
+                   PcmFileType _pcmFileType);
 
   WriteSettingsPcm(PcmBitDepth _bitDepth, int _sampleRate,
-                   PcmFileType _pcmFileType)
-      : bitDepth(_bitDepth), sampleRate(_sampleRate),
-        pcmFileType(_pcmFileType) {}
+                   PcmFileType _pcmFileType);
 
   PcmBitDepth bitDepth;
   int sampleRate;
   PcmFileType pcmFileType;
 
-  static WriteSettingsPcm cd(PcmFileType _pcmFileType = PcmFileType::Wav) {
-    return WriteSettingsPcm(PcmBitDepth::_16, PcmSampleRate::_441,
-                            _pcmFileType);
-  }
-
-  static WriteSettingsPcm hq(PcmFileType _pcmFileType = PcmFileType::Wav) {
-    return WriteSettingsPcm(PcmBitDepth::_24, PcmSampleRate::_48, _pcmFileType);
-  }
-
-  static WriteSettingsPcm master(PcmFileType _pcmFileType = PcmFileType::Wav) {
-    return WriteSettingsPcm(PcmBitDepth::_32, PcmSampleRate::_192,
-                            _pcmFileType);
-  }
+  static WriteSettingsPcm cd(PcmFileType _pcmFileType = PcmFileType::Wav);
+  static WriteSettingsPcm hq(PcmFileType _pcmFileType = PcmFileType::Wav);
+  static WriteSettingsPcm master(PcmFileType _pcmFileType = PcmFileType::Wav);
 
 private:
-  WriteSettingsPcm() {}
+  WriteSettingsPcm();
 };
 
 struct WriteSettingsMp3 {
-  WriteSettingsMp3(int _bitRate) : bitRate(_bitRate) {}
+  WriteSettingsMp3(int _bitRate);
+
   int bitRate;
 
-  static WriteSettingsMp3 _320() { return WriteSettingsMp3(320); }
-
-  static WriteSettingsMp3 _256() { return WriteSettingsMp3(256); }
-
-  static WriteSettingsMp3 _196() { return WriteSettingsMp3(196); }
-
-  static WriteSettingsMp3 _96() { return WriteSettingsMp3(96); }
+  static WriteSettingsMp3 _320();
+  static WriteSettingsMp3 _256();
+  static WriteSettingsMp3 _196();
+  static WriteSettingsMp3 _96();
 
 private:
-  WriteSettingsMp3() {}
+  WriteSettingsMp3();
 };
 
 using WriteSettings = std::variant<WriteSettingsPcm, WriteSettingsMp3>;

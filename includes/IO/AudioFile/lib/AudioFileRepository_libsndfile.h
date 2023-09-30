@@ -20,90 +20,22 @@
  *
  */
 
-#include <stdexcept>
 #include <string>
-#include <variant>
 
 #include "../AudioFile.h"
 #include "../AudioFileRepository.h"
 
-#include "filesystem_Delete.h"
-#include "lamemp3_Write.h"
-#include "libsndfile_Append.h"
-#include "libsndfile_Read.h"
-#include "libsndfile_Write.h"
-
 namespace Clover::IO::AudioFile {
 
 struct AudioFileRepository_libsndfile : public AudioFileRepository {
-  void Write(const WriteSpec &writeSpec, const AudioFile &audioFile) override {
-    const char *path = getPath(writeSpec);
-    const WriteSettings writeSettings = getWriteSettings(writeSpec);
-
-    std::visit(
-        [path, audioFile](auto &&arg) {
-          using T = std::decay_t<decltype(arg)>;
-
-          if constexpr (std::is_same_v<T, WriteSettingsPcm>) {
-            auto settings = static_cast<WriteSettingsPcm>(arg);
-            impl::libsndfile_Write(path, settings, audioFile);
-
-          } else if constexpr (std::is_same_v<T, WriteSettingsMp3 &>) {
-            auto settings = static_cast<WriteSettingsMp3>(arg);
-            impl::lamemp3_Write(path, settings, audioFile);
-
-          } else {
-            throw std::runtime_error("Unhandled WriteSettings variant for "
-                                     "AudioFileRepository.Write");
-          }
-        },
-        writeSettings);
-  }
-
-  AudioFile Read(const std::string &path) override {
-    return impl::libsndfile_Read(path.c_str());
-  }
-
-  void Append(const WriteSpec &writeSpec, const AudioFile &audioFile) override {
-
-    const char *path = getPath(writeSpec);
-    const WriteSettings writeSettings = getWriteSettings(writeSpec);
-
-    std::visit(
-        [path, audioFile](auto &&arg) {
-          using T = std::decay_t<decltype(arg)>;
-
-          if constexpr (std::is_same_v<T, WriteSettingsPcm>) {
-            auto settings = static_cast<WriteSettingsPcm>(arg);
-            impl::libsndfile_Append(path, settings, audioFile);
-
-          } else if constexpr (std::is_same_v<T, WriteSettingsMp3 &>) {
-            auto settings = static_cast<WriteSettingsMp3>(arg);
-            throw std::runtime_error("WriteSettingsMp3 variant not supported "
-                                     "for AudioFileRepository.Append.");
-
-          } else {
-            throw std::runtime_error("Unhandled WriteSettings variant for "
-                                     "AudioFileRepository.Append");
-          }
-        },
-        writeSettings);
-  }
-
-  void Delete(const std::string &path) override {
-    Read(path); // validate that it's an audio file
-    impl::filesystem_Delete(path);
-  }
+  void Write(const WriteSpec &writeSpec, const AudioFile &audioFile) override;
+  AudioFile Read(const std::string &path) override;
+  void Append(const WriteSpec &writeSpec, const AudioFile &audioFile) override;
+  void Delete(const std::string &path) override;
 
 private:
-  const char *getPath(const WriteSpec &writeSpec) {
-    return writeSpec.first;
-    const WriteSettings writeSettings = writeSpec.second;
-  }
-
-  WriteSettings getWriteSettings(const WriteSpec &writeSpec) {
-    return writeSpec.second;
-  }
+  const char *getPath(const WriteSpec &writeSpec);
+  WriteSettings getWriteSettings(const WriteSpec &writeSpec);
 };
 
 } // namespace Clover::IO::AudioFile

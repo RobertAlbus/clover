@@ -1,5 +1,3 @@
-#pragma once
-
 /*
  * /////////
  * // Clover
@@ -20,19 +18,18 @@
  *
  */
 
+#include <filesystem> // for std::filesystem::remove
 #include <stdexcept>
 #include <string>
-#include <vector>
 
-#include "sndfile.h"
-
-#include "../AudioFile.h"
-#include "../AudioFileWriteSettings.h"
-#include "libsndfile__Util.h"
+#include "filesystem_Delete.h"
 
 namespace Clover::IO::AudioFile::impl {
 
-void libsndfile_Write(const char *path, const WriteSettingsPcm &writeSettings,
-                      const AudioFile &audioFile);
+void filesystem_Delete(const std::string &path) {
+  if (!std::filesystem::remove(path)) {
+    throw std::runtime_error("Failed to delete the audio file.");
+  }
+}
 
 } // namespace Clover::IO::AudioFile::impl

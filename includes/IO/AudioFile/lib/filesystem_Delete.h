@@ -20,19 +20,10 @@
  *
  */
 
-#include <filesystem> // for std::filesystem::remove
-#include <stdexcept>
 #include <string>
-
-#include "../AudioFile.h"
-#include "../AudioFileRepository.h"
 
 namespace Clover::IO::AudioFile::impl {
 
-void filesystem_Delete(const std::string &path) {
-  if (!std::filesystem::remove(path)) {
-    throw std::runtime_error("Failed to delete the audio file.");
-  }
-}
+void filesystem_Delete(const std::string &path);
 
 } // namespace Clover::IO::AudioFile::impl
