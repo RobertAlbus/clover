@@ -83,8 +83,8 @@ private:
 using WriteSettings = std::variant<WriteSettingsPcm, WriteSettingsMp3>;
 
 struct WriteSpec {
-  std::string const path;
-  WriteSettings const writeSettings;
+  std::string path;
+  WriteSettings writeSettings;
 };
 
 } // namespace Clover::IO::AudioFile
