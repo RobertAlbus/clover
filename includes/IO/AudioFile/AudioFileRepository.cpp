@@ -18,7 +18,7 @@
  *
  */
 
-#include "lib/AudioFileRepository_libsndfile.h"
+#include "impl/AudioFileRepository_libsndfile.h"
 
 namespace Clover::IO::AudioFile {
 
