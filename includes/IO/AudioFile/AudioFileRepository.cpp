@@ -1,5 +1,3 @@
-#pragma once
-
 /*
  * /////////
  * // Clover
@@ -20,25 +18,12 @@
  *
  */
 
-#include <memory>
-#include <string>
-
-#include "AudioFile.h"
-#include "AudioFileWriteSettings.h"
+#include "lib/AudioFileRepository_libsndfile.h"
 
 namespace Clover::IO::AudioFile {
 
-struct AudioFileRepository {
-  virtual ~AudioFileRepository() = default;
-
-  static std::unique_ptr<AudioFileRepository> BuildInstance();
-
-  virtual void Write(const WriteSpec &writeSpec,
-                     const AudioFile &audioFile) = 0;
-  virtual AudioFile Read(const std::string &filePath) = 0;
-  virtual void Append(const WriteSpec &writeSpec,
-                      const AudioFile &audioFile) = 0;
-  virtual void Delete(const std::string &filePath) = 0;
-};
+std::unique_ptr<AudioFileRepository> AudioFileRepository::BuildInstance() {
+  return std::make_unique<AudioFileRepository_libsndfile>();
+}
 
 } // namespace Clover::IO::AudioFile

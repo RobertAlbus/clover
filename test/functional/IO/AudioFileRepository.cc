@@ -25,7 +25,8 @@
 #include "Algo/Wavetable/WavetableOscillatorMono.h"
 #include "IO/AudioFile/AudioFile.h"
 #include "IO/AudioFile/AudioFileWriteSettings.h"
-#include "IO/AudioFile/lib/AudioFileRepository_libsndfile.h"
+#include "IO/AudioFile/AudioFileRepository.h"
+
 
 using namespace Clover::IO::AudioFile;
 
@@ -34,8 +35,11 @@ TEST(AudioFileRepository_libsndfile_Integration, Full_Wav) {
   std::string path = "./TEST.wav";
   int channelCount = 2;
 
-  AudioFileRepository_libsndfile repository;
-  AudioFile file;
+  std::unique_ptr<AudioFileRepository> repo_ptr =
+      AudioFileRepository::BuildInstance();
+  AudioFileRepository &repository = *repo_ptr;
+
+  AudioFile file = generateAudioFileData();
 
   file.channelCount = 2;
   file.sampleRateHz = samplerate;
