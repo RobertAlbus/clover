@@ -52,7 +52,7 @@ WriteSettingsPcm::WriteSettingsPcm() {}
 WriteSettingsMp3::WriteSettingsMp3(int _bitRate) : bitRate(_bitRate) {}
 WriteSettingsMp3 WriteSettingsMp3::_320() { return WriteSettingsMp3(320); }
 WriteSettingsMp3 WriteSettingsMp3::_256() { return WriteSettingsMp3(256); }
-WriteSettingsMp3 WriteSettingsMp3::_196() { return WriteSettingsMp3(196); }
+WriteSettingsMp3 WriteSettingsMp3::_192() { return WriteSettingsMp3(192); }
 WriteSettingsMp3 WriteSettingsMp3::_96() { return WriteSettingsMp3(96); }
 
 WriteSettingsMp3::WriteSettingsMp3() {}

@@ -72,7 +72,7 @@ struct WriteSettingsMp3 {
 
   static WriteSettingsMp3 _320();
   static WriteSettingsMp3 _256();
-  static WriteSettingsMp3 _196();
+  static WriteSettingsMp3 _192();
   static WriteSettingsMp3 _96();
 
 private:
