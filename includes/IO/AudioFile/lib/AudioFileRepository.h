@@ -20,16 +20,18 @@
  *
  */
 
+#include <memory>
 #include <string>
-#include <vector>
 
-#include "AudioFile.h"
-#include "AudioFileWriteSettings.h"
+#include "../AudioFile.h"
+#include "../AudioFileWriteSettings.h"
 
 namespace Clover::IO::AudioFile {
 
 struct AudioFileRepository {
   virtual ~AudioFileRepository() = default;
+
+  static std::unique_ptr<AudioFileRepository> BuildInstance();
 
   virtual void Write(const WriteSpec &writeSpec,
                      const AudioFile &audioFile) = 0;

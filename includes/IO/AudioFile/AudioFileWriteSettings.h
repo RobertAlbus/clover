@@ -20,15 +20,18 @@
  *
  */
 
+#include <string>
 #include <variant>
 
 namespace Clover::IO::AudioFile {
 
 // clang-format off
 enum struct PcmBitDepth {
-  _16 = 16,
-  _24 = 24,
-  _32 = 32
+  _16,
+  _24,
+  _32,
+  _float,
+  _double,
 };
 
 enum struct PcmSampleRate {
@@ -46,55 +49,42 @@ enum struct PcmFileType {
 
 struct WriteSettingsPcm {
   WriteSettingsPcm(PcmBitDepth _bitDepth, PcmSampleRate _sampleRate,
-                   PcmFileType _pcmFileType)
-      : bitDepth(_bitDepth), sampleRate(static_cast<int>(_sampleRate)),
-        pcmFileType(_pcmFileType) {}
+                   PcmFileType _pcmFileType);
 
   WriteSettingsPcm(PcmBitDepth _bitDepth, int _sampleRate,
-                   PcmFileType _pcmFileType)
-      : bitDepth(_bitDepth), sampleRate(_sampleRate),
-        pcmFileType(_pcmFileType) {}
+                   PcmFileType _pcmFileType);
 
   PcmBitDepth bitDepth;
   int sampleRate;
   PcmFileType pcmFileType;
 
-  static WriteSettingsPcm cd(PcmFileType _pcmFileType = PcmFileType::Wav) {
-    return WriteSettingsPcm(PcmBitDepth::_16, PcmSampleRate::_441,
-                            _pcmFileType);
-  }
-
-  static WriteSettingsPcm hq(PcmFileType _pcmFileType = PcmFileType::Wav) {
-    return WriteSettingsPcm(PcmBitDepth::_24, PcmSampleRate::_48, _pcmFileType);
-  }
-
-  static WriteSettingsPcm master(PcmFileType _pcmFileType = PcmFileType::Wav) {
-    return WriteSettingsPcm(PcmBitDepth::_32, PcmSampleRate::_192,
-                            _pcmFileType);
-  }
+  static WriteSettingsPcm cd(PcmFileType _pcmFileType = PcmFileType::Wav);
+  static WriteSettingsPcm hq(PcmFileType _pcmFileType = PcmFileType::Wav);
+  static WriteSettingsPcm master(PcmFileType _pcmFileType = PcmFileType::Wav);
 
 private:
-  WriteSettingsPcm() {}
+  WriteSettingsPcm();
 };
 
 struct WriteSettingsMp3 {
-  WriteSettingsMp3(int _bitRate) : bitRate(_bitRate) {}
+  WriteSettingsMp3(int _bitRate);
+
   int bitRate;
 
-  static WriteSettingsMp3 _320() { return WriteSettingsMp3(320000); }
-
-  static WriteSettingsMp3 _256() { return WriteSettingsMp3(256000); }
-
-  static WriteSettingsMp3 _196() { return WriteSettingsMp3(196000); }
-
-  static WriteSettingsMp3 _96() { return WriteSettingsMp3(96000); }
+  static WriteSettingsMp3 _320();
+  static WriteSettingsMp3 _256();
+  static WriteSettingsMp3 _192();
+  static WriteSettingsMp3 _96();
 
 private:
-  WriteSettingsMp3() {}
+  WriteSettingsMp3();
 };
 
 using WriteSettings = std::variant<WriteSettingsPcm, WriteSettingsMp3>;
 
-using WriteSpec = std::pair<const char *, const WriteSettings>;
+struct WriteSpec {
+  std::string path;
+  WriteSettings writeSettings;
+};
 
 } // namespace Clover::IO::AudioFile

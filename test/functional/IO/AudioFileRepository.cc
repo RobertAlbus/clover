@@ -25,17 +25,50 @@
 #include "Algo/Wavetable/WavetableOscillatorMono.h"
 #include "IO/AudioFile/AudioFile.h"
 #include "IO/AudioFile/AudioFileWriteSettings.h"
-#include "IO/AudioFile/lib/AudioFileRepository_libsndfile.h"
+#include "IO/AudioFile/lib/AudioFileRepository.h"
+
+#include "./AudioFileRepository/AudioFileRepository_util.h"
 
 using namespace Clover::IO::AudioFile;
 
-TEST(AudioFileRepository_Wav, ShouldWrite) {
+TEST(AudioFileRepository_libsndfile_Integration, Write_PCM) {
+  std::unique_ptr<AudioFileRepository> repo_ptr =
+      AudioFileRepository::BuildInstance();
+  AudioFileRepository &repository = *repo_ptr;
+
+  AudioFile file = generateAudioFileData();
+
+  std::vector<WriteSpec> writeSpecs = generateValidWriteSpecsFlac();
+  std::vector<WriteSpec> wavWriteSpecs = generateValidWriteSpecsWav();
+  writeSpecs.insert(writeSpecs.end(), wavWriteSpecs.begin(),
+                    wavWriteSpecs.end());
+
+  for (auto writeSpec : writeSpecs) {
+    if (std::filesystem::exists(writeSpec.path)) {
+      std::filesystem::remove(writeSpec.path);
+    }
+  }
+
+  for (auto writeSpec : writeSpecs) {
+    repository.Write(writeSpec, file);
+  }
+
+  for (auto writeSpec : writeSpecs) {
+    EXPECT_TRUE(std::filesystem::exists(writeSpec.path));
+    std::filesystem::remove(writeSpec.path);
+  }
+}
+
+TEST(AudioFileRepository_libsndfile_Integration, Full_Wav) {
   int samplerate = 48000;
   std::string path = "./TEST.wav";
   int channelCount = 2;
 
-  AudioFileRepository_libsndfile repository;
-  AudioFile file;
+  std::unique_ptr<AudioFileRepository> repo_ptr =
+      AudioFileRepository::BuildInstance();
+  AudioFileRepository &repository = *repo_ptr;
+
+  AudioFile file = generateAudioFileData();
 
   file.channelCount = 2;
   file.sampleRateHz = samplerate;
@@ -43,17 +76,11 @@ TEST(AudioFileRepository_Wav, ShouldWrite) {
   Clover::Wavetable::WavetableOscillatorMono<float> osc(samplerate);
   osc.freq(500);
 
-  int twoSeconds = samplerate * 2;
-  file.audioData.reserve(twoSeconds);
+  WriteSpec writeSpec(path,
+                      WriteSettingsPcm(PcmBitDepth::_float, PcmSampleRate::_48,
+                                       PcmFileType::Wav));
 
-  for (int i = 0; i < twoSeconds; i++) {
-    float signal = osc.process();
-    file.audioData.emplace_back(signal); // L
-    file.audioData.emplace_back(signal); // R
-  }
-
-  auto writeSettings = std::make_pair(path.c_str(), WriteSettingsPcm::cd());
-  repository.Write(writeSettings, file);
+  repository.Write(writeSpec, file);
   AudioFile readFile = repository.Read(path);
 
   EXPECT_EQ(file.channelCount, readFile.channelCount);
@@ -64,24 +91,24 @@ TEST(AudioFileRepository_Wav, ShouldWrite) {
     EXPECT_FLOAT_EQ(file.cuePoints.at(i), readFile.cuePoints.at(i));
   }
 
-  for (int i = 0; i < twoSeconds * channelCount; i++) {
+  int audioDataSize = file.audioData.size();
+  for (int i = 0; i < audioDataSize; i++) {
     float fileData = readFile.audioData.at(i);
     float audioData = file.audioData.at(i);
-    EXPECT_FLOAT_EQ(fileData, audioData);
+    EXPECT_FLOAT_EQ(fileData, audioData) << i;
   }
 
-  repository.Append(writeSettings, file);
+  repository.Append(writeSpec, file);
   readFile = repository.Read(path);
 
-  int fourSeconds = twoSeconds * 2;
+  int audioDataSizeDoubled = audioDataSize * 2;
 
-  int dataSize = fourSeconds * channelCount;
-  EXPECT_EQ(readFile.audioData.size(), dataSize);
-  for (int i = 0; i < dataSize; i++) {
+  EXPECT_EQ(readFile.audioData.size(), audioDataSizeDoubled);
+  for (int i = 0; i < audioDataSizeDoubled; i++) {
     float fileData = readFile.audioData.at(i);
-    float audioData = file.audioData.at(i % (twoSeconds * channelCount));
+    float audioData = file.audioData.at(i % audioDataSize);
 
-    EXPECT_FLOAT_EQ(fileData, audioData) << "???";
+    EXPECT_FLOAT_EQ(fileData, audioData);
   }
 
   EXPECT_TRUE(std::filesystem::exists(path));
