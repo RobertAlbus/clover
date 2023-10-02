@@ -20,6 +20,7 @@
  *
  */
 
+#include <string>
 #include <variant>
 
 namespace Clover::IO::AudioFile {
@@ -81,6 +82,9 @@ private:
 
 using WriteSettings = std::variant<WriteSettingsPcm, WriteSettingsMp3>;
 
-using WriteSpec = std::pair<const char *, const WriteSettings>;
+struct WriteSpec {
+  std::string const path;
+  WriteSettings const writeSettings;
+};
 
 } // namespace Clover::IO::AudioFile

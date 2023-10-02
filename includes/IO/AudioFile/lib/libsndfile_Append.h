@@ -25,7 +25,8 @@
 
 namespace Clover::IO::AudioFile::impl {
 
-void libsndfile_Append(const char *path, const WriteSettingsPcm &writeSettings,
+void libsndfile_Append(const std::string &path,
+                       const WriteSettingsPcm &writeSettings,
                        const AudioFile &audioFile);
 
 } // namespace Clover::IO::AudioFile::impl

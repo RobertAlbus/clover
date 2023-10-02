@@ -35,46 +35,39 @@ namespace Clover::IO::AudioFile {
 
 void AudioFileRepository_libsndfile::Write(const WriteSpec &writeSpec,
                                            const AudioFile &audioFile) {
-  const char *path = getPath(writeSpec);
-  const WriteSettings writeSettings = getWriteSettings(writeSpec);
-
   std::visit(
-      [path, audioFile](auto &&arg) {
+      [writeSpec, audioFile](auto &&arg) {
         using T = std::decay_t<decltype(arg)>;
 
         if constexpr (std::is_same_v<T, WriteSettingsPcm>) {
           auto settings = static_cast<WriteSettingsPcm>(arg);
-          impl::libsndfile_Write(path, settings, audioFile);
+          impl::libsndfile_Write(writeSpec.path, settings, audioFile);
 
         } else if constexpr (std::is_same_v<T, WriteSettingsMp3 &>) {
           auto settings = static_cast<WriteSettingsMp3>(arg);
-          impl::lamemp3_Write(path, settings, audioFile);
+          impl::lamemp3_Write(writeSpec.path, settings, audioFile);
 
         } else {
           throw std::runtime_error("Unhandled WriteSettings variant for "
                                    "AudioFileRepository.Write");
         }
       },
-      writeSettings);
+      writeSpec.writeSettings);
 }
 
 AudioFile AudioFileRepository_libsndfile::Read(const std::string &path) {
-  return impl::libsndfile_Read(path.c_str());
+  return impl::libsndfile_Read(path);
 }
 
 void AudioFileRepository_libsndfile::Append(const WriteSpec &writeSpec,
                                             const AudioFile &audioFile) {
-
-  const char *path = getPath(writeSpec);
-  const WriteSettings writeSettings = getWriteSettings(writeSpec);
-
   std::visit(
-      [path, audioFile](auto &&arg) {
+      [writeSpec, audioFile](auto &&arg) {
         using T = std::decay_t<decltype(arg)>;
 
         if constexpr (std::is_same_v<T, WriteSettingsPcm>) {
           auto settings = static_cast<WriteSettingsPcm>(arg);
-          impl::libsndfile_Append(path, settings, audioFile);
+          impl::libsndfile_Append(writeSpec.path, settings, audioFile);
 
         } else if constexpr (std::is_same_v<T, WriteSettingsMp3 &>) {
           auto settings = static_cast<WriteSettingsMp3>(arg);
@@ -86,23 +79,12 @@ void AudioFileRepository_libsndfile::Append(const WriteSpec &writeSpec,
                                    "AudioFileRepository.Append");
         }
       },
-      writeSettings);
+      writeSpec.writeSettings);
 }
 
 void AudioFileRepository_libsndfile::Delete(const std::string &path) {
   Read(path); // validate that it's an audio file
   impl::filesystem_Delete(path);
-}
-
-const char *
-AudioFileRepository_libsndfile::getPath(const WriteSpec &writeSpec) {
-  return writeSpec.first;
-  const WriteSettings writeSettings = writeSpec.second;
-}
-
-WriteSettings
-AudioFileRepository_libsndfile::getWriteSettings(const WriteSpec &writeSpec) {
-  return writeSpec.second;
 }
 
 } // namespace Clover::IO::AudioFile

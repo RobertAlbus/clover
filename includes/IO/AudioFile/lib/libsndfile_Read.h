@@ -24,6 +24,6 @@
 
 namespace Clover::IO::AudioFile::impl {
 
-AudioFile libsndfile_Read(const char *path);
+AudioFile libsndfile_Read(const std::string &path);
 
 } // namespace Clover::IO::AudioFile::impl

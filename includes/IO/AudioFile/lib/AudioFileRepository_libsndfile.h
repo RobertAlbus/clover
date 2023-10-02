@@ -32,10 +32,6 @@ struct AudioFileRepository_libsndfile : public AudioFileRepository {
   AudioFile Read(const std::string &path) override;
   void Append(const WriteSpec &writeSpec, const AudioFile &audioFile) override;
   void Delete(const std::string &path) override;
-
-private:
-  const char *getPath(const WriteSpec &writeSpec);
-  WriteSettings getWriteSettings(const WriteSpec &writeSpec);
 };
 
 } // namespace Clover::IO::AudioFile

@@ -28,11 +28,12 @@
 
 namespace Clover::IO::AudioFile::impl {
 
-void libsndfile_Append(const char *path, const WriteSettingsPcm &writeSettings,
+void libsndfile_Append(const std::string &path,
+                       const WriteSettingsPcm &writeSettings,
                        const AudioFile &audioFile) {
 
   SF_INFO sfinfo;
-  SNDFILE *file = sf_open(path, SFM_RDWR, &sfinfo);
+  SNDFILE *file = sf_open(path.c_str(), SFM_RDWR, &sfinfo);
 
   throwIfFails(file, sf_error(file));
 

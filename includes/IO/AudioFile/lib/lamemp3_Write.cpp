@@ -32,7 +32,8 @@
 
 namespace Clover::IO::AudioFile::impl {
 
-void lamemp3_Write(const char *path, const WriteSettingsMp3 &writeSettings,
+void lamemp3_Write(const std::string &path,
+                   const WriteSettingsMp3 &writeSettings,
                    const AudioFile &audioFile) {
 
   lame_t lame = lame_init();
@@ -77,7 +78,7 @@ void lamemp3_Write(const char *path, const WriteSettingsMp3 &writeSettings,
         "lamemp3_Write: Could not initialize lamemp3 encoder");
   }
 
-  std::ofstream mp3_file(path, std::ios::binary);
+  std::ofstream mp3_file(path.c_str(), std::ios::binary);
   mp3_file.write((char *)mp3_buffer.data(), mp3_bytes);
 
   int flush_bytes =

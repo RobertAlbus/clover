@@ -29,14 +29,15 @@
 
 namespace Clover::IO::AudioFile::impl {
 
-void libsndfile_Write(const char *path, const WriteSettingsPcm &writeSettings,
+void libsndfile_Write(const std::string &path,
+                      const WriteSettingsPcm &writeSettings,
                       const AudioFile &audioFile) {
   SF_INFO sfinfo;
   sfinfo.samplerate = writeSettings.sampleRate;
   sfinfo.channels = audioFile.channelCount;
   sfinfo.format = getWriteSettingsFormat(writeSettings);
 
-  SNDFILE *file = sf_open(path, SFM_WRITE, &sfinfo);
+  SNDFILE *file = sf_open(path.c_str(), SFM_WRITE, &sfinfo);
   throwIfFails(file, sf_error(file));
 
   sf_count_t count = sf_write_float(file, audioFile.audioData.data(),

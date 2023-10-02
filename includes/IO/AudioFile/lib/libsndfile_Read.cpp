@@ -27,10 +27,10 @@
 
 namespace Clover::IO::AudioFile::impl {
 
-AudioFile libsndfile_Read(const char *path) {
+AudioFile libsndfile_Read(const std::string &path) {
   AudioFile audioFile;
   SF_INFO sfinfo;
-  SNDFILE *file = sf_open(path, SFM_READ, &sfinfo);
+  SNDFILE *file = sf_open(path.c_str(), SFM_READ, &sfinfo);
   throwIfFails(file, sf_error(file));
 
   audioFile.sampleRateHz = sfinfo.samplerate;

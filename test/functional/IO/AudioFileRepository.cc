@@ -29,7 +29,7 @@
 
 using namespace Clover::IO::AudioFile;
 
-TEST(AudioFileRepository_libsndfile, Integration) {
+TEST(AudioFileRepository_libsndfile_Integration, Full_Wav) {
   int samplerate = 48000;
   std::string path = "./TEST.wav";
   int channelCount = 2;
@@ -52,9 +52,10 @@ TEST(AudioFileRepository_libsndfile, Integration) {
     file.audioData.emplace_back(signal); // R
   }
 
-  auto writeSpec = std::make_pair(
-      path.c_str(), WriteSettingsPcm(PcmBitDepth::_float, PcmSampleRate::_48,
-                                     PcmFileType::Wav));
+  WriteSpec writeSpec(path,
+                      WriteSettingsPcm(PcmBitDepth::_float, PcmSampleRate::_48,
+                                       PcmFileType::Wav));
+
   repository.Write(writeSpec, file);
   AudioFile readFile = repository.Read(path);
 
