@@ -24,9 +24,10 @@
 
 #include "Algo/Wavetable/WavetableOscillatorMono.h"
 #include "IO/AudioFile/AudioFile.h"
-#include "IO/AudioFile/AudioFileWriteSettings.h"
 #include "IO/AudioFile/AudioFileRepository.h"
+#include "IO/AudioFile/AudioFileWriteSettings.h"
 
+#include "./AudioFileRepository/AudioFileRepository_util.h"
 
 using namespace Clover::IO::AudioFile;
 
@@ -47,15 +48,6 @@ TEST(AudioFileRepository_libsndfile_Integration, Full_Wav) {
   Clover::Wavetable::WavetableOscillatorMono<float> osc(samplerate);
   osc.freq(500);
 
-  int twoSeconds = samplerate * 2;
-  file.audioData.reserve(twoSeconds);
-
-  for (int i = 0; i < twoSeconds; i++) {
-    float signal = osc.process();
-    file.audioData.emplace_back(signal); // L
-    file.audioData.emplace_back(signal); // R
-  }
-
   WriteSpec writeSpec(path,
                       WriteSettingsPcm(PcmBitDepth::_float, PcmSampleRate::_48,
                                        PcmFileType::Wav));
@@ -71,7 +63,8 @@ TEST(AudioFileRepository_libsndfile_Integration, Full_Wav) {
     EXPECT_FLOAT_EQ(file.cuePoints.at(i), readFile.cuePoints.at(i));
   }
 
-  for (int i = 0; i < twoSeconds * channelCount; i++) {
+  int audioDataSize = file.audioData.size();
+  for (int i = 0; i < audioDataSize; i++) {
     float fileData = readFile.audioData.at(i);
     float audioData = file.audioData.at(i);
     EXPECT_FLOAT_EQ(fileData, audioData) << i;
@@ -80,15 +73,14 @@ TEST(AudioFileRepository_libsndfile_Integration, Full_Wav) {
   repository.Append(writeSpec, file);
   readFile = repository.Read(path);
 
-  int fourSeconds = twoSeconds * 2;
+  int audioDataSizeDoubled = audioDataSize * 2;
 
-  int dataSize = fourSeconds * channelCount;
-  EXPECT_EQ(readFile.audioData.size(), dataSize);
-  for (int i = 0; i < dataSize; i++) {
+  EXPECT_EQ(readFile.audioData.size(), audioDataSizeDoubled);
+  for (int i = 0; i < audioDataSizeDoubled; i++) {
     float fileData = readFile.audioData.at(i);
-    float audioData = file.audioData.at(i % (twoSeconds * channelCount));
+    float audioData = file.audioData.at(i % audioDataSize);
 
-    EXPECT_FLOAT_EQ(fileData, audioData) << "???";
+    EXPECT_FLOAT_EQ(fileData, audioData);
   }
 
   EXPECT_TRUE(std::filesystem::exists(path));
