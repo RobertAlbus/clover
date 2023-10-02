@@ -20,127 +20,19 @@
  *
  */
 
-#include <stdexcept>
-
 #include "AudioFile.h"
 #include "AudioFileWriteSettings.h"
 
 namespace Clover::IO::AudioFile {
 
 struct WriteSpecValidator {
-  static void validate(const WriteSpec writeSpec, const AudioFile audioFile) {
-    if (writeSpec.path.size() < 1) {
-      throw std::runtime_error(
-          "AudioFileService cannot write a file without a path");
-    }
-
-    std::visit(
-        [audioFile](auto &&arg) {
-          using T = std::decay_t<decltype(arg)>;
-
-          if constexpr (std::is_same_v<T, WriteSettingsPcm>) {
-            const WriteSettingsPcm settings =
-                static_cast<WriteSettingsPcm>(arg);
-            validatePcm(settings, audioFile);
-          } else if constexpr (std::is_same_v<T, WriteSettingsMp3 &>) {
-
-          } else {
-            throw std::runtime_error("Unhandled WriteSettings variant for "
-                                     "WriteSpecValidator.validate");
-          }
-        },
-        writeSpec.writeSettings);
-
-    /*
-    flac:
-    - 16 and 24 bit depth only
-    - supported sample rates?
-    - 1-8 channels
-
-    wav:
-    - any bit depth is fine
-    - supported sample rates?
-    - 1-1024 channels
-
-    mp3:
-    - bit depth, sample rate?
-    - channels?
-
-    should throw runtime error
-
-
-    // OTHER TODO: rename the files with AudioFile prefix to unprefixed to match
-    the namespace/classname format
-
-    */
-  }
+  static void validate(const WriteSpec writeSpec, const AudioFile audioFile);
 
 private:
-  static void validateMp3(WriteSettingsMp3 writeSettings, AudioFile audioFile) {
-    bool isValidBitRate =
-        writeSettings.bitRate == 320 || writeSettings.bitRate == 256 ||
-        writeSettings.bitRate == 192 || writeSettings.bitRate == 96;
-
-    if (!isValidBitRate) {
-      throw std::runtime_error("Clover::IO::AudioFile::WriteSpecValidator: "
-                               "Mp3 bit rate must be 96, 192, 256, or 320.");
-    }
-
-    bool isValidChannelCount =
-        audioFile.channelCount == 1 || audioFile.channelCount == 2;
-    if (!isValidChannelCount) {
-      throw std::runtime_error("Clover::IO::AudioFile::WriteSpecValidator: "
-                               "Mp3 files can only be written for audio with a"
-                               "channel count of 1 or 2");
-    }
-  }
-
-  static void validatePcm(WriteSettingsPcm writeSettings, AudioFile audioFile) {
-    if (writeSettings.pcmFileType == PcmFileType::Flac) {
-      validateFlac(writeSettings, audioFile);
-    } else if (writeSettings.pcmFileType == PcmFileType::Wav) {
-      validateWav(writeSettings, audioFile);
-    } else {
-      throw std::runtime_error("Clover::IO::AudioFile::WriteSpecValidator: "
-                               "Unhandled PCM file type");
-    }
-  }
-
-  static void validateFlac(WriteSettingsPcm writeSettings,
-                           AudioFile audioFile) {
-    if (writeSettings.pcmFileType != PcmFileType::Flac)
-      return;
-
-    bool isSupportedBitDepth = writeSettings.bitDepth == PcmBitDepth::_16 ||
-                               writeSettings.bitDepth == PcmBitDepth::_24;
-    if (!isSupportedBitDepth) {
-      throw std::runtime_error("Clover::IO::AudioFile::WriteSpecValidator: "
-                               "Flac files must be 16 or 24 bit.");
-    }
-
-    bool isSupportedChannelCount =
-        audioFile.channelCount > 0 && audioFile.channelCount <= 9;
-
-    if (!isSupportedChannelCount) {
-      throw std::runtime_error("Clover::IO::AudioFile::WriteSpecValidator: "
-                               "Flac files can only be written for audio with a"
-                               "channel count between 1 and 8");
-    }
-  }
-
-  static void validateWav(WriteSettingsPcm writeSettings, AudioFile audioFile) {
-    if (writeSettings.pcmFileType != PcmFileType::Wav)
-      return;
-
-    bool isSupportedChannelCount =
-        audioFile.channelCount > 0 && audioFile.channelCount <= 1024;
-
-    if (!isSupportedChannelCount) {
-      throw std::runtime_error("Clover::IO::AudioFile::WriteSpecValidator: "
-                               "Wav files can only be written for audio with a "
-                               "channel count between 1 and 1024");
-    }
-  }
+  static void validateMp3(WriteSettingsMp3 writeSettings, AudioFile audioFile);
+  static void validatePcm(WriteSettingsPcm writeSettings, AudioFile audioFile);
+  static void validateFlac(WriteSettingsPcm writeSettings, AudioFile audioFile);
+  static void validateWav(WriteSettingsPcm writeSettings, AudioFile audioFile);
 };
 
 } // namespace Clover::IO::AudioFile
