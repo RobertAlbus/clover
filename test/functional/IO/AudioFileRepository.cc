@@ -31,6 +31,34 @@
 
 using namespace Clover::IO::AudioFile;
 
+TEST(AudioFileRepository_libsndfile_Integration, Write_PCM) {
+  std::unique_ptr<AudioFileRepository> repo_ptr =
+      AudioFileRepository::BuildInstance();
+  AudioFileRepository &repository = *repo_ptr;
+
+  AudioFile file = generateAudioFileData();
+
+  std::vector<WriteSpec> writeSpecs = generateValidWriteSpecsFlac();
+  std::vector<WriteSpec> wavWriteSpecs = generateValidWriteSpecsWav();
+  writeSpecs.insert(writeSpecs.end(), wavWriteSpecs.begin(),
+                    wavWriteSpecs.end());
+
+  for (auto writeSpec : writeSpecs) {
+    if (std::filesystem::exists(writeSpec.path)) {
+      std::filesystem::remove(writeSpec.path);
+    }
+  }
+
+  for (auto writeSpec : writeSpecs) {
+    repository.Write(writeSpec, file);
+  }
+
+  for (auto writeSpec : writeSpecs) {
+    EXPECT_TRUE(std::filesystem::exists(writeSpec.path));
+    std::filesystem::remove(writeSpec.path);
+  }
+}
+
 TEST(AudioFileRepository_libsndfile_Integration, Full_Wav) {
   int samplerate = 48000;
   std::string path = "./TEST.wav";
