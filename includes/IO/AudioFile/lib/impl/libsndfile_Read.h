@@ -20,13 +20,10 @@
  *
  */
 
-#include "../AudioFile.h"
-#include "../AudioFileWriteSettings.h"
+#include "../../AudioFile.h"
 
 namespace Clover::IO::AudioFile::impl {
 
-void libsndfile_Append(const std::string &path,
-                       const WriteSettingsPcm &writeSettings,
-                       const AudioFile &audioFile);
+AudioFile libsndfile_Read(const std::string &path);
 
 } // namespace Clover::IO::AudioFile::impl

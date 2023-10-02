@@ -23,8 +23,8 @@
 #include <memory>
 #include <vector>
 
-#include "AudioFileRepository.h"
-#include "WriteSpecValidator.h"
+#include "lib/AudioFileRepository.h"
+#include "lib/WriteSpecValidator.h"
 
 namespace Clover::IO::AudioFile {
 

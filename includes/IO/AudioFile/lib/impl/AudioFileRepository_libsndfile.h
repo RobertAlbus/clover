@@ -20,20 +20,18 @@
  *
  */
 
-#include <stdexcept>
 #include <string>
-#include <vector>
 
-#include "sndfile.h"
+#include "../../AudioFile.h"
+#include "../AudioFileRepository.h"
 
-#include "../AudioFile.h"
-#include "../AudioFileWriteSettings.h"
-#include "libsndfile__Util.h"
+namespace Clover::IO::AudioFile {
 
-namespace Clover::IO::AudioFile::impl {
+struct AudioFileRepository_libsndfile : public AudioFileRepository {
+  void Write(const WriteSpec &writeSpec, const AudioFile &audioFile) override;
+  AudioFile Read(const std::string &path) override;
+  void Append(const WriteSpec &writeSpec, const AudioFile &audioFile) override;
+  void Delete(const std::string &path) override;
+};
 
-void libsndfile_Write(const std::string &path,
-                      const WriteSettingsPcm &writeSettings,
-                      const AudioFile &audioFile);
-
-} // namespace Clover::IO::AudioFile::impl
+} // namespace Clover::IO::AudioFile

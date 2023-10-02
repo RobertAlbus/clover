@@ -22,7 +22,7 @@
 
 #include "sndfile.h"
 
-#include "../AudioFileWriteSettings.h"
+#include "../../AudioFileWriteSettings.h"
 
 namespace Clover::IO::AudioFile::impl {
 

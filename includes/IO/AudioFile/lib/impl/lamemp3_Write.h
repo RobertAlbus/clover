@@ -20,10 +20,18 @@
  *
  */
 
-#include "../AudioFile.h"
+#include <fstream>
+#include <stdexcept>
+#include <string>
+#include <vector>
+
+#include "../../AudioFile.h"
+#include "../../AudioFileWriteSettings.h"
 
 namespace Clover::IO::AudioFile::impl {
 
-AudioFile libsndfile_Read(const std::string &path);
+void lamemp3_Write(const std::string &path,
+                   const WriteSettingsMp3 &writeSettings,
+                   const AudioFile &audioFile);
 
 } // namespace Clover::IO::AudioFile::impl

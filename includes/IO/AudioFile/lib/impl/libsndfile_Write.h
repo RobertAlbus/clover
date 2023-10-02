@@ -20,25 +20,20 @@
  *
  */
 
-#include <memory>
+#include <stdexcept>
 #include <string>
+#include <vector>
 
-#include "AudioFile.h"
-#include "AudioFileWriteSettings.h"
+#include "sndfile.h"
 
-namespace Clover::IO::AudioFile {
+#include "../../AudioFile.h"
+#include "../../AudioFileWriteSettings.h"
+#include "libsndfile__Util.h"
 
-struct AudioFileRepository {
-  virtual ~AudioFileRepository() = default;
+namespace Clover::IO::AudioFile::impl {
 
-  static std::unique_ptr<AudioFileRepository> BuildInstance();
+void libsndfile_Write(const std::string &path,
+                      const WriteSettingsPcm &writeSettings,
+                      const AudioFile &audioFile);
 
-  virtual void Write(const WriteSpec &writeSpec,
-                     const AudioFile &audioFile) = 0;
-  virtual AudioFile Read(const std::string &filePath) = 0;
-  virtual void Append(const WriteSpec &writeSpec,
-                      const AudioFile &audioFile) = 0;
-  virtual void Delete(const std::string &filePath) = 0;
-};
-
-} // namespace Clover::IO::AudioFile
+} // namespace Clover::IO::AudioFile::impl

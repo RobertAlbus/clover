@@ -26,8 +26,8 @@
 // available as a transitive dependency via libsndfile
 #include "lame/lame.h"
 
-#include "../AudioFile.h"
-#include "../AudioFileWriteSettings.h"
+#include "../../AudioFile.h"
+#include "../../AudioFileWriteSettings.h"
 #include "lamemp3_Write.h"
 
 namespace Clover::IO::AudioFile::impl {

@@ -20,7 +20,7 @@
 #include <memory>
 
 #include "AudioFileService.h"
-#include "WriteSpecValidator.h"
+#include "lib/WriteSpecValidator.h"
 
 namespace Clover::IO::AudioFile {
 

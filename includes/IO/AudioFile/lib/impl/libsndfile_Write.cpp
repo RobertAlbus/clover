@@ -19,46 +19,46 @@
  */
 
 #include <stdexcept>
+#include <vector>
 
 #include "sndfile.h"
 
-#include "../AudioFile.h"
+#include "../../AudioFile.h"
+#include "../../AudioFileWriteSettings.h"
 #include "libsndfile__Util.h"
 
 namespace Clover::IO::AudioFile::impl {
 
-AudioFile libsndfile_Read(const std::string &path) {
-  AudioFile audioFile;
+void libsndfile_Write(const std::string &path,
+                      const WriteSettingsPcm &writeSettings,
+                      const AudioFile &audioFile) {
   SF_INFO sfinfo;
-  SNDFILE *file = sf_open(path.c_str(), SFM_READ, &sfinfo);
+  sfinfo.samplerate = writeSettings.sampleRate;
+  sfinfo.channels = audioFile.channelCount;
+  sfinfo.format = getWriteSettingsFormat(writeSettings);
+
+  SNDFILE *file = sf_open(path.c_str(), SFM_WRITE, &sfinfo);
   throwIfFails(file, sf_error(file));
 
-  audioFile.sampleRateHz = sfinfo.samplerate;
-  audioFile.channelCount = sfinfo.channels;
-
-  audioFile.audioData.resize(sfinfo.frames * sfinfo.channels);
-  sf_count_t count = sf_read_float(file, audioFile.audioData.data(),
-                                   audioFile.audioData.size());
+  sf_count_t count = sf_write_float(file, audioFile.audioData.data(),
+                                    audioFile.audioData.size());
 
   if (count != static_cast<sf_count_t>(audioFile.audioData.size())) {
     throwIfFails(file, sf_error(file));
   }
 
-  SF_CUES cues;
-  if (sf_command(file, SFC_GET_CUE, &cues, sizeof(cues)) == SF_TRUE) {
-    for (unsigned i = 0; i < cues.cue_count; ++i) {
-      audioFile.cuePoints.push_back(cues.cue_points[i].sample_offset);
-    }
+  std::vector<SF_CUE_POINT> cuePoints;
+  cuePoints.reserve(audioFile.cuePoints.size());
+  for (auto &point : audioFile.cuePoints) {
+    SF_CUE_POINT cuePoint;
+    cuePoint.position = point;
+    cuePoints.push_back(cuePoint);
   }
+  sf_command(file, SFC_SET_CUE, cuePoints.data(),
+             cuePoints.size() * sizeof(SF_CUE_POINT));
 
-  if (sf_close(file) != 0) {
-    int err = sf_error(file);
-    if (err != SF_ERR_NO_ERROR) {
-      throw std::runtime_error(sf_strerror(file));
-    }
-  }
-
-  return audioFile;
+  sf_write_sync(file);
+  throwIfFails(file, sf_close(file));
 }
 
 } // namespace Clover::IO::AudioFile::impl

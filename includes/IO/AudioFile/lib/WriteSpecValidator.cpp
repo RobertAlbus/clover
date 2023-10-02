@@ -20,8 +20,8 @@
 
 #include <stdexcept>
 
-#include "AudioFile.h"
-#include "AudioFileWriteSettings.h"
+#include "../AudioFile.h"
+#include "../AudioFileWriteSettings.h"
 #include "WriteSpecValidator.h"
 
 namespace Clover::IO::AudioFile {

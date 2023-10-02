@@ -20,18 +20,13 @@
  *
  */
 
-#include <fstream>
-#include <stdexcept>
-#include <string>
-#include <vector>
+#include "sndfile.h"
 
-#include "../AudioFile.h"
-#include "../AudioFileWriteSettings.h"
+#include "../../AudioFileWriteSettings.h"
 
 namespace Clover::IO::AudioFile::impl {
 
-void lamemp3_Write(const std::string &path,
-                   const WriteSettingsMp3 &writeSettings,
-                   const AudioFile &audioFile);
+void throwIfFails(SNDFILE *sndfile, int resultCode);
+int getWriteSettingsFormat(const WriteSettingsPcm &writeSettings);
 
 } // namespace Clover::IO::AudioFile::impl

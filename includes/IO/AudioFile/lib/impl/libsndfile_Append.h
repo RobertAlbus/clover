@@ -20,19 +20,13 @@
  *
  */
 
-#include "AudioFile.h"
-#include "AudioFileWriteSettings.h"
+#include "../../AudioFile.h"
+#include "../../AudioFileWriteSettings.h"
 
-namespace Clover::IO::AudioFile {
+namespace Clover::IO::AudioFile::impl {
 
-struct WriteSpecValidator {
-  static void validate(const WriteSpec writeSpec, const AudioFile audioFile);
+void libsndfile_Append(const std::string &path,
+                       const WriteSettingsPcm &writeSettings,
+                       const AudioFile &audioFile);
 
-private:
-  static void validateMp3(WriteSettingsMp3 writeSettings, AudioFile audioFile);
-  static void validatePcm(WriteSettingsPcm writeSettings, AudioFile audioFile);
-  static void validateFlac(WriteSettingsPcm writeSettings, AudioFile audioFile);
-  static void validateWav(WriteSettingsPcm writeSettings, AudioFile audioFile);
-};
-
-} // namespace Clover::IO::AudioFile
+} // namespace Clover::IO::AudioFile::impl

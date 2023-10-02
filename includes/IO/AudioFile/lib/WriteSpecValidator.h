@@ -20,13 +20,19 @@
  *
  */
 
-#include "sndfile.h"
-
+#include "../AudioFile.h"
 #include "../AudioFileWriteSettings.h"
 
-namespace Clover::IO::AudioFile::impl {
+namespace Clover::IO::AudioFile {
 
-void throwIfFails(SNDFILE *sndfile, int resultCode);
-int getWriteSettingsFormat(const WriteSettingsPcm &writeSettings);
+struct WriteSpecValidator {
+  static void validate(const WriteSpec writeSpec, const AudioFile audioFile);
 
-} // namespace Clover::IO::AudioFile::impl
+private:
+  static void validateMp3(WriteSettingsMp3 writeSettings, AudioFile audioFile);
+  static void validatePcm(WriteSettingsPcm writeSettings, AudioFile audioFile);
+  static void validateFlac(WriteSettingsPcm writeSettings, AudioFile audioFile);
+  static void validateWav(WriteSettingsPcm writeSettings, AudioFile audioFile);
+};
+
+} // namespace Clover::IO::AudioFile
