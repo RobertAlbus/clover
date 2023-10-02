@@ -16,6 +16,7 @@ if(CLANG_TIDY_BIN)
         ${SOURCE_LIST_INCLUDES_H}
         ${SOURCE_LIST_TEST_FUNCTIONAL_CC}
         ${SOURCE_LIST_TEST_PERFORMANCE_CC}
+        ${SOURCE_LIST_TEST_HELPERS_H}
     )
 else()
     add_custom_target(tidy
