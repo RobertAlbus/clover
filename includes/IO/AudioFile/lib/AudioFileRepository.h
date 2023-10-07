@@ -33,11 +33,11 @@ struct AudioFileRepository {
 
   static std::unique_ptr<AudioFileRepository> BuildInstance();
 
-  virtual void Write(const WriteSpec &writeSpec,
-                     const AudioFile &audioFile) = 0;
+  virtual void
+  Write(const WriteSpec &writeSpec, const AudioFile &audioFile) = 0;
   virtual AudioFile Read(const std::string &filePath) = 0;
-  virtual void Append(const WriteSpec &writeSpec,
-                      const AudioFile &audioFile) = 0;
+  virtual void
+  Append(const WriteSpec &writeSpec, const AudioFile &audioFile) = 0;
   virtual void Delete(const std::string &filePath) = 0;
 };
 

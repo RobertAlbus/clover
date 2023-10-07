@@ -32,16 +32,18 @@ AudioFileService::AudioFileService()
     : repostiory(AudioFileRepository::BuildInstance()) {}
 
 // single op
-void AudioFileService::Write(const WriteSpec &writeSpec,
-                             const AudioFile &audioFile) {
+void AudioFileService::Write(
+    const WriteSpec &writeSpec, const AudioFile &audioFile
+) {
   validator.validate(writeSpec, audioFile);
   repostiory->Write(writeSpec, audioFile);
 }
 AudioFile AudioFileService::Read(const std::string &filePath) {
   return repostiory->Read(filePath);
 }
-void AudioFileService::Append(const WriteSpec &writeSpec,
-                              const AudioFile &audioFile) {
+void AudioFileService::Append(
+    const WriteSpec &writeSpec, const AudioFile &audioFile
+) {
   validator.validate(writeSpec, audioFile);
   repostiory->Append(writeSpec, audioFile);
 }
@@ -50,8 +52,9 @@ void AudioFileService::Delete(const std::string &filePath) {
 }
 
 // multi op
-void AudioFileService::Write(const std::vector<WriteSpec> &writeSpecs,
-                             const AudioFile &audioFile) {
+void AudioFileService::Write(
+    const std::vector<WriteSpec> &writeSpecs, const AudioFile &audioFile
+) {
   for (const WriteSpec writeSpec : writeSpecs) {
     Write(writeSpec, audioFile);
   }
@@ -65,8 +68,9 @@ AudioFileService::Read(const std::vector<std::string> &filePaths) {
 
   return audioFiles;
 }
-void AudioFileService::Append(const std::vector<WriteSpec> &writeSpecs,
-                              const AudioFile &audioFile) {
+void AudioFileService::Append(
+    const std::vector<WriteSpec> &writeSpecs, const AudioFile &audioFile
+) {
   for (const WriteSpec writeSpec : writeSpecs) {
     Append(writeSpec, audioFile);
   }

@@ -26,32 +26,36 @@
 
 namespace Clover::IO::AudioFile {
 
-void WriteSpecValidator::validate(const WriteSpec writeSpec,
-                                  const AudioFile audioFile) {
+void WriteSpecValidator::validate(
+    const WriteSpec writeSpec, const AudioFile audioFile
+) {
   if (writeSpec.path.size() < 1) {
     throw std::runtime_error(
-        "AudioFileService cannot write a file without a path");
+        "AudioFileService cannot write a file without a path"
+    );
   }
 
   std::visit(
       [audioFile](auto &&arg) {
-        using T = std::decay_t<decltype(arg)>;
+    using T = std::decay_t<decltype(arg)>;
 
-        if constexpr (std::is_same_v<T, WriteSettingsPcm>) {
-          const WriteSettingsPcm settings = static_cast<WriteSettingsPcm>(arg);
-          validatePcm(settings, audioFile);
-        } else if constexpr (std::is_same_v<T, WriteSettingsMp3 &>) {
-
-        } else {
-          throw std::runtime_error("Unhandled WriteSettings variant for "
-                                   "WriteSpecValidator.validate");
-        }
+    if constexpr (std::is_same_v<T, WriteSettingsPcm>) {
+      const WriteSettingsPcm settings = static_cast<WriteSettingsPcm>(arg);
+      validatePcm(settings, audioFile);
+    } else if constexpr (std::is_same_v<T, WriteSettingsMp3 &>) {
+      const WriteSettingsMp3 settings = static_cast<WriteSettingsPcm>(arg);
+      validateMp3(settings, audioFile);
+    } else {
+      throw std::runtime_error("Unhandled WriteSettings variant for "
+                               "WriteSpecValidator.validate");
+    }
       },
       writeSpec.writeSettings);
 }
 
-void WriteSpecValidator::validateMp3(WriteSettingsMp3 writeSettings,
-                                     AudioFile audioFile) {
+void WriteSpecValidator::validateMp3(
+    WriteSettingsMp3 writeSettings, AudioFile audioFile
+) {
   bool isValidBitRate =
       writeSettings.bitRate == 320 || writeSettings.bitRate == 256 ||
       writeSettings.bitRate == 192 || writeSettings.bitRate == 96;
@@ -70,8 +74,9 @@ void WriteSpecValidator::validateMp3(WriteSettingsMp3 writeSettings,
   }
 }
 
-void WriteSpecValidator::validatePcm(WriteSettingsPcm writeSettings,
-                                     AudioFile audioFile) {
+void WriteSpecValidator::validatePcm(
+    WriteSettingsPcm writeSettings, AudioFile audioFile
+) {
   if (writeSettings.pcmFileType == PcmFileType::Flac) {
     validateFlac(writeSettings, audioFile);
   } else if (writeSettings.pcmFileType == PcmFileType::Wav) {
@@ -82,8 +87,9 @@ void WriteSpecValidator::validatePcm(WriteSettingsPcm writeSettings,
   }
 }
 
-void WriteSpecValidator::validateFlac(WriteSettingsPcm writeSettings,
-                                      AudioFile audioFile) {
+void WriteSpecValidator::validateFlac(
+    WriteSettingsPcm writeSettings, AudioFile audioFile
+) {
   if (writeSettings.pcmFileType != PcmFileType::Flac)
     return;
 
@@ -104,8 +110,9 @@ void WriteSpecValidator::validateFlac(WriteSettingsPcm writeSettings,
   }
 }
 
-void WriteSpecValidator::validateWav(WriteSettingsPcm writeSettings,
-                                     AudioFile audioFile) {
+void WriteSpecValidator::validateWav(
+    WriteSettingsPcm writeSettings, AudioFile audioFile
+) {
   if (writeSettings.pcmFileType != PcmFileType::Wav)
     return;
 

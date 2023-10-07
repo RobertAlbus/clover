@@ -26,8 +26,8 @@ template <FloatingPoint T, int __arity> class JilesAthertonModel {
 public:
   JilesAthertonModel(T sampleRate) { initializeDefaultParameters(sampleRate); }
 
-  std::array<T, __arity>
-  processSample(const std::array<T, __arity> &inputValues) {
+  std::array<T, __arity> processSample(const std::array<T, __arity> &inputValues
+  ) {
     updateStateVariables(inputValues);
     return computeOutput();
   }

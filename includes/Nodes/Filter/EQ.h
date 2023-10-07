@@ -69,8 +69,8 @@ public:
   }
 
   void lowShelf() {
-    setFunction = [this](float freq, float reso, float dbGain,
-                         float sampleRate) {
+    setFunction =
+        [this](float freq, float reso, float dbGain, float sampleRate) {
       this->freq_ = freq;
       this->reso_ = reso;
       this->dbGain_ = dbGain;
@@ -81,8 +81,8 @@ public:
   }
 
   void highShelf() {
-    setFunction = [this](float freq, float reso, float dbGain,
-                         float sampleRate) {
+    setFunction =
+        [this](float freq, float reso, float dbGain, float sampleRate) {
       this->freq_ = freq;
       this->reso_ = reso;
       this->dbGain_ = dbGain;
@@ -93,8 +93,8 @@ public:
   }
 
   void peakingEQ() {
-    setFunction = [this](float freq, float reso, float dbGain,
-                         float sampleRate) {
+    setFunction =
+        [this](float freq, float reso, float dbGain, float sampleRate) {
       this->freq_ = freq;
       this->reso_ = reso;
       this->dbGain_ = dbGain;

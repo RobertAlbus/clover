@@ -49,8 +49,11 @@ EnvelopeComputation EnvelopeDefinition::compute() const {
   computation.points.reserve(points.size());
 
   for (const EnvelopeDefinition::Point &definitionPoint : points) {
-    computation.addPoint(std::round(definitionPoint.start),
-                         definitionPoint.value, definitionPoint.tension);
+    computation.addPoint(
+        std::round(definitionPoint.start),
+        definitionPoint.value,
+        definitionPoint.tension
+    );
   }
 
   computation.calculateDurations();

@@ -28,8 +28,9 @@ void Pitchable::midiNote(float note) {
   throw NotImplementedException("Pitchable:pitch(float)");
 };
 
-void PitchableFacilitator(const float &data,
-                          std::vector<Pitchable *> &targets) {
+void PitchableFacilitator(
+    const float &data, std::vector<Pitchable *> &targets
+) {
   for (Pitchable *target : targets)
     target->midiNote(data);
 }

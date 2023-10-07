@@ -98,8 +98,8 @@ struct ResonantButterworthCoefficientStrategy
     return coefficients;
   }
 
-  IIRFilterCoefficients<T> lowShelf(T cutoff_hz, T Q, T gain_db,
-                                    T samplerate_hz) {
+  IIRFilterCoefficients<T>
+  lowShelf(T cutoff_hz, T Q, T gain_db, T samplerate_hz) {
     T w0 = T(2) * M_PI * cutoff_hz / samplerate_hz;
     T alpha = sin(w0) / (T(2) * Q);
     T A = pow(T(10), gain_db / T(40));
@@ -119,8 +119,8 @@ struct ResonantButterworthCoefficientStrategy
     return coefficients;
   }
 
-  IIRFilterCoefficients<T> highShelf(T cutoff_hz, T Q, T gain_db,
-                                     T samplerate_hz) {
+  IIRFilterCoefficients<T>
+  highShelf(T cutoff_hz, T Q, T gain_db, T samplerate_hz) {
     T w0 = T(2) * M_PI * cutoff_hz / samplerate_hz;
     T alpha = sin(w0) / (T(2) * Q);
     T A = pow(T(10), gain_db / T(40));
@@ -140,8 +140,8 @@ struct ResonantButterworthCoefficientStrategy
     return coefficients;
   }
 
-  IIRFilterCoefficients<T> peakingEQ(T cutoff_hz, T Q, T gain_db,
-                                     T samplerate_hz) {
+  IIRFilterCoefficients<T>
+  peakingEQ(T cutoff_hz, T Q, T gain_db, T samplerate_hz) {
     T w0 = T(2) * M_PI * cutoff_hz / samplerate_hz;
     T alpha = sin(w0) / (T(2) * Q);
     T A = pow(T(10), gain_db / T(40));

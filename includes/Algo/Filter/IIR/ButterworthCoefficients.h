@@ -88,8 +88,8 @@ struct ButterworthCoefficientStrategy : public IIRCoefficientStrategy<T> {
     return IIRFilterCoefficients<T>{b0, b1, b2, a0, a1, a2};
   }
 
-  IIRFilterCoefficients<T> lowShelf(T cutoff_hz, T Q, T gain_db,
-                                    T samplerate_hz) {
+  IIRFilterCoefficients<T>
+  lowShelf(T cutoff_hz, T Q, T gain_db, T samplerate_hz) {
     T A = std::pow(T(10), gain_db / T(40));
     T omega_c = std::tan(M_PI * cutoff_hz / samplerate_hz);
     T beta = std::sqrt(A) / Q;
@@ -105,8 +105,8 @@ struct ButterworthCoefficientStrategy : public IIRCoefficientStrategy<T> {
     return IIRFilterCoefficients<T>{b0, b1, b2, a0, a1, a2};
   }
 
-  IIRFilterCoefficients<T> highShelf(T cutoff_hz, T Q, T gain_db,
-                                     T samplerate_hz) {
+  IIRFilterCoefficients<T>
+  highShelf(T cutoff_hz, T Q, T gain_db, T samplerate_hz) {
     T A = std::pow(T(10), gain_db / T(40));
     T omega_c = std::tan(M_PI * cutoff_hz / samplerate_hz);
     T beta = std::sqrt(A) / Q;
@@ -122,8 +122,8 @@ struct ButterworthCoefficientStrategy : public IIRCoefficientStrategy<T> {
     return IIRFilterCoefficients<T>{b0, b1, b2, a0, a1, a2};
   }
 
-  IIRFilterCoefficients<T> peakingEQ(T cutoff_hz, T Q, T gain_db,
-                                     T samplerate_hz) {
+  IIRFilterCoefficients<T>
+  peakingEQ(T cutoff_hz, T Q, T gain_db, T samplerate_hz) {
     T A = std::pow(T(10), gain_db / T(40));
     T omega_c = std::tan(M_PI * cutoff_hz / samplerate_hz);
     T sin_omega_c = std::sin(omega_c);

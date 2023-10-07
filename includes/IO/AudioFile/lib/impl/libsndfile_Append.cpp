@@ -28,9 +28,11 @@
 
 namespace Clover::IO::AudioFile::impl {
 
-void libsndfile_Append(const std::string &path,
-                       const WriteSettingsPcm &writeSettings,
-                       const AudioFile &audioFile) {
+void libsndfile_Append(
+    const std::string &path,
+    const WriteSettingsPcm &writeSettings,
+    const AudioFile &audioFile
+) {
 
   SF_INFO sfinfo;
   SNDFILE *file = sf_open(path.c_str(), SFM_RDWR, &sfinfo);
@@ -42,7 +44,8 @@ void libsndfile_Append(const std::string &path,
     sf_close(file);
     throw std::runtime_error(
         "Incompatible sample rate when appending audio to file: path=[" +
-        std::string(path) + "]");
+        std::string(path) + "]"
+    );
   }
 
   bool channelCountMismatch = sfinfo.channels != audioFile.channelCount;
@@ -50,12 +53,14 @@ void libsndfile_Append(const std::string &path,
     sf_close(file);
     throw std::runtime_error(
         "Incompatible channel count when appending audio to file: path=[" +
-        std::string(path) + "]");
+        std::string(path) + "]"
+    );
   }
 
   sf_seek(file, 0, SEEK_END);
-  sf_count_t count = sf_write_float(file, audioFile.audioData.data(),
-                                    audioFile.audioData.size());
+  sf_count_t count = sf_write_float(
+      file, audioFile.audioData.data(), audioFile.audioData.size()
+  );
 
   if (count != static_cast<sf_count_t>(audioFile.audioData.size())) {
     throwIfFails(file, sf_error(file));

@@ -37,8 +37,9 @@ AudioFile libsndfile_Read(const std::string &path) {
   audioFile.channelCount = sfinfo.channels;
 
   audioFile.audioData.resize(sfinfo.frames * sfinfo.channels);
-  sf_count_t count = sf_read_float(file, audioFile.audioData.data(),
-                                   audioFile.audioData.size());
+  sf_count_t count = sf_read_float(
+      file, audioFile.audioData.data(), audioFile.audioData.size()
+  );
 
   if (count != static_cast<sf_count_t>(audioFile.audioData.size())) {
     throwIfFails(file, sf_error(file));

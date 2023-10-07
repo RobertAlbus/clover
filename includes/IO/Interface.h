@@ -99,12 +99,17 @@ public:
         Pa_GetDeviceInfo(outputParameters.device)->defaultLowOutputLatency;
     outputParameters.hostApiSpecificStreamInfo = NULL;
 
-    PaError err = Pa_OpenStream(&stream, NULL, /* no input */
-                                &outputParameters, Base::sampleRate,
-                                paFramesPerBufferUnspecified, paNoFlag,
-                                &Interface::paCallback, this
-                                /* Using 'this' for userData so we can cast to
-                                   Interface* paCallback method */
+    PaError err = Pa_OpenStream(
+        &stream,
+        NULL, /* no input */
+        &outputParameters,
+        Base::sampleRate,
+        paFramesPerBufferUnspecified,
+        paNoFlag,
+        &Interface::paCallback,
+        this
+        /* Using 'this' for userData so we can cast to
+           Interface* paCallback method */
     );
 
     if (err != paNoError) {
@@ -150,10 +155,13 @@ private:
 
   /* The instance callback, where we have access to every method/variable in
    * object of class Interface */
-  int paCallbackMethod(const void *inputBuffer, void *outputBuffer,
-                       unsigned long framesPerBuffer,
-                       const PaStreamCallbackTimeInfo *timeInfo,
-                       PaStreamCallbackFlags statusFlags) {
+  int paCallbackMethod(
+      const void *inputBuffer,
+      void *outputBuffer,
+      unsigned long framesPerBuffer,
+      const PaStreamCallbackTimeInfo *timeInfo,
+      PaStreamCallbackFlags statusFlags
+  ) {
     float *out = (float *)outputBuffer;
     unsigned long i;
 
@@ -188,16 +196,21 @@ private:
   ** It may called at interrupt level on some machines so don't do anything
   ** that could mess up the system like calling malloc() or free().
   */
-  static int paCallback(const void *inputBuffer, void *outputBuffer,
-                        unsigned long framesPerBuffer,
-                        const PaStreamCallbackTimeInfo *timeInfo,
-                        PaStreamCallbackFlags statusFlags, void *userData) {
+  static int paCallback(
+      const void *inputBuffer,
+      void *outputBuffer,
+      unsigned long framesPerBuffer,
+      const PaStreamCallbackTimeInfo *timeInfo,
+      PaStreamCallbackFlags statusFlags,
+      void *userData
+  ) {
     /* Here we cast userData to Interface* type so we can call the instance
        method paCallbackMethod, we can do that since we called Pa_OpenStream
        with 'this' for userData */
     return ((Interface *)userData)
-        ->paCallbackMethod(inputBuffer, outputBuffer, framesPerBuffer, timeInfo,
-                           statusFlags);
+        ->paCallbackMethod(
+            inputBuffer, outputBuffer, framesPerBuffer, timeInfo, statusFlags
+        );
   }
 
 private:

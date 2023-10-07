@@ -40,8 +40,9 @@ TEST(AudioFileRepository_libsndfile_Integration, Write_PCM) {
 
   std::vector<WriteSpec> writeSpecs = generateValidWriteSpecsFlac();
   std::vector<WriteSpec> wavWriteSpecs = generateValidWriteSpecsWav();
-  writeSpecs.insert(writeSpecs.end(), wavWriteSpecs.begin(),
-                    wavWriteSpecs.end());
+  writeSpecs.insert(
+      writeSpecs.end(), wavWriteSpecs.begin(), wavWriteSpecs.end()
+  );
 
   for (auto writeSpec : writeSpecs) {
     if (std::filesystem::exists(writeSpec.path)) {
@@ -76,9 +77,12 @@ TEST(AudioFileRepository_libsndfile_Integration, Full_Wav) {
   Clover::Wavetable::WavetableOscillatorMono<float> osc(samplerate);
   osc.freq(500);
 
-  WriteSpec writeSpec(path,
-                      WriteSettingsPcm(PcmBitDepth::_float, PcmSampleRate::_48,
-                                       PcmFileType::Wav));
+  WriteSpec writeSpec(
+      path,
+      WriteSettingsPcm(
+          PcmBitDepth::_float, PcmSampleRate::_48, PcmFileType::Wav
+      )
+  );
 
   repository.Write(writeSpec, file);
   AudioFile readFile = repository.Read(path);

@@ -61,9 +61,12 @@ struct ChebyshevType2CoefficientStrategy : public IIRCoefficientStrategy<T> {
     return highPass(cutoff_hz, Q, samplerate_hz, std::nullopt);
   }
 
-  IIRFilterCoefficients<T>
-  highPass(T cutoff_hz, T Q, T samplerate_hz,
-           std::optional<IIRFilterCoefficients<T>> lp_coefficients) {
+  IIRFilterCoefficients<T> highPass(
+      T cutoff_hz,
+      T Q,
+      T samplerate_hz,
+      std::optional<IIRFilterCoefficients<T>> lp_coefficients
+  ) {
 
     if (!lp_coefficients.has_value()) {
       lp_coefficients = lowPass(cutoff_hz, Q, samplerate_hz);
@@ -129,8 +132,8 @@ struct ChebyshevType2CoefficientStrategy : public IIRCoefficientStrategy<T> {
     return coeffs;
   }
 
-  IIRFilterCoefficients<T> lowShelf(T cutoff_hz, T Q, T gain_db,
-                                    T samplerate_hz) {
+  IIRFilterCoefficients<T>
+  lowShelf(T cutoff_hz, T Q, T gain_db, T samplerate_hz) {
     IIRFilterCoefficients<T> lp_coefficients =
         lowPass(cutoff_hz, Q, samplerate_hz);
     IIRFilterCoefficients<T> hp_coefficients =
@@ -149,8 +152,8 @@ struct ChebyshevType2CoefficientStrategy : public IIRCoefficientStrategy<T> {
     return coefficients;
   }
 
-  IIRFilterCoefficients<T> highShelf(T cutoff_hz, T Q, T gain_db,
-                                     T samplerate_hz) {
+  IIRFilterCoefficients<T>
+  highShelf(T cutoff_hz, T Q, T gain_db, T samplerate_hz) {
     IIRFilterCoefficients<T> lp_coefficients =
         lowPass(cutoff_hz, Q, samplerate_hz);
     IIRFilterCoefficients<T> hp_coefficients =
@@ -170,8 +173,8 @@ struct ChebyshevType2CoefficientStrategy : public IIRCoefficientStrategy<T> {
     return coeffs;
   }
 
-  IIRFilterCoefficients<T> peakingEQ(T cutoff_hz, T Q, T gain_db,
-                                     T samplerate_hz) {
+  IIRFilterCoefficients<T>
+  peakingEQ(T cutoff_hz, T Q, T gain_db, T samplerate_hz) {
     IIRFilterCoefficients<T> bp_coefs = bandPass(cutoff_hz, Q, samplerate_hz);
 
     T V = std::pow(10, gain_db / 20);

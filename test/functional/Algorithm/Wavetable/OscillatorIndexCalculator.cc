@@ -27,8 +27,9 @@
 TEST(Algorithm_Wavetable_Oscillator_Index_Calculator, ShouldInitialize) {
   float sampleRate = 48000.f;
   int size = 100;
-  Clover::Wavetable::OscillatorIndexCalculator<float> calculator(sampleRate,
-                                                                 size);
+  Clover::Wavetable::OscillatorIndexCalculator<float> calculator(
+      sampleRate, size
+  );
   ASSERT_FLOAT_EQ(calculator.sampleRate(), sampleRate);
   ASSERT_FLOAT_EQ(calculator.size(), size);
 
@@ -54,8 +55,9 @@ TEST(Algorithm_Wavetable_Oscillator_Index_Calculator, ShouldInitialize) {
 TEST(Algorithm_Wavetable_Oscillator_Index_Calculator, ShouldBeSettable) {
   float sampleRate = 48000.f;
   int size = 100;
-  Clover::Wavetable::OscillatorIndexCalculator<float> calculator(sampleRate,
-                                                                 size);
+  Clover::Wavetable::OscillatorIndexCalculator<float> calculator(
+      sampleRate, size
+  );
 
   float freq = 1000.f;
   calculator.freq(freq);
@@ -80,8 +82,9 @@ TEST(Algorithm_Wavetable_Oscillator_Index_Calculator, ShouldBeSettable) {
 TEST(Algorithm_Wavetable_Oscillator_Index_Calculator, ShouldWalkThroughIndex) {
   float sampleRate = 100.f;
   int size = 100;
-  Clover::Wavetable::OscillatorIndexCalculator<float> calculator(sampleRate,
-                                                                 size);
+  Clover::Wavetable::OscillatorIndexCalculator<float> calculator(
+      sampleRate, size
+  );
   calculator.freq(1.f);
 
   calculator.process();
@@ -104,12 +107,15 @@ TEST(Algorithm_Wavetable_Oscillator_Index_Calculator, ShouldWalkThroughIndex) {
   ASSERT_FLOAT_EQ(calculator.last().lerpAmount, 0.f);
 }
 
-TEST(Algorithm_Wavetable_Oscillator_Index_Calculator,
-     PhaseControlShouldSetReadIndex) {
+TEST(
+    Algorithm_Wavetable_Oscillator_Index_Calculator,
+    PhaseControlShouldSetReadIndex
+) {
   float sampleRate = 100.f;
   int size = 100;
-  Clover::Wavetable::OscillatorIndexCalculator<float> calculator(sampleRate,
-                                                                 size);
+  Clover::Wavetable::OscillatorIndexCalculator<float> calculator(
+      sampleRate, size
+  );
   calculator.freq(1.f);
 
   // immediately changes index
@@ -125,12 +131,15 @@ TEST(Algorithm_Wavetable_Oscillator_Index_Calculator,
   ASSERT_FLOAT_EQ(calculator.process().indexA, 75.f);
 }
 
-TEST(Algorithm_Wavetable_Oscillator_Index_Calculator,
-     PhaseOffsetShouldOffsetIndex) {
+TEST(
+    Algorithm_Wavetable_Oscillator_Index_Calculator,
+    PhaseOffsetShouldOffsetIndex
+) {
   float sampleRate = 100.f;
   int size = 100;
-  Clover::Wavetable::OscillatorIndexCalculator<float> calculator(sampleRate,
-                                                                 size);
+  Clover::Wavetable::OscillatorIndexCalculator<float> calculator(
+      sampleRate, size
+  );
   calculator.phaseOffset(0.25f);
   calculator.freq(1.f);
   ASSERT_FLOAT_EQ(calculator.phase(), 0.f);

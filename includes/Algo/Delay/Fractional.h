@@ -70,8 +70,9 @@ protected:
   std::vector<Frame> buffer;
 
   void writeNewFrameToBuffer(Frame input) {
-    std::copy(std::begin(input), std::end(input),
-              std::begin(buffer[writeHead]));
+    std::copy(
+        std::begin(input), std::end(input), std::begin(buffer[writeHead])
+    );
   }
 
   Frame buildOutputFrame() {

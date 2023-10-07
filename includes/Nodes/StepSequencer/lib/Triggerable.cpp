@@ -32,8 +32,9 @@ void Triggerable::triggerOff() {
   throw NotImplementedException("Triggerable:triggerOff()");
 };
 
-void TriggerableFacilitator(const TriggerState &data,
-                            std::vector<Triggerable *> &targets) {
+void TriggerableFacilitator(
+    const TriggerState &data, std::vector<Triggerable *> &targets
+) {
   switch (data) {
   case TriggerState::On:
     for (Triggerable *target : targets)

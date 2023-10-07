@@ -48,11 +48,13 @@ enum struct PcmFileType {
 // clang-format on
 
 struct WriteSettingsPcm {
-  WriteSettingsPcm(PcmBitDepth _bitDepth, PcmSampleRate _sampleRate,
-                   PcmFileType _pcmFileType);
+  WriteSettingsPcm(
+      PcmBitDepth _bitDepth, PcmSampleRate _sampleRate, PcmFileType _pcmFileType
+  );
 
-  WriteSettingsPcm(PcmBitDepth _bitDepth, int _sampleRate,
-                   PcmFileType _pcmFileType);
+  WriteSettingsPcm(
+      PcmBitDepth _bitDepth, int _sampleRate, PcmFileType _pcmFileType
+  );
 
   PcmBitDepth bitDepth;
   int sampleRate;
