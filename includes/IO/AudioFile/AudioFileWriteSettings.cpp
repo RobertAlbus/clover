@@ -25,14 +25,15 @@
 
 namespace Clover::IO::AudioFile {
 
-WriteSettingsPcm::WriteSettingsPcm(PcmBitDepth _bitDepth,
-                                   PcmSampleRate _sampleRate,
-                                   PcmFileType _pcmFileType)
+WriteSettingsPcm::WriteSettingsPcm(
+    PcmBitDepth _bitDepth, PcmSampleRate _sampleRate, PcmFileType _pcmFileType
+)
     : bitDepth(_bitDepth), sampleRate(static_cast<int>(_sampleRate)),
       pcmFileType(_pcmFileType) {}
 
-WriteSettingsPcm::WriteSettingsPcm(PcmBitDepth _bitDepth, int _sampleRate,
-                                   PcmFileType _pcmFileType)
+WriteSettingsPcm::WriteSettingsPcm(
+    PcmBitDepth _bitDepth, int _sampleRate, PcmFileType _pcmFileType
+)
     : bitDepth(_bitDepth), sampleRate(_sampleRate), pcmFileType(_pcmFileType) {}
 
 WriteSettingsPcm WriteSettingsPcm::cd(PcmFileType _pcmFileType) {

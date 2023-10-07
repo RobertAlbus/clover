@@ -68,7 +68,8 @@ std::vector<T> LerpTable(int outputSize, std::vector<T> rawTable) {
     T weight = rawIndex - static_cast<T>(truncatedRawIndex);
 
     wavetable.emplace_back(
-        std::lerp(rawTable[truncatedRawIndex], rawTable[nextRawIndex], weight));
+        std::lerp(rawTable[truncatedRawIndex], rawTable[nextRawIndex], weight)
+    );
   }
 
   return wavetable;

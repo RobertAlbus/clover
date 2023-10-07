@@ -26,10 +26,16 @@ TEST(Util_Calc, ShouldCalculateFreqDifferenceBySemitone) {
   EXPECT_EQ(Clover::Util::Calc::freqBySemitoneDifference(1000, 12), 2000);
   EXPECT_EQ(Clover::Util::Calc::freqBySemitoneDifference(1000, -12), 500);
 
-  EXPECT_NEAR(Clover::Util::Calc::freqBySemitoneDifference(1000.001, 12),
-              2000.002, 0.00005);
-  EXPECT_NEAR(Clover::Util::Calc::freqBySemitoneDifference(10000.001, 12),
-              20000.002, 0.00005);
+  EXPECT_NEAR(
+      Clover::Util::Calc::freqBySemitoneDifference(1000.001, 12),
+      2000.002,
+      0.00005
+  );
+  EXPECT_NEAR(
+      Clover::Util::Calc::freqBySemitoneDifference(10000.001, 12),
+      20000.002,
+      0.00005
+  );
 }
 
 TEST(Util_Calc, ShouldDetectSign) {

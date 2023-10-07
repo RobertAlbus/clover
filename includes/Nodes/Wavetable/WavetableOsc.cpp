@@ -38,12 +38,21 @@
 namespace Clover::Nodes::Wavetable {
 
 WavetableOsc::WavetableOsc()
-    : WavetableOsc(std::make_shared<std::vector<Sample>>(
-                       Clover::Wavetable::Sine<Sample>(256)),
-                   200, 0, 0) {}
+    : WavetableOsc(
+          std::make_shared<std::vector<Sample>>(
+              Clover::Wavetable::Sine<Sample>(256)
+          ),
+          200,
+          0,
+          0
+      ) {}
 
-WavetableOsc::WavetableOsc(std::shared_ptr<Wavetable> wavetable, float freq,
-                           float phase, float phaseOffset)
+WavetableOsc::WavetableOsc(
+    std::shared_ptr<Wavetable> wavetable,
+    float freq,
+    float phase,
+    float phaseOffset
+)
     : Clover::Graph::AudioOutNode<1>(), osc(Base::sampleRate, wavetable) {}
 
 void WavetableOsc::phase(float phasePercent) { osc.phase(phasePercent); }

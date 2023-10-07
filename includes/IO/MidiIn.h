@@ -105,9 +105,9 @@ private:
   std::vector<unsigned char> controlChannel;
   RtMidiIn *rtMidi = 0;
 
-  static void rtMidiCallback(double timeStamp,
-                             std::vector<unsigned char> *message,
-                             void *midiInRef) {
+  static void rtMidiCallback(
+      double timeStamp, std::vector<unsigned char> *message, void *midiInRef
+  ) {
     assert(midiInRef != NULL);
     MidiIn *midiIn = (MidiIn *)midiInRef;
 
@@ -120,7 +120,8 @@ private:
     } else {
       printf(
           "\nClover received a MIDI message of type %c, which is unsupported",
-          message->at(0));
+          message->at(0)
+      );
       exit(EXIT_FAILURE);
     }
 

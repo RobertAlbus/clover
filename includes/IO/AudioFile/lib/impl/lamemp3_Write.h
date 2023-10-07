@@ -30,8 +30,10 @@
 
 namespace Clover::IO::AudioFile::impl {
 
-void lamemp3_Write(const std::string &path,
-                   const WriteSettingsMp3 &writeSettings,
-                   const AudioFile &audioFile);
+void lamemp3_Write(
+    const std::string &path,
+    const WriteSettingsMp3 &writeSettings,
+    const AudioFile &audioFile
+);
 
 } // namespace Clover::IO::AudioFile::impl

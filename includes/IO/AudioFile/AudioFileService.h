@@ -38,11 +38,11 @@ struct AudioFileService {
   void Delete(const std::string &filePath);
 
   // multi op
-  void Write(const std::vector<WriteSpec> &writeSpecs,
-             const AudioFile &audioFile);
+  void
+  Write(const std::vector<WriteSpec> &writeSpecs, const AudioFile &audioFile);
   std::vector<AudioFile> Read(const std::vector<std::string> &filePaths);
-  void Append(const std::vector<WriteSpec> &writeSpecs,
-              const AudioFile &audioFile);
+  void
+  Append(const std::vector<WriteSpec> &writeSpecs, const AudioFile &audioFile);
   void Delete(const std::vector<std::string> &filePaths);
 
 private:

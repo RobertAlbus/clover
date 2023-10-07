@@ -52,10 +52,11 @@ TEST(Nodes_SmokeTest, Delay_Fractional) {
   crank.turn(testSize);
 
   for (int i = 0; i < testSize - delayTime; i++) {
-    EXPECT_EQ(delayCollector.frames[i + delayTime][0],
-              incrementorCollector.frames[i][0])
-        << "If this test has failed, it's likely the "
-           "Delay::FractionalDelay algorithm.";
+    EXPECT_EQ(
+        delayCollector.frames[i + delayTime][0],
+        incrementorCollector.frames[i][0]
+    ) << "If this test has failed, it's likely the "
+         "Delay::FractionalDelay algorithm.";
   }
 }
 

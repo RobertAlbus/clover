@@ -67,17 +67,19 @@ AudioFile generateAudioFileData() {
   return file;
 }
 
-std::vector<WriteSettings>
-generateWriteSettingsPcmCombos(std::vector<PcmSampleRate> sampleRates,
-                               std::vector<PcmBitDepth> bitDepths,
-                               std::vector<PcmFileType> fileTypes) {
+std::vector<WriteSettings> generateWriteSettingsPcmCombos(
+    std::vector<PcmSampleRate> sampleRates,
+    std::vector<PcmBitDepth> bitDepths,
+    std::vector<PcmFileType> fileTypes
+) {
 
   std::vector<WriteSettings> writeSettings;
   for (PcmFileType filetype : fileTypes) {
     for (PcmBitDepth bitDepth : bitDepths) {
       for (PcmSampleRate sampleRate : sampleRates) {
         writeSettings.emplace_back(
-            WriteSettingsPcm(bitDepth, sampleRate, filetype));
+            WriteSettingsPcm(bitDepth, sampleRate, filetype)
+        );
       }
     }
   }
@@ -85,9 +87,9 @@ generateWriteSettingsPcmCombos(std::vector<PcmSampleRate> sampleRates,
   return writeSettings;
 }
 
-std::vector<WriteSpec>
-generateWriteSpecs(std::vector<WriteSettings> writeSettings,
-                   std::string fileSiffix) {
+std::vector<WriteSpec> generateWriteSpecs(
+    std::vector<WriteSettings> writeSettings, std::string fileSiffix
+) {
   std::vector<WriteSpec> writeSpecs;
   for (auto writeSetting : writeSettings) {
     WriteSpec spec(randString(10) + fileSiffix, writeSetting);

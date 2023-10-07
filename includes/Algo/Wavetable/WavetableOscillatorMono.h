@@ -36,8 +36,9 @@ template <FloatingPoint T>
 struct WavetableOscillatorMono : public WavetableOscInterface<T>,
                                  public AlgorithmBase<T> {
   WavetableOscillatorMono(T sampleRateHz, Wavetable<T> wt = Sine<T>(512))
-      : WavetableOscillatorMono(sampleRateHz,
-                                std::make_shared<Wavetable<T>>(wt)) {}
+      : WavetableOscillatorMono(
+            sampleRateHz, std::make_shared<Wavetable<T>>(wt)
+        ) {}
 
   WavetableOscillatorMono(T sampleRateHz, std::shared_ptr<Wavetable<T>> wt)
       : calculator(sampleRateHz, wt->size()) {
@@ -79,9 +80,11 @@ struct WavetableOscillatorMono : public WavetableOscInterface<T>,
 
   T process() {
     OscillatorIndexCalculatorResult<T> index = calculator.process();
-    this->processed =
-        std::lerp<T>((*wavetable_)[index.indexA], (*wavetable_)[index.indexB],
-                     index.lerpAmount);
+    this->processed = std::lerp<T>(
+        (*wavetable_)[index.indexA],
+        (*wavetable_)[index.indexB],
+        index.lerpAmount
+    );
     return this->processed;
   }
 

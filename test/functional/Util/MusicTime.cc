@@ -40,7 +40,8 @@ TEST(Util_MusicTime, ShouldProvideCorrectTime) {
 
   EXPECT_EQ(time.beat(), beatLength);
   EXPECT_EQ((float)time.beat_i(), (int)beatLength);
-  EXPECT_EQ(time.currentBeat(),
-            ((float)duration_two_and_a_half_beats / time.beat()));
+  EXPECT_EQ(
+      time.currentBeat(), ((float)duration_two_and_a_half_beats / time.beat())
+  );
   EXPECT_EQ(time.currentBeat_i(), 2);
 }

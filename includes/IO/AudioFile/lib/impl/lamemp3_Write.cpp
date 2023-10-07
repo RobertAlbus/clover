@@ -32,20 +32,24 @@
 
 namespace Clover::IO::AudioFile::impl {
 
-void lamemp3_Write(const std::string &path,
-                   const WriteSettingsMp3 &writeSettings,
-                   const AudioFile &audioFile) {
+void lamemp3_Write(
+    const std::string &path,
+    const WriteSettingsMp3 &writeSettings,
+    const AudioFile &audioFile
+) {
 
   lame_t lame = lame_init();
   if (!lame) {
     throw std::runtime_error(
-        "lamemp3_Write: Could not initialize lamemp3 encoder");
+        "lamemp3_Write: Could not initialize lamemp3 encoder"
+    );
   }
 
   for (auto sample : audioFile.audioData) {
     if (sample > 1.f || sample < -1.f) {
       throw std::runtime_error(
-          "lamemp3_Write: Audio data must be normalized to -1..1");
+          "lamemp3_Write: Audio data must be normalized to -1..1"
+      );
     }
   }
 
@@ -57,7 +61,8 @@ void lamemp3_Write(const std::string &path,
   if (lame_init_params(lame) < 0) {
     lame_close(lame);
     throw std::runtime_error(
-        "lamemp3_Write: Could not initialize lamemp3 encoder");
+        "lamemp3_Write: Could not initialize lamemp3 encoder"
+    );
   }
 
   const int frameCount = audioFile.audioData.size() / audioFile.channelCount;
@@ -70,12 +75,16 @@ void lamemp3_Write(const std::string &path,
       audioFile.audioData.data(),
       // Right channel of interleaved buffer or nullptr for mono
       (audioFile.channelCount == 2) ? audioFile.audioData.data() + 1 : nullptr,
-      frameCount, mp3_buffer.data(), mp3_buffer.size());
+      frameCount,
+      mp3_buffer.data(),
+      mp3_buffer.size()
+  );
 
   if (mp3_bytes < 0) {
     lame_close(lame);
     throw std::runtime_error(
-        "lamemp3_Write: Could not initialize lamemp3 encoder");
+        "lamemp3_Write: Could not initialize lamemp3 encoder"
+    );
   }
 
   std::ofstream mp3_file(path.c_str(), std::ios::binary);

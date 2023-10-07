@@ -29,9 +29,11 @@
 
 namespace Clover::IO::AudioFile::impl {
 
-void libsndfile_Write(const std::string &path,
-                      const WriteSettingsPcm &writeSettings,
-                      const AudioFile &audioFile) {
+void libsndfile_Write(
+    const std::string &path,
+    const WriteSettingsPcm &writeSettings,
+    const AudioFile &audioFile
+) {
   SF_INFO sfinfo;
   sfinfo.samplerate = writeSettings.sampleRate;
   sfinfo.channels = audioFile.channelCount;
@@ -40,8 +42,9 @@ void libsndfile_Write(const std::string &path,
   SNDFILE *file = sf_open(path.c_str(), SFM_WRITE, &sfinfo);
   throwIfFails(file, sf_error(file));
 
-  sf_count_t count = sf_write_float(file, audioFile.audioData.data(),
-                                    audioFile.audioData.size());
+  sf_count_t count = sf_write_float(
+      file, audioFile.audioData.data(), audioFile.audioData.size()
+  );
 
   if (count != static_cast<sf_count_t>(audioFile.audioData.size())) {
     throwIfFails(file, sf_error(file));
@@ -54,8 +57,12 @@ void libsndfile_Write(const std::string &path,
     cuePoint.position = point;
     cuePoints.push_back(cuePoint);
   }
-  sf_command(file, SFC_SET_CUE, cuePoints.data(),
-             cuePoints.size() * sizeof(SF_CUE_POINT));
+  sf_command(
+      file,
+      SFC_SET_CUE,
+      cuePoints.data(),
+      cuePoints.size() * sizeof(SF_CUE_POINT)
+  );
 
   sf_write_sync(file);
   throwIfFails(file, sf_close(file));

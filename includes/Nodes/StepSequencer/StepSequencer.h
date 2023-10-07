@@ -63,9 +63,10 @@ template <typename T> struct STSQ_Pattern {
   float totalDuration;
 };
 
-template <typename StepDataType, typename TargetType,
-          void (*applyStepDataFunc)(const StepDataType &,
-                                    std::vector<TargetType *> &)>
+template <
+    typename StepDataType,
+    typename TargetType,
+    void (*applyStepDataFunc)(const StepDataType &, std::vector<TargetType *> &)>
 struct STSQ : public Clover::Graph::NullNode, public PatternSettable {
 
   STSQ() : NullNode(), nextIndex(0), patternIndex(0) {}
@@ -104,8 +105,9 @@ private:
   }
 
   float getElapsedPatternTime() {
-    return fmod(static_cast<float>(_currentClockTime),
-                currentPattern().totalDuration);
+    return fmod(
+        static_cast<float>(_currentClockTime), currentPattern().totalDuration
+    );
   }
 
   bool isStartOfNextStep() {

@@ -42,8 +42,12 @@ struct WavetableOsc : public Graph::AudioOutNode<1>,
                       public Base,
                       public Clover::Wavetable::WavetableOscInterface<float> {
   WavetableOsc();
-  WavetableOsc(std::shared_ptr<Wavetable> wavetable, float freq,
-               float phase = 0, float phaseOffset = 0);
+  WavetableOsc(
+      std::shared_ptr<Wavetable> wavetable,
+      float freq,
+      float phase = 0,
+      float phaseOffset = 0
+  );
 
   void phase(float phase) override;
   float phase() override;

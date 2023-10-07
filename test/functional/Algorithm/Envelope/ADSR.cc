@@ -164,8 +164,11 @@ TEST(Algorithm_Envelope_ADSR, ShouldBeAbleToUpdateAttackDuringAttack) {
   EXPECT_EQ(envelope.process(), 0.8f);
   EXPECT_EQ(envelope.process(), 0.85f);
   EXPECT_EQ(envelope.process(), 0.9f);
-  EXPECT_NEAR(envelope.process(), 0.95f,
-              0.000000065); // sorry, floats are weird
+  EXPECT_NEAR(
+      envelope.process(),
+      0.95f,
+      0.000000065
+  ); // sorry, floats are weird
   EXPECT_EQ(envelope.process(), 1.f);
 }
 
@@ -218,8 +221,11 @@ TEST(Algorithm_Envelope_ADSR, ShouldBeAbleToUpdateSustainDuringDecay) {
   flush = (envelope.decay() / 2) + 1;
   for (int i = 0; i < flush; i++) {
     float expectedValue = 0.75f - (static_cast<float>(i + 1) * 0.125f);
-    EXPECT_NEAR(envelope.process(), expectedValue,
-                0.0001); // sorry, floats are weird
+    EXPECT_NEAR(
+        envelope.process(),
+        expectedValue,
+        0.0001
+    ); // sorry, floats are weird
   }
 }
 
@@ -274,10 +280,8 @@ TEST(Algorithm_Envelope_ADSR, ShouldInvokeCallbackOnCompletion) {
   Clover::Envelope::ADSR<float> envelope(2, 2, 1.f, 2);
 
   bool hasCompleted = false;
-  envelope.onComplete(
-      [&hasCompleted](const Clover::Envelope::ADSR<float> *env) {
-        hasCompleted = true;
-      });
+  envelope.onComplete([&hasCompleted](const Clover::Envelope::ADSR<float> *env
+                      ) { hasCompleted = true; });
 
   envelope.keyOn();
   envelope.process();

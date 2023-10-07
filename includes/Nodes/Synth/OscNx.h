@@ -142,8 +142,8 @@ struct OscNx : public Clover::Graph::AudioOutNode<2>, Pitchable, Triggerable {
     updateFilterMod();
     updateAmplitudeMod();
 
-    Clover::Graph::AudioFrame<2> f{audioSink.currentFrame()[0],
-                                   audioSink.currentFrame()[1]};
+    Clover::Graph::AudioFrame<2> f{
+        audioSink.currentFrame()[0], audioSink.currentFrame()[1]};
 
     return f;
   }
@@ -173,7 +173,8 @@ struct OscNx : public Clover::Graph::AudioOutNode<2>, Pitchable, Triggerable {
 
     for (Voice &voice : voices) {
       float voiceFreq = Clover::Util::Calc::freqBySemitoneDifference(
-          currentMidiNoteFreq, voice.tuning());
+          currentMidiNoteFreq, voice.tuning()
+      );
       voice.osc.freq(voiceFreq + pitchMod);
     }
   }
