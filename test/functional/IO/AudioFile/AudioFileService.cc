@@ -45,10 +45,10 @@ TEST(IO_AudioFile_AudioFileService, WriteOne) {
   // ARRANGE
   AudioFileService service = AudioFileService::BuildInstance();
 
-  AudioFile audioFile;
-  audioFile.channelCount = 1;
+  AudioFile audioFileFixture;
+  audioFileFixture.channelCount = 1;
   for (int i = 0; i < 30; i++) {
-    audioFile.audioData.emplace_back(0);
+    audioFileFixture.audioData.emplace_back(0);
   }
 
   std::string path = "AudioFileService_Write_One.wav";
@@ -57,7 +57,7 @@ TEST(IO_AudioFile_AudioFileService, WriteOne) {
   WriteSpec spec(path, WriteSettingsPcm::cd());
 
   // ACT
-  service.Write(spec, audioFile);
+  service.Write(spec, audioFileFixture);
 
   // ASSERT
   bool isFileCreated = std::filesystem::exists(path);
@@ -76,10 +76,10 @@ TEST(IO_AudioFile_AudioFileService, WriteMany) {
   // ARRANGE
   AudioFileService service = AudioFileService::BuildInstance();
 
-  AudioFile audioFile;
-  audioFile.channelCount = 1;
+  AudioFile audioFileFixture;
+  audioFileFixture.channelCount = 1;
   for (int i = 0; i < 30; i++) {
-    audioFile.audioData.emplace_back(0);
+    audioFileFixture.audioData.emplace_back(0);
   }
 
   std::string pathPrefix = "AudioFileService_Write_";
@@ -91,7 +91,7 @@ TEST(IO_AudioFile_AudioFileService, WriteMany) {
   }
 
   // ACT
-  service.Write(specs, audioFile);
+  service.Write(specs, audioFileFixture);
 
   for (auto spec : specs) {
     // ASSERT
