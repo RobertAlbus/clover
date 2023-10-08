@@ -47,6 +47,8 @@ TEST(IO_AudioFile_AudioFileService, WriteOne) {
 
   AudioFile audioFileFixture;
   audioFileFixture.channelCount = 1;
+  audioFileFixture.sampleRateHz = 48000;
+
   for (int i = 0; i < 30; i++) {
     audioFileFixture.audioData.emplace_back(0);
   }
@@ -78,6 +80,8 @@ TEST(IO_AudioFile_AudioFileService, WriteMany) {
 
   AudioFile audioFileFixture;
   audioFileFixture.channelCount = 1;
+  audioFileFixture.sampleRateHz = 48000;
+
   for (int i = 0; i < 30; i++) {
     audioFileFixture.audioData.emplace_back(0);
   }
@@ -119,6 +123,8 @@ TEST(IO_AudioFile_AudioFileService, ReadOne) {
 
   AudioFile audioFileFixture;
   audioFileFixture.channelCount = 1;
+  audioFileFixture.sampleRateHz = 48000;
+
   for (int i = 0; i < 30; i++) {
     audioFileFixture.audioData.emplace_back((i % 3) - 1);
   }
@@ -163,6 +169,7 @@ TEST(IO_AudioFile_AudioFileService, ReadMany) {
 
   AudioFile audioFileFixture;
   audioFileFixture.channelCount = 1;
+  audioFileFixture.sampleRateHz = 48000;
 
   audioFileFixture.audioData.reserve(30);
   for (int i = 0; i < 30; i++) {
