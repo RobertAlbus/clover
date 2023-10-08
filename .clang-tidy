@@ -3,6 +3,7 @@ Checks: >
     bugprone-unused-raii,
     misc-header-include-cycle,
     misc-include-cleaner,
+    modernize-use-noexcept,
 
 WarningsAsErrors: true
 
