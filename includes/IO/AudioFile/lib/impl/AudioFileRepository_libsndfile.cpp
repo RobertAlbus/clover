@@ -18,6 +18,7 @@
  *
  */
 
+#include <filesystem> // for std::filesystem::exists
 #include <stdexcept>
 #include <string>
 #include <variant>
@@ -30,6 +31,7 @@
 #include "libsndfile_Append.h"
 #include "libsndfile_Read.h"
 #include "libsndfile_Write.h"
+#include "libsndfile__Util.h"
 
 namespace Clover::IO::AudioFile {
 
@@ -74,7 +76,7 @@ void AudioFileRepository_libsndfile::Append(
     } else if constexpr (std::is_same_v<T, WriteSettingsMp3 &>) {
       auto settings = static_cast<WriteSettingsMp3>(arg);
       throw std::runtime_error("WriteSettingsMp3 variant not supported "
-                               "for AudioFileRepository.Append.");
+                               "for AudioFileRepository.Append");
 
     } else {
       throw std::runtime_error("Unhandled WriteSettings variant for "
@@ -85,7 +87,24 @@ void AudioFileRepository_libsndfile::Append(
 }
 
 void AudioFileRepository_libsndfile::Delete(const std::string &path) {
-  Read(path); // validate that it's an audio file
+  bool fileExists = std::filesystem::exists(path);
+  bool isAudioFile = fileExists && impl::isAudioFile(path);
+
+  if (!fileExists)
+    throw std::runtime_error(
+        "AudioFileRepository_libsndfile.Delete could not find file"
+        "\nfile=[" +
+        path + "]"
+    );
+
+  if (!isAudioFile) {
+    throw std::runtime_error(
+        "AudioFileRepository_libsndfile.Delete will only delete audio files"
+        "\nfile=[" +
+        path + "]"
+    );
+  }
+
   impl::filesystem_Delete(path);
 }
 

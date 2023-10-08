@@ -26,6 +26,20 @@
 
 namespace Clover::IO::AudioFile::impl {
 
+bool isAudioFile(const std::string &path) {
+  SF_INFO sfinfo;
+  sfinfo.format = 0;
+
+  SNDFILE *infile = sf_open(path.c_str(), SFM_READ, &sfinfo);
+
+  if (!infile) {
+    return false;
+  }
+
+  sf_close(infile);
+  return true;
+}
+
 void throwIfFails(SNDFILE *sndfile, int resultCode) {
   bool hasError = resultCode != SF_ERR_NO_ERROR;
   bool hasFile = !!sndfile;
