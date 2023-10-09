@@ -135,7 +135,7 @@ TEST(IO_AudioFile_AudioFileService, ReadOne) {
   WriteSpec spec(
       path, WriteSettingsPcm(PcmBitDepth::_float, 48000, PcmFileType::Wav)
   );
-  service.Write(spec, audioFileFixture);
+  service.Write(spec, audioFileFixture); // seed fixture file
 
   // ACT
   AudioFile audioFile = service.Read(path);
@@ -197,7 +197,7 @@ TEST(IO_AudioFile_AudioFileService, ReadMany) {
       [](const WriteSpec &spec) { return spec.path; }
   );
 
-  service.Write(specs, audioFileFixture);
+  service.Write(specs, audioFileFixture); // seed fixture files
 
   // ACT
   std::vector<AudioFile> audioFiles = service.Read(paths);
@@ -213,6 +213,152 @@ TEST(IO_AudioFile_AudioFileService, ReadMany) {
 
       EXPECT_FLOAT_EQ(fixtureSignal, fileSignal)
           << i << "  fixture: " << fixtureSignal << "  file: " << fileSignal;
+
+      if (fixtureSignal != fileSignal) {
+        HAVE_TESTS_FAILED_READ = true;
+      }
+    }
+      });
+
+  // CLEAN
+  std::for_each(specs.begin(), specs.end(), [](const WriteSpec &spec) {
+    cleanFile(spec.path);
+  });
+}
+
+TEST(IO_AudioFile_AudioFileService, AppendOne) {
+
+  // TEST DEPENDENCY: AudioFileService.{Write,Read} used to seed test fixture
+  if (HAVE_TESTS_FAILED_WRITE || HAVE_TESTS_FAILED_READ) {
+    GTEST_SKIP();
+  }
+
+  // ARRANGE
+  AudioFileService service = AudioFileService::BuildInstance();
+
+  AudioFile audioFileFixture;
+  audioFileFixture.channelCount = 1;
+  audioFileFixture.sampleRateHz = 48000;
+
+  for (int i = 0; i < 30; i++) {
+    audioFileFixture.audioData.emplace_back((i % 3) - 1);
+  }
+
+  std::string path = "AudioFileService_Append_One.wav";
+
+  int outputSampleRate = 48000;
+  WriteSpec spec(
+      path,
+      WriteSettingsPcm(PcmBitDepth::_float, outputSampleRate, PcmFileType::Wav)
+  );
+
+  cleanFile(path);
+  service.Write(spec, audioFileFixture); // seed fixture file
+
+  // ACT
+  service.Append(spec, audioFileFixture);
+  AudioFile audioFile = service.Read(path);
+
+  // ASSERT
+  int fixtureAudioDataSize =
+      static_cast<int>(audioFileFixture.audioData.size());
+  int expectedFileAudioDataSize = 2 * fixtureAudioDataSize;
+  int actualFileAudioDataSize = audioFile.audioData.size();
+
+  EXPECT_EQ(expectedFileAudioDataSize, actualFileAudioDataSize);
+  EXPECT_EQ(audioFile.sampleRateHz, outputSampleRate);
+
+  for (int i = 0; i < expectedFileAudioDataSize; i++) {
+    float fixtureSignal =
+        audioFileFixture.audioData.at(i % fixtureAudioDataSize);
+    float fileSignal = audioFile.audioData.at(i);
+
+    bool doSignalsMatch = fixtureSignal == fileSignal;
+    EXPECT_FLOAT_EQ(fixtureSignal, fileSignal);
+
+    if (fixtureSignal != fileSignal) {
+      HAVE_TESTS_FAILED_READ = true;
+    }
+  }
+
+  // CLEAN
+  cleanFile(path);
+}
+
+TEST(IO_AudioFile_AudioFileService, AppendMany) {
+
+  // TEST DEPENDENCY: AudioFileService.Write used to seed test fixture
+  if (HAVE_TESTS_FAILED_WRITE) {
+    GTEST_SKIP();
+  }
+
+  // ARRANGE
+  AudioFileService service = AudioFileService::BuildInstance();
+
+  AudioFile audioFileFixture;
+  audioFileFixture.channelCount = 1;
+  audioFileFixture.sampleRateHz = 48000;
+
+  audioFileFixture.audioData.reserve(30);
+  for (int i = 0; i < 30; i++) {
+    float signal = ((i % 3) - 1);
+    audioFileFixture.audioData.emplace_back(signal);
+  }
+
+  std::string pathPrefix = "AudioFileService_Append_Many_";
+  std::vector<WriteSpec> specs;
+
+  specs.reserve(3);
+  for (int i = 0; i < 3; i++) {
+    std::string path =
+        "AudioFileService_Append_Many_" + std::to_string(i) + ".wav";
+    cleanFile(path);
+    specs.emplace_back(WriteSpec(
+        path, WriteSettingsPcm(PcmBitDepth::_float, 48000, PcmFileType::Wav)
+    ));
+  }
+
+  std::vector<std::string> paths;
+  std::transform(
+      specs.begin(),
+      specs.end(),
+      std::back_inserter(paths),
+      [](const WriteSpec &spec) { return spec.path; }
+  );
+
+  service.Write(specs, audioFileFixture);
+
+  // ACT
+  service.Append(specs, audioFileFixture);
+  std::vector<AudioFile> audioFiles = service.Read(paths);
+
+  // ASSERT
+  int fixtureAudioDataSize =
+      static_cast<int>(audioFileFixture.audioData.size());
+  int expectedFileAudioDataSize = 2 * fixtureAudioDataSize;
+
+  std::for_each(
+      audioFiles.begin(),
+      audioFiles.end(),
+      [audioFileFixture,
+       expectedFileAudioDataSize](const AudioFile &audioFile) {
+    EXPECT_EQ(audioFile.sampleRateHz, audioFileFixture.sampleRateHz);
+    EXPECT_EQ(expectedFileAudioDataSize, audioFile.audioData.size());
+      });
+
+  std::for_each(
+      audioFiles.begin(),
+      audioFiles.end(),
+      [&audioFileFixture,
+       expectedFileAudioDataSize,
+       fixtureAudioDataSize](const AudioFile &audioFile) {
+    for (int i = 0; i < expectedFileAudioDataSize; i++) {
+      float fixtureSignal =
+          audioFileFixture.audioData.at(i % fixtureAudioDataSize);
+      float fileSignal = audioFile.audioData.at(i);
+
+      bool doSignalsMatch = fixtureSignal == fileSignal;
+      EXPECT_FLOAT_EQ(fixtureSignal, fileSignal);
 
       if (fixtureSignal != fileSignal) {
         HAVE_TESTS_FAILED_READ = true;
