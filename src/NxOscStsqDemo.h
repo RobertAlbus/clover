@@ -139,9 +139,9 @@ struct OscAndStSq {
     instrument.filterCutoff_ = 10;
     instrument.filterReso_ = 2;
     instrument.filterCut.adsr.set(
-        time.beat(0.5), time.beat(0.1), 0.5, time.beat(2)
+        time.beat(0.25), time.beat(0.1), 0.9f, time.beat(1.f)
     );
-    instrument.filterCut.adsr.gain(4000);
+    instrument.filterCut.adsr.gain(8.75);
 
     instrument.amplitude.adsr.set(time.quat(0.8), 0.f, 1.f, time.beat(2));
     instrument.gain(0.1);
@@ -171,9 +171,9 @@ struct OscAndStSq {
     kick.filterCutoff_ = 10;
     kick.filterReso_ = .7f;
     kick.pitch.adsr.set(0.f, time.quat(0.1f), 0.f, 0.f);
-    kick.pitch.adsr.gain(800);
+    kick.pitch.adsr.gain(7.5);
     kick.filterCut.adsr.set(50.f, time.quat(0.2f), 0.02f, 0.f);
-    kick.filterCut.adsr.gain(1000);
+    kick.filterCut.adsr.gain(7);
 
     kick.amplitude.adsr.set(50.f, time.quat(1.8f), 0.02f, 0.f);
     kick.gain(0.9);

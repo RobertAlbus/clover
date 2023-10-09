@@ -32,6 +32,7 @@
 #include "Nodes/Wavetable/WavetableOsc.h"
 #include "Nodes/Wavetable/WavetableOscInterface.h"
 #include "Nodes/Wavetable/WavetableOscStereo.h"
+#include "Util/Calc.h"
 
 namespace Clover::Nodes::Synth {
 
@@ -169,24 +170,31 @@ struct OscNx : public Clover::Graph::AudioOutNode<2>, Pitchable, Triggerable {
   }
 
   void updatePitchMod() {
-    float pitchMod = pitch.adsrValue() + pitch.lfoValue();
+    float pitchModOctaves = pitch.adsrValue() + pitch.lfoValue();
 
     for (Voice &voice : voices) {
       float voiceFreq = Clover::Util::Calc::freqBySemitoneDifference(
           currentMidiNoteFreq, voice.tuning()
       );
-      voice.osc.freq(voiceFreq + pitchMod);
+      float voiceFreqPitchModHz =
+          Util::Calc::freqBySemitoneDifference(voiceFreq, pitchModOctaves * 12);
+
+      voice.osc.freq(voiceFreqPitchModHz);
     }
   }
 
   void updateFilterMod() {
-    // float fff = getLogScaledFreq(filterCutoff_, filterCut.adsr.gain(),
-    // filterCut.adsrValue());
+    // octave range from cut off
 
-    float filterCutoff =
-        filterCutoff_ + filterCut.adsrValue() + filterCut.lfoValue();
+    float currentModValueOctaves =
+        (filterCut.adsrValue() + filterCut.lfoValue());
+
+    float modAmountHz =
+        Util::Calc::freqBySemitoneDifference(10.f, currentModValueOctaves * 12);
+    float filterCutoff = filterCutoff_ + modAmountHz;
 
     float filterReso = filterReso_ + filterQ.adsrValue() + filterQ.lfoValue();
+
     filter.set(filterCutoff, filterReso);
   }
 

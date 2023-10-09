@@ -91,7 +91,7 @@ int main(int argc, char *argv[]) {
   EQ.lowShelf();
   EQ.set(80., 0.7, -10);
 
-  osc >> filter >> EQ >> interface.rootNode;
+  // osc >> filter >> EQ >> interface.rootNode;
   EQ.gain(0.33);
 
   Wavetable::WavetableOsc lfo;
