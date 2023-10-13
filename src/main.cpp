@@ -92,7 +92,7 @@ int main(int argc, char *argv[]) {
   EQ.set(80., 0.7, -10);
 
   // osc >> filter >> EQ >> interface.rootNode;
-  EQ.gain(0.33);
+  EQ.gain(0.13);
 
   Wavetable::WavetableOsc lfo;
   lfo.sine(1024);
@@ -111,107 +111,89 @@ int main(int argc, char *argv[]) {
   testPattern.stsq_kick >> nullSink;
   testPattern.stsq_trigger >> nullSink;
 
-  bool isProfilingMode = false;
-  if (isProfilingMode) {
-    int quantity = Clover::Base::sampleRate * 360 * 10;
-    std::vector<Clover::Graph::AudioFrame<2>> benchmarkData;
-    benchmarkData.reserve(quantity);
-    auto start = std::chrono::high_resolution_clock::now();
-    for (int i = 0; i < quantity; i++) {
-      interface.rootNode.metaTick(interface.clock.currentSample());
-      interface.clock.tick();
-      benchmarkData.emplace_back(interface.rootNode.frames.current);
-    }
-    auto end = std::chrono::high_resolution_clock::now();
+  interface.clock.registerTickCallback([&](int currentTime) -> void {
+    float lfoAdjusted = lfo.frames.current[0] + 1.;
+    float modAdjusted = (mod.frames.current[0] + 1.) / 2.;
+    float oscAdjusted = (osc.frames.current[0] + 1.) / 2.;
+    float envelopeValue = adsr.frames.current[0];
+    osc.freq(100. * (modAdjusted * 2. - 1));
+    mod.freq(400. * (oscAdjusted * 3.));
 
-    auto duration = duration_cast<std::chrono::milliseconds>(end - start);
-    printf("\n\nTHIS MANY   %i\n\n", static_cast<int>(duration.count()));
-    exit(0);
-  } else {
-    interface.clock.registerTickCallback([&](int currentTime) -> void {
-      float lfoAdjusted = lfo.frames.current[0] + 1.;
-      float modAdjusted = (mod.frames.current[0] + 1.) / 2.;
-      float oscAdjusted = (osc.frames.current[0] + 1.) / 2.;
-      float envelopeValue = adsr.frames.current[0];
-      osc.freq(100. * (modAdjusted * 2. - 1));
-      mod.freq(400. * (oscAdjusted * 3.));
+    float cut = envelopeValue * (1000. * lfoAdjusted) + 200;
+    float reso = envelopeValue * (-1. * lfoAdjusted) + 2;
+    filter.set(cut, reso);
+    osc.gain(envelopeValue);
 
-      float cut = envelopeValue * (1000. * lfoAdjusted) + 200;
-      float reso = envelopeValue * (-1. * lfoAdjusted) + 2;
-      filter.set(cut, reso);
-      osc.gain(envelopeValue);
+    float currentQuat = time.currentQuat() + 3.f;
 
-      float currentQuat = time.currentQuat() + 3.f;
-
-      float currentSixteenthInTwoBeats = fmod(currentQuat, 8.f);
-      if (currentSixteenthInTwoBeats == 0.f ||
-          currentSixteenthInTwoBeats == 3.f ||
-          currentSixteenthInTwoBeats == 6.f) {
-        osc.phase(0);
-        mod.phase(0);
-        adsr.triggerOn();
-      }
-
-      float currentBar = fmod(time.currentBar(), 16);
-      if (currentBar == 0 && time.currentUnit(1) != 0) {
-        testPattern.stsq_pitch.setPattern(0);
-      } else if (currentBar == 12) {
-        testPattern.stsq_pitch.setPattern(1);
-      }
-    });
-
-    if (interface.initialize() != paNoError)
-      return 1;
-
-    interface.hostInfo();
-
-    if (interface.openDevice(Pa_GetDefaultOutputDevice()) != paNoError)
-      return 1;
-
-    // might need to add some sort of "graphReady" functionaltiy to prevent
-    // starting until everything is initialized
-    std::this_thread::sleep_for(std::chrono::milliseconds(500));
-
-    if (interface.start() != paNoError) {
-      interface.close();
-      return 1;
+    float currentSixteenthInTwoBeats = fmod(currentQuat, 8.f);
+    if (currentSixteenthInTwoBeats == 0.f ||
+        currentSixteenthInTwoBeats == 3.f ||
+        currentSixteenthInTwoBeats == 6.f) {
+      osc.phase(0);
+      mod.phase(0);
+      adsr.triggerOn();
     }
 
-    // TODO: need a way to determine the composition length but this will do for
-    // now. I should be able to compute this value once I have composition-level
-    // utilities.
-
-    struct termios oldt, newt;
-    tcgetattr(STDIN_FILENO, &oldt);
-    newt = oldt;
-    newt.c_lflag &= ~(ICANON | ECHO);
-    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
-
-    while (true) {
-      fd_set readfds;
-      FD_ZERO(&readfds);
-      FD_SET(STDIN_FILENO, &readfds);
-
-      struct timeval tv;
-      tv.tv_sec = 1;
-      tv.tv_usec = 0;
-
-      if (select(STDIN_FILENO + 1, &readfds, nullptr, nullptr, &tv) > 0) {
-        char c;
-        read(STDIN_FILENO, &c, 1);
-        if (c) {
-          break; // Breaks the loop if a key is pressed
-        }
-      }
+    float currentBar = fmod(time.currentBar(), 16);
+    if (currentBar == 0 && time.currentUnit(1) != 0) {
+      testPattern.stsq_pitch.setPattern(0);
+    } else if (currentBar == 12) {
+      testPattern.stsq_pitch.setPattern(1);
     }
+  });
 
-    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
-    // std::this_thread::sleep_for(std::chrono::seconds(NUM_SECONDS));
+  if (interface.initialize() != paNoError)
+    return 1;
 
-    interface.stop();
-    interface.terminate();
-    globalInterface = 0;
+  interface.hostInfo();
 
-    return paNoError;
+  if (interface.openDevice(Pa_GetDefaultOutputDevice()) != paNoError)
+    return 1;
+
+  // might need to add some sort of "graphReady" functionaltiy to prevent
+  // starting until everything is initialized
+  std::this_thread::sleep_for(std::chrono::milliseconds(500));
+
+  if (interface.start() != paNoError) {
+    interface.close();
+    return 1;
   }
+
+  // TODO: need a way to determine the composition length but this will do for
+  // now. I should be able to compute this value once I have composition-level
+  // utilities.
+
+  struct termios oldt, newt;
+  tcgetattr(STDIN_FILENO, &oldt);
+  newt = oldt;
+  newt.c_lflag &= ~(ICANON | ECHO);
+  tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+
+  while (true) {
+    fd_set readfds;
+    FD_ZERO(&readfds);
+    FD_SET(STDIN_FILENO, &readfds);
+
+    struct timeval tv;
+    tv.tv_sec = 1;
+    tv.tv_usec = 0;
+
+    if (select(STDIN_FILENO + 1, &readfds, nullptr, nullptr, &tv) > 0) {
+      char c;
+      read(STDIN_FILENO, &c, 1);
+      if (c) {
+        break; // Breaks the loop if a key is pressed
+      }
+    }
+  }
+
+  tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+  // std::this_thread::sleep_for(std::chrono::seconds(NUM_SECONDS));
+
+  interface.stop();
+  interface.terminate();
+  globalInterface = 0;
+
+  return paNoError;
 }

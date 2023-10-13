@@ -56,17 +56,20 @@ struct OscAndStSq {
     // clang-format off
     STSQ_Pattern<float> pattern1;
     pattern1.totalDuration = time.beat(4);
-    pattern1.add(As2, time.beat(0.0));
-    pattern1.add(Cs3, time.beat(1.0));
-    pattern1.add(Gs3, time.beat(2.1));
-    pattern1.add(As3, time.beat(3.0));
+    pattern1.add(E2, time.beat(0.0));
+    pattern1.add(D3, time.beat(0.5));
+    pattern1.add(E2, time.beat(1.0));
+    pattern1.add(E2, time.beat(1.5));
+    pattern1.add(D3, time.beat(2.0));
+    pattern1.add(E2, time.beat(2.5));
+    pattern1.add(E3, time.beat(3.0));
 
     STSQ_Pattern<float> pattern2;
     pattern2.totalDuration = time.beat(2);
-    pattern2.add(As3, time.beat(0.0));
-    pattern2.add(Cs4, time.beat(0.5));
-    pattern2.add(Gs4, time.beat(1.0));
-    pattern2.add(As4, time.beat(1.5));
+    pattern2.add(E2, time.beat(0.0));
+    pattern2.add(D3, time.beat(0.5));
+    pattern2.add(E2, time.beat(1.0));
+    pattern2.add(E3, time.beat(1.5));
 
     // clang-format on
 
@@ -127,9 +130,9 @@ struct OscAndStSq {
     instrument.voices[1].stereoDetune(0.2);
     instrument.voices[2].stereoDetune(-0.2);
 
-    instrument.voices[0].tuning(-12);
-    instrument.voices[1].tuning(0.1);
-    instrument.voices[2].tuning(7.15);
+    instrument.voices[0].tuning(-24);
+    instrument.voices[1].tuning(-12.1);
+    instrument.voices[2].tuning(-5.15);
 
     instrument.voices[0].gain(1.);
     instrument.voices[1].gain(0.5);
@@ -141,7 +144,7 @@ struct OscAndStSq {
     instrument.filterCut.adsr.set(
         time.beat(0.25), time.beat(0.1), 0.9f, time.beat(1.f)
     );
-    instrument.filterCut.adsr.gain(8.75);
+    instrument.filterCut.adsr.gain(5.75);
 
     instrument.amplitude.adsr.set(time.quat(0.8), 0.f, 1.f, time.beat(2));
     instrument.gain(0.1);
@@ -149,33 +152,29 @@ struct OscAndStSq {
 
   void patchTheKick(Clover::Util::Time &time) {
     kick.voices[0].sine();
-    kick.voices[1].sine();
+    kick.voices[1].saw();
     kick.voices[2].sine();
 
-    kick.voices[0].gain(1);
-    kick.voices[1].gain(0.7);
-    kick.voices[2].gain(0.5);
-
-    kick.voices[1].stereoDetune(0.02);
-    kick.voices[2].stereoDetune(-0.01);
+    // kick.voices[1].stereoDetune(0.02);
+    // kick.voices[2].stereoDetune(-0.01);
 
     kick.voices[0].tuning(-9);
-    kick.voices[1].tuning(5);
-    kick.voices[2].tuning(11);
+    kick.voices[1].tuning(7);
+    kick.voices[2].tuning(13);
 
     kick.voices[0].gain(1.);
     kick.voices[1].gain(0.5);
-    kick.voices[2].gain(0.8);
+    kick.voices[2].gain(0.7);
 
     kick.filter.lowPass();
-    kick.filterCutoff_ = 10;
-    kick.filterReso_ = .7f;
-    kick.pitch.adsr.set(0.f, time.quat(0.1f), 0.f, 0.f);
-    kick.pitch.adsr.gain(7.5);
-    kick.filterCut.adsr.set(50.f, time.quat(0.2f), 0.02f, 0.f);
-    kick.filterCut.adsr.gain(7);
+    kick.filterCutoff_ = 20;
+    kick.filterReso_ = 1.1f;
+    kick.pitch.adsr.set(100.f, time.quat(0.15f), 0.f, 100.f);
+    kick.pitch.adsr.gain(5.5f);
+    kick.filterCut.adsr.set(100.f, time.quat(0.3f), 0.0f, 100.f);
+    kick.filterCut.adsr.gain(5);
 
-    kick.amplitude.adsr.set(50.f, time.quat(1.8f), 0.02f, 0.f);
+    kick.amplitude.adsr.set(100.f, time.quat(0.5f), 0.0f, 100.f);
     kick.gain(0.9);
   }
 

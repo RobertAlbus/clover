@@ -34,6 +34,8 @@ float ltodb(float x);
 
 float dbtol(float x);
 
+float ltol_dbscale(float x);
+
 float mtof(float x);
 
 float ftom(float x);

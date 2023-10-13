@@ -199,7 +199,8 @@ struct OscNx : public Clover::Graph::AudioOutNode<2>, Pitchable, Triggerable {
   }
 
   void updateAmplitudeMod() {
-    audioSink.gain(amplitude.adsrValue() + amplitude.lfoValue());
+    float modValue = amplitude.adsrValue() + amplitude.lfoValue();
+    audioSink.gain(modValue);
   }
 };
 

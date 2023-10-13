@@ -19,6 +19,7 @@
  */
 
 #include <cmath>
+#include <limits> // numeric_limits<float>::min
 
 #include "Calc.h"
 
@@ -37,6 +38,10 @@ float sign(float value) { return value < 0. ? -1.f : 1.f; }
 float ltodb(float x) { return log10f(fabsf(x)) * 20.f; }
 
 float dbtol(float x) { return powf(10.f, x / 20.f); }
+
+float ltol_dbscale(float x) {
+  return std::max( 0.f, (20 * log10f(std::max(x, std::numeric_limits<float>::min())) + 96) / 96); //* 0.01041666666;
+} // 1/96 }
 
 float mtof(float x) { return 440.f * powf(2.f, (x - 69.f) / 12.f); }
 
