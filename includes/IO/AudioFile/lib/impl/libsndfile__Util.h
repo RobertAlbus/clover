@@ -26,6 +26,7 @@
 
 namespace Clover::IO::AudioFile::impl {
 
+bool isAudioFile(const std::string &path);
 void throwIfFails(SNDFILE *sndfile, int resultCode);
 int getWriteSettingsFormat(const WriteSettingsPcm &writeSettings);
 

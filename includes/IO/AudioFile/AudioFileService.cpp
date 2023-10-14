@@ -48,7 +48,11 @@ void AudioFileService::Append(
   repostiory->Append(writeSpec, audioFile);
 }
 void AudioFileService::Delete(const std::string &filePath) {
-  repostiory->Delete(filePath);
+  try {
+    repostiory->Delete(filePath);
+  } catch (std::runtime_error error) {
+    printf(error.what());
+  }
 }
 
 // multi op
