@@ -136,6 +136,9 @@ private:
 
     for (int i = 0; i < 128; i++) {
       f[i] = noteChannel[i];
+    }
+
+    for (int i = 0; i < 128; i++) {
       f[i + 128] = controlChannel[i];
     }
 

@@ -1,11 +1,3 @@
-# TODO
-
-- migrate to RtAudio? or off of rtmidi? want to have the same provider, but RtMidi is buggy. or perhaps it is my controller.
-
-## Node Base
-- make every node have a ClassNameSettings object for all member variables
-    - ctor should accept this (with a copy, not a ref)
-
 ## reference material
 - https://github.com/webprofusion/OpenAudio
 - https://github.com/twoz/binaural-vst (head related transfer functions for mono=>stereo as JUCE VST)
@@ -24,6 +16,10 @@
 - https://github.com/thestk/stk
 - http://svr-www.eng.cam.ac.uk/comp.speech/Section1/AudioSoftware/spkit.html
 - https://github.com/CD3/libInterpolate
+
+MIDI:
+- midi smoothing: https://www.kvraudio.com/forum/viewtopic.php?p=7955616&sid=c27fe476fe3f16c6a7c159f88038714a#p7955616
+- https://midi.org/specifications
 - https://github.com/PortMidi/portmidi
 - http://rampmeupscotty.herokuapp.com/blog/2016/01/19/anatomy-of-midi-message/
 
@@ -37,6 +33,7 @@ UI
   - only one I could get working
   - no external dependencies
   - ANSI C
+  - NO KNOBS :( )
 
 - http://cegui.org.uk/content/getting-started (games and cool stuff)
 - https://www.fltk.org/ (application UIs)
