@@ -1,6 +1,5 @@
 build
 .vscode/*
-experiments
 *.prof 
 callgrind*
 renders/*
