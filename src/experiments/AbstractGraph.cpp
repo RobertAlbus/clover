@@ -1,13 +1,16 @@
+#include <chrono>
 #include <concepts>
 #include <cstdio>
+#include <functional>
+#include <map>
+#include <string>
 #include <type_traits>
+#include <typeinfo>
+#include <typeindex>
 #include <vector>
 
 struct FrameBase {
     FrameBase() = default;
-    // FrameBase(const FrameBase&) = default;
-    // virtual FrameBase& operator+=(const FrameBase &other) = 0;
-    // virtual FrameBase operator+(const FrameBase &other) = 0;
 };
 
 template <typename T>
@@ -24,7 +27,10 @@ concept Frame =
 };
 
 struct AbstractNode {
-    // virtual void processNext(const FrameBase& input) = 0;
+    std::string name;
+    AbstractNode(const char *name) : name(std::string(name)) { }
+    virtual std::type_index getTypeIdInput() = 0;
+    virtual std::type_index getTypeIdOutput() = 0;
 };
 
 template <Frame InputT>
@@ -39,10 +45,7 @@ struct NodeOutput {
 
 template <Frame InputT, Frame OutputT>
 struct Node : public NodeInput<InputT>, public NodeOutput<OutputT>, public AbstractNode {
-    // virtual void processNext(const FrameBase& input) override {
-    //     InputT *cast = reinterpret_cast<const InputT*>(&input);
-    //     processNext(*(cast));
-    // }
+    Node(const char *nodeName) : AbstractNode(nodeName), lastOutput({}) { }
 
     void processNext(const InputT& input) override {
         lastOutput = tick(input);
@@ -52,6 +55,14 @@ struct Node : public NodeInput<InputT>, public NodeOutput<OutputT>, public Abstr
 
     OutputT getResult() override {
         return lastOutput.clone();
+    }
+
+    std::type_index getTypeIdInput() override {
+        return typeid(InputT);
+    }
+
+    std::type_index getTypeIdOutput() override {
+        return typeid(OutputT);
     }
     
 protected: 
@@ -75,8 +86,8 @@ struct NullFrame : public FrameBase {
 };
 
 struct IntFrame : public FrameBase {
-    IntFrame() {}
-    int data = 0;
+    IntFrame() : data(0) {}
+    int data;
 
     IntFrame& operator+=(const IntFrame &other) {
         data += other.data;
@@ -89,14 +100,14 @@ struct IntFrame : public FrameBase {
     }
     IntFrame clone() {
         IntFrame f;
-        f.data = data;;
+        f.data = data;
         return f;
     }
 };
 
 struct FloatFrame : public FrameBase {
-    FloatFrame() {}
-    float data = 0;
+    FloatFrame() : data(0.f) {}
+    float data;
 
     FloatFrame& operator+=(const FloatFrame &other) {
         data += other.data;
@@ -115,6 +126,7 @@ struct FloatFrame : public FrameBase {
 };
 
 struct SourceNode : public Node<NullFrame, IntFrame> {
+    using Node<NullFrame, IntFrame>::Node;
     IntFrame tick(NullFrame input) {
         IntFrame f;
         f.data = 1;
@@ -123,6 +135,7 @@ struct SourceNode : public Node<NullFrame, IntFrame> {
 };
 
 struct UpcastNode : public Node<IntFrame, FloatFrame> {
+    using Node<IntFrame, FloatFrame>::Node;
     FloatFrame tick(IntFrame input) {
         FloatFrame f;
         f.data = static_cast<float>(input.data);
@@ -131,6 +144,7 @@ struct UpcastNode : public Node<IntFrame, FloatFrame> {
 };
 
 struct FloatNode : public Node<FloatFrame, FloatFrame> {
+    using Node<FloatFrame, FloatFrame>::Node;
     FloatFrame tick(FloatFrame input) {
         FloatFrame f;
         f.data = input.data + lastOutput.data;
@@ -139,48 +153,96 @@ struct FloatNode : public Node<FloatFrame, FloatFrame> {
 };
 
 
+template<Frame FrameType>
+std::function<void(AbstractNode*, std::vector<AbstractNode*>)> MapIO() {
+    return [](AbstractNode* node, std::vector<AbstractNode*> inputs) {
+        NodeInput<FrameType>* receivingNode = dynamic_cast<NodeInput<FrameType>*>(node);
+
+        FrameType frame {};
+        for (auto input : inputs) {
+
+            NodeOutput<FrameType>* providingNode = dynamic_cast<NodeOutput<FrameType>*>(input);
+            frame += providingNode->getResult();
+        }
+
+        receivingNode->processNext(frame);
+    };
+}
+
+template<Frame FrameType>
+std::function<void()>
+    MapIO_v2(AbstractNode* node, std::vector<AbstractNode*> inputs) {
+    return [node, inputs]() {
+        NodeInput<FrameType>* receivingNode = dynamic_cast<NodeInput<FrameType>*>(node);
+
+        FrameType frame;
+        for (auto input : inputs) {
+            NodeOutput<FrameType>* providingNode = dynamic_cast<NodeOutput<FrameType>*>(input);
+            frame += providingNode->getResult();
+        }
+
+        receivingNode->processNext(frame);
+    };
+}
+
 
 int main() {
+    int testIterationCount = 1000000;
 
     std::vector<AbstractNode*> nodes;
 
-    SourceNode sourceNode1;
-    SourceNode sourceNode2;
-    UpcastNode upcastNode1;
+    SourceNode sourceNode1("SN1");
+    SourceNode sourceNode2("SN2");
+    UpcastNode upcastNode1("UN1");
 
     nodes.emplace_back(&sourceNode1);
     nodes.emplace_back(&sourceNode2);
     nodes.emplace_back(&upcastNode1);
 
-    nodes.at(0) = &sourceNode1;
-    nodes.at(1) = &sourceNode2;
-    nodes.at(2) = &upcastNode1;
+    /*
+        TYPE MAP
+     */
 
-    ////
-    // source node 1
-    auto sourceNode1_reinterpret_input = reinterpret_cast<NodeInput<NullFrame>*>(nodes.at(0));
-    sourceNode1_reinterpret_input->processNext(NullFrame());
+    // TYPE MAP: setup
+    using MapIOFunc = std::function<void(AbstractNode*, std::vector<AbstractNode*>)>;
+    std::map<std::type_index, MapIOFunc> typeMap;
+    typeMap[typeid(IntFrame)] = MapIO<IntFrame>();
+    typeMap[typeid(FloatFrame)] = MapIO<FloatFrame>();
+    typeMap[typeid(NullFrame)] = MapIO<NullFrame>();
+    
+    // TYPE MAP: execute
+    auto typeMapStart = std::chrono::high_resolution_clock::now();
+    for (int i = 0; i < testIterationCount; i++) {
+        typeMap[nodes.at(0)->getTypeIdInput()](nodes.at(0), std::vector<AbstractNode*>{});
+        typeMap[nodes.at(1)->getTypeIdInput()](nodes.at(1), std::vector<AbstractNode*>{});
+        typeMap[nodes.at(2)->getTypeIdInput()](nodes.at(2), std::vector<AbstractNode*>{nodes.at(0), nodes.at(1)});
+    }
+    auto typeMapEnd = std::chrono::high_resolution_clock::now();
+    auto typeMapDuration = std::chrono::duration_cast<std::chrono::milliseconds>(typeMapEnd - typeMapStart).count();
+    printf("\nTime taken |     type map: %6i milliseconds", static_cast<int>(typeMapDuration));
 
-    auto sourceNode1_reinterpret_output = reinterpret_cast<NodeOutput<IntFrame>*>(nodes.at(0));
-    auto sourceNode1_output = sourceNode1_reinterpret_output->getResult();
+    /*
+        INSTANCE MAP    
+     */
+    // INSTANCE MAP: setup
+    std::map<AbstractNode*, std::function<void()>> instanceMap;
+    instanceMap[nodes[0]] = MapIO_v2<NullFrame>(nodes[0], std::vector<AbstractNode*>{});
+    instanceMap[nodes[1]] = MapIO_v2<NullFrame>(nodes[1], std::vector<AbstractNode*>{});
+    instanceMap[nodes[2]] = MapIO_v2<IntFrame>(nodes[2], std::vector<AbstractNode*>{nodes[0], nodes[1]});
 
-    ////
-    // source node 2
-    auto sourceNode2_reinterpret_input = reinterpret_cast<NodeInput<NullFrame>*>(nodes.at(1));
-    sourceNode2_reinterpret_input->processNext(NullFrame());
+    // TYPE MAP: execute
+    auto instanceMapStart = std::chrono::high_resolution_clock::now();
+    for (int i = 0; i < testIterationCount; i++) {
+        instanceMap[nodes[0]]();
+        instanceMap[nodes[1]]();
+        instanceMap[nodes[2]]();
+    }
+    auto instanceMapEnd = std::chrono::high_resolution_clock::now();
+    auto instanceMapDuration = std::chrono::duration_cast<std::chrono::milliseconds>(instanceMapEnd - instanceMapStart).count();
+    printf("\nTime taken | instance map: %6i milliseconds", static_cast<int>(instanceMapDuration));
 
-    auto sourceNode2_reinterpret_output = reinterpret_cast<NodeOutput<IntFrame>*>(nodes.at(1));
-    auto sourceNode2_output = sourceNode2_reinterpret_output->getResult();
-
-    ////
-    // upcast node 1
-    auto upcastNode1_reinterpret_input = reinterpret_cast<NodeInput<IntFrame>*>(nodes.at(2));
-    upcastNode1_reinterpret_input->processNext(sourceNode1_output + sourceNode2_output);
-
-    auto upcastNode1_reinterpret_output = reinterpret_cast<NodeOutput<FloatFrame>*>(nodes.at(1));
-    auto upcastNode1_output = upcastNode1_reinterpret_output->getResult();
-
-    printf("\nresult: %f", upcastNode1_output.data);
+    auto outputData = dynamic_cast<NodeOutput<FloatFrame>*>(nodes.at(2))->getResult();
+    // printf("\nresult: %f", outputData.data);
 
     return 0;
 }
