@@ -168,7 +168,8 @@ struct FloatNode : public Node<FloatFrame, FloatFrame> {
 
 
 template<Frame FrameType>
-std::function<void(AbstractNode*, std::vector<AbstractNode*>)> TypeMap() {
+std::function<void(AbstractNode*, std::vector<AbstractNode*>)>
+    TypeMap() {
     return [](AbstractNode* node, std::vector<AbstractNode*> inputs) {
         NodeInput<FrameType>* receivingNode = dynamic_cast<NodeInput<FrameType>*>(node);
 
@@ -181,6 +182,20 @@ std::function<void(AbstractNode*, std::vector<AbstractNode*>)> TypeMap() {
         receivingNode->processNext(frame);
     };
 }
+
+// Helper function to add a single type to the map
+template<typename T>
+void addTypeToMap(std::map<std::type_index, std::function<void(AbstractNode*, std::vector<AbstractNode*>)>>& typeMap) {
+    typeMap[typeid(T)] = TypeMap<T>();
+}
+
+// Function template to initialize type map with a list of types
+template<typename... Types>
+void initializeTypeMap(std::map<std::type_index, std::function<void(AbstractNode*, std::vector<AbstractNode*>)>>& typeMap) {
+    // Using fold expression to initialize map for each type
+    (addTypeToMap<Types>(typeMap), ...);
+}
+
 
 template<Frame FrameType>
 std::function<void()>
@@ -237,9 +252,11 @@ int main() {
     // TYPE MAP: setup
     using MapIOFunc = std::function<void(AbstractNode*, std::vector<AbstractNode*>)>;
     std::map<std::type_index, MapIOFunc> typeMap;
-    typeMap[typeid(IntFrame)] = TypeMap<IntFrame>();
-    typeMap[typeid(FloatFrame)] = TypeMap<FloatFrame>();
-    typeMap[typeid(NullFrame)] = TypeMap<NullFrame>();
+                    // typeMap[typeid(IntFrame)] = TypeMap<IntFrame>();
+                    // typeMap[typeid(FloatFrame)] = TypeMap<FloatFrame>();
+                    // typeMap[typeid(NullFrame)] = TypeMap<NullFrame>();
+    // Initialize the map with all frame types in one call
+    initializeTypeMap<IntFrame, FloatFrame, NullFrame>(typeMap);
     
     // TYPE MAP: execute
     auto typeMapStart = std::chrono::high_resolution_clock::now();
