@@ -72,6 +72,14 @@ struct Node : public NodeInput<InputT>, public NodeOutput<OutputT>, public Abstr
         lastOutput.reset();
     }
     
+    NodeInput<InputT>* asInput() {
+        return dynamic_cast<NodeInput<InputT>*>(this);
+    }
+
+    NodeOutput<OutputT>* asOutput() {
+        return dynamic_cast<NodeOutput<OutputT>*>(this);
+    }
+    
 protected: 
     OutputT lastOutput;
 };
@@ -199,17 +207,14 @@ void initializeTypeMap(std::map<std::type_index, std::function<void(AbstractNode
 
 template<Frame FrameType>
 std::function<void()>
-    InstanceMap(AbstractNode* node, std::vector<AbstractNode*> inputs) {
-    return [node, inputs]() {
-        NodeInput<FrameType>* receivingNode = dynamic_cast<NodeInput<FrameType>*>(node);
+    InstanceMap(NodeInput<FrameType>* node, std::vector<NodeOutput<FrameType>*> inputs) {
 
+    return [node, inputs]() {
         FrameType frame;
         for (auto input : inputs) {
-            NodeOutput<FrameType>* providingNode = dynamic_cast<NodeOutput<FrameType>*>(input);
-            frame += providingNode->getResult();
+            frame += input->getResult();
         }
-
-        receivingNode->processNext(frame);
+        node->processNext(frame);
     };
 }
 
@@ -261,15 +266,15 @@ int main() {
     // TYPE MAP: execute
     auto typeMapStart = std::chrono::high_resolution_clock::now();
     for (int i = 0; i < testIterationCount; i++) {
-        typeMap[nodes.at(0)->getTypeIdInput()](nodes.at(0), std::vector<AbstractNode*>{});
-        typeMap[nodes.at(1)->getTypeIdInput()](nodes.at(1), std::vector<AbstractNode*>{});
-        typeMap[nodes.at(2)->getTypeIdInput()](nodes.at(2), std::vector<AbstractNode*>{});
-        typeMap[nodes.at(3)->getTypeIdInput()](nodes.at(3), std::vector<AbstractNode*>{});
-        typeMap[nodes.at(4)->getTypeIdInput()](nodes.at(4), std::vector<AbstractNode*>{nodes.at(0), nodes.at(1), nodes.at(2), nodes.at(3)});
-        typeMap[nodes.at(5)->getTypeIdInput()](nodes.at(5), std::vector<AbstractNode*>{nodes.at(0), nodes.at(1), nodes.at(2), nodes.at(3)});
-        typeMap[nodes.at(6)->getTypeIdInput()](nodes.at(6), std::vector<AbstractNode*>{nodes.at(4), nodes.at(5)});
-        typeMap[nodes.at(7)->getTypeIdInput()](nodes.at(7), std::vector<AbstractNode*>{nodes.at(4), nodes.at(5)});
-        typeMap[nodes.at(8)->getTypeIdInput()](nodes.at(8), std::vector<AbstractNode*>{nodes.at(6), nodes.at(7)});
+        typeMap[nodes.at(0)->getTypeIdInput()](nodes.at(0), {});
+        typeMap[nodes.at(1)->getTypeIdInput()](nodes.at(1), {});
+        typeMap[nodes.at(2)->getTypeIdInput()](nodes.at(2), {});
+        typeMap[nodes.at(3)->getTypeIdInput()](nodes.at(3), {});
+        typeMap[nodes.at(4)->getTypeIdInput()](nodes.at(4), {nodes.at(0), nodes.at(1), nodes.at(2), nodes.at(3)});
+        typeMap[nodes.at(5)->getTypeIdInput()](nodes.at(5), {nodes.at(0), nodes.at(1), nodes.at(2), nodes.at(3)});
+        typeMap[nodes.at(6)->getTypeIdInput()](nodes.at(6), {nodes.at(4), nodes.at(5)});
+        typeMap[nodes.at(7)->getTypeIdInput()](nodes.at(7), {nodes.at(4), nodes.at(5)});
+        typeMap[nodes.at(8)->getTypeIdInput()](nodes.at(8), {nodes.at(6), nodes.at(7)});
     }
     auto typeMapEnd = std::chrono::high_resolution_clock::now();
     auto typeMapDuration = std::chrono::duration_cast<std::chrono::milliseconds>(typeMapEnd - typeMapStart).count();
@@ -285,17 +290,17 @@ int main() {
      */
     // INSTANCE MAP: setup
     std::map<AbstractNode*, std::function<void()>> instanceMap;
-    instanceMap[nodes.at(0)] = InstanceMap<NullFrame>(nodes.at(0), std::vector<AbstractNode*>{});
-    instanceMap[nodes.at(1)] = InstanceMap<NullFrame>(nodes.at(1), std::vector<AbstractNode*>{});
-    instanceMap[nodes.at(2)] = InstanceMap<NullFrame>(nodes.at(2), std::vector<AbstractNode*>{});
-    instanceMap[nodes.at(3)] = InstanceMap<NullFrame>(nodes.at(3), std::vector<AbstractNode*>{});
-    instanceMap[nodes.at(4)] = InstanceMap<IntFrame>(nodes.at(4), std::vector<AbstractNode*>{nodes.at(0), nodes.at(1), nodes.at(2), nodes.at(3)});
-    instanceMap[nodes.at(5)] = InstanceMap<IntFrame>(nodes.at(5), std::vector<AbstractNode*>{nodes.at(0), nodes.at(1), nodes.at(2), nodes.at(3)});
-    instanceMap[nodes.at(6)] = InstanceMap<FloatFrame>(nodes.at(6), std::vector<AbstractNode*>{nodes.at(4), nodes.at(5)});
-    instanceMap[nodes.at(7)] = InstanceMap<FloatFrame>(nodes.at(7), std::vector<AbstractNode*>{nodes.at(4), nodes.at(5)});
-    instanceMap[nodes.at(8)] = InstanceMap<FloatFrame>(nodes.at(8), std::vector<AbstractNode*>{nodes.at(6), nodes.at(7)});
+    instanceMap[&sourceNode1] = InstanceMap(sourceNode1.asInput(), {});
+    instanceMap[&sourceNode2] = InstanceMap(sourceNode2.asInput(), {});
+    instanceMap[&sourceNode3] = InstanceMap(sourceNode3.asInput(), {});
+    instanceMap[&sourceNode4] = InstanceMap(sourceNode4.asInput(), {});
+    instanceMap[&upcastNode1] = InstanceMap(upcastNode1.asInput(), {sourceNode1.asOutput(), sourceNode2.asOutput(), sourceNode3.asOutput(), sourceNode4.asOutput()});
+    instanceMap[&upcastNode2] = InstanceMap(upcastNode2.asInput(), {sourceNode1.asOutput(), sourceNode2.asOutput(), sourceNode3.asOutput(), sourceNode4.asOutput()});
+    instanceMap[&floatNode1] = InstanceMap(floatNode1.asInput(), {upcastNode1.asOutput(), upcastNode2.asOutput()});
+    instanceMap[&floatNode2] = InstanceMap(floatNode2.asInput(), {upcastNode1.asOutput(), upcastNode2.asOutput()});
+    instanceMap[&floatNode3] = InstanceMap(floatNode3.asInput(), {floatNode1.asOutput(), floatNode2.asOutput()});
 
-    // TYPE MAP: execute
+    // INSTANCE MAP: execute
     auto instanceMapStart = std::chrono::high_resolution_clock::now();
     for (int i = 0; i < testIterationCount; i++) {
         for (auto node : nodes) {
