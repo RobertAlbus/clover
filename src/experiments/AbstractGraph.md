@@ -19,6 +19,25 @@
 | instance map |  589 milliseconds <= 42.7% faster
 x--------------------------------
 
+## single threaded lambda orchestration with programmatic graph relationships
+
+|------------------------------------------------------|
+|where x == (explicit relationships)                   |
+|where y == (mapped relationships)                     |
+|------------------------------------------------------|
+|1 second   |                                          |
+|Time taken |     type map [x]:   182 milliseconds     |
+|Time taken | instance map [y]:    83 milliseconds     |
+|------------------------------------------------------|
+|1 second   |                                          |
+|Time taken |     type map [y]:   266 milliseconds     |
+|Time taken | instance map [y]:    83 milliseconds     |
+|------------------------------------------------------|
+|1 minute   |                                          |
+|Time taken |     type map [y]: 14501 milliseconds     |
+|Time taken | instance map [y]:  5433 milliseconds     |
+|------------------------------------------------------|
+
 
 
 

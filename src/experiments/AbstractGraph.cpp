@@ -218,6 +218,44 @@ std::function<void()>
     };
 }
 
+template<Frame FrameType>
+std::function<void()>
+    InstanceMap(NodeInput<FrameType>* node, std::vector<AbstractNode*> inputs) {
+    std::vector<NodeOutput<FrameType>*> cast_inputs;
+    for (auto input : inputs) {
+        cast_inputs.emplace_back(dynamic_cast<NodeOutput<FrameType>*>(input));
+    }
+
+    return InstanceMap(node, cast_inputs);
+}
+
+std::map<AbstractNode*, std::vector<AbstractNode*>> nodeAdjacencyMap;
+
+template <Frame X, Frame Y, Frame Z>
+Node<Y,Z> &operator>>(Node<X,Y> &sourceNode, Node<Y,Z> &destinationNode) {
+    nodeAdjacencyMap[&destinationNode].emplace_back(&sourceNode);
+    return destinationNode;
+}
+
+void CreateInstanceMappings(
+        std::map<AbstractNode*, std::function<void()>> &instanceMap,
+        std::map<AbstractNode*, std::vector<AbstractNode*>> &adjacencyMatrix) {
+}
+template <Frame FrameType, typename... Args>
+void CreateInstanceMappings(
+        std::map<AbstractNode*, std::function<void()>> &instanceMap,
+        std::map<AbstractNode*, std::vector<AbstractNode*>> &adjacencyMatrix,
+        NodeInput<FrameType>& node,
+        Args&... args) {
+
+    AbstractNode* nodeIdentity = dynamic_cast<AbstractNode*>(&node);
+    std::vector<AbstractNode*> inputs = adjacencyMatrix[nodeIdentity];
+
+    instanceMap[nodeIdentity] = InstanceMap(&node, inputs);
+    if (sizeof...(args) != 0) {
+        CreateInstanceMappings(instanceMap, adjacencyMatrix, args...);
+    }
+}
 
 int main() {
     int sampleRate = 48000;
@@ -250,31 +288,47 @@ int main() {
         node->reset();
     }
 
+    for (auto node : nodes) {
+        std::vector<AbstractNode*> relationships {};
+        relationships.reserve(nodes.size());
+        nodeAdjacencyMap[node] = relationships;
+    }
+
+    sourceNode1 >> upcastNode1;
+    sourceNode2 >> upcastNode1;
+    sourceNode3 >> upcastNode1;
+    sourceNode4 >> upcastNode1;
+    sourceNode1 >> upcastNode2;
+    sourceNode2 >> upcastNode2;
+    sourceNode3 >> upcastNode2;
+    sourceNode4 >> upcastNode2;
+
+    upcastNode1 >> floatNode1;
+    upcastNode2 >> floatNode1;
+    upcastNode1 >> floatNode2;
+    upcastNode2 >> floatNode2;
+
+    floatNode1 >> floatNode3;
+    floatNode2 >> floatNode3;
+
 
     /*
         TYPE MAP
      */
     // TYPE MAP: setup
     using MapIOFunc = std::function<void(AbstractNode*, std::vector<AbstractNode*>)>;
+    
+    // These type map aspects could be built into the assignment operator.
+    // For example, if a type index map key does not exist, create it.
     std::map<std::type_index, MapIOFunc> typeMap;
-                    // typeMap[typeid(IntFrame)] = TypeMap<IntFrame>();
-                    // typeMap[typeid(FloatFrame)] = TypeMap<FloatFrame>();
-                    // typeMap[typeid(NullFrame)] = TypeMap<NullFrame>();
-    // Initialize the map with all frame types in one call
     initializeTypeMap<IntFrame, FloatFrame, NullFrame>(typeMap);
     
     // TYPE MAP: execute
     auto typeMapStart = std::chrono::high_resolution_clock::now();
     for (int i = 0; i < testIterationCount; i++) {
-        typeMap[nodes.at(0)->getTypeIdInput()](nodes.at(0), {});
-        typeMap[nodes.at(1)->getTypeIdInput()](nodes.at(1), {});
-        typeMap[nodes.at(2)->getTypeIdInput()](nodes.at(2), {});
-        typeMap[nodes.at(3)->getTypeIdInput()](nodes.at(3), {});
-        typeMap[nodes.at(4)->getTypeIdInput()](nodes.at(4), {nodes.at(0), nodes.at(1), nodes.at(2), nodes.at(3)});
-        typeMap[nodes.at(5)->getTypeIdInput()](nodes.at(5), {nodes.at(0), nodes.at(1), nodes.at(2), nodes.at(3)});
-        typeMap[nodes.at(6)->getTypeIdInput()](nodes.at(6), {nodes.at(4), nodes.at(5)});
-        typeMap[nodes.at(7)->getTypeIdInput()](nodes.at(7), {nodes.at(4), nodes.at(5)});
-        typeMap[nodes.at(8)->getTypeIdInput()](nodes.at(8), {nodes.at(6), nodes.at(7)});
+        for (auto node : nodes) {
+            typeMap[node->getTypeIdInput()](node, nodeAdjacencyMap[node]);
+        }
     }
     auto typeMapEnd = std::chrono::high_resolution_clock::now();
     auto typeMapDuration = std::chrono::duration_cast<std::chrono::milliseconds>(typeMapEnd - typeMapStart).count();
@@ -290,15 +344,20 @@ int main() {
      */
     // INSTANCE MAP: setup
     std::map<AbstractNode*, std::function<void()>> instanceMap;
-    instanceMap[&sourceNode1] = InstanceMap(sourceNode1.asInput(), {});
-    instanceMap[&sourceNode2] = InstanceMap(sourceNode2.asInput(), {});
-    instanceMap[&sourceNode3] = InstanceMap(sourceNode3.asInput(), {});
-    instanceMap[&sourceNode4] = InstanceMap(sourceNode4.asInput(), {});
-    instanceMap[&upcastNode1] = InstanceMap(upcastNode1.asInput(), {sourceNode1.asOutput(), sourceNode2.asOutput(), sourceNode3.asOutput(), sourceNode4.asOutput()});
-    instanceMap[&upcastNode2] = InstanceMap(upcastNode2.asInput(), {sourceNode1.asOutput(), sourceNode2.asOutput(), sourceNode3.asOutput(), sourceNode4.asOutput()});
-    instanceMap[&floatNode1] = InstanceMap(floatNode1.asInput(), {upcastNode1.asOutput(), upcastNode2.asOutput()});
-    instanceMap[&floatNode2] = InstanceMap(floatNode2.asInput(), {upcastNode1.asOutput(), upcastNode2.asOutput()});
-    instanceMap[&floatNode3] = InstanceMap(floatNode3.asInput(), {floatNode1.asOutput(), floatNode2.asOutput()});
+    CreateInstanceMappings(
+        instanceMap,
+        nodeAdjacencyMap,
+        
+        sourceNode1,
+        sourceNode2,
+        sourceNode3,
+        sourceNode4,
+        upcastNode1,
+        upcastNode2,
+        floatNode1,
+        floatNode2,
+        floatNode3
+    );
 
     // INSTANCE MAP: execute
     auto instanceMapStart = std::chrono::high_resolution_clock::now();
