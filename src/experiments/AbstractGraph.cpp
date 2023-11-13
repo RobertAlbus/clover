@@ -179,6 +179,7 @@ template<Frame FrameType>
 std::function<void(AbstractNode*, std::vector<AbstractNode*>&)>
     CreateTypeMapFunction(NodeInput<FrameType> *receivingNode) {
     return [](AbstractNode* node, std::vector<AbstractNode*> inputs) {
+        // bulk-casting here is 16% slower vs. cast per in for loop
         FrameType frame {};
         for (auto input : inputs) {
             NodeOutput<FrameType>* providingNode = dynamic_cast<NodeOutput<FrameType>*>(input);
@@ -218,37 +219,42 @@ std::map<AbstractNode*, std::vector<AbstractNode*>> nodeAdjacencyMap;
 
 using MapIOFunc = std::function<void(AbstractNode*, std::vector<AbstractNode*>&)>;
 std::map<std::type_index, MapIOFunc> typeMap;
+std::map<AbstractNode*, std::function<void()>> instanceMap;
 
 template <Frame X, Frame Y, Frame Z>
 Node<Y,Z> &operator>>(Node<X,Y> &sourceNode, Node<Y,Z> &destinationNode) {
     nodeAdjacencyMap[&destinationNode].emplace_back(&sourceNode);
 
-    // for type map approach: auto register type processing function
+    // type map approach: auto register processing functions
     if (!typeMap.contains(sourceNode.getTypeIdInput())) {
         typeMap[sourceNode.getTypeIdInput()] = CreateTypeMapFunction(&sourceNode);
     }
+    if (!typeMap.contains(destinationNode.getTypeIdInput())) {
+        typeMap[destinationNode.getTypeIdInput()] = CreateTypeMapFunction(&destinationNode);
+    }
+
+    // instance map approach: auto register processing functions
+    
+    instanceMap[&sourceNode] = InstanceMap(&sourceNode, nodeAdjacencyMap[&sourceNode]);
+    instanceMap[&destinationNode] = InstanceMap(&destinationNode, nodeAdjacencyMap[&destinationNode]);
+
+    // an ordering issue here!?!?!?!
+    // nope
+    // InstanceMap is casting the AbstractNode pointers and capturing the casted adjacency list each time.
+
+    // if (!instanceMap.contains(&sourceNode)) {
+    //     std::vector<AbstractNode*> inputs = nodeAdjacencyMap[&sourceNode];
+    //     instanceMap[&sourceNode] = InstanceMap(&sourceNode, nodeAdjacencyMap[&sourceNode]);
+    // }
+
+    // if (!instanceMap.contains(&destinationNode)) {
+    //     std::vector<AbstractNode*> inputs = nodeAdjacencyMap[&destinationNode];
+    //     instanceMap[&destinationNode] = InstanceMap(&destinationNode, nodeAdjacencyMap[&destinationNode]);
+    // }
+
+    // can alternatively move a single iteration of the instance map setup into a graph.prepare() method.
 
     return destinationNode;
-}
-
-void CreateInstanceMappings(
-        std::map<AbstractNode*, std::function<void()>> &instanceMap,
-        std::map<AbstractNode*, std::vector<AbstractNode*>> &adjacencyMatrix) {
-}
-template <Frame FrameType, typename... Args>
-void CreateInstanceMappings(
-        std::map<AbstractNode*, std::function<void()>> &instanceMap,
-        std::map<AbstractNode*, std::vector<AbstractNode*>> &adjacencyMatrix,
-        NodeInput<FrameType>& node,
-        Args&... args) {
-
-    AbstractNode* nodeIdentity = dynamic_cast<AbstractNode*>(&node);
-    std::vector<AbstractNode*> inputs = adjacencyMatrix[nodeIdentity];
-
-    instanceMap[nodeIdentity] = InstanceMap(&node, inputs);
-    if (sizeof...(args) != 0) {
-        CreateInstanceMappings(instanceMap, adjacencyMatrix, args...);
-    }
 }
 
 int main() {
@@ -331,22 +337,6 @@ int main() {
         INSTANCE MAP    
      */
     // INSTANCE MAP: setup
-    std::map<AbstractNode*, std::function<void()>> instanceMap;
-    // surely this function can also be internalized into operator>> too
-    CreateInstanceMappings(
-        instanceMap,
-        nodeAdjacencyMap,
-        
-        sourceNode1,
-        sourceNode2,
-        sourceNode3,
-        sourceNode4,
-        upcastNode1,
-        upcastNode2,
-        floatNode1,
-        floatNode2,
-        floatNode3
-    );
 
     // INSTANCE MAP: execute
     auto instanceMapStart = std::chrono::high_resolution_clock::now();
