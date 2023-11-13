@@ -176,32 +176,17 @@ struct FloatNode : public Node<FloatFrame, FloatFrame> {
 
 
 template<Frame FrameType>
-std::function<void(AbstractNode*, std::vector<AbstractNode*>)>
-    TypeMap() {
+std::function<void(AbstractNode*, std::vector<AbstractNode*>&)>
+    CreateTypeMapFunction(NodeInput<FrameType> *receivingNode) {
     return [](AbstractNode* node, std::vector<AbstractNode*> inputs) {
-        NodeInput<FrameType>* receivingNode = dynamic_cast<NodeInput<FrameType>*>(node);
-
         FrameType frame {};
         for (auto input : inputs) {
             NodeOutput<FrameType>* providingNode = dynamic_cast<NodeOutput<FrameType>*>(input);
             frame += providingNode->getResult();
         }
-
+        NodeInput<FrameType> *receivingNode = dynamic_cast<NodeInput<FrameType>*>(node);
         receivingNode->processNext(frame);
     };
-}
-
-// Helper function to add a single type to the map
-template<typename T>
-void addTypeToMap(std::map<std::type_index, std::function<void(AbstractNode*, std::vector<AbstractNode*>)>>& typeMap) {
-    typeMap[typeid(T)] = TypeMap<T>();
-}
-
-// Function template to initialize type map with a list of types
-template<typename... Types>
-void initializeTypeMap(std::map<std::type_index, std::function<void(AbstractNode*, std::vector<AbstractNode*>)>>& typeMap) {
-    // Using fold expression to initialize map for each type
-    (addTypeToMap<Types>(typeMap), ...);
 }
 
 
@@ -231,9 +216,18 @@ std::function<void()>
 
 std::map<AbstractNode*, std::vector<AbstractNode*>> nodeAdjacencyMap;
 
+using MapIOFunc = std::function<void(AbstractNode*, std::vector<AbstractNode*>&)>;
+std::map<std::type_index, MapIOFunc> typeMap;
+
 template <Frame X, Frame Y, Frame Z>
 Node<Y,Z> &operator>>(Node<X,Y> &sourceNode, Node<Y,Z> &destinationNode) {
     nodeAdjacencyMap[&destinationNode].emplace_back(&sourceNode);
+
+    // for type map approach: auto register type processing function
+    if (!typeMap.contains(sourceNode.getTypeIdInput())) {
+        typeMap[sourceNode.getTypeIdInput()] = CreateTypeMapFunction(&sourceNode);
+    }
+
     return destinationNode;
 }
 
@@ -316,12 +310,6 @@ int main() {
         TYPE MAP
      */
     // TYPE MAP: setup
-    using MapIOFunc = std::function<void(AbstractNode*, std::vector<AbstractNode*>)>;
-    
-    // These type map aspects could be built into the assignment operator.
-    // For example, if a type index map key does not exist, create it.
-    std::map<std::type_index, MapIOFunc> typeMap;
-    initializeTypeMap<IntFrame, FloatFrame, NullFrame>(typeMap);
     
     // TYPE MAP: execute
     auto typeMapStart = std::chrono::high_resolution_clock::now();
@@ -344,6 +332,7 @@ int main() {
      */
     // INSTANCE MAP: setup
     std::map<AbstractNode*, std::function<void()>> instanceMap;
+    // surely this function can also be internalized into operator>> too
     CreateInstanceMappings(
         instanceMap,
         nodeAdjacencyMap,
