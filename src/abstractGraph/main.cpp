@@ -1,20 +1,10 @@
 #include <chrono>
-#include <concepts>
-#include <cstdio>
 #include <functional>
-#include <latch>
 #include <map>
-#include <string>
-#include <type_traits>
-#include <typeinfo>
-#include <typeindex>
-#include <vector>
 
 #include "FrameBase.h"
 #include "NodeBase.h"
 #include "CustomTypes.h"
-
-
 
 template<Frame FrameType>
 std::function<void(AbstractNode*, std::vector<AbstractNode*>&)>
