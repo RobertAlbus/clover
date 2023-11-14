@@ -234,25 +234,15 @@ Node<Y,Z> &operator>>(Node<X,Y> &sourceNode, Node<Y,Z> &destinationNode) {
     }
 
     // instance map approach: auto register processing functions
+    // - InstanceMap(...) is casting the AbstractNode pointers and capturing the casted adjacency list each time.
+    // - can alternatively move a single iteration of the instance map setup into a graph.prepare() method.
     
-    instanceMap[&sourceNode] = InstanceMap(&sourceNode, nodeAdjacencyMap[&sourceNode]);
+    if (!instanceMap.contains(&sourceNode)) {
+        std::vector<AbstractNode*> inputs = nodeAdjacencyMap[&sourceNode];
+        instanceMap[&sourceNode] = InstanceMap(&sourceNode, nodeAdjacencyMap[&sourceNode]);
+    }
     instanceMap[&destinationNode] = InstanceMap(&destinationNode, nodeAdjacencyMap[&destinationNode]);
 
-    // an ordering issue here!?!?!?!
-    // nope
-    // InstanceMap is casting the AbstractNode pointers and capturing the casted adjacency list each time.
-
-    // if (!instanceMap.contains(&sourceNode)) {
-    //     std::vector<AbstractNode*> inputs = nodeAdjacencyMap[&sourceNode];
-    //     instanceMap[&sourceNode] = InstanceMap(&sourceNode, nodeAdjacencyMap[&sourceNode]);
-    // }
-
-    // if (!instanceMap.contains(&destinationNode)) {
-    //     std::vector<AbstractNode*> inputs = nodeAdjacencyMap[&destinationNode];
-    //     instanceMap[&destinationNode] = InstanceMap(&destinationNode, nodeAdjacencyMap[&destinationNode]);
-    // }
-
-    // can alternatively move a single iteration of the instance map setup into a graph.prepare() method.
 
     return destinationNode;
 }
@@ -261,8 +251,6 @@ int main() {
     int sampleRate = 48000;
     int oneMinute = sampleRate * 60;
     int testIterationCount = oneMinute;
-
-    std::vector<AbstractNode*> nodes;
 
     SourceNode sourceNode1("SN1");
     SourceNode sourceNode2("SN2");
@@ -274,6 +262,7 @@ int main() {
     FloatNode floatNode2("FN2");
     FloatNode floatNode3("ROOT");
 
+    std::vector<AbstractNode*> nodes;
     nodes.emplace_back(&sourceNode1);
     nodes.emplace_back(&sourceNode2);
     nodes.emplace_back(&sourceNode3);
@@ -287,6 +276,31 @@ int main() {
     for (auto node : nodes) {
         node->reset();
     }
+
+    // a modified topological sort
+    // - nodes are grouped into "distance from outside edge"
+    // - "outside edge" refers to the farthest upstream node with 0 inputs
+    std::map<int, std::vector<AbstractNode*>> sortedNodes;
+    sortedNodes[0] = std::vector<AbstractNode*> {
+        &sourceNode1,
+        &sourceNode2,
+        &sourceNode3,
+        &sourceNode4,
+    };
+
+    sortedNodes[1] = std::vector<AbstractNode*> {
+        &upcastNode1,
+        &upcastNode2,
+    };
+
+    sortedNodes[2] = std::vector<AbstractNode*> {
+        &floatNode1,
+        &floatNode2,
+    };
+
+    sortedNodes[3] = std::vector<AbstractNode*> {
+        &floatNode3,
+    };
 
     for (auto node : nodes) {
         std::vector<AbstractNode*> relationships {};
@@ -315,15 +329,16 @@ int main() {
     /*
         TYPE MAP
      */
-    // TYPE MAP: setup
-    
     // TYPE MAP: execute
     auto typeMapStart = std::chrono::high_resolution_clock::now();
     for (int i = 0; i < testIterationCount; i++) {
-        for (auto node : nodes) {
-            typeMap[node->getTypeIdInput()](node, nodeAdjacencyMap[node]);
+        for (auto group : sortedNodes) {
+            for (auto node : group.second) {
+                typeMap[node->getTypeIdInput()](node, nodeAdjacencyMap[node]);
+            }
         }
     }
+
     auto typeMapEnd = std::chrono::high_resolution_clock::now();
     auto typeMapDuration = std::chrono::duration_cast<std::chrono::milliseconds>(typeMapEnd - typeMapStart).count();
     printf("\nTime taken |     type map: %6i milliseconds", static_cast<int>(typeMapDuration));
@@ -336,13 +351,14 @@ int main() {
     /*
         INSTANCE MAP    
      */
-    // INSTANCE MAP: setup
-
     // INSTANCE MAP: execute
     auto instanceMapStart = std::chrono::high_resolution_clock::now();
+
     for (int i = 0; i < testIterationCount; i++) {
-        for (auto node : nodes) {
-            instanceMap[node]();
+        for (auto group : sortedNodes) {
+            for (auto node : group.second) {
+                instanceMap[node]();
+            }
         }
     }
     auto instanceMapEnd = std::chrono::high_resolution_clock::now();

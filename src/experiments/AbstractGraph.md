@@ -39,5 +39,29 @@ x--------------------------------
 |------------------------------------------------------|
 
 
+## single threaded but with "distance from edge" sorting
+this introduces a little overhead for the map
 
+|----------------------------------------------|
+|no map:                                       |
+|Time taken |     type map:   2999 milliseconds|
+|Time taken | instance map:    193 milliseconds|
+|----------------------------------------------|
+|with map:                                     |
+|Time taken |     type map:   3354 milliseconds|
+|Time taken | instance map:    396 milliseconds|
+|----------------------------------------------|
+|performance cost:                             |
+|type     map: 10.58%                          |
+|instance map: 51.26%                          |
+|----------------------------------------------|
+
+
+    
+Next steps:
+- split abstract graph experiment into multiple files
+    - `std::map<int, std::vector<AbstractNode*>> groupedNodes;`
+- create experiment for pausing one thread to wait for others
+- parallelize the processing for all nodes in a given group
+    
 
