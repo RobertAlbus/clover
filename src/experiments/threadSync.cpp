@@ -8,112 +8,101 @@
 #include <chrono>
 
 
-int timeMultiplier = 1;
-int baseEffort = 1;
-
-int numIterations = 100000; 
+int numIterations = 10000; 
 
 
-void logStart(int id) {
-    // printf("\nThread %d starting", id);
-}
-
-void logComplete(int id) {
-    // printf("\nThread %d completing", id);
-}
+template<typename T>
+struct BaseThreadWorker {
+    virtual void work(T& mechanism) = 0;
+};
 
 //----------------
 // Semaphore
-
-void semaphoreWorker(std::counting_semaphore<INT32_MAX> &sem1, std::counting_semaphore<INT32_MAX> &sem2, int id, int effort) {
-    // logStart(id);
-    // std::this_thread::sleep_for(std::chrono::microseconds(std::max(0, effort)));
-    // logComplete(id);
-    if (id <= 3) sem1.release();
-    else if (id <= 5) sem2.release();
-}
+struct SemaphoreThreadWorker : public BaseThreadWorker<std::counting_semaphore<INT32_MAX>> {
+    void work(std::counting_semaphore<INT32_MAX>& mechanism) override {
+        mechanism.release();
+    }
+};
 
 void semaphoreMain() {
-    std::counting_semaphore sem1(0); // threads 1, 2, 3
-    std::counting_semaphore sem2(0); // threads 4, 5
+    std::vector<SemaphoreThreadWorker> workers(6);
+    std::counting_semaphore semaphore(0);
     std::thread threads[6];
 
-    // Start threads 1, 2, 3
     for (int i = 0; i < 3; ++i) {
-        int id = i + 1;
-        int effort = baseEffort - i * timeMultiplier;
-        threads[i] = std::thread(semaphoreWorker, std::ref(sem1), std::ref(sem2), id, effort);
+        auto task = [&workers, &semaphore, i]() {
+            workers[i].work(semaphore);
+        };
+        threads[i] = std::thread(task);
     }
 
-    // Wait for threads 1, 2, 3 to complete
     for (int i = 0; i < 3; ++i) {
-        sem1.acquire();
+        semaphore.acquire();
     }
 
-    // Start threads 4, 5
     for (int i = 3; i < 5; ++i) {
-        int id = i + 1;
-        int effort = baseEffort - i * timeMultiplier;
-        threads[i] = std::thread(semaphoreWorker, std::ref(sem1), std::ref(sem2), id, effort);
+        auto task = [&workers, &semaphore, i]() {
+            workers[i].work(semaphore);
+        };
+        threads[i] = std::thread(task);
     }
 
-    // Wait for threads 4, 5 to complete
     for (int i = 0; i < 2; ++i) {
-        sem2.acquire();
+        semaphore.acquire();
     }
 
-    // Start and wait for thread 6
-    threads[5] = std::thread(semaphoreWorker, std::ref(sem1), std::ref(sem2), 6, 4 * timeMultiplier);
-    threads[5].join();
+    auto task = [&workers, &semaphore]() {
+        workers[5].work(semaphore);
+    };
+    threads[5] = std::thread(task);
+    semaphore.acquire();
 
-    // Join threads 1-5
-    for (int i = 0; i < 5; ++i) {
+    for (int i = 0; i < 6; ++i) {
         threads[i].join();
     }
 }
 
 //----------------
 // Latch
-
-void latchWorker(std::latch &latch1, std::latch &latch2, int id, int effort) {
-    // logStart(id);
-    // std::this_thread::sleep_for(std::chrono::microseconds(std::max(0, effort)));
-    // logComplete(id);
-    if (id <= 3) latch1.count_down();
-    else if (id <= 5) latch2.count_down();
-}
+struct LatchThreadWorker : public BaseThreadWorker<std::latch> {
+    void work(std::latch& mechanism) override {
+        mechanism.count_down();
+    }
+};
 
 void latchMain() {
-    std::latch latch1(3); // threads 1, 2, 3
-    std::latch latch2(2); // threads 4, 5
+    std::vector<LatchThreadWorker> workers(6);
     std::thread threads[6];
+    std::latch latch1(3);
+    std::latch latch2(2);
+    std::latch latch3(1);
 
-    // Start threads 1, 2, 3
     for (int i = 0; i < 3; ++i) {
-        int id = i + 1;
-        int effort = baseEffort - i * timeMultiplier;
-        threads[i] = std::thread(latchWorker, std::ref(latch1), std::ref(latch2), id, effort);
+        auto task = [&workers, &latch1, i]() {
+            workers[i].work(latch1);
+        };
+        threads[i] = std::thread(task);
     }
 
-    // Wait for threads 1, 2, 3 to complete
     latch1.wait();
 
-    // Start threads 4, 5
     for (int i = 3; i < 5; ++i) {
-        int id = i + 1;
-        int effort = baseEffort - i * timeMultiplier;
-        threads[i] = std::thread(latchWorker, std::ref(latch1), std::ref(latch2), id, effort);
+        auto task = [&workers, &latch2, i]() {
+            workers[i].work(latch2);
+        };
+        threads[i] = std::thread(task);
     }
 
-    // Wait for threads 4, 5 to complete
     latch2.wait();
 
-    // Start and wait for thread 6
-    threads[5] = std::thread(latchWorker, std::ref(latch1), std::ref(latch2), 6, 4 * timeMultiplier);
-    threads[5].join();
+    auto task = [&workers, &latch3]() {
+        workers[5].work(latch3);
+    };
+    threads[5] = std::thread(task);
 
-    // Join threads 1-5
-    for (int i = 0; i < 5; ++i) {
+    latch3.wait();
+
+    for (int i = 0; i < 6; ++i) {
         threads[i].join();
     }
 }
@@ -121,50 +110,45 @@ void latchMain() {
 //----------------
 // Barrier
 
-
-void barrierWorker(std::barrier<> &barrier1, std::barrier<> &barrier2, int id, int effort) {
-    // logStart(id);
-    // std::this_thread::sleep_for(std::chrono::microseconds(std::max(0, effort)));
-    // logComplete(id);
-    if (id <= 3) {
-        barrier1.arrive_and_wait();
-    } else if (id <= 5) {
-        barrier2.arrive_and_wait();
+struct BarrierThreadWorker : public BaseThreadWorker<std::barrier<>> {
+    void work(std::barrier<>& mechanism) override {
+        mechanism.arrive_and_wait();
     }
-}
+};
 
-std::barrier<> barrier1(4); // threads 1, 2, 3, and the main thread
-std::barrier<> barrier2(3); // threads 4, 5, and the main thread
 void barrierMain() {
-
+    std::vector<BarrierThreadWorker> workers(6);
     std::thread threads[6];
+    std::barrier<> barrier1(4); // threads 1, 2, 3, and the main thread
+    std::barrier<> barrier2(3); // threads 4, 5, and the main thread
+    std::barrier<> barrier3(2); // thread 6, and the main thread
 
-    // Start threads 1, 2, 3
     for (int i = 0; i < 3; ++i) {
-        int id = i + 1;
-        int effort = baseEffort - i * timeMultiplier;
-        threads[i] = std::thread(barrierWorker, std::ref(barrier1), std::ref(barrier2), id, effort);
+        auto task = [&workers, &barrier1, i]() {
+            workers[i].work(barrier1);
+        };
+        threads[i] = std::thread(task);
     }
 
-    // Wait for threads 1, 2, 3 to complete
     barrier1.arrive_and_wait();
 
-    // Start threads 4, 5
     for (int i = 3; i < 5; ++i) {
-        int id = i + 1;
-        int effort = baseEffort - i * timeMultiplier;
-        threads[i] = std::thread(barrierWorker, std::ref(barrier1), std::ref(barrier2), id, effort);
+        auto task = [&workers, &barrier2, i]() {
+            workers[i].work(barrier2);
+        };
+        threads[i] = std::thread(task);
     }
 
-    // Wait for threads 4, 5 to complete
     barrier2.arrive_and_wait();
 
-    // Start and wait for thread 6
-    threads[5] = std::thread(barrierWorker, std::ref(barrier1), std::ref(barrier2), 6, 4 * timeMultiplier);
-    threads[5].join();
+    auto task = [&workers, &barrier3]() {
+        workers[5].work(barrier3);
+    };
+    threads[5] = std::thread(task);
 
-    // Join threads 1-5
-    for (int i = 0; i < 5; ++i) {
+    barrier3.arrive_and_wait();
+
+    for (int i = 0; i < 6; ++i) {
         threads[i].join();
     }
 }
@@ -182,7 +166,6 @@ int main() {
     auto completeStart = std::chrono::high_resolution_clock::now();
     for (int i = 0; i < numIterations; i++) {
         auto iterationStart = std::chrono::high_resolution_clock::now();
-        printf("\nIteration %d starting", i);
 
         auto semaphoreStart = std::chrono::high_resolution_clock::now();
         semaphoreMain();
