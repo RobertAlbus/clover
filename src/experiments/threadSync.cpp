@@ -7,6 +7,22 @@
 #include <barrier>
 #include <chrono>
 
+int worker_count_layer_1 = 3;
+int worker_count_layer_2 = 2;
+int worker_count_layer_3 = 1;
+
+int worker_count_total_layer_3 = 
+        worker_count_layer_1 +
+        worker_count_layer_2 +
+        worker_count_layer_3;
+
+int worker_count_total_layer_2 = 
+        worker_count_layer_1 +
+        worker_count_layer_2;
+
+int last_worker_index = worker_count_total_layer_3 - 1;
+
+
 
 int numIterations = 10000; 
 
@@ -25,39 +41,39 @@ struct SemaphoreThreadWorker : public BaseThreadWorker<std::counting_semaphore<I
 };
 
 void semaphoreMain() {
-    std::vector<SemaphoreThreadWorker> workers(6);
+    std::vector<SemaphoreThreadWorker> workers(worker_count_total_layer_3);
     std::counting_semaphore semaphore(0);
-    std::thread threads[6];
+    std::thread threads[worker_count_total_layer_3];
 
-    for (int i = 0; i < 3; ++i) {
+    for (int i = 0; i < worker_count_layer_1; ++i) {
         auto task = [&workers, &semaphore, i]() {
             workers[i].work(semaphore);
         };
         threads[i] = std::thread(task);
     }
 
-    for (int i = 0; i < 3; ++i) {
+    for (int i = 0; i < worker_count_layer_1; ++i) {
         semaphore.acquire();
     }
 
-    for (int i = 3; i < 5; ++i) {
+    for (int i = worker_count_layer_1; i < worker_count_total_layer_2; ++i) {
         auto task = [&workers, &semaphore, i]() {
             workers[i].work(semaphore);
         };
         threads[i] = std::thread(task);
     }
 
-    for (int i = 0; i < 2; ++i) {
+    for (int i = 0; i < worker_count_layer_2; ++i) {
         semaphore.acquire();
     }
 
     auto task = [&workers, &semaphore]() {
-        workers[5].work(semaphore);
+        workers[last_worker_index].work(semaphore);
     };
-    threads[5] = std::thread(task);
+    threads[last_worker_index] = std::thread(task);
     semaphore.acquire();
 
-    for (int i = 0; i < 6; ++i) {
+    for (int i = 0; i < worker_count_total_layer_3; ++i) {
         threads[i].join();
     }
 }
@@ -71,13 +87,13 @@ struct LatchThreadWorker : public BaseThreadWorker<std::latch> {
 };
 
 void latchMain() {
-    std::vector<LatchThreadWorker> workers(6);
-    std::thread threads[6];
-    std::latch latch1(3);
-    std::latch latch2(2);
-    std::latch latch3(1);
+    std::vector<LatchThreadWorker> workers(worker_count_total_layer_3);
+    std::thread threads[worker_count_total_layer_3];
+    std::latch latch1(worker_count_layer_1);
+    std::latch latch2(worker_count_layer_2);
+    std::latch latch3(worker_count_layer_3);
 
-    for (int i = 0; i < 3; ++i) {
+    for (int i = 0; i < worker_count_layer_1; ++i) {
         auto task = [&workers, &latch1, i]() {
             workers[i].work(latch1);
         };
@@ -86,7 +102,7 @@ void latchMain() {
 
     latch1.wait();
 
-    for (int i = 3; i < 5; ++i) {
+    for (int i = worker_count_layer_1; i < worker_count_total_layer_2; ++i) {
         auto task = [&workers, &latch2, i]() {
             workers[i].work(latch2);
         };
@@ -96,13 +112,13 @@ void latchMain() {
     latch2.wait();
 
     auto task = [&workers, &latch3]() {
-        workers[5].work(latch3);
+        workers[last_worker_index].work(latch3);
     };
-    threads[5] = std::thread(task);
+    threads[last_worker_index] = std::thread(task);
 
     latch3.wait();
 
-    for (int i = 0; i < 6; ++i) {
+    for (int i = 0; i < worker_count_total_layer_3; ++i) {
         threads[i].join();
     }
 }
@@ -117,13 +133,13 @@ struct BarrierThreadWorker : public BaseThreadWorker<std::barrier<>> {
 };
 
 void barrierMain() {
-    std::vector<BarrierThreadWorker> workers(6);
-    std::thread threads[6];
-    std::barrier<> barrier1(4); // threads 1, 2, 3, and the main thread
-    std::barrier<> barrier2(3); // threads 4, 5, and the main thread
-    std::barrier<> barrier3(2); // thread 6, and the main thread
+    std::vector<BarrierThreadWorker> workers(worker_count_total_layer_3);
+    std::thread threads[worker_count_total_layer_3];
+    std::barrier<> barrier1(worker_count_layer_1 + 1);
+    std::barrier<> barrier2(worker_count_layer_2 + 1);
+    std::barrier<> barrier3(worker_count_layer_3 + 1);
 
-    for (int i = 0; i < 3; ++i) {
+    for (int i = 0; i < worker_count_layer_1; ++i) {
         auto task = [&workers, &barrier1, i]() {
             workers[i].work(barrier1);
         };
@@ -132,7 +148,7 @@ void barrierMain() {
 
     barrier1.arrive_and_wait();
 
-    for (int i = 3; i < 5; ++i) {
+    for (int i = worker_count_layer_1; i < worker_count_total_layer_2; ++i) {
         auto task = [&workers, &barrier2, i]() {
             workers[i].work(barrier2);
         };
@@ -142,13 +158,13 @@ void barrierMain() {
     barrier2.arrive_and_wait();
 
     auto task = [&workers, &barrier3]() {
-        workers[5].work(barrier3);
+        workers[last_worker_index].work(barrier3);
     };
-    threads[5] = std::thread(task);
+    threads[last_worker_index] = std::thread(task);
 
     barrier3.arrive_and_wait();
 
-    for (int i = 0; i < 6; ++i) {
+    for (int i = 0; i < worker_count_total_layer_3; ++i) {
         threads[i].join();
     }
 }
