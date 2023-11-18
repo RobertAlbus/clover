@@ -48,6 +48,9 @@ removed the printf statement from the main loop
 
 |------------------------------------------|
 | 10,000 iterations                        |
+|                                          |
+| workers:               6                 |
+| synchronization depth: 3                 |
 |------------------------------------------|
 | total:     3528996 microseconds          |
 | iteration: 3523638 microseconds          |
@@ -61,10 +64,6 @@ removed the printf statement from the main loop
 | latch:     1106021 microseconds          |
 | barrier:   1282013 microseconds          |
 |---------------------------------------------|
-|                                             |
-| workers:               6                    |
-| synchronization depth: 3                    |
-|---------------------------------------------|
 | Cost per worker                             |
 | semaphore:       18.67 microseconds average |
 | latch:           18.33 microseconds average |
@@ -75,6 +74,41 @@ removed the printf statement from the main loop
 | latch:           36.67 microseconds average |
 | barrier:         42.67 microseconds average |
 |---------------------------------------------|
+
+
+|-------------------------------------------|
+| 10,000 iterations                         |
+|                                           |
+| workers:               111                |
+| synchronization depth: 3                  |
+|-------------------------------------------|
+| total:     104214268 microseconds         |
+| iteration: 104097597 microseconds         |
+| iteration:     10409 microseconds average |
+|-------------------------------------------|
+| semaphore:     3378 microseconds average  |
+| latch:         3394 microseconds average  |
+| barrier:       3635 microseconds average  |
+|-------------------------------------------|
+| semaphore: 33789518 microseconds          |
+| latch:     33942720 microseconds          |
+| barrier:   36353627 microseconds          |
+|---------------------------------------------|
+| Cost per worker                             |
+| semaphore:   304410.07 microseconds average |
+| latch:       305790.27 microseconds average |
+| barrier:     327510.15 microseconds average |
+|---------------------------------------------|
+| Cost per layer of depth                     |
+| semaphore: 11263172.67 microseconds average |
+| latch:     11314240.00 microseconds average |
+| barrier:   12117875.67 microseconds average |
+|---------------------------------------------|
+
+There is a huge overhead with creating and joining threads.
+Next steps: re-use threads
+
+
 
 
 

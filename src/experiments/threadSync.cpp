@@ -7,8 +7,8 @@
 #include <barrier>
 #include <chrono>
 
-int worker_count_layer_1 = 3;
-int worker_count_layer_2 = 2;
+int worker_count_layer_1 = 100;
+int worker_count_layer_2 = 10;
 int worker_count_layer_3 = 1;
 
 int worker_count_total_layer_3 = 
