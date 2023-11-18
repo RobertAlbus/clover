@@ -166,6 +166,9 @@ add_executable(FloatVsDouble EXCLUDE_FROM_ALL src/experiments/FloatVsDouble.cpp)
 add_executable(ThreadSync EXCLUDE_FROM_ALL src/experiments/threadSync.cpp)
 target_compile_options(ThreadSync PRIVATE -Ofast ${COMMON_ARCH_FLAGS})
 
+add_executable(PersistentWorkers EXCLUDE_FROM_ALL src/experiments/persistentWorkers.cpp)
+target_compile_options(PersistentWorkers PRIVATE -Ofast ${COMMON_ARCH_FLAGS})
+
 #--------------------------------
 # commands
 
