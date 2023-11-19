@@ -7,29 +7,35 @@
 
 int effort = 10;
 int task_count = 100;
-int worker_count = 20;
+int worker_count = 5;
 
 std::counting_semaphore<> completedWorkSemaphore(0);
 
 
 class ThreadPool {
 public:
-    ThreadPool(size_t numThreads) : done(false), newWorkSemaphore(0) {
-        for (size_t i = 0; i < numThreads; ++i) {
-            workers.emplace_back([this, i] {
-                printf("\nstarting: %i", i);
-                while (true) {
-                    newWorkSemaphore.acquire();
-                    if (done) {
-                        printf("\ndone: %i", i);
-                        break;
+    ThreadPool(size_t numThreads, bool simulateWorkload = false) : done(false), newWorkSemaphore(0) {
+        if (simulateWorkload) {
+            for (size_t i = 0; i < numThreads; ++i) {
+                workers.emplace_back([this, i] {
+                    printf("\nstarting: %i", i);
+                    while (true) {
+                        newWorkSemaphore.acquire();
+                        if (done) {
+                            printf("\ndone: %i", i);
+                            break;
+                        }
+                        printf("\nworking: %i", i);
+                        std::this_thread::sleep_for(std::chrono::milliseconds(effort));
+                        completedWorkSemaphore.release();
                     }
-                    printf("\nworking: %i", i);
-                    std::this_thread::sleep_for(std::chrono::milliseconds(effort));
-                    completedWorkSemaphore.release();
-                }
-            });
+                });
+            }
         }
+    }
+
+    void addWorker(std::function<void()> task) {
+        workers.emplace_back(std::move(task));
     }
 
     ~ThreadPool() {
@@ -49,16 +55,27 @@ public:
         newWorkSemaphore.release();
     }
 
-private:
     std::vector<std::thread> workers;
     std::atomic<bool> done;
     std::counting_semaphore<> newWorkSemaphore;
 };
 
 int main() {
-    ThreadPool pool(worker_count);
-    std::this_thread::sleep_for(std::chrono::seconds(2));
-
+    bool simulate_workload = true;
+    ThreadPool pool(worker_count, simulate_workload);
+    pool.addWorker([&pool] {
+                    printf("\nstarting: custom");
+                    while (true) {
+                        pool.newWorkSemaphore.acquire();
+                        if (pool.done) {
+                            printf("\ndone: custom");
+                            break;
+                        }
+                        printf("\nworking: custom");
+                        std::this_thread::sleep_for(std::chrono::milliseconds(effort));
+                        completedWorkSemaphore.release();
+                    }
+                });
 
     auto start = std::chrono::high_resolution_clock::now();
 
