@@ -9,38 +9,12 @@
 #include "Graph.h"
 
 
-template <Frame X, Frame Y, Frame Z>
-Node<Y,Z> &operator>>(Node<X,Y> &sourceNode, Node<Y,Z> &destinationNode) {
-    Graph& graph = *(Graph::context);
-    graph.nodeAdjacencyMap[&destinationNode].emplace_back(&sourceNode);
-
-    // type map approach: auto register processing functions
-    if (!graph.typeMap.contains(sourceNode.getTypeIdInput())) {
-        graph.typeMap[sourceNode.getTypeIdInput()] = Graph::CreateTypeMapFunction(&sourceNode);
-    }
-    if (!graph.typeMap.contains(destinationNode.getTypeIdInput())) {
-        graph.typeMap[destinationNode.getTypeIdInput()] = Graph::CreateTypeMapFunction(&destinationNode);
-    }
-
-    // instance map approach: auto register processing functions
-    // - InstanceMap(...) is casting the AbstractNode pointers and capturing the casted adjacency list each time.
-    // - can alternatively move a single iteration of the instance map setup into a graph.prepare() method.
-    
-    if (!graph.instanceMap.contains(&sourceNode)) {
-        std::vector<AbstractNode*> inputs = graph.nodeAdjacencyMap[&sourceNode];
-        graph.instanceMap[&sourceNode] = Graph::InstanceMap(&sourceNode, graph.nodeAdjacencyMap[&sourceNode]);
-    }
-    graph.instanceMap[&destinationNode] = Graph::InstanceMap(&destinationNode, graph.nodeAdjacencyMap[&destinationNode]);
-
-    return destinationNode;
-}
-
 int main() {
     Graph graph;
 
     int sampleRate = 48000;
     int oneMinute = sampleRate * 60;
-    int testIterationCount = oneMinute;
+    int testIterationCount = 100000;
 
     SourceNode sourceNode1("SN1");
     SourceNode sourceNode2("SN2");
@@ -140,15 +114,33 @@ int main() {
         INSTANCE MAP    
      */
     // INSTANCE MAP: execute
+
+    for (auto node : graph.nodes) {
+        graph.workers[node] = std::thread(graph.instanceMap[node]);
+    }
+
     auto instanceMapStart = std::chrono::high_resolution_clock::now();
 
     for (int i = 0; i < testIterationCount; i++) {
         for (auto group : graph.sortedNodes) {
             for (auto node : group.second) {
-                graph.instanceMap[node]();
+                Graph::context->workerWakeupSemaphores[node]->release();
+            }
+            for (auto node : group.second) {
+                Graph::context->returnToMainSemaphores[node]->acquire();
             }
         }
     }
+
+    graph.isDone = true;
+    for (auto node : graph.nodes) {
+        Graph::context->workerWakeupSemaphores[node]->release();
+    }
+
+    for (auto node : graph.nodes) {
+        Graph::context->workers[node].join();
+    }
+
     auto instanceMapEnd = std::chrono::high_resolution_clock::now();
     auto instanceMapDuration = std::chrono::duration_cast<std::chrono::milliseconds>(instanceMapEnd - instanceMapStart).count();
     printf("\nTime taken | instance map: %6i milliseconds", static_cast<int>(instanceMapDuration));
