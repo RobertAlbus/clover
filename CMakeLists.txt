@@ -158,7 +158,7 @@ add_executable(${PROJECT_NAME}_Demo_Profiling EXCLUDE_FROM_ALL src/main.cpp)
 target_link_libraries(${PROJECT_NAME}_Demo_Profiling PUBLIC ${PROJECT_NAME}_Profiling)
 
 # experiments
-add_executable(AbstractGraph EXCLUDE_FROM_ALL src/abstractGraph/main.cpp)
+add_executable(AbstractGraph EXCLUDE_FROM_ALL src/abstractGraph/main.cpp src/abstractGraph/Graph.cpp)
 target_compile_options(AbstractGraph PRIVATE -Ofast ${COMMON_ARCH_FLAGS})
 
 add_executable(FloatVsDouble EXCLUDE_FROM_ALL src/experiments/FloatVsDouble.cpp)
