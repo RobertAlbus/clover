@@ -157,10 +157,6 @@ target_link_libraries(${PROJECT_NAME}_Demo PUBLIC ${PROJECT_NAME})
 add_executable(${PROJECT_NAME}_Demo_Profiling EXCLUDE_FROM_ALL src/main.cpp)
 target_link_libraries(${PROJECT_NAME}_Demo_Profiling PUBLIC ${PROJECT_NAME}_Profiling)
 
-# experiments
-add_executable(AbstractGraph EXCLUDE_FROM_ALL src/experiments/AbstractGraph.cpp)
-add_executable(FloatVsDouble EXCLUDE_FROM_ALL src/experiments/FloatVsDouble.cpp)
-
 #--------------------------------
 # commands
 

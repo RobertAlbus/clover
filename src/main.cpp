@@ -165,12 +165,12 @@ int main(int argc, char *argv[]) {
 
     interface.hostInfo();
 
-    if (interface.openDevice(Pa_GetDefaultOutputDevice()) != paNoError)
+    if (interface.openDefaultDevice() != paNoError)
       return 1;
 
     // might need to add some sort of "graphReady" functionaltiy to prevent
     // starting until everything is initialized
-    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 
     if (interface.start() != paNoError) {
       interface.close();
