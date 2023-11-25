@@ -59,13 +59,19 @@ public:
 
   void hostInfo() {
     printf("\n\nHOST INFO");
-    printf("\nNumber of hosts: %i", (int)Pa_GetHostApiCount());
-
     int numHostApis = Pa_GetHostApiCount();
     for (PaHostApiIndex i = 0; i < numHostApis; ++i) {
       const PaHostApiInfo *hostInfo = Pa_GetHostApiInfo(i);
-      printf("\nHost name: %s", hostInfo->name);
+      printf("\nHost %i: %s", i, hostInfo->name);
     }
+
+    printf("\n\nDEVICE INFO");
+    int numDevices = Pa_GetDeviceCount();
+    for (PaDeviceIndex i = 0; i < numDevices; ++i) {
+      const PaDeviceInfo *deviceInfo = Pa_GetDeviceInfo(i);
+      printf("\nDevice %i: %s", i, deviceInfo->name);
+    }
+
 
     printf("\n\n");
   }
@@ -79,6 +85,34 @@ public:
     resultValidation(Pa_Terminate());
   }
 
+  PaError openDevice(std::string name) {
+    PaDeviceIndex deviceIndex = paInvalidDevice; 
+    int numHostApis = Pa_GetDeviceCount();
+    for (PaDeviceIndex i = 0; i < numHostApis; ++i) {
+      const PaDeviceInfo *deviceInfo = Pa_GetDeviceInfo(i);
+      std::string deviceName {deviceInfo->name};
+      if (deviceName.rfind(name) != std::string::npos) {
+        deviceIndex = i;
+        break;
+      }
+    }
+
+    if (deviceIndex == paInvalidDevice) {
+      printf("\n\nNo device found\n\n");
+      exit(1);
+    }
+
+    return openDevice(deviceIndex);
+  }
+
+  PaError openDefaultDevice() {
+
+
+    
+    return openDevice(Pa_GetDefaultOutputDevice());
+  }
+
+
   PaError openDevice(PaDeviceIndex index) {
     PaStreamParameters outputParameters;
 
@@ -89,7 +123,9 @@ public:
 
     const PaDeviceInfo *pInfo = Pa_GetDeviceInfo(index);
     if (pInfo != 0) {
-      printf("\nOutput device name: '%s'\r", pInfo->name);
+      std::string name {pInfo->name};
+      printf("\nOutput device name: '%s'\r", name.c_str());
+      printf("\n");
     }
 
     outputParameters.channelCount = 2; /* stereo output */
