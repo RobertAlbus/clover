@@ -157,18 +157,6 @@ target_link_libraries(${PROJECT_NAME}_Demo PUBLIC ${PROJECT_NAME})
 add_executable(${PROJECT_NAME}_Demo_Profiling EXCLUDE_FROM_ALL src/main.cpp)
 target_link_libraries(${PROJECT_NAME}_Demo_Profiling PUBLIC ${PROJECT_NAME}_Profiling)
 
-# experiments
-add_executable(AbstractGraph EXCLUDE_FROM_ALL src/abstractGraph/main.cpp src/abstractGraph/Graph.cpp)
-target_compile_options(AbstractGraph PRIVATE -Ofast ${COMMON_ARCH_FLAGS})
-
-add_executable(FloatVsDouble EXCLUDE_FROM_ALL src/experiments/FloatVsDouble.cpp)
-
-add_executable(ThreadSync EXCLUDE_FROM_ALL src/experiments/threadSync.cpp)
-target_compile_options(ThreadSync PRIVATE -Ofast ${COMMON_ARCH_FLAGS})
-
-add_executable(PersistentWorkers EXCLUDE_FROM_ALL src/experiments/persistentWorkers.cpp)
-target_compile_options(PersistentWorkers PRIVATE -Ofast ${COMMON_ARCH_FLAGS})
-
 #--------------------------------
 # commands
 
