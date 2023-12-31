@@ -104,7 +104,7 @@ public:
 
   void butterworthResonant() override {
     coefficientStrategy = std::make_unique<
-        Clover::Filter::ResonantButterworthCoefficientStrategy<Sample>>();
+        Clover::Filter::RbjBiquadCoefficientStrategy<Sample>>();
     resetCoefficients();
   }
 
