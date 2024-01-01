@@ -2,7 +2,7 @@
 
 See [License](./LICENSE.TXT).
 
-# Third-Party Dependencies
+## Third-Party Dependencies
 
 This project uses various third-party libraries to provide certain functionalities. Below is the list of third-party libraries and their respective licenses.
 
@@ -10,6 +10,7 @@ This project uses various third-party libraries to provide certain functionaliti
 
 ## Template
 
+``` md
 ### [Library Name]
 
 - **Version**: [Version number]
@@ -19,6 +20,7 @@ This project uses various third-party libraries to provide certain functionaliti
 #### Purpose
 
 Briefly describe what this library is used for in your project.
+```
 
 --------------------------------
 
@@ -65,3 +67,14 @@ Streaming audio IO
 #### Purpose
 
 MIDI IO
+
+--- 
+
+### vectorclass
+
+- **License**: Apache license 2.0 https://github.com/vectorclass/version2/blob/master/LICENSE
+- **Website**: https://github.com/vectorclass/version2/tree/master
+
+#### Purpose
+
+SIMD processing

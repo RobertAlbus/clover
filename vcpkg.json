@@ -4,6 +4,7 @@
     "gtest",
     "libsndfile",
     "portaudio",
-    "rtmidi"
+    "rtmidi",
+    "vectorclass"
   ]
 }
