@@ -59,7 +59,7 @@ int main(int argc, char *argv[]) {
   ////////////////////////////////////////////////////////////////
   // CLOVER POC
 
-  Clover::IO::MidiIn::printPorts();
+  // Clover::IO::MidiIn::printPorts();
 
   Interface interface;
   globalInterface = &interface;
@@ -165,7 +165,7 @@ int main(int argc, char *argv[]) {
 
     interface.hostInfo();
 
-    if (interface.openDefaultDevice() != paNoError)
+    if (interface.openDevice("pulse") != paNoError)
       return 1;
 
     // might need to add some sort of "graphReady" functionaltiy to prevent
