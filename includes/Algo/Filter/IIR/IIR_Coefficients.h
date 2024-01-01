@@ -23,14 +23,12 @@
 #include "Util.h"
 
 template <FloatingPoint T> struct IIRFilterCoefficients {
-  T b0;
-  T b1;
-  T b2;
-  T a0;
-  T a1;
-  T a2;
+  T b0, b1, b2, a0, a1, a2;
 
   void normalize() {
+    T a0_abs = std::abs(a0);
+    if (a0 == T(1) || a0_abs == T(0) || a0_abs == INFINITY || a0_abs == NAN) return;
+    
     T a0_inv = T(1) / a0;
     b0 *= a0_inv;
     b1 *= a0_inv;
