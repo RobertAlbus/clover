@@ -71,15 +71,23 @@ file(GLOB_RECURSE SOURCE_LIST_TEST_PERFORMANCE_CC
 #--------------------------------
 # SIMD detect/enable
 
-list(APPEND COMMON_ARCH_FLAGS)
-if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-    if(CMAKE_SYSTEM_PROCESSOR MATCHES "(x86)|(X86)|(amd64)|(AMD64)")
-        list(APPEND COMMON_ARCH_FLAGS "-msse")
+include(CheckCXXCompilerFlag)
+function(enable_SIMD_flag flag)
+    check_cxx_compiler_flag("${flag}" flag_supported)
+    if(flag_supported)
+        list(APPEND COMMON_ARCH_FLAGS "${flag}")
     endif()
+endfunction()
 
-    if(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
-        list(APPEND COMMON_ARCH_FLAGS "-mavx")
-    endif()
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    enable_SIMD_flag("-msse")
+    enable_SIMD_flag("-msse2")
+    enable_SIMD_flag("-msse3")
+    enable_SIMD_flag("-mssse3")
+    enable_SIMD_flag("-msse4.1")
+    enable_SIMD_flag("-msse4.2")
+    enable_SIMD_flag("-mavx")
+    enable_SIMD_flag("-mavx2")
 endif()
 
 
