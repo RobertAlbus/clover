@@ -86,6 +86,7 @@ public:
   }
 
   PaError openDevice(std::string name) {
+    if (name.c_str() == "default") openDefaultDevice();
     PaDeviceIndex deviceIndex = paInvalidDevice; 
     int numHostApis = Pa_GetDeviceCount();
     for (PaDeviceIndex i = 0; i < numHostApis; ++i) {

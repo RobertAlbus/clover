@@ -165,7 +165,7 @@ int main(int argc, char *argv[]) {
 
     interface.hostInfo();
 
-    if (interface.openDevice("pulse") != paNoError)
+    if (interface.openDevice("default") != paNoError)
       return 1;
 
     // might need to add some sort of "graphReady" functionaltiy to prevent
