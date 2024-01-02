@@ -39,6 +39,7 @@ public:
 
   void updateCoefficients(const IIRFilterCoefficients<T> &coeffs) {
     coeffs_ = coeffs;
+    coeffs_.normalize();
   }
 
   std::array<T, __arity> process(const std::array<T, __arity> &input) {
