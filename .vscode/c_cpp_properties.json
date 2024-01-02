@@ -8,7 +8,10 @@
             "intelliSenseMode": "linux-clang-x86",
             "includePath": [
                 "includes",
-                "includes/*"
+                "includes/*",
+                "src/**",
+                "${workspaceFolder}/**"
+
             ]
         }
     ],
