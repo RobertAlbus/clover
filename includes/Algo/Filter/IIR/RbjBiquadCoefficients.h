@@ -23,7 +23,6 @@
 #include <cmath>
 #include <numbers>
 
-#include "IIRCoefficientStrategy.h"
 #include "IIR_Coefficients.h"
 #include "Util/FloatingPointConcept.h"
 
@@ -38,7 +37,7 @@ by Robert Bristow-Johnson  <rbj@audioimagination.com>
 
 
 template <FloatingPoint T>
-struct RbjBiquadCoefficientStrategy : public IIRCoefficientStrategy<T> {
+struct RbjBiquadCoefficientStrategy{
   IIRFilterCoefficients<T> lowPass(T cutoff_hz, T Q, T samplerate_hz) {
     T omega = T(2) * std::numbers::pi_v<T> * cutoff_hz / samplerate_hz;
     T cos_omega = std::cos(omega);

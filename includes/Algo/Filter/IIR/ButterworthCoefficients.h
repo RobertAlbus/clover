@@ -22,14 +22,13 @@
 
 #include <cmath>
 
-#include "IIRCoefficientStrategy.h"
 #include "IIR_Coefficients.h"
 #include "Util.h"
 
 namespace Clover::Filter {
 
 template <FloatingPoint T>
-struct ButterworthCoefficientStrategy : public IIRCoefficientStrategy<T> {
+struct ButterworthCoefficientStrategy{
   IIRFilterCoefficients<T> lowPass(T cutoff_hz, T Q, T samplerate_hz) {
     T omega_c = std::tan(M_PI * cutoff_hz / samplerate_hz);
     T alpha = omega_c / Q;

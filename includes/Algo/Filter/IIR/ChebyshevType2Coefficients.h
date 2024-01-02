@@ -26,14 +26,13 @@
 #include <optional>
 #include <vector>
 
-#include "IIRCoefficientStrategy.h"
 #include "IIR_Coefficients.h"
 #include "Util.h"
 
 namespace Clover::Filter {
 
 template <FloatingPoint T>
-struct ChebyshevType2CoefficientStrategy : public IIRCoefficientStrategy<T> {
+struct ChebyshevType2CoefficientStrategy{
 
   T stopBandAttenuationDb = T(60);
 
