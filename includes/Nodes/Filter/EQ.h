@@ -29,18 +29,16 @@
 #include "Base.h"
 #include "Graph.h"
 
-#include "CoefficientStrategySettable.h"
 #include "EQSettable.h"
 
 namespace Clover::Nodes::Filter {
 
 template <size_t __arity>
 class EQ : public EQSettable,
-           public CoefficientStrategySettable,
            public Base,
            public Graph::AudioNode<__arity, __arity> {
 public:
-  EQ() : biquad() { butterworthResonant(); }
+  EQ() : biquad() {}
 
   void set(float f, float Q, float dbGain) {
     if (f == freq_ && Q == reso_ && dbGain == dbGain_)
@@ -75,7 +73,7 @@ public:
       this->reso_ = reso;
       this->dbGain_ = dbGain;
       IIRFilterCoefficients<Sample> coefficients =
-          this->coefficientStrategy->lowShelf(freq, reso, dbGain, sampleRate);
+          this->coefficientStrategy.lowShelf(freq, reso, dbGain, sampleRate);
       this->biquad.updateCoefficients(coefficients);
     };
   }
@@ -87,7 +85,7 @@ public:
       this->reso_ = reso;
       this->dbGain_ = dbGain;
       IIRFilterCoefficients<Sample> coefficients =
-          this->coefficientStrategy->highShelf(freq, reso, dbGain, sampleRate);
+          this->coefficientStrategy.highShelf(freq, reso, dbGain, sampleRate);
       this->biquad.updateCoefficients(coefficients);
     };
   }
@@ -99,38 +97,13 @@ public:
       this->reso_ = reso;
       this->dbGain_ = dbGain;
       IIRFilterCoefficients<Sample> coefficients =
-          this->coefficientStrategy->peakingEQ(freq, reso, dbGain, sampleRate);
+          this->coefficientStrategy.peakingEQ(freq, reso, dbGain, sampleRate);
       this->biquad.updateCoefficients(coefficients);
     };
   }
 
-  void butterworthResonant() {
-    coefficientStrategy = std::make_unique<
-        Clover::Filter::RbjBiquadCoefficientStrategy<Sample>>();
-    resetCoefficients();
-  }
-
-  void butterworth() {
-    coefficientStrategy = std::make_unique<
-        Clover::Filter::ButterworthCoefficientStrategy<Sample>>();
-    resetCoefficients();
-  }
-
-  void chebyshevType1() {
-    coefficientStrategy = std::make_unique<
-        Clover::Filter::ChebyshevType1CoefficientStrategy<Sample>>();
-    resetCoefficients();
-  }
-
-  void chebyshevType2() {
-    coefficientStrategy = std::make_unique<
-        Clover::Filter::ChebyshevType2CoefficientStrategy<Sample>>();
-    resetCoefficients();
-  }
-
   Graph::AudioFrame<__arity> tick(Graph::AudioFrame<__arity> input) {
-    input.data = biquad.process(input.data);
-    return input;
+    return biquad.process(input.data);
   }
 
 protected:
@@ -141,8 +114,7 @@ protected:
   std::function<void(float, float, float, float)> setFunction;
   Clover::Filter::IIRFilterDF2T<Sample, __arity> biquad;
 
-  std::unique_ptr<Clover::Filter::IIRCoefficientStrategy<Sample>>
-      coefficientStrategy;
+  Clover::Filter::RbjBiquadCoefficientStrategy<Sample> coefficientStrategy;
 
   void resetCoefficients() {
     peakingEQ();
