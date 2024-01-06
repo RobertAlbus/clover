@@ -23,7 +23,7 @@
 #include <algorithm>
 #include <cmath>
 
-#include "Algo/Envelope/Basic.h"
+#include "Algorithm/Envelope/Basic.h"
 #include "Graph/AudioFrame.h"
 #include "Graph/AudioNode.h"
 

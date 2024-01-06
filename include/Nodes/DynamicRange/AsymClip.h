@@ -20,7 +20,7 @@
  *
  */
 
-#include "Algo/DynamicRange/AsymClip.h"
+#include "Algorithm/DynamicRange/AsymClip.h"
 #include "Graph/AudioNode.h"
 
 namespace Clover::Nodes::DynamicRange {

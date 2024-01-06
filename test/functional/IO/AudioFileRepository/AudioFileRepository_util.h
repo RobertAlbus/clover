@@ -24,7 +24,7 @@
 #include <stdexcept>
 #include <vector>
 
-#include "Algo/Wavetable/WavetableOscillatorMono.h"
+#include "Algorithm/Wavetable/WavetableOscillatorMono.h"
 #include "IO/AudioFile/AudioFile.h"
 #include "IO/AudioFile/AudioFileWriteSettings.h"
 

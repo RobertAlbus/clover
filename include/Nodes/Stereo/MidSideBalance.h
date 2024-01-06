@@ -20,7 +20,7 @@
  *
  */
 
-#include "Algo/Stereo/MidSideBalance.h"
+#include "Algorithm/Stereo/MidSideBalance.h"
 
 #include "Graph/AudioFrame.h"
 #include "Graph/AudioNode.h"

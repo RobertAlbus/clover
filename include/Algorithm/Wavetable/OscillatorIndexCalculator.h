@@ -25,7 +25,7 @@
 #include <memory>
 #include <vector>
 
-#include "Algo/AlgorithmBase.h"
+#include "Algorithm/AlgorithmBase.h"
 #include "OscillatorInterface.h"
 
 #include "Util/FloatingPointConcept.h"

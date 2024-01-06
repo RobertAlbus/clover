@@ -22,7 +22,7 @@
 
 #include <array>
 
-#include "Algo/Stereo/MidSideBalance.h"
+#include "Algorithm/Stereo/MidSideBalance.h"
 
 TEST(Algorithm_Stereo_Spread, ShouldInitialize) {
   Clover::Stereo::MidSideBalance<float> defaultConstructor;

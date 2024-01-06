@@ -24,7 +24,7 @@
 #include <math.h>
 #include <vector>
 
-#include "Algo/Delay/Fractional.h"
+#include "Algorithm/Delay/Fractional.h"
 #include "Graph.h"
 
 namespace Clover::Nodes::Delay {

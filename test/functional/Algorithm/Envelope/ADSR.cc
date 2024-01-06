@@ -20,7 +20,7 @@
 
 #include <gtest/gtest.h>
 
-#include "Algo/Envelope/ADSR.h"
+#include "Algorithm/Envelope/ADSR.h"
 
 TEST(Algorithm_Envelope_ADSR, ShouldInitializeAsInstanlyFullyOpen) {
   Clover::Envelope::ADSR<float> envelope;

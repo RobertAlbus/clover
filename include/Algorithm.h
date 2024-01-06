@@ -20,12 +20,12 @@
  *
  */
 
-#include "Algo/Envelope/ADSR.h"
-#include "Algo/Envelope/Basic.h"
-#include "Algo/Envelope/DC.h"
+#include "Algorithm/Envelope/ADSR.h"
+#include "Algorithm/Envelope/Basic.h"
+#include "Algorithm/Envelope/DC.h"
 
-#include "Algo/DynamicRange/AsymClip.h"
+#include "Algorithm/DynamicRange/AsymClip.h"
 
-#include "Algo/Filter/IIR/IIRFilterDF2T.h"
-#include "Algo/Filter/IIR/IIR_Coefficients.h"
-#include "Algo/Filter/IIR/RbjBiquadCoefficients.h"
+#include "Algorithm/Filter/IIR/IIRFilterDF2T.h"
+#include "Algorithm/Filter/IIR/IIR_Coefficients.h"
+#include "Algorithm/Filter/IIR/RbjBiquadCoefficients.h"

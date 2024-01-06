@@ -20,7 +20,7 @@
 
 #include <gtest/gtest.h>
 
-#include "Algo/DynamicRange/AsymClip.h"
+#include "Algorithm/DynamicRange/AsymClip.h"
 
 TEST(Algorithm_Dynamic_Range_Clip, ShouldInitialize) {
   Clover::DynamicRange::AsymClip<float, 1> clip;

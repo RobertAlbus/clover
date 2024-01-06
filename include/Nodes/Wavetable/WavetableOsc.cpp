@@ -32,8 +32,8 @@
 
 #include "WavetableOsc.h"
 
-#include "Algo/Wavetable/Generators.h"
-#include "Algo/Wavetable/OscillatorInterface.h"
+#include "Algorithm/Wavetable/Generators.h"
+#include "Algorithm/Wavetable/OscillatorInterface.h"
 
 namespace Clover::Nodes::Wavetable {
 

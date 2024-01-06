@@ -22,7 +22,7 @@
 
 #include <memory>
 
-#include "Algo/AlgorithmBase.h"
+#include "Algorithm/AlgorithmBase.h"
 #include "Generators.h"
 #include "OscillatorIndexCalculator.h"
 #include "OscillatorInterface.h"

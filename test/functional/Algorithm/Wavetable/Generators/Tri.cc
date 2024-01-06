@@ -22,7 +22,7 @@
 
 #include <vector>
 
-#include "Algo/Wavetable/Generators.h"
+#include "Algorithm/Wavetable/Generators.h"
 
 TEST(Algorithm_Wavetable_Generator_Tri, ShouldBeTriangle) {
   std::vector<float> table5 = Clover::Wavetable::Tri<float>(5);

@@ -20,7 +20,7 @@
  *
  */
 
-#include "Algo/Stereo/Difference.h"
+#include "Algorithm/Stereo/Difference.h"
 #include "Graph/AudioFrame.h"
 #include "Graph/AudioNode.h"
 

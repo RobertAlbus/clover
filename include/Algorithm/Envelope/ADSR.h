@@ -22,8 +22,8 @@
 
 #include <functional>
 
-#include "Algo/AlgorithmBase.h"
-#include "Algo/Envelope/Basic.h"
+#include "Algorithm/AlgorithmBase.h"
+#include "Algorithm/Envelope/Basic.h"
 #include "Util/FloatingPointConcept.h"
 
 namespace Clover::Envelope {

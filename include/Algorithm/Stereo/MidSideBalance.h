@@ -22,10 +22,10 @@
 
 #include <array>
 
-#include "Algo/AlgorithmBase.h"
-#include "Algo/Stereo/Difference.h"
-#include "Algo/Stereo/Pan.h"
-#include "Algo/Stereo/Sum.h"
+#include "Algorithm/AlgorithmBase.h"
+#include "Algorithm/Stereo/Difference.h"
+#include "Algorithm/Stereo/Pan.h"
+#include "Algorithm/Stereo/Sum.h"
 
 #include "Util/FloatingPointConcept.h"
 

@@ -22,7 +22,7 @@
 
 #include <array>
 
-#include "Algo/Stereo/Difference.h"
+#include "Algorithm/Stereo/Difference.h"
 
 TEST(Algorithm_Stereo_Difference, ShouldPerformDifferenceCalculation) {
   Clover::Stereo::Difference<float> difference;

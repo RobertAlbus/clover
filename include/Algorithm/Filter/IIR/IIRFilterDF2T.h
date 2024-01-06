@@ -23,7 +23,7 @@
 #include <array>
 #include <iostream>
 
-#include "Algo/AlgorithmBase.h"
+#include "Algorithm/AlgorithmBase.h"
 #include "IIR_Coefficients.h"
 #include "Util.h"
 

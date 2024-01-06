@@ -26,8 +26,8 @@
 #include <tgmath.h>
 #include <vector>
 
-#include "Algo/Wavetable/OscillatorInterface.h"
-#include "Algo/Wavetable/WavetableOscillatorMono.h"
+#include "Algorithm/Wavetable/OscillatorInterface.h"
+#include "Algorithm/Wavetable/WavetableOscillatorMono.h"
 #include "Base/CloverBase.h"
 #include "Graph/AudioFrame.h"
 #include "Graph/AudioNode.h"

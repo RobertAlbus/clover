@@ -20,7 +20,7 @@
  *
  */
 
-#include "Algo/Stereo/Sum.h"
+#include "Algorithm/Stereo/Sum.h"
 #include "Graph/AudioFrame.h"
 #include "Graph/AudioNode.h"
 

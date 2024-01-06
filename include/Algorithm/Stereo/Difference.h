@@ -22,7 +22,7 @@
 
 #include <array>
 
-#include "Algo/AlgorithmBase.h"
+#include "Algorithm/AlgorithmBase.h"
 #include "Util/Calc.h"
 #include "Util/FloatingPointConcept.h"
 

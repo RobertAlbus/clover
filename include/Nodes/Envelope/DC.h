@@ -20,7 +20,7 @@
  *
  */
 
-#include "Algo/Envelope/DC.h"
+#include "Algorithm/Envelope/DC.h"
 #include "Graph.h"
 
 namespace Clover::Nodes::Envelope {
