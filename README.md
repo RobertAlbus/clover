@@ -2,7 +2,7 @@
 
 Clover is a real time graph-based signal processing framework. It was initially developed for audio but can be used for arbitrary types of discrete time signals.
 
-This project is largely experimental and liable to change drastically. I recommend referring to specific commit hashes if you consume this library. Clover requires a compiler with C++20 support.
+This project is experimental and liable to change drastically. I am working toward a stable iteration of the library, but for now I recommend referring to specific commit hashes if you consume this library. Clover requires a compiler with C++20 support.
 
 Clover is permissively licensed and depends on open source software. See [LICENSE](./LICENSE) and [THIRD_PARTY.md](./THIRD_PARTY.md).
 
@@ -11,7 +11,7 @@ Clover is permissively licensed and depends on open source software. See [LICENS
 
 Clover implements a directed graph for signal routing. The graph is not inherently buffered; the base Frame [concept](https://en.cppreference.com/w/cpp/concepts) does not require that the data field is a buffer. There may be performance tradeoffs with an unbuffered approach, but it allows for complex and phase-sensitive modulations that might otherwise be hard to achieve. There is not any technical limitation to implementing buffered frames if you should choose to do so.
 
-Clover currently processes the graph in a single thread. Efforts are underway to parallelize the graph processing algoritm without compromising the established guarantees from the single-threaded engine.
+Clover processes the graph in a single thread. Effort was put into exploring multithreading with the ultimate conclusion that it is not currently suitable for Clover's processing model. Future effort may be made toward SIMD optimizations for the core algorithms provided in the library; Library users may choose to leverage SIMD on their own as well.
 
 ### Extensible
 
