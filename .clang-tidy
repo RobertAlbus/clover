@@ -11,5 +11,5 @@ HeaderFilterRegex: '^(?!.*(build|dependencies)).*'
 
 ---
 -std=c++20
--extra-arg=-Iincludes
+-extra-arg=-Iinclude
 

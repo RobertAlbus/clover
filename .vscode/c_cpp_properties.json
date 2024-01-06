@@ -7,8 +7,8 @@
             "compileCommands": "build/compile_commands.json",
             "intelliSenseMode": "linux-clang-x86",
             "includePath": [
-                "includes",
-                "includes/*",
+                "include",
+                "include/*",
                 "src/**",
                 "${workspaceFolder}/**"
 

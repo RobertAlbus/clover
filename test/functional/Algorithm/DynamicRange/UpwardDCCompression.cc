@@ -20,7 +20,7 @@
 
 #include <gtest/gtest.h>
 
-#include "Algo/DynamicRange/UpwardDCCompression.h"
+#include "Algorithm/DynamicRange/UpwardDCCompression.h"
 
 TEST(Algorithm_Dynamic_Range_BipolarDCOffest, ShouldCompressUpwards) {
   Clover::DynamicRange::UpwardDCCompression<float, 1> avoider(0.1f);

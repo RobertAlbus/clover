@@ -22,7 +22,7 @@
 
 #include <vector>
 
-#include "Algo/Wavetable/Generators.h"
+#include "Algorithm/Wavetable/Generators.h"
 
 TEST(Algorithm_Wavetable_Generator_Saw, ShouldBeCorrectSize) {
   EXPECT_EQ(Clover::Wavetable::Saw<float>(8).size(), 8);

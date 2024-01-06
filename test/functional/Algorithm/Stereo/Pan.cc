@@ -22,7 +22,7 @@
 
 #include <array>
 
-#include "Algo/Stereo/Pan.h"
+#include "Algorithm/Stereo/Pan.h"
 
 TEST(Algorithm_Pan_Base, ShouldInitializeAtZero) {
   Clover::Stereo::PanBase<float> pan;

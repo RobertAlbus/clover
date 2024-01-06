@@ -22,7 +22,7 @@
 
 #include <array>
 
-#include "Algo/Stereo/Sum.h"
+#include "Algorithm/Stereo/Sum.h"
 
 TEST(Algorithm_Sum_Mono, ShouldPerformSumCalculation) {
   Clover::Stereo::SumMono<float> sum;

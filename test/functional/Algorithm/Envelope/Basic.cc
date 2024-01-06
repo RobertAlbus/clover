@@ -20,7 +20,7 @@
 
 #include <gtest/gtest.h>
 
-#include "Algo/Envelope/Basic.h"
+#include "Algorithm/Envelope/Basic.h"
 
 TEST(Algorithm_Envelope_Basic, ShouldInitializeAtZero) {
   Clover::Envelope::Basic<float> envelope;

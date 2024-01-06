@@ -20,7 +20,7 @@
 
 #include <gtest/gtest.h>
 
-#include "Algo/Delay/Fractional.h"
+#include "Algorithm/Delay/Fractional.h"
 
 TEST(Algorithm_Delay_Fractional, ShouldInitializeWithZeroDelay) {
   Clover::Delay::FractionalDelay<float, 1> delay(512);
