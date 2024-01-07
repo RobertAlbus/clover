@@ -20,6 +20,7 @@
  *
  */
 
+#include "Algorithm/Math.h"
 #include "Graph/AudioFrame.h"
 #include "Graph/AudioNode.h"
 #include "Graph/NullFrame.h"
@@ -173,11 +174,11 @@ struct OscNx : public Clover::Graph::AudioOutNode<2>, Pitchable, Triggerable {
     float pitchModOctaves = pitch.adsrValue() + pitch.lfoValue();
 
     for (Voice &voice : voices) {
-      float voiceFreq = Clover::Util::Calc::freqBySemitoneDifference(
+      float voiceFreq = Algorithm::frequency_by_semitone_difference(
           currentMidiNoteFreq, voice.tuning()
       );
       float voiceFreqPitchModHz =
-          Util::Calc::freqBySemitoneDifference(voiceFreq, pitchModOctaves * 12);
+          Algorithm::frequency_by_octave_difference(voiceFreq, pitchModOctaves);
 
       voice.osc.freq(voiceFreqPitchModHz);
     }
@@ -190,7 +191,7 @@ struct OscNx : public Clover::Graph::AudioOutNode<2>, Pitchable, Triggerable {
         (filterCut.adsrValue() + filterCut.lfoValue());
 
     float modAmountHz =
-        Util::Calc::freqBySemitoneDifference(10.f, currentModValueOctaves * 12);
+        Algorithm::frequency_by_octave_difference(10.f, currentModValueOctaves);
     float filterCutoff = filterCutoff_ + modAmountHz;
 
     float filterReso = filterReso_ + filterQ.adsrValue() + filterQ.lfoValue();

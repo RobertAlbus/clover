@@ -23,6 +23,7 @@
 #include <tgmath.h>
 #include <vector>
 
+#include "Algorithm/Math.h"
 #include "Constants.h"
 #include "Graph.h"
 #include "Nodes.h"
@@ -75,8 +76,12 @@ void WavetableOscStereo::freq(float freq) {
 }
 
 void WavetableOscStereo::updateFreq() {
-  oscL.freq(Util::Calc::freqBySemitoneDifference(freq_, stereoDetune_L_semi));
-  oscR.freq(Util::Calc::freqBySemitoneDifference(freq_, stereoDetune_R_semi));
+  oscL.freq(
+      Algorithm::frequency_by_semitone_difference(freq_, stereoDetune_L_semi)
+  );
+  oscR.freq(
+      Algorithm::frequency_by_semitone_difference(freq_, stereoDetune_R_semi)
+  );
 }
 
 float WavetableOscStereo::freq() { return freq_; }

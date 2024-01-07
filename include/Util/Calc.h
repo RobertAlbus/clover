@@ -24,8 +24,6 @@
 
 namespace Clover::Util::Calc {
 
-float freqBySemitoneDifference(float freq, float semitones);
-
 float tension(float value, float tension);
 
 float sign(float value);

@@ -20,19 +20,26 @@
 
 #include <gtest/gtest.h>
 
+#include "Algorithm/Math.h"
 #include "Util/Calc.h"
 
 TEST(Util_Calc, ShouldCalculateFreqDifferenceBySemitone) {
-  EXPECT_EQ(Clover::Util::Calc::freqBySemitoneDifference(1000, 12), 2000);
-  EXPECT_EQ(Clover::Util::Calc::freqBySemitoneDifference(1000, -12), 500);
+  // explicitly invoking the <float> template rather than appending `.f` for
+  // template deduction
+  EXPECT_EQ(
+      Clover::Algorithm::frequency_by_semitone_difference<float>(1000, 12), 2000
+  );
+  EXPECT_EQ(
+      Clover::Algorithm::frequency_by_semitone_difference<float>(1000, -12), 500
+  );
 
   EXPECT_NEAR(
-      Clover::Util::Calc::freqBySemitoneDifference(1000.001, 12),
+      Clover::Algorithm::frequency_by_semitone_difference<float>(1000.001, 12),
       2000.002,
       0.00005
   );
   EXPECT_NEAR(
-      Clover::Util::Calc::freqBySemitoneDifference(10000.001, 12),
+      Clover::Algorithm::frequency_by_semitone_difference<float>(10000.001, 12),
       20000.002,
       0.00005
   );
