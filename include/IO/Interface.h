@@ -72,7 +72,6 @@ public:
       printf("\nDevice %i: %s", i, deviceInfo->name);
     }
 
-
     printf("\n\n");
   }
 
@@ -86,12 +85,13 @@ public:
   }
 
   PaError openDevice(std::string name) {
-    if (name.c_str() == "default") openDefaultDevice();
-    PaDeviceIndex deviceIndex = paInvalidDevice; 
+    if (name.c_str() == "default")
+      openDefaultDevice();
+    PaDeviceIndex deviceIndex = paInvalidDevice;
     int numHostApis = Pa_GetDeviceCount();
     for (PaDeviceIndex i = 0; i < numHostApis; ++i) {
       const PaDeviceInfo *deviceInfo = Pa_GetDeviceInfo(i);
-      std::string deviceName {deviceInfo->name};
+      std::string deviceName{deviceInfo->name};
       if (deviceName.rfind(name) != std::string::npos) {
         deviceIndex = i;
         break;
@@ -108,11 +108,8 @@ public:
 
   PaError openDefaultDevice() {
 
-
-    
     return openDevice(Pa_GetDefaultOutputDevice());
   }
-
 
   PaError openDevice(PaDeviceIndex index) {
     PaStreamParameters outputParameters;
@@ -124,7 +121,7 @@ public:
 
     const PaDeviceInfo *pInfo = Pa_GetDeviceInfo(index);
     if (pInfo != 0) {
-      std::string name {pInfo->name};
+      std::string name{pInfo->name};
       printf("\nOutput device name: '%s'\r", name.c_str());
       printf("\n");
     }

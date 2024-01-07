@@ -35,9 +35,7 @@ Cookbook formulae for audio EQ biquad filter coefficients
 by Robert Bristow-Johnson  <rbj@audioimagination.com>
 */
 
-
-template <FloatingPoint T>
-struct RbjBiquadCoefficientStrategy{
+template <FloatingPoint T> struct RbjBiquadCoefficientStrategy {
   IIRFilterCoefficients<T> lowPass(T cutoff_hz, T Q, T samplerate_hz) {
     T omega = T(2) * std::numbers::pi_v<T> * cutoff_hz / samplerate_hz;
     T cos_omega = std::cos(omega);
@@ -46,12 +44,12 @@ struct RbjBiquadCoefficientStrategy{
     T b0 = (T(1) - cos_omega) * T(0.5);
     T b1 = T(1) - cos_omega;
     T b2 = b0;
-    
+
     T a0 = T(1) + alpha;
     T a1 = T(-2) * cos_omega;
     T a2 = T(1) - alpha;
 
-    IIRFilterCoefficients<T> coeffs {b0, b1, b2, a0, a1, a2};
+    IIRFilterCoefficients<T> coeffs{b0, b1, b2, a0, a1, a2};
     coeffs.normalize();
     return coeffs;
   }
@@ -61,16 +59,15 @@ struct RbjBiquadCoefficientStrategy{
     T cos_omega = std::cos(omega);
     T alpha = std::sin(omega) / (T(2) * Q);
 
-
     T b0 = (T(1) + cos_omega) * T(0.5);
     T b1 = T(-1) + cos_omega;
     T b2 = b0;
-    
+
     T a0 = T(1) + alpha;
     T a1 = T(-2) * cos_omega;
     T a2 = T(1) - alpha;
 
-    IIRFilterCoefficients<T> coeffs {b0, b1, b2, a0, a1, a2};
+    IIRFilterCoefficients<T> coeffs{b0, b1, b2, a0, a1, a2};
     coeffs.normalize();
     return coeffs;
   }
@@ -85,12 +82,12 @@ struct RbjBiquadCoefficientStrategy{
     T b0 = sin_omega * T(0.5);
     T b1 = T(0);
     T b2 = T(-1) * b0;
-    
+
     T a0 = T(1) + alpha;
     T a1 = T(-2) * cos_omega;
     T a2 = T(1) - alpha;
 
-    IIRFilterCoefficients<T> coeffs {b0, b1, b2, a0, a1, a2};
+    IIRFilterCoefficients<T> coeffs{b0, b1, b2, a0, a1, a2};
     coeffs.normalize();
     return coeffs;
   }
@@ -104,12 +101,12 @@ struct RbjBiquadCoefficientStrategy{
     T b0 = alpha;
     T b1 = T(0);
     T b2 = T(-1) * alpha;
-    
+
     T a0 = T(1) + alpha;
     T a1 = T(-2) * cos_omega;
     T a2 = T(1) - alpha;
 
-    IIRFilterCoefficients<T> coeffs {b0, b1, b2, a0, a1, a2};
+    IIRFilterCoefficients<T> coeffs{b0, b1, b2, a0, a1, a2};
     coeffs.normalize();
     return coeffs;
   }
@@ -122,12 +119,12 @@ struct RbjBiquadCoefficientStrategy{
     T b0 = T(1);
     T b1 = T(-2) * cos_omega;
     T b2 = T(1);
-    
+
     T a0 = T(1) + alpha;
     T a1 = b1;
     T a2 = T(1) - alpha;
 
-    IIRFilterCoefficients<T> coeffs {b0, b1, b2, a0, a1, a2};
+    IIRFilterCoefficients<T> coeffs{b0, b1, b2, a0, a1, a2};
     coeffs.normalize();
     return coeffs;
   }
@@ -140,12 +137,12 @@ struct RbjBiquadCoefficientStrategy{
     T b0 = T(1) - alpha;
     T b1 = T(-2) * cos_omega;
     T b2 = T(1) + alpha;
-    
+
     T a0 = b2;
     T a1 = b1;
     T a2 = b0;
 
-    IIRFilterCoefficients<T> coeffs {b0, b1, b2, a0, a1, a2};
+    IIRFilterCoefficients<T> coeffs{b0, b1, b2, a0, a1, a2};
     coeffs.normalize();
     return coeffs;
   }
@@ -161,26 +158,28 @@ struct RbjBiquadCoefficientStrategy{
     // T sqrtAAlpha = std::sqrt(A) * alpha;
     // T b0_b2_part1 = (A + T(1)) - (A - T(1)) * cos_omega;
 
-////////////////////
-    T b0 = A * ((A + T(1)) - (A - T(1)) * cos_omega + T(2) * std::sqrt(A) * alpha);
+    ////////////////////
+    T b0 =
+        A * ((A + T(1)) - (A - T(1)) * cos_omega + T(2) * std::sqrt(A) * alpha);
     T b1 = T(2) * A * ((A - T(1)) - (A + T(1)) * cos_omega);
-    T b2 = A * ((A + T(1)) - (A - T(1)) * cos_omega - T(2) * std::sqrt(A) * alpha);
+    T b2 =
+        A * ((A + T(1)) - (A - T(1)) * cos_omega - T(2) * std::sqrt(A) * alpha);
     T a0 = (A + T(1)) + (A - T(1)) * cos_omega + T(2) * std::sqrt(A) * alpha;
     T a1 = -T(2) * ((A - T(1)) + (A + T(1)) * cos_omega);
     T a2 = (A + T(1)) + (A - T(1)) * cos_omega - T(2) * std::sqrt(A) * alpha;
-////////////////////
+    ////////////////////
 
     // T b0 = A * (b0_b2_part1 + twoSqrtAAlpha);
     // T b1 = T(2) * A * ((A - T(1)) - (A + T(1)) * cos_omega);
     // T b2 = A * (b0_b2_part1 - twoSqrtAAlpha);
-    
+
     // T a0_a2_part1 = (A + T(1)) + (A - T(1)) * cos_omega;
 
     // T a0 = a0_a2_part1 + twoSqrtAAlpha;
     // T a1 = T(-2) * A * ((A - T(1)) + (A + T(1)) * cos_omega);
     // T a2 = a0_a2_part1 - twoSqrtAAlpha;
 
-    IIRFilterCoefficients<T> coeffs {b0, b1, b2, a0, a1, a2};
+    IIRFilterCoefficients<T> coeffs{b0, b1, b2, a0, a1, a2};
     coeffs.normalize();
     return coeffs;
   }
@@ -196,26 +195,28 @@ struct RbjBiquadCoefficientStrategy{
     // T sqrtAAlpha = std::sqrt(A) * alpha;
     // T b0_b2_part1 = (A + T(1)) + (A - T(1)) * cos_omega;
 
-////////////////
-    T b0 = A * ((A + T(1)) + (A - T(1)) * cos_omega + T(2) * std::sqrt(A) * alpha);
+    ////////////////
+    T b0 =
+        A * ((A + T(1)) + (A - T(1)) * cos_omega + T(2) * std::sqrt(A) * alpha);
     T b1 = -T(2) * A * ((A - T(1)) + (A + T(1)) * cos_omega);
-    T b2 = A * ((A + T(1)) + (A - T(1)) * cos_omega - T(2) * std::sqrt(A) * alpha);
+    T b2 =
+        A * ((A + T(1)) + (A - T(1)) * cos_omega - T(2) * std::sqrt(A) * alpha);
     T a0 = (A + T(1)) - (A - T(1)) * cos_omega + T(2) * std::sqrt(A) * alpha;
     T a1 = T(2) * ((A - T(1)) - (A + T(1)) * cos_omega);
     T a2 = (A + T(1)) - (A - T(1)) * cos_omega - T(2) * std::sqrt(A) * alpha;
-////////////////
+    ////////////////
 
     // T b0 = A * (b0_b2_part1 + twoSqrtAAlpha);
     // T b1 = T(-2) * A * ((A - T(1)) + (A + T(1)) * cos_omega);
     // T b2 = A * (b0_b2_part1 - twoSqrtAAlpha);
-    
+
     // T a0_a2_part1 = (A + T(1)) - (A - T(1))  * cos_omega;
 
     // T a0 = a0_a2_part1 + twoSqrtAAlpha;
     // T a1 = T(2) * A * ((A - T(1)) - (A + T(1)) * cos_omega);
     // T a2 = a0_a2_part1 - twoSqrtAAlpha;
 
-    IIRFilterCoefficients<T> coeffs {b0, b1, b2, a0, a1, a2};
+    IIRFilterCoefficients<T> coeffs{b0, b1, b2, a0, a1, a2};
     coeffs.normalize();
     return coeffs;
   }
@@ -234,12 +235,12 @@ struct RbjBiquadCoefficientStrategy{
     T b2 = T(1) - alphaA;
 
     T alphaOverA = alpha / A;
-    
+
     T a0 = T(1) + alphaOverA;
     T a1 = b1;
     T a2 = T(1) - alphaOverA;
 
-    IIRFilterCoefficients<T> coeffs {b0, b1, b2, a0, a1, a2};
+    IIRFilterCoefficients<T> coeffs{b0, b1, b2, a0, a1, a2};
     coeffs.normalize();
     return coeffs;
   }

@@ -27,8 +27,9 @@ template <FloatingPoint T> struct IIRFilterCoefficients {
 
   void normalize() {
     T a0_abs = std::abs(a0);
-    if (a0 == T(1) || a0_abs == T(0) || a0_abs == INFINITY || a0_abs == NAN) return;
-    
+    if (a0 == T(1) || a0_abs == T(0) || a0_abs == INFINITY || a0_abs == NAN)
+      return;
+
     T a0_inv = T(1) / a0;
     b0 *= a0_inv;
     b1 *= a0_inv;
