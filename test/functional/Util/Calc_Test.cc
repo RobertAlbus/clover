@@ -74,11 +74,11 @@ TEST(Util_Calc, ShouldConvertFreqToMidi) {
 }
 
 TEST(Util_Calc, ShouldHaveTensionCurve) {
-  EXPECT_EQ(Clover::Util::Calc::tension(0.5, 0), 0.5);
+  EXPECT_EQ(Clover::Algorithm::tension(0.5f, 0.f), 0.5f);
 
-  EXPECT_NEAR(Clover::Util::Calc::tension(0.5, -.297), 0.4, 0.066);
-  EXPECT_EQ(Clover::Util::Calc::tension(0.5, -10), 0.);
+  EXPECT_NEAR(Clover::Algorithm::tension(0.5f, -.297f), 0.4f, 0.066f);
+  EXPECT_EQ(Clover::Algorithm::tension(0.5f, -10.f), 0.f);
 
-  EXPECT_NEAR(Clover::Util::Calc::tension(0.5, 1.13343), 0.8, 0.000005);
-  EXPECT_NEAR(Clover::Util::Calc::tension(0.5, 10), 1., 0.00004);
+  EXPECT_NEAR(Clover::Algorithm::tension(0.5f, 1.13343f), 0.72909f, 0.00001f);
+  EXPECT_NEAR(Clover::Algorithm::tension(0.5f, 10.f), 0.99932f, 0.00003f);
 }

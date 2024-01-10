@@ -26,7 +26,6 @@
 #include "EnvelopeStruct.h"
 #include "Graph/AudioFrame.h"
 #include "Graph/AudioNode.h"
-#include "Util/Calc.h"
 
 namespace Clover::Nodes {
 
@@ -73,7 +72,7 @@ private:
     float lerpValue =
         std::lerp(currentPoint.value, nextPoint.value, lerpAmount);
     float tensionedValue =
-        Util::Calc::tension(lerpValue, nextPoint.tension * _tensionScale);
+        Algorithm::tension(lerpValue, nextPoint.tension * _tensionScale);
 
     if (_currentClockTime >= nextPoint.start) {
       _currentIndex++;

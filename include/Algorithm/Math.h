@@ -26,6 +26,19 @@
 
 namespace Clover::Algorithm {
 
+// Definitions
+
+template <FloatingPoint T> T frequency_by_octave_difference(T freq, T octaves);
+template <FloatingPoint T> T frequency_by_semitone_difference(T freq, T semitones);
+template <FloatingPoint T> T tension(T value, T tension);
+template <FloatingPoint T> T sign(T value);
+template <FloatingPoint T> T linear_to_db(T x);
+template <FloatingPoint T> T db_to_linear(T x);
+template <FloatingPoint T> T midi_to_frequency(T x);
+template <FloatingPoint T> T frequency_to_midi(T x);
+
+// ----------------------------------------------------------------
+
 template <FloatingPoint T> T frequency_by_octave_difference(T freq, T octaves) {
   return freq * exp2(octaves);
 }
