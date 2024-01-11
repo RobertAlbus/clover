@@ -24,10 +24,6 @@
 
 namespace Clover::Util::Calc {
 
-float tension(float value, float tension);
-
-float sign(float value);
-
 float ltodb(float x);
 
 float dbtol(float x);
