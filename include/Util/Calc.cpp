@@ -25,7 +25,8 @@
 namespace Clover::Util::Calc {
 
 float tension(float value, float tension) {
-  return powf(fabsf(value), expf(tension * -1.f) * Calc::sign(value));
+  // expf is e^x for floats
+  return powf(fabsf(value), expf(tension * -1.f) * sign(value));
 }
 
 float sign(float value) { return value < 0. ? -1.f : 1.f; }

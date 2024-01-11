@@ -46,9 +46,9 @@ TEST(Util_Calc, ShouldCalculateFreqDifferenceBySemitone) {
 }
 
 TEST(Util_Calc, ShouldDetectSign) {
-  EXPECT_EQ(Clover::Util::Calc::sign(-10), -1);
-  EXPECT_EQ(Clover::Util::Calc::sign(0), 1);
-  EXPECT_EQ(Clover::Util::Calc::sign(10), 1);
+  EXPECT_EQ(Clover::Algorithm::sign(-10.f), -1.f);
+  EXPECT_EQ(Clover::Algorithm::sign(0.f), 1.f);
+  EXPECT_EQ(Clover::Algorithm::sign(10.f), 1.f);
 }
 
 TEST(Util_Calc, ShouldConvertDbToLinear) {

@@ -23,7 +23,6 @@
 #include <array>
 
 #include "Algorithm/AlgorithmBase.h"
-#include "Util/Calc.h"
 #include "Util/FloatingPointConcept.h"
 
 namespace Clover::DynamicRange {
@@ -36,12 +35,7 @@ struct AsymClip : public AlgorithmBase<std::array<T, __arity>> {
 
   std::array<T, __arity> process(std::array<T, __arity> input) {
     for (size_t i = 0; i < __arity; i++) {
-      T sign = Util::Calc::sign(input[i]);
-      if (sign < 0) {
-        this->processed[i] = std::max(minimum_, input[i]);
-      } else {
-        this->processed[i] = std::min(maximum_, input[i]);
-      }
+      this->processed[i] = std::clamp(input[i], minimum_, maximum_);
     }
     return this->processed;
   }
