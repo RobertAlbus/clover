@@ -24,13 +24,14 @@
 #include <array>
 
 #include "Algorithm/AlgorithmBase.h"
+#include "Algorithm/Math.h"
 #include "Util/Calc.h"
 #include "Util/FloatingPointConcept.h"
 
 namespace Clover::Stereo {
 
 template <FloatingPoint T> struct PanBase {
-  PanBase(T p = T(0)) : midGain_(T(Util::Calc::dbtol(-4.5))) { pan(p); }
+  PanBase(T p = T(0)) : midGain_(T(Algorithm::db_to_linear(-4.5))) { pan(p); }
 
   T pan() { return pan_; }
   void pan(T p) {

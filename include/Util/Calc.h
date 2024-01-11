@@ -24,10 +24,6 @@
 
 namespace Clover::Util::Calc {
 
-float ltodb(float x);
-
-float dbtol(float x);
-
 float mtof(float x);
 
 float ftom(float x);

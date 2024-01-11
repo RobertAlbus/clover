@@ -52,13 +52,13 @@ TEST(Util_Calc, ShouldDetectSign) {
 }
 
 TEST(Util_Calc, ShouldConvertDbToLinear) {
-  EXPECT_EQ(Clover::Util::Calc::dbtol(6.f), 1.99526238f);
-  EXPECT_EQ(Clover::Util::Calc::dbtol(-6), 0.5011872336f);
+  EXPECT_EQ(Clover::Algorithm::db_to_linear(6.f), 1.99526238f);
+  EXPECT_EQ(Clover::Algorithm::db_to_linear(-6.f), 0.5011872336f);
 }
 
 TEST(Util_Calc, ShouldConvertLinearToDb) {
-  EXPECT_NEAR(Clover::Util::Calc::ltodb(2.f), 6.0206f, 0.00001);
-  EXPECT_NEAR(Clover::Util::Calc::ltodb(0.5f), -6.0206, 0.00001);
+  EXPECT_NEAR(Clover::Algorithm::linear_to_db(2.f), 6.0206f, 0.00001);
+  EXPECT_NEAR(Clover::Algorithm::linear_to_db(0.5f), -6.0206, 0.00001);
 }
 
 TEST(Util_Calc, ShouldConvertMidiToFreq) {

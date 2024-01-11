@@ -53,7 +53,7 @@ TEST(Nodes_Filter_Filter, ShouldFilterLowPass) {
   rms = std::sqrt(rms);
 
   EXPECT_GT(static_cast<float>(collector.frames.size()), 0.f);
-  EXPECT_LE(Clover::Util::Calc::ltodb(rms), -60);
+  EXPECT_LE(Clover::Algorithm::linear_to_db(rms), -60);
 }
 
 TEST(Nodes_Filter_Filter, ShouldFilterHighPass) {
@@ -82,5 +82,5 @@ TEST(Nodes_Filter_Filter, ShouldFilterHighPass) {
   rms = std::sqrt(rms);
 
   EXPECT_GT(static_cast<float>(collector.frames.size()), 0.f);
-  EXPECT_LE(Clover::Util::Calc::ltodb(rms), -53);
+  EXPECT_LE(Clover::Algorithm::linear_to_db(rms), -53);
 }
