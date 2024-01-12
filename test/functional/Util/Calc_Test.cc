@@ -21,7 +21,6 @@
 #include <gtest/gtest.h>
 
 #include "Algorithm/Math.h"
-#include "Util/Calc.h"
 
 TEST(Util_Calc, ShouldCalculateFreqDifferenceBySemitone) {
   // explicitly invoking the <float> template rather than appending `.f` for

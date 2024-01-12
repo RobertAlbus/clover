@@ -25,7 +25,6 @@
 
 #include "Nodes/Filter/Filter.h"
 #include "Nodes/Wavetable/WavetableOsc.h"
-#include "Util/Calc.h"
 #include "_Test.h"
 
 TEST(Nodes_Filter_Filter, ShouldFilterLowPass) {

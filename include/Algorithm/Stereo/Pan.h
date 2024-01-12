@@ -25,7 +25,6 @@
 
 #include "Algorithm/AlgorithmBase.h"
 #include "Algorithm/Math.h"
-#include "Util/Calc.h"
 #include "Util/FloatingPointConcept.h"
 
 namespace Clover::Stereo {

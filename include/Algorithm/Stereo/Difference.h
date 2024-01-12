@@ -23,7 +23,6 @@
 #include <array>
 
 #include "Algorithm/AlgorithmBase.h"
-#include "Util/Calc.h"
 #include "Util/FloatingPointConcept.h"
 
 namespace Clover::Stereo {
