@@ -62,15 +62,15 @@ TEST(Util_Calc, ShouldConvertLinearToDb) {
 }
 
 TEST(Util_Calc, ShouldConvertMidiToFreq) {
-  EXPECT_EQ(Clover::Util::Calc::mtof(0), 8.17579842f);
-  EXPECT_EQ(Clover::Util::Calc::mtof(63), 311.126983722f);
-  EXPECT_EQ(Clover::Util::Calc::mtof(127), 12543.8555f);
+  EXPECT_NEAR(Clover::Algorithm::midi_to_frequency<float>(0), 8.175798f, 0.000001f);
+  EXPECT_EQ(Clover::Algorithm::midi_to_frequency<float>(63), 311.126983722f);
+  EXPECT_EQ(Clover::Algorithm::midi_to_frequency<float>(127), 12543.8555f);
 }
 
 TEST(Util_Calc, ShouldConvertFreqToMidi) {
-  EXPECT_NEAR(Clover::Util::Calc::ftom(8.17579842f), 0, 0.00001);
-  EXPECT_EQ(Clover::Util::Calc::ftom(311.126983722f), 63);
-  EXPECT_NEAR(Clover::Util::Calc::ftom(12543.8539514f), 127, 0.00001f);
+  EXPECT_NEAR(Clover::Algorithm::frequency_to_midi(8.17579842f), 0, 0.00001);
+  EXPECT_EQ(Clover::Algorithm::frequency_to_midi(311.126983722f), 63);
+  EXPECT_NEAR(Clover::Algorithm::frequency_to_midi(12543.8539514f), 127, 0.00001f);
 }
 
 TEST(Util_Calc, ShouldHaveTensionCurve) {

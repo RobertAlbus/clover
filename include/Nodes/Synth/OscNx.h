@@ -97,7 +97,7 @@ struct OscNx : public Clover::Graph::AudioOutNode<2>, Pitchable, Triggerable {
 
   void midiNote(float note) {
     currentMidiNote = note;
-    currentMidiNoteFreq = Clover::Util::Calc::mtof(note);
+    currentMidiNoteFreq = Clover::Algorithm::midi_to_frequency(note);
   }
 
   void triggerOn() {

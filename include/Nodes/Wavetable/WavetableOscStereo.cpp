@@ -87,10 +87,10 @@ void WavetableOscStereo::updateFreq() {
 float WavetableOscStereo::freq() { return freq_; }
 
 void WavetableOscStereo::note(float midiNote) {
-  freq(Util::Calc::mtof(midiNote));
+  freq(Algorithm::midi_to_frequency(midiNote));
 }
 
-float WavetableOscStereo::note() { return Util::Calc::ftom(freq()); }
+float WavetableOscStereo::note() { return Algorithm::frequency_to_midi(freq()); }
 
 void WavetableOscStereo::wavelength(float wavelengthSamples) {
   freq(((float)Base::sampleRate) / wavelengthSamples);
