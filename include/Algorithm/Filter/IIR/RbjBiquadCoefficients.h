@@ -60,7 +60,7 @@ template <FloatingPoint T> struct RbjBiquadCoefficientStrategy {
     T alpha = std::sin(omega) / (T(2) * Q);
 
     T b0 = (T(1) + cos_omega) * T(0.5);
-    T b1 = - (T(1) + cos_omega);
+    T b1 = -(T(1) + cos_omega);
     T b2 = b0;
 
     T a0 = T(1) + alpha;
