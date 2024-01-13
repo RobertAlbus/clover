@@ -29,3 +29,5 @@
 #include "Algorithm/Filter/IIR/IIRFilterDF2T.h"
 #include "Algorithm/Filter/IIR/IIR_Coefficients.h"
 #include "Algorithm/Filter/IIR/RbjBiquadCoefficients.h"
+
+#include "Algorithm/Math.h"

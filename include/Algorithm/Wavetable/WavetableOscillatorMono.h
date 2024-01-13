@@ -23,11 +23,11 @@
 #include <memory>
 
 #include "Algorithm/AlgorithmBase.h"
+#include "Algorithm/Math.h"
 #include "Generators.h"
 #include "OscillatorIndexCalculator.h"
 #include "OscillatorInterface.h"
 
-#include "Util/Calc.h"
 #include "Util/FloatingPointConcept.h"
 
 namespace Clover::Wavetable {
@@ -61,9 +61,9 @@ struct WavetableOscillatorMono : public WavetableOscInterface<T>,
   T sampleRate() override { return calculator.sampleRate(); }
 
   void note(T midiNote) override {
-    calculator.freq(Util::Calc::mtof(midiNote));
+    calculator.freq(Algorithm::midi_to_frequency(midiNote));
   }
-  T note() override { return Util::Calc::mtof(calculator.freq()); }
+  T note() override { return Algorithm::midi_to_frequency(calculator.freq()); }
 
   void wavetable(Wavetable<T> wt) {
     wavetable(std::make_shared<Wavetable<T>>(wt));

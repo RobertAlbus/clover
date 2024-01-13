@@ -84,7 +84,7 @@ filter.freq(1000);
 filter.reso(0.68);
 
 delay.delay(time.step() * 6);
-feedbackGain.gain(Calc::dbtol(-10));
+feedbackGain.gain(Algorithm::db_to_linear(-10.f));
 
 // this graph has a synth with a 3/4 beat dub style band passed echo 
 synth >> g1 >> audioOutput.rootNode;

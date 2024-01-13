@@ -23,7 +23,6 @@
 #include "Algorithm/Stereo/Pan.h"
 #include "Graph/AudioFrame.h"
 #include "Graph/AudioNode.h"
-#include "Util/Calc.h"
 
 namespace Clover::Nodes::Stereo {
 

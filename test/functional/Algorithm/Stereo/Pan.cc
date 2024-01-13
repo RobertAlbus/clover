@@ -78,7 +78,7 @@ TEST(Algorithm_Pan_Base, ShouldClampPanAtValue) {
 TEST(Algorithm_Pan_Mono, ShouldPanInput) {
   Clover::Stereo::PanMono<float> pan;
   float testSignal = 1.f;
-  float midGain = Clover::Util::Calc::dbtol(-4.5f);
+  float midGain = Clover::Algorithm::db_to_linear(-4.5f);
 
   pan.process(testSignal);
   EXPECT_FLOAT_EQ(pan.last()[0], midGain);
@@ -100,7 +100,7 @@ TEST(Algorithm_Pan_Mono, ShouldPanInput) {
 TEST(Algorithm_Pan_Stereo, ShouldPanInput) {
   Clover::Stereo::PanStereo<float> pan;
   std::array<float, 2> testSignal{1.f, 1.f};
-  float midGain = Clover::Util::Calc::dbtol(-4.5f);
+  float midGain = Clover::Algorithm::db_to_linear(-4.5f);
 
   pan.process(testSignal);
   EXPECT_FLOAT_EQ(pan.last()[0], midGain);
