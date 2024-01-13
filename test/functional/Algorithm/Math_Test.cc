@@ -22,57 +22,59 @@
 
 #include "Algorithm/Math.h"
 
-TEST(Util_Calc, ShouldCalculateFreqDifferenceBySemitone) {
-  // explicitly invoking the <float> template rather than appending `.f` for
-  // template deduction
+TEST(Algorithm_Math, ShouldCalculateFreqDifferenceBySemitone) {
   EXPECT_EQ(
-      Clover::Algorithm::frequency_by_semitone_difference<float>(1000, 12), 2000
+      Clover::Algorithm::frequency_by_semitone_difference(1000.f, 12.f), 2000
   );
   EXPECT_EQ(
-      Clover::Algorithm::frequency_by_semitone_difference<float>(1000, -12), 500
+      Clover::Algorithm::frequency_by_semitone_difference(1000.f, -12.f), 500
   );
 
   EXPECT_NEAR(
-      Clover::Algorithm::frequency_by_semitone_difference<float>(1000.001, 12),
+      Clover::Algorithm::frequency_by_semitone_difference(1000.001f, 12.f),
       2000.002,
       0.00005
   );
   EXPECT_NEAR(
-      Clover::Algorithm::frequency_by_semitone_difference<float>(10000.001, 12),
+      Clover::Algorithm::frequency_by_semitone_difference(10000.001f, 12.f),
       20000.002,
       0.00005
   );
 }
 
-TEST(Util_Calc, ShouldDetectSign) {
+TEST(Algorithm_Math, ShouldDetectSign) {
   EXPECT_EQ(Clover::Algorithm::sign(-10.f), -1.f);
   EXPECT_EQ(Clover::Algorithm::sign(0.f), 1.f);
   EXPECT_EQ(Clover::Algorithm::sign(10.f), 1.f);
 }
 
-TEST(Util_Calc, ShouldConvertDbToLinear) {
+TEST(Algorithm_Math, ShouldConvertDbToLinear) {
   EXPECT_EQ(Clover::Algorithm::db_to_linear(6.f), 1.99526238f);
   EXPECT_EQ(Clover::Algorithm::db_to_linear(-6.f), 0.5011872336f);
 }
 
-TEST(Util_Calc, ShouldConvertLinearToDb) {
+TEST(Algorithm_Math, ShouldConvertLinearToDb) {
   EXPECT_NEAR(Clover::Algorithm::linear_to_db(2.f), 6.0206f, 0.00001);
   EXPECT_NEAR(Clover::Algorithm::linear_to_db(0.5f), -6.0206, 0.00001);
 }
 
-TEST(Util_Calc, ShouldConvertMidiToFreq) {
-  EXPECT_NEAR(Clover::Algorithm::midi_to_frequency<float>(0), 8.175798f, 0.000001f);
+TEST(Algorithm_Math, ShouldConvertMidiToFreq) {
+  EXPECT_NEAR(
+      Clover::Algorithm::midi_to_frequency<float>(0), 8.175798f, 0.000001f
+  );
   EXPECT_EQ(Clover::Algorithm::midi_to_frequency<float>(63), 311.126983722f);
   EXPECT_EQ(Clover::Algorithm::midi_to_frequency<float>(127), 12543.8555f);
 }
 
-TEST(Util_Calc, ShouldConvertFreqToMidi) {
+TEST(Algorithm_Math, ShouldConvertFreqToMidi) {
   EXPECT_NEAR(Clover::Algorithm::frequency_to_midi(8.17579842f), 0, 0.00001);
   EXPECT_EQ(Clover::Algorithm::frequency_to_midi(311.126983722f), 63);
-  EXPECT_NEAR(Clover::Algorithm::frequency_to_midi(12543.8539514f), 127, 0.00001f);
+  EXPECT_NEAR(
+      Clover::Algorithm::frequency_to_midi(12543.8539514f), 127, 0.00001f
+  );
 }
 
-TEST(Util_Calc, ShouldHaveTensionCurve) {
+TEST(Algorithm_Math, ShouldHaveTensionCurve) {
   EXPECT_EQ(Clover::Algorithm::tension(0.5f, 0.f), 0.5f);
 
   EXPECT_NEAR(Clover::Algorithm::tension(0.5f, -.297f), 0.4f, 0.066f);
