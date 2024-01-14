@@ -22,13 +22,12 @@
 
 #include <functional>
 
-#include "Algorithm/AlgorithmBase.h"
 #include "Algorithm/Envelope/Basic.h"
 #include "Util/FloatingPointConcept.h"
 
 namespace Clover::Envelope {
 
-template <FloatingPoint T> struct ADSR : public AlgorithmBase<T> {
+template <FloatingPoint T> struct ADSR {
 public:
   ADSR() : ADSR(2u, 2u, T(1), 2u) {}
 
@@ -114,8 +113,7 @@ public:
       envelope.set(sustainValue, decaySamples);
     }
 
-    this->processed = envelope.process() * velocity_;
-    return this->processed;
+    return envelope.process() * velocity_;
   }
 
 protected:

@@ -35,53 +35,55 @@ TEST(Algorithm_Stereo_Spread, ShouldInitialize) {
 TEST(Algorithm_Stereo_Spread, ShouldSpreadInvertedSignal) {
   Clover::Stereo::MidSideBalance<float> image;
 
-  std::array<float, 2> frame{1.f, -1.f};
+  std::array<float, 2> inputFrame{1.f, -1.f};
+  std::array<float, 2> result{0.f, 0.f};
 
   image.spread(-1.f);
-  image.process(frame);
+  result = image.process(inputFrame);
 
-  EXPECT_FLOAT_EQ(image.last()[0], 0.f);
-  EXPECT_FLOAT_EQ(image.last()[1], 0.f);
+  EXPECT_FLOAT_EQ(result[0], 0.f);
+  EXPECT_FLOAT_EQ(result[1], 0.f);
 
   image.spread(1.f);
-  image.process(frame);
+  result = image.process(inputFrame);
 
-  EXPECT_FLOAT_EQ(image.last()[0], 1.f);
-  EXPECT_FLOAT_EQ(image.last()[1], -1.f);
+  EXPECT_FLOAT_EQ(result[0], 1.f);
+  EXPECT_FLOAT_EQ(result[1], -1.f);
 }
 
 TEST(Algorithm_Stereo_Spread, ShouldNotSpreadMonoSignal) {
   Clover::Stereo::MidSideBalance<float> image;
 
   std::array<float, 2> frame{1.f, 1.f};
+  std::array<float, 2> result{0.f, 0.f};
 
   image.spread(-1.f);
-  image.process(frame);
+  result = image.process(frame);
 
-  EXPECT_FLOAT_EQ(image.last()[0], 1.f);
-  EXPECT_FLOAT_EQ(image.last()[1], 1.f);
+  EXPECT_FLOAT_EQ(result[0], 1.f);
+  EXPECT_FLOAT_EQ(result[1], 1.f);
 
   image.spread(1.f);
-  image.process(frame);
-
-  EXPECT_FLOAT_EQ(image.last()[0], 0.f);
-  EXPECT_FLOAT_EQ(image.last()[1], 0.f);
+  result = image.process(frame);
+  EXPECT_FLOAT_EQ(result[0], 0.f);
+  EXPECT_FLOAT_EQ(result[1], 0.f);
 }
 
 TEST(Algorithm_Stereo_Spread, ShouldSpreadStereoSignal) {
   Clover::Stereo::MidSideBalance<float> image;
 
   std::array<float, 2> frame{1.f, 0.9f};
+  std::array<float, 2> result{0.f, 0.f};
 
   image.spread(-1.f);
-  image.process(frame);
+  result = image.process(frame);
 
-  EXPECT_FLOAT_EQ(image.last()[0], 0.95);
-  EXPECT_FLOAT_EQ(image.last()[1], 0.95);
+  EXPECT_FLOAT_EQ(result[0], 0.95);
+  EXPECT_FLOAT_EQ(result[1], 0.95);
 
   image.spread(1.f);
-  image.process(frame);
+  result = image.process(frame);
 
-  EXPECT_FLOAT_EQ(image.last()[0], 0.05f);
-  EXPECT_FLOAT_EQ(image.last()[1], -0.05f);
+  EXPECT_FLOAT_EQ(result[0], 0.05f);
+  EXPECT_FLOAT_EQ(result[1], -0.05f);
 }

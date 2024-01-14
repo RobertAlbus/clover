@@ -22,7 +22,6 @@
 
 #include <memory>
 
-#include "Algorithm/AlgorithmBase.h"
 #include "Algorithm/Math.h"
 #include "Generators.h"
 #include "OscillatorIndexCalculator.h"
@@ -33,8 +32,7 @@
 namespace Clover::Wavetable {
 
 template <FloatingPoint T>
-struct WavetableOscillatorMono : public WavetableOscInterface<T>,
-                                 public AlgorithmBase<T> {
+struct WavetableOscillatorMono : public WavetableOscInterface<T> {
   WavetableOscillatorMono(T sampleRateHz, Wavetable<T> wt = Sine<T>(512))
       : WavetableOscillatorMono(
             sampleRateHz, std::make_shared<Wavetable<T>>(wt)
@@ -80,12 +78,11 @@ struct WavetableOscillatorMono : public WavetableOscInterface<T>,
 
   T process() {
     OscillatorIndexCalculatorResult<T> index = calculator.process();
-    this->processed = std::lerp<T>(
+    return std::lerp<T>(
         (*wavetable_)[index.indexA],
         (*wavetable_)[index.indexB],
         index.lerpAmount
     );
-    return this->processed;
   }
 
   // clang-format off

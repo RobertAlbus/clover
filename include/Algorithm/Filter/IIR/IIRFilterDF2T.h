@@ -23,14 +23,13 @@
 #include <array>
 #include <iostream>
 
-#include "Algorithm/AlgorithmBase.h"
 #include "IIR_Coefficients.h"
 #include "Util.h"
 
 namespace Clover::Filter {
 
 template <FloatingPoint T, int __arity>
-class IIRFilterDF2T : AlgorithmBase<std::array<T, __arity>> {
+class IIRFilterDF2T {
 public:
   IIRFilterDF2T() : inputStates_({{0}}), outputStates_({{0}}) {}
 
@@ -58,8 +57,6 @@ public:
 
       output[ch] = yn;
     }
-
-    this->processed = output;
 
     return output;
   }
