@@ -23,11 +23,11 @@
 #include <array>
 #include <cstdio>
 
-#include "Constants.h"
+# include "Util/FloatingPointConcept.h"
 
 namespace Clover::Graph {
 
-template <size_t __arity> struct AudioFrame {
+template <size_t __arity, FloatingPoint Sample = float> struct AudioFrame {
 
   AudioFrame() : data() {}
 

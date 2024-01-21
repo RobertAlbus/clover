@@ -27,9 +27,13 @@
 #include "Graph/AudioFrame.h"
 #include "Graph/AudioNode.h"
 
+#include "Util/FloatingPointConcept.h"
+
+
 namespace Clover::Nodes::Envelope {
 
-class BasicEnvelope : public Graph::AudioNode<0, 1> {
+template <FloatingPoint Sample = float>
+class BasicEnvelope : public Graph::AudioNode<0, 1, Sample> {
 public:
   BasicEnvelope();
   BasicEnvelope(float currentValue, float targetValue, uint durationTime);

@@ -28,17 +28,19 @@
 #include "Node.h"
 #include "NullFrame.h"
 
+# include "Util/FloatingPointConcept.h"
+
 namespace Clover::Graph {
 
 /// Base class for all N channel nodes of the audio graph.
-template <size_t __arityInput, size_t __arityOutput>
+template <size_t __arityInput, size_t __arityOutput, FloatingPoint Sample = float>
 class AudioNode
-    : public Node<AudioFrame<__arityInput>, AudioFrame<__arityOutput>> {};
+    : public Node<AudioFrame<__arityInput, Sample>, AudioFrame<__arityOutput, Sample>> {};
 
-template <size_t __arity>
-class AudioInNode : public Node<AudioFrame<__arity>, NullFrame> {};
+template <size_t __arity, FloatingPoint Sample = float>
+class AudioInNode : public Node<AudioFrame<__arity, Sample>, NullFrame> {};
 
-template <size_t __arity>
-class AudioOutNode : public Node<NullFrame, AudioFrame<__arity>> {};
+template <size_t __arity, FloatingPoint Sample = float>
+class AudioOutNode : public Node<NullFrame, AudioFrame<__arity, Sample>> {};
 
 } // namespace Clover::Graph

@@ -23,14 +23,12 @@
 #include <array>
 #include <cstdio>
 
-#include "Constants.h"
 
 namespace Clover::Graph {
 
 struct NullFrame {
 
   NullFrame() {}
-  NullFrame(std::initializer_list<Sample> init) {}
 
   NullFrame operator+(const Graph::NullFrame &b) const { return b; }
 

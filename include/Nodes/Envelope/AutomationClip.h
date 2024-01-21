@@ -27,54 +27,57 @@
 #include "Graph/AudioFrame.h"
 #include "Graph/AudioNode.h"
 
+#include "Util/FloatingPointConcept.h"
+
 namespace Clover::Nodes {
 
-class AutomationNode : public Graph::AudioNode<0, 1> {
+template <FloatingPoint Sample = float>
+class AutomationNode : public Graph::AudioNode<0, 1, Sample> {
 public:
   AutomationNode() : _tensionScale(M_PI), _currentIndex(0), _nextIndex(1) {
-    EnvelopeDefinition emptyEnvelope;
+    EnvelopeDefinition<Sample> emptyEnvelope;
     emptyEnvelope.addPoint(0, 0, 0);
     useEnvelope(emptyEnvelope);
   }
 
-  AutomationNode(const EnvelopeDefinition &envelopeDefinition)
+  AutomationNode(const EnvelopeDefinition<Sample> &envelopeDefinition)
       : _tensionScale(M_PI), _currentIndex(0), _nextIndex(1) {
     useEnvelope(envelopeDefinition);
   }
 
-  void useEnvelope(const EnvelopeDefinition &envelopeDefinition) {
+  void useEnvelope(const EnvelopeDefinition<Sample> &envelopeDefinition) {
     computedEnvelope = envelopeDefinition.compute();
   }
 
-  void tensionScale(float scale) { _tensionScale = scale; }
+  void tensionScale(Sample scale) { _tensionScale = scale; }
 
-  float tensionScale() { return _tensionScale; }
+  Sample tensionScale() { return _tensionScale; }
 
 private:
   Graph::AudioFrame<1> tick(Graph::AudioFrame<0>) {
-    const EnvelopeComputation::Point &endPoint = computedEnvelope.points.back();
+    const typename EnvelopeComputation<Sample>::Point &endPoint = computedEnvelope.points.back();
 
     if (this->_currentClockTime >= endPoint.start) {
       return Graph::AudioFrame<1>{endPoint.value};
     }
 
-    const EnvelopeComputation::Point &currentPoint =
+    const typename EnvelopeComputation<Sample>::Point &currentPoint =
         computedEnvelope.points[_currentIndex];
-    const EnvelopeComputation::Point &nextPoint =
+    const typename EnvelopeComputation<Sample>::Point &nextPoint =
         computedEnvelope.points[_nextIndex];
 
-    float elapsedSectionTime =
-        static_cast<float>(_currentClockTime - currentPoint.start);
-    float sectionDuration =
-        static_cast<float>(nextPoint.start - currentPoint.start);
+    Sample elapsedSectionTime =
+        static_cast<Sample>(this->_currentClockTime - currentPoint.start);
+    Sample sectionDuration =
+        static_cast<Sample>(nextPoint.start - currentPoint.start);
 
-    float lerpAmount = elapsedSectionTime / sectionDuration;
-    float lerpValue =
+    Sample lerpAmount = elapsedSectionTime / sectionDuration;
+    Sample lerpValue =
         std::lerp(currentPoint.value, nextPoint.value, lerpAmount);
-    float tensionedValue =
+    Sample tensionedValue =
         Algorithm::tension(lerpValue, nextPoint.tension * _tensionScale);
 
-    if (_currentClockTime >= nextPoint.start) {
+    if (this->_currentClockTime >= nextPoint.start) {
       _currentIndex++;
       _nextIndex++;
     }
@@ -82,8 +85,8 @@ private:
     return Graph::AudioFrame<1>{tensionedValue};
   }
 
-  EnvelopeComputation computedEnvelope;
-  float _tensionScale;
+  EnvelopeComputation<Sample> computedEnvelope;
+  Sample _tensionScale;
   int _currentIndex;
   int _nextIndex;
 };

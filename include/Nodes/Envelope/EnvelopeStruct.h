@@ -20,35 +20,86 @@
  *
  */
 
+#include <cmath>
 #include <vector>
 
+#include "Util/FloatingPointConcept.h"
+
+template <FloatingPoint Sample = float>
 struct EnvelopeComputation {
   struct Point {
     int start;
     int duration;
-    float value;
-    float tension;
+    Sample value;
+    Sample tension;
   };
 
   std::vector<Point> points;
 
-  void addPoint(int startTime, float value, float tension);
+  void addPoint(int startTime, Sample value, Sample tension) {
+    Point point;
+    point.start = startTime;
+    point.duration = 0;
+    point.value = value;
+    point.tension = tension;
+    points.push_back(point);
+  }
 
-  void calculateDurations();
+  void calculateDurations() {
+    if (points.size() < 2)
+      return;
+
+    size_t end = points.size() - 2;
+
+    for (size_t i = 0; i < end; i++) {
+      points[i].duration = points[i + 1].start - points[i].start;
+    }
+  }
 };
 
+template <FloatingPoint Sample = float>
 struct EnvelopeDefinition {
   struct Point {
-    float start;
-    float value;
-    float tension;
+    Sample start;
+    Sample value;
+    Sample tension;
   };
 
   std::vector<Point> points;
 
-  void addPoint(float startTime, float value, float tension = 0.f);
+  void addPoint(Sample startTime, Sample value, Sample tension = 0.f)  {
+    Point point;
+    point.start = startTime;
+    point.value = value;
+    point.tension = tension;
+    points.push_back(point);
+  }
 
-  void validate() const;
+  void validate() const {
+    size_t size = points.size();
+    if (size < 1)
+      throw "Envelope must have at least one point.";
+    if (points[0].start != 0.)
+      throw "Envelope must start with a point at sample 0";
+    for (size_t i = 1; i < size; i++) {
+      if (points[i].start < points[i - 1].start)
+        throw "Envelope must have ordered points";
+    }
+  }
 
-  EnvelopeComputation compute() const;
+  EnvelopeComputation<Sample> compute() const {
+    validate();
+    EnvelopeComputation computation;
+    computation.points.reserve(points.size());
+
+    for (const EnvelopeDefinition::Point &definitionPoint : points) {
+      computation.addPoint(
+          std::round(definitionPoint.start),
+          definitionPoint.value,
+          definitionPoint.tension
+      );
+    }
+    computation.calculateDurations();
+    return computation;
+  }
 };

@@ -22,7 +22,6 @@
 
 #include "Algorithm.h"
 #include "Base.h"
-#include "Constants.h"
 #include "Exception.h"
 #include "Graph.h"
 #include "IO.h"

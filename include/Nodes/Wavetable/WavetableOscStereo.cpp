@@ -24,7 +24,6 @@
 #include <vector>
 
 #include "Algorithm/Math.h"
-#include "Constants.h"
 #include "Graph.h"
 #include "Nodes.h"
 #include "Util.h"
