@@ -25,7 +25,6 @@
 #include <memory>
 #include <vector>
 
-#include "Algorithm/AlgorithmBase.h"
 #include "OscillatorInterface.h"
 
 #include "Util/FloatingPointConcept.h"
@@ -40,8 +39,7 @@ template <FloatingPoint T> struct OscillatorIndexCalculatorResult {
 
 template <FloatingPoint T>
 struct OscillatorIndexCalculator
-    : public OscillatorIndexCalculculatorInterface<T>,
-      public AlgorithmBase<OscillatorIndexCalculatorResult<T>> {
+    : public OscillatorIndexCalculculatorInterface<T> {
 
   OscillatorIndexCalculator(T sampleRateHz, int wavetableSize = 0)
       : // clang-format off
@@ -100,13 +98,14 @@ struct OscillatorIndexCalculator
   T phaseOffset() override { return phaseOffsetPercent_; }
 
   OscillatorIndexCalculatorResult<T> process() {
-    this->processed.indexA = static_cast<int>(readIndex_);
-    this->processed.indexB =
-        static_cast<int>(normalizeReadIndex(this->processed.indexA + 1));
-    this->processed.lerpAmount = getFractionalComponent(readIndex_);
+    OscillatorIndexCalculatorResult<T> result {};
+    result.indexA = static_cast<int>(readIndex_);
+    result.indexB =
+        static_cast<int>(normalizeReadIndex(result.indexA + 1));
+    result.lerpAmount = getFractionalComponent(readIndex_);
     readIndex_ = normalizeReadIndex(readIndex_ + readIndexIncrementSamples_);
 
-    return this->processed;
+    return result;
   }
 
   void period(T periodSamples) override { freq(sampleRate_ / periodSamples); }
@@ -162,6 +161,8 @@ private:
 
   int normalizeSize(int size) { return std::max(0, size); }
 
+  OscillatorIndexCalculatorResult<T> previous;
+
   T freq_;
   T freqReciprocal_;
   T readIndex_;
@@ -175,8 +176,6 @@ private:
 
   T wavetableSize_;
   T wavetableSizeResciprocal_;
-
-public:
 };
 
 } // namespace Clover::Wavetable

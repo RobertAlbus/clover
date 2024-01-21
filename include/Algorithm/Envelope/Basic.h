@@ -23,17 +23,16 @@
 #include <assert.h>
 #include <cmath>
 
-#include "Algorithm/AlgorithmBase.h"
 #include "Util/FloatingPointConcept.h"
 
 namespace Clover::Envelope {
 
-template <FloatingPoint T> struct Basic : public AlgorithmBase<T> {
+template <FloatingPoint T> struct Basic {
   Basic() : Basic(0.f, 0.f, 1) {}
 
   Basic(float from, float to, uint numSteps) {
     set(from, to, numSteps);
-    this->processed = from;
+    previous_ = from;
   }
 
   void set(float from, float to, int numSteps) {
@@ -44,45 +43,44 @@ template <FloatingPoint T> struct Basic : public AlgorithmBase<T> {
     from_ = from;
     to_ = to;
     currentStep_ = 0;
-    setCommon(numSteps);
+    configureIncrement(numSteps);
   }
 
   void set(float to, int numSteps) { set(to, static_cast<uint>(numSteps)); }
 
   void set(float to, uint numSteps) {
-    from_ = this->processed;
+    from_ = previous_;
     to_ = to;
 
     // let the previous sample be the starting the point
     currentStep_ = 1;
-    setCommon(numSteps);
+    configureIncrement(numSteps);
   }
 
   T process() {
 
     if (currentStep_ >= targetStep_) {
-      this->processed = to_;
+      previous_ = to_;
       return to_;
     }
 
     T lerpAmount = currentStep_ * reciprocal_;
-    assert(lerpAmount >= T(0) && lerpAmount <= T(1));
-
-    this->processed = std::lerp(from_, to_, lerpAmount);
-
     currentStep_++;
 
-    return this->processed;
+    previous_ = std::lerp(from_, to_, lerpAmount);
+
+    return previous_;
   }
 
 protected:
   T from_;
   T to_;
+  T previous_;
   T reciprocal_;
   uint currentStep_;
   uint targetStep_;
 
-  void setCommon(uint numSteps) {
+  void configureIncrement(uint numSteps) {
     numSteps = numSteps < 2 ? 2 : numSteps;
 
     reciprocal_ = 1 / static_cast<T>(numSteps - 1);

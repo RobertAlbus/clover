@@ -141,15 +141,22 @@ TEST(Algorithm_Envelope_ADSR, ShouldBeRetriggerableMidEnvelope) {
 
 TEST(Algorithm_Envelope_ADSR, ShouldBeAbleToUpdateAttackDuringAttack) {
   Clover::Envelope::ADSR<float> envelope(101, 3, 0.5f, 3);
+  /*
+  - 101 sample attack, 100 increment periods
+  - halfway mark: 50 samples, value of 0.5f
+  
+  */
 
   envelope.keyOn();
 
+  float result;
   int halfAttackDuration = 50;
   for (int i = 0; i <= halfAttackDuration; i++) {
-    EXPECT_EQ(envelope.process(), static_cast<float>(i) * 0.01f);
+    result = envelope.process();
+    EXPECT_EQ(result, static_cast<float>(i) * 0.01f);
   }
 
-  EXPECT_EQ(envelope.last(), 0.5f);
+  EXPECT_EQ(result, 0.5f);
 
   // 11 remaining samples in the new attack, which is 10 increments
   // 0.5 remaining distance divided by 10 is 0.05
@@ -177,12 +184,13 @@ TEST(Algorithm_Envelope_ADSR, ShouldBeAbleToUpdateDecayDuringDecay) {
 
   envelope.keyOn();
 
+  float result;
   int flush = envelope.attack() + (envelope.decay() / 2);
   for (int i = 0; i < flush; i++) {
-    envelope.process();
+    result = envelope.process();
   }
 
-  EXPECT_EQ(envelope.last(), 0.75f);
+  EXPECT_EQ(result, 0.75f);
 
   // 11 samples in the new decay, which is 10 increments
   // 0.25 remaining distance divided by 10 is 0.025
@@ -206,12 +214,13 @@ TEST(Algorithm_Envelope_ADSR, ShouldBeAbleToUpdateSustainDuringDecay) {
 
   envelope.keyOn();
 
+  float result;
   int flush = envelope.attack() + (envelope.decay() / 2);
   for (int i = 0; i < flush; i++) {
-    envelope.process();
+    result = envelope.process();
   }
 
-  EXPECT_EQ(envelope.last(), 0.75f);
+  EXPECT_EQ(result, 0.75f);
 
   // 6 remaining samples in decay, which is 50 increments
   // 0.75 remaining distance divided by 6 is 0.15
@@ -234,12 +243,13 @@ TEST(Algorithm_Envelope_ADSR, ShouldBeAbleToUpdateSustainDuringSustain) {
 
   envelope.keyOn();
 
+  float result;
   int flush = envelope.attack() + envelope.decay();
   for (int i = 0; i < flush; i++) {
-    envelope.process();
+    result = envelope.process();
   }
 
-  EXPECT_EQ(envelope.last(), 0.5f);
+  EXPECT_EQ(result, 0.5f);
 
   envelope.sustain(0.6);
 
@@ -251,21 +261,22 @@ TEST(Algorithm_Envelope_ADSR, ShouldBeAbleToUpdateReleaseDuringRelease) {
 
   envelope.keyOn();
 
+  float result;
   int flush = envelope.attack() + envelope.decay() + 10;
   for (int i = 0; i < flush; i++) {
-    envelope.process();
+    result = envelope.process();
   }
 
-  EXPECT_EQ(envelope.last(), 1.f);
+  EXPECT_EQ(result, 1.f);
 
   envelope.keyOff();
 
   flush = envelope.release() / 2;
   for (int i = 0; i < flush; i++) {
-    envelope.process();
+    result = envelope.process();
   }
 
-  EXPECT_EQ(envelope.last(), 0.5f);
+  EXPECT_EQ(result, 0.5f);
 
   envelope.release(15);
 

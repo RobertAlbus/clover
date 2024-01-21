@@ -23,7 +23,6 @@
 #include <algorithm>
 #include <array>
 
-#include "Algorithm/AlgorithmBase.h"
 #include "Algorithm/Math.h"
 #include "Util/FloatingPointConcept.h"
 
@@ -53,28 +52,28 @@ protected:
 };
 
 template <FloatingPoint T>
-struct PanMono : public PanBase<T>, public AlgorithmBase<std::array<T, 2>> {
+struct PanMono : public PanBase<T> {
 
   PanMono(T pan = T(0)) : PanBase<T>(pan) {}
 
   std::array<T, 2> process(T input) {
-    this->processed[0] = input * this->coefL_;
-    this->processed[1] = input * this->coefR_;
-
-    return this->processed;
+    return {
+      input * this->coefL_,
+      input * this->coefR_
+    };
   }
 };
 
 template <FloatingPoint T>
-struct PanStereo : public PanBase<T>, public AlgorithmBase<std::array<T, 2>> {
+struct PanStereo : public PanBase<T> {
 
   PanStereo(T pan = T(0)) : PanBase<T>(pan) {}
 
   std::array<T, 2> process(std::array<T, 2> input) {
-    this->processed[0] = input[0] * this->coefL_;
-    this->processed[1] = input[1] * this->coefR_;
-
-    return this->processed;
+    return {
+      input[0] * this->coefL_,
+      input[1] * this->coefR_
+    };
   }
 };
 

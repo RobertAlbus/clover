@@ -38,18 +38,15 @@ TEST(Algorithm_Wavetable_Oscillator_Index_Calculator, ShouldInitialize) {
   ASSERT_FLOAT_EQ(calculator.phase(), 0.f);
   ASSERT_FLOAT_EQ(calculator.phaseOffset(), 0.f);
 
-  ASSERT_FLOAT_EQ(calculator.last().indexA, 0.f);
-  ASSERT_FLOAT_EQ(calculator.last().indexB, 0.f);
-  ASSERT_FLOAT_EQ(calculator.last().lerpAmount, 0.f);
-
-  calculator.process();
-  ASSERT_FLOAT_EQ(calculator.last().indexA, 0.f);
-  ASSERT_FLOAT_EQ(calculator.last().indexB, 1.f);
-  ASSERT_FLOAT_EQ(calculator.last().lerpAmount, 0.f);
-  calculator.process();
-  ASSERT_FLOAT_EQ(calculator.last().indexA, 0.f);
-  ASSERT_FLOAT_EQ(calculator.last().indexB, 1.f);
-  ASSERT_FLOAT_EQ(calculator.last().lerpAmount, 0.f);
+  Clover::Wavetable::OscillatorIndexCalculatorResult<float> result;
+  result = calculator.process();
+  ASSERT_FLOAT_EQ(result.indexA, 0.f);
+  ASSERT_FLOAT_EQ(result.indexB, 1.f);
+  ASSERT_FLOAT_EQ(result.lerpAmount, 0.f);
+  result = calculator.process();
+  ASSERT_FLOAT_EQ(result.indexA, 0.f);
+  ASSERT_FLOAT_EQ(result.indexB, 1.f);
+  ASSERT_FLOAT_EQ(result.lerpAmount, 0.f);
 }
 
 TEST(Algorithm_Wavetable_Oscillator_Index_Calculator, ShouldBeSettable) {
@@ -87,24 +84,26 @@ TEST(Algorithm_Wavetable_Oscillator_Index_Calculator, ShouldWalkThroughIndex) {
   );
   calculator.freq(1.f);
 
-  calculator.process();
-  ASSERT_FLOAT_EQ(calculator.last().indexA, 0.f);
-  ASSERT_FLOAT_EQ(calculator.last().indexB, 1.f);
-  ASSERT_FLOAT_EQ(calculator.last().lerpAmount, 0.f);
-  calculator.process();
-  ASSERT_FLOAT_EQ(calculator.last().indexA, 1.f);
-  ASSERT_FLOAT_EQ(calculator.last().indexB, 2.f);
-  ASSERT_FLOAT_EQ(calculator.last().lerpAmount, 0.f);
-  calculator.process();
-  ASSERT_FLOAT_EQ(calculator.last().indexA, 2.f);
-  ASSERT_FLOAT_EQ(calculator.last().indexB, 3.f);
-  ASSERT_FLOAT_EQ(calculator.last().lerpAmount, 0.f);
+  Clover::Wavetable::OscillatorIndexCalculatorResult<float> result;
+
+  result = calculator.process();
+  ASSERT_FLOAT_EQ(result.indexA, 0.f);
+  ASSERT_FLOAT_EQ(result.indexB, 1.f);
+  ASSERT_FLOAT_EQ(result.lerpAmount, 0.f);
+  result = calculator.process();
+  ASSERT_FLOAT_EQ(result.indexA, 1.f);
+  ASSERT_FLOAT_EQ(result.indexB, 2.f);
+  ASSERT_FLOAT_EQ(result.lerpAmount, 0.f);
+  result = calculator.process();
+  ASSERT_FLOAT_EQ(result.indexA, 2.f);
+  ASSERT_FLOAT_EQ(result.indexB, 3.f);
+  ASSERT_FLOAT_EQ(result.lerpAmount, 0.f);
 
   calculator.freq(2.f);
-  calculator.process();
-  ASSERT_FLOAT_EQ(calculator.last().indexA, 3.f);
-  ASSERT_FLOAT_EQ(calculator.last().indexB, 4.f);
-  ASSERT_FLOAT_EQ(calculator.last().lerpAmount, 0.f);
+  result = calculator.process();
+  ASSERT_FLOAT_EQ(result.indexA, 3.f);
+  ASSERT_FLOAT_EQ(result.indexB, 4.f);
+  ASSERT_FLOAT_EQ(result.lerpAmount, 0.f);
 }
 
 TEST(

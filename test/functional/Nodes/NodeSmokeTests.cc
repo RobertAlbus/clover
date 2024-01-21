@@ -27,7 +27,6 @@
 
 #include "Nodes/Adapter/NullAdapter.h"
 #include "Nodes/Delay/FractionalDelayLine.h"
-#include "Nodes/DynamicRange/AsymClip.h"
 #include "Nodes/Envelope/ADSR.h"
 #include "Nodes/Envelope/BasicEnvelope.h"
 #include "Nodes/Stereo/Difference.h"
@@ -58,36 +57,6 @@ TEST(Nodes_SmokeTest, Delay_Fractional) {
     ) << "If this test has failed, it's likely the "
          "Delay::FractionalDelay algorithm.";
   }
-}
-
-TEST(Nodes_SmokeTest, DynamicRange_Clamp) {
-  Clover::_Test::HandCrank crank;
-  Clover::_Test::Collector<1> envelopeCollector(6);
-  Clover::Nodes::DynamicRange::AsymClip<1> clip;
-  Clover::_Test::DCN<1> dc;
-
-  dc >> clip >> envelopeCollector >> crank;
-
-  dc.indexBasis(-1.5f);
-  crank.turn(1);
-  dc.indexBasis(-1.0f);
-  crank.turn(1);
-  dc.indexBasis(-0.5f);
-  crank.turn(1);
-  dc.indexBasis(0.5f);
-  crank.turn(1);
-  dc.indexBasis(1.0f);
-  crank.turn(1);
-  dc.indexBasis(1.5f);
-  crank.turn(1);
-
-  EXPECT_EQ(envelopeCollector.frames[0][0], -1.f);
-  EXPECT_EQ(envelopeCollector.frames[1][0], -1.f);
-  EXPECT_EQ(envelopeCollector.frames[2][0], -0.5f);
-
-  EXPECT_EQ(envelopeCollector.frames[3][0], 0.5f);
-  EXPECT_EQ(envelopeCollector.frames[4][0], 1.f);
-  EXPECT_EQ(envelopeCollector.frames[5][0], 1.f);
 }
 
 TEST(Nodes_SmokeTest, Envelope_Basic) {

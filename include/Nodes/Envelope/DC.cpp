@@ -26,7 +26,7 @@ namespace Clover::Nodes::Envelope {
 DC::DC(Sample value) : dc(value) {}
 
 void DC::value(Sample v) { dc.value(v); }
-Sample DC::value() { return dc.last(); }
+Sample DC::value() { return dc.value(); }
 
 Graph::AudioFrame<1> DC::tick(Graph::AudioFrame<0> input) {
   return Graph::AudioFrame<1>{dc.process()};

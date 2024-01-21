@@ -22,24 +22,21 @@
 
 #include <array>
 
-#include "Algorithm/AlgorithmBase.h"
 #include "Util/FloatingPointConcept.h"
 
 namespace Clover::Stereo {
 
 template <FloatingPoint T>
-struct Difference : public AlgorithmBase<std::array<T, 2>> {
+struct Difference {
 
   Difference() {}
 
   std::array<T, 2> process(std::array<T, 2> input) {
-    T sideL = (input[0] - input[1]) * T(0.5);
-    T sideR = sideL * T(-1);
-
-    this->processed[0] = sideL;
-    this->processed[1] = sideR;
-
-    return this->processed;
+    T side = (input[0] - input[1]) * T(0.5);
+    return {
+      side,
+      side * T(-1)
+    };
   }
 };
 

@@ -78,45 +78,47 @@ TEST(Algorithm_Pan_Base, ShouldClampPanAtValue) {
 TEST(Algorithm_Pan_Mono, ShouldPanInput) {
   Clover::Stereo::PanMono<float> pan;
   float testSignal = 1.f;
+  std::array<float, 2> result{0.f, 0.f};
   float midGain = Clover::Algorithm::db_to_linear(-4.5f);
 
-  pan.process(testSignal);
-  EXPECT_FLOAT_EQ(pan.last()[0], midGain);
-  EXPECT_FLOAT_EQ(pan.last()[1], midGain);
+  result = pan.process(testSignal);
+  EXPECT_FLOAT_EQ(result[0], midGain);
+  EXPECT_FLOAT_EQ(result[1], midGain);
 
   pan.pan(1.f);
-  pan.process(testSignal);
+  result = pan.process(testSignal);
 
-  EXPECT_FLOAT_EQ(pan.last()[0], 0.f);
-  EXPECT_FLOAT_EQ(pan.last()[1], 1.f);
+  EXPECT_FLOAT_EQ(result[0], 0.f);
+  EXPECT_FLOAT_EQ(result[1], 1.f);
 
   pan.pan(-1.f);
-  pan.process(testSignal);
+  result = pan.process(testSignal);
 
-  EXPECT_FLOAT_EQ(pan.last()[0], 1.f);
-  EXPECT_FLOAT_EQ(pan.last()[1], 0.f);
+  EXPECT_FLOAT_EQ(result[0], 1.f);
+  EXPECT_FLOAT_EQ(result[1], 0.f);
 }
 
 TEST(Algorithm_Pan_Stereo, ShouldPanInput) {
   Clover::Stereo::PanStereo<float> pan;
   std::array<float, 2> testSignal{1.f, 1.f};
+  std::array<float, 2> result{0.f, 0.f};
   float midGain = Clover::Algorithm::db_to_linear(-4.5f);
 
-  pan.process(testSignal);
-  EXPECT_FLOAT_EQ(pan.last()[0], midGain);
-  EXPECT_FLOAT_EQ(pan.last()[1], midGain);
+  result = pan.process(testSignal);
+  EXPECT_FLOAT_EQ(result[0], midGain);
+  EXPECT_FLOAT_EQ(result[1], midGain);
 
   pan.pan(1.f);
-  pan.process(testSignal);
+  result = pan.process(testSignal);
 
-  EXPECT_FLOAT_EQ(pan.last()[0], 0.f);
-  EXPECT_FLOAT_EQ(pan.last()[1], 1.f);
+  EXPECT_FLOAT_EQ(result[0], 0.f);
+  EXPECT_FLOAT_EQ(result[1], 1.f);
 
   pan.pan(-1.f);
-  pan.process(testSignal);
+  result = pan.process(testSignal);
 
-  EXPECT_FLOAT_EQ(pan.last()[0], 1.f);
-  EXPECT_FLOAT_EQ(pan.last()[1], 0.f);
+  EXPECT_FLOAT_EQ(result[0], 1.f);
+  EXPECT_FLOAT_EQ(result[1], 0.f);
 }
 
 // migrate pan node test to nodesmoketest

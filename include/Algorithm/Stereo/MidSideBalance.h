@@ -22,7 +22,6 @@
 
 #include <array>
 
-#include "Algorithm/AlgorithmBase.h"
 #include "Algorithm/Stereo/Difference.h"
 #include "Algorithm/Stereo/Pan.h"
 #include "Algorithm/Stereo/Sum.h"
@@ -32,7 +31,7 @@
 namespace Clover::Stereo {
 
 template <FloatingPoint T>
-struct MidSideBalance : public AlgorithmBase<std::array<T, 2>> {
+struct MidSideBalance {
   MidSideBalance(T s = T(0)) { spread(s); }
 
   T spread() { return spreadRaw_; }
@@ -42,6 +41,7 @@ struct MidSideBalance : public AlgorithmBase<std::array<T, 2>> {
 
     bool shouldNarrow = s < 0;
     if (shouldNarrow) {
+      // I think this is wrong...
       spreadCoefMid_ = T(1);
       spreadCoefSide_ = T(1) + s;
     } else {
@@ -51,17 +51,15 @@ struct MidSideBalance : public AlgorithmBase<std::array<T, 2>> {
   }
 
   std::array<T, 2> process(std::array<T, 2> input) {
-    sum_.process(input);
-    diff_.process(input);
+    std::array<T, 2> mid = sum_.process(input);
+    std::array<T, 2> side = diff_.process(input);
 
+    std::array<T, 2> output {};
     for (int i = 0; i < 2; i++) {
-      T mid = sum_.last()[i] * spreadCoefMid_;
-      T side = diff_.last()[i] * spreadCoefSide_;
-
-      this->processed[i] = mid + side;
+      output[i] = mid[i] * spreadCoefMid_ + side[i] * spreadCoefSide_;
     }
 
-    return this->processed;
+    return output;
   }
 
 protected:

@@ -25,8 +25,6 @@
 TEST(Algorithm_Envelope_Basic, ShouldInitializeAtZero) {
   Clover::Envelope::Basic<float> envelope;
 
-  EXPECT_EQ(envelope.last(), 0.f);
-
   EXPECT_EQ(envelope.process(), 0.f);
   EXPECT_EQ(envelope.process(), 0.f);
 }
@@ -75,17 +73,18 @@ TEST(Algorithm_Envelope_Basic, ShouldHoldTargetValue) {
   uint duration = 5;
   Clover::Envelope::Basic<float> envelope(0.f, 10.005f, 5);
 
+  float result;
   for (uint i = 0; i < duration * 10u; i++) {
-    envelope.process();
+    result = envelope.process();
   }
 
-  EXPECT_EQ(envelope.last(), 10.005f);
+  EXPECT_EQ(result, 10.005f);
 
   envelope.set(10.005f, 0.f, 5);
 
   for (uint i = 0; i < duration * 10u; i++) {
-    envelope.process();
+    result = envelope.process();
   }
 
-  EXPECT_EQ(envelope.last(), 0.f);
+  EXPECT_EQ(result, 0.f);
 }
