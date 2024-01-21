@@ -22,7 +22,9 @@
 namespace Clover {
 
 struct Base {
-  static int sampleRate;
+  static const int sampleRate;
+  static const float sampleRate_f;
+  static const double sampleRate_d;
 };
 
 } // namespace Clover

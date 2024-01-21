@@ -21,7 +21,9 @@
 #include "Base/CloverBase.h"
 
 #ifndef CLOVER_SAMPLE_RATE
-#define CLOVER_SAMPLE_RATE 48000.f
+#define CLOVER_SAMPLE_RATE 48000
 #endif
 
-int Clover::Base::sampleRate = CLOVER_SAMPLE_RATE;
+const int Clover::Base::sampleRate = CLOVER_SAMPLE_RATE;
+const float Clover::Base::sampleRate_f = static_cast<float>(CLOVER_SAMPLE_RATE);
+const double Clover::Base::sampleRate_d = static_cast<double>(CLOVER_SAMPLE_RATE);
