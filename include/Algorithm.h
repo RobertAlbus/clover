@@ -24,8 +24,6 @@
 #include "Algorithm/Envelope/Basic.h"
 #include "Algorithm/Envelope/DC.h"
 
-#include "Algorithm/Filter/IIR/IIRFilterDF2T.h"
-#include "Algorithm/Filter/IIR/IIR_Coefficients.h"
-#include "Algorithm/Filter/IIR/RbjBiquadCoefficients.h"
+#include "Algorithm/Filter_IIR.h"
 
 #include "Algorithm/Math.h"

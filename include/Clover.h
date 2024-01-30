@@ -20,6 +20,8 @@
  *
  */
 
+#include "Constants.h"
+
 #include "Algorithm.h"
 #include "Base.h"
 #include "Constants.h"

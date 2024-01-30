@@ -20,14 +20,11 @@
  *
  */
 
-#include <array>
-#include <cmath>
 #include <functional>
-#include <memory>
 
-#include "Algorithm.h"
-#include "Base.h"
-#include "Graph.h"
+#include "Algorithm/Filter_IIR.h"
+#include "Base/CloverBase.h"
+#include "Graph/AudioNode.h"
 
 #include "EQSettable.h"
 
@@ -38,68 +35,56 @@ class EQ : public EQSettable,
            public Base,
            public Graph::AudioNode<__arity, __arity> {
 public:
-  EQ() : biquad() {}
+  EQ()
+      : biquad(),
+        generateCoefficientsFunction(Clover::Filter::peakingEQ_rbj<float>),
+        freq_(22000.f), reso_(0.707f), dbGain_(0.f) {}
 
   void set(float f, float Q, float dbGain) {
-    if (f == freq_ && Q == reso_ && dbGain == dbGain_)
+    if (freq_ == f && reso_ == Q && dbGain_ == dbGain)
       return;
-    setFunction(f, Q, dbGain, Base::sampleRate);
+    freq_ = f;
+    reso_ = Q;
+    dbGain_ = dbGain;
+    updateCoefficients();
   }
 
   float freq() { return freq_; }
   void freq(float f) {
-    if (f == freq_)
+    if (freq_ == f)
       return;
-    setFunction(f, reso_, dbGain_, Base::sampleRate);
+    freq_ = f;
+    updateCoefficients();
   }
 
   float reso() { return reso_; }
   void reso(float Q) {
-    if (Q == reso_)
+    if (reso_ == Q)
       return;
-    setFunction(freq_, Q, dbGain_, Base::sampleRate);
+    reso_ = Q;
+    updateCoefficients();
   }
 
   void dbGain(float dbGain) {
-    if (dbGain == dbGain_)
+    if (dbGain_ == dbGain)
       return;
-    setFunction(freq_, reso_, dbGain, Base::sampleRate);
+    dbGain_ = dbGain;
+    updateCoefficients();
   }
 
   void lowShelf() {
-    setFunction =
-        [this](float freq, float reso, float dbGain, float sampleRate) {
-      this->freq_ = freq;
-      this->reso_ = reso;
-      this->dbGain_ = dbGain;
-      IIRFilterCoefficients<Sample> coefficients =
-          this->coefficientStrategy.lowShelf(freq, reso, dbGain, sampleRate);
-      this->biquad.updateCoefficients(coefficients);
-    };
+    generateCoefficientsFunction = Clover::Filter::lowShelf_rbj<float>;
+    updateCoefficients();
   }
 
   void highShelf() {
-    setFunction =
-        [this](float freq, float reso, float dbGain, float sampleRate) {
-      this->freq_ = freq;
-      this->reso_ = reso;
-      this->dbGain_ = dbGain;
-      IIRFilterCoefficients<Sample> coefficients =
-          this->coefficientStrategy.highShelf(freq, reso, dbGain, sampleRate);
-      this->biquad.updateCoefficients(coefficients);
-    };
+    generateCoefficientsFunction = Clover::Filter::highShelf_rbj<float>;
+    updateCoefficients();
   }
 
   void peakingEQ() {
-    setFunction =
-        [this](float freq, float reso, float dbGain, float sampleRate) {
-      this->freq_ = freq;
-      this->reso_ = reso;
-      this->dbGain_ = dbGain;
-      IIRFilterCoefficients<Sample> coefficients =
-          this->coefficientStrategy.peakingEQ(freq, reso, dbGain, sampleRate);
-      this->biquad.updateCoefficients(coefficients);
-    };
+    generateCoefficientsFunction = Clover::Filter::peakingEQ_rbj<float>;
+    updateCoefficients();
   }
 
   Graph::AudioFrame<__arity> tick(Graph::AudioFrame<__arity> input) {
@@ -111,14 +96,17 @@ protected:
   float reso_;
   float dbGain_;
 
-  std::function<void(float, float, float, float)> setFunction;
-  Clover::Filter::IIRFilterDF2T<Sample, __arity> biquad;
+  std::function<
+      Clover::Filter::IIRFilterCoefficients<float>(float, float, float, float)>
+      generateCoefficientsFunction;
 
-  Clover::Filter::RbjBiquadCoefficientStrategy<Sample> coefficientStrategy;
+  Clover::Filter::IIRFilterDF2T<float, __arity> biquad;
 
-  void resetCoefficients() {
-    peakingEQ();
-    set(21000, 0.707, 0);
+  void updateCoefficients() {
+    auto coefficients = generateCoefficientsFunction(
+        freq_, reso_, dbGain_, static_cast<float>(Base::sampleRate)
+    );
+    biquad.updateCoefficients(coefficients);
   }
 };
 

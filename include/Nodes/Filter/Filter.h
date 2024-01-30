@@ -20,13 +20,11 @@
  *
  */
 
-#include <cmath>
 #include <functional>
-#include <memory>
 
-#include "Algorithm.h"
-#include "Base.h"
-#include "Graph.h"
+#include "Algorithm/Filter_IIR.h"
+#include "Base/CloverBase.h"
+#include "Graph/AudioNode.h"
 
 #include "FilterSettable.h"
 
@@ -37,66 +35,53 @@ class Filter : public FilterSettable,
                public Base,
                public Graph::AudioNode<__arity, __arity> {
 public:
-  Filter() : biquad() {}
+  Filter()
+      : biquad(),
+        generateCoefficientsFunction(Clover::Filter::lowPass_rbj<float>),
+        freq_(22000.f), reso_(0.707f) {}
 
   void set(float f, float Q) override {
-    if (f == freq_ && Q == reso_)
+    if (freq_ == f && reso_ == Q)
       return;
-    setFunction(f, Q, Base::sampleRate);
+    freq_ = f;
+    reso_ = Q;
+    updateCoefficients();
   }
 
   float freq() override { return freq_; }
   void freq(float f) override {
-    if (f == freq_)
+    if (freq_ == f)
       return;
-    setFunction(f, reso_, Base::sampleRate);
+    freq_ = f;
+    updateCoefficients();
   }
 
   float reso() override { return reso_; }
   void reso(float Q) override {
-    if (Q == reso_)
+    if (reso_ == Q)
       return;
-    setFunction(freq_, Q, Base::sampleRate);
+    reso_ = Q;
+    updateCoefficients();
   }
 
   void lowPass() override {
-    setFunction = [this](float freq, float reso, float sampleRate) {
-      this->freq_ = freq;
-      this->reso_ = reso;
-      IIRFilterCoefficients<Sample> coefficients =
-          this->coefficientStrategy.lowPass(freq, reso, sampleRate);
-      this->biquad.updateCoefficients(coefficients);
-    };
+    generateCoefficientsFunction = Clover::Filter::lowPass_rbj<float>;
+    updateCoefficients();
   }
 
   void highPass() override {
-    setFunction = [this](float freq, float reso, float sampleRate) {
-      this->freq_ = freq;
-      this->reso_ = reso;
-      IIRFilterCoefficients<Sample> coefficients =
-          this->coefficientStrategy.highPass(freq, reso, sampleRate);
-      this->biquad.updateCoefficients(coefficients);
-    };
+    generateCoefficientsFunction = Clover::Filter::highPass_rbj<float>;
+    updateCoefficients();
   }
 
   void notch() override {
-    setFunction = [this](float freq, float reso, float sampleRate) {
-      this->freq_ = freq;
-      this->reso_ = reso;
-      IIRFilterCoefficients<Sample> coefficients =
-          this->coefficientStrategy.notch(freq, reso, sampleRate);
-      this->biquad.updateCoefficients(coefficients);
-    };
+    generateCoefficientsFunction = Clover::Filter::notch_rbj<float>;
+    updateCoefficients();
   }
 
   void bandPass() override {
-    setFunction = [this](float freq, float reso, float sampleRate) {
-      this->freq_ = freq;
-      this->reso_ = reso;
-      IIRFilterCoefficients<Sample> coefficients =
-          this->coefficientStrategy.bandPass(freq, reso, sampleRate);
-      this->biquad.updateCoefficients(coefficients);
-    };
+    generateCoefficientsFunction = Clover::Filter::bandPass_rbj<float>;
+    updateCoefficients();
   }
 
   Graph::AudioFrame<__arity> tick(Graph::AudioFrame<__arity> input) {
@@ -107,14 +92,16 @@ protected:
   float freq_;
   float reso_;
 
-  std::function<void(float, float, float)> setFunction;
-  Clover::Filter::IIRFilterDF2T<Sample, __arity> biquad;
+  std::function<
+      Clover::Filter::IIRFilterCoefficients<float>(float, float, float)>
+      generateCoefficientsFunction;
+  Clover::Filter::IIRFilterDF2T<float, __arity> biquad;
 
-  Clover::Filter::RbjBiquadCoefficientStrategy<Sample> coefficientStrategy;
-
-  void resetCoefficients() {
-    lowPass();
-    set(21000, 0.707);
+  void updateCoefficients() {
+    auto coefficients = generateCoefficientsFunction(
+        freq_, reso_, static_cast<float>(Base::sampleRate)
+    );
+    biquad.updateCoefficients(coefficients);
   }
 };
 
