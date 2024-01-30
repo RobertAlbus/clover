@@ -151,10 +151,10 @@ target_compile_options(${PROJECT_NAME}_Strict PRIVATE ${COMMON_ARCH_FLAGS}
 #--------------------------------
 # executable demos
 
-add_executable(${PROJECT_NAME}_Demo src/main.cpp)
+add_executable(${PROJECT_NAME}_Demo examples/demo/main.cpp)
 target_link_libraries(${PROJECT_NAME}_Demo PUBLIC ${PROJECT_NAME})
 
-add_executable(${PROJECT_NAME}_Demo_Profiling EXCLUDE_FROM_ALL src/main.cpp)
+add_executable(${PROJECT_NAME}_Demo_Profiling EXCLUDE_FROM_ALL examples/demo/main.cpp)
 target_link_libraries(${PROJECT_NAME}_Demo_Profiling PUBLIC ${PROJECT_NAME}_Profiling)
 
 #--------------------------------
