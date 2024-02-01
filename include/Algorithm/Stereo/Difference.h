@@ -26,17 +26,13 @@
 
 namespace Clover::Stereo {
 
-template <FloatingPoint T>
-struct Difference {
+template <FloatingPoint T> struct Difference {
 
   Difference() {}
 
   std::array<T, 2> process(std::array<T, 2> input) {
     T side = (input[0] - input[1]) * T(0.5);
-    return {
-      side,
-      side * T(-1)
-    };
+    return {side, side * T(-1)};
   }
 };
 

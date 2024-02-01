@@ -98,10 +98,9 @@ struct OscillatorIndexCalculator
   T phaseOffset() override { return phaseOffsetPercent_; }
 
   OscillatorIndexCalculatorResult<T> process() {
-    OscillatorIndexCalculatorResult<T> result {};
+    OscillatorIndexCalculatorResult<T> result{};
     result.indexA = static_cast<int>(readIndex_);
-    result.indexB =
-        static_cast<int>(normalizeReadIndex(result.indexA + 1));
+    result.indexB = static_cast<int>(normalizeReadIndex(result.indexA + 1));
     result.lerpAmount = getFractionalComponent(readIndex_);
     readIndex_ = normalizeReadIndex(readIndex_ + readIndexIncrementSamples_);
 

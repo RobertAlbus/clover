@@ -30,13 +30,10 @@ template <FloatingPoint T> struct SumMono {
 
   SumMono() {}
 
-  T process(std::array<T, 2> input) {
-    return (input[0] + input[1]) * T(0.5);
-  }
+  T process(std::array<T, 2> input) { return (input[0] + input[1]) * T(0.5); }
 };
 
-template <FloatingPoint T>
-struct SumStereo {
+template <FloatingPoint T> struct SumStereo {
 
   SumStereo() {}
 

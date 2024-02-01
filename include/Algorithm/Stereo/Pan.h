@@ -51,29 +51,21 @@ protected:
   T coefR_;
 };
 
-template <FloatingPoint T>
-struct PanMono : public PanBase<T> {
+template <FloatingPoint T> struct PanMono : public PanBase<T> {
 
   PanMono(T pan = T(0)) : PanBase<T>(pan) {}
 
   std::array<T, 2> process(T input) {
-    return {
-      input * this->coefL_,
-      input * this->coefR_
-    };
+    return {input * this->coefL_, input * this->coefR_};
   }
 };
 
-template <FloatingPoint T>
-struct PanStereo : public PanBase<T> {
+template <FloatingPoint T> struct PanStereo : public PanBase<T> {
 
   PanStereo(T pan = T(0)) : PanBase<T>(pan) {}
 
   std::array<T, 2> process(std::array<T, 2> input) {
-    return {
-      input[0] * this->coefL_,
-      input[1] * this->coefR_
-    };
+    return {input[0] * this->coefL_, input[1] * this->coefR_};
   }
 };
 

@@ -144,7 +144,7 @@ TEST(Algorithm_Envelope_ADSR, ShouldBeAbleToUpdateAttackDuringAttack) {
   /*
   - 101 sample attack, 100 increment periods
   - halfway mark: 50 samples, value of 0.5f
-  
+
   */
 
   envelope.keyOn();

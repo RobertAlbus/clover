@@ -30,8 +30,7 @@
 
 namespace Clover::Stereo {
 
-template <FloatingPoint T>
-struct MidSideBalance {
+template <FloatingPoint T> struct MidSideBalance {
   MidSideBalance(T s = T(0)) { spread(s); }
 
   T spread() { return spreadRaw_; }
@@ -54,7 +53,7 @@ struct MidSideBalance {
     std::array<T, 2> mid = sum_.process(input);
     std::array<T, 2> side = diff_.process(input);
 
-    std::array<T, 2> output {};
+    std::array<T, 2> output{};
     for (int i = 0; i < 2; i++) {
       output[i] = mid[i] * spreadCoefMid_ + side[i] * spreadCoefSide_;
     }

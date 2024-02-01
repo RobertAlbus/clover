@@ -28,8 +28,7 @@
 
 namespace Clover::Delay {
 
-template <FloatingPoint T, int __arity>
-struct FractionalDelay {
+template <FloatingPoint T, int __arity> struct FractionalDelay {
 
   typedef std::array<T, __arity> Frame;
 
@@ -59,7 +58,7 @@ struct FractionalDelay {
     int previousReadHead = static_cast<int>(readHead);
     float lerpAmount = readHead - (float)previousReadHead;
     int nextReadHead = previousReadHead + 1;
-    if(nextReadHead  >= bufferCapacity) {
+    if (nextReadHead >= bufferCapacity) {
       nextReadHead -= bufferCapacity;
     }
 
@@ -90,7 +89,7 @@ protected:
 
   std::vector<Frame> buffer;
 
-  void writeNewFrameToBuffer(Frame& input) {
+  void writeNewFrameToBuffer(Frame &input) {
     std::copy(
         std::begin(input), std::end(input), std::begin(buffer[writeHead])
     );

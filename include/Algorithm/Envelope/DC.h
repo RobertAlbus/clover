@@ -28,9 +28,7 @@ template <FloatingPoint T> struct DC {
 
   DC(float value = 0.f) : value_(value) {}
 
-  T process() {
-    return value_;
-  }
+  T process() { return value_; }
 
   void value(T v) { value_ = v; }
   T value() { return value_; }
