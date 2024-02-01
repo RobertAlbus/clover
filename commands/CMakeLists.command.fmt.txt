@@ -1,20 +1,27 @@
+add_custom_target(
+  fmt2
+  COMMAND ls -R
+  include
+  WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/..
+)
 find_program(
   CLANG_FORMAT_BIN clang-format
 )
 if(CLANG_FORMAT_BIN)
+  file(GLOB_RECURSE FMT_SOURCE_LIST
+      CONFIGURE_DEPENDS
+      ${CMAKE_CURRENT_LIST_DIR}/../include/*.cpp
+      ${CMAKE_CURRENT_LIST_DIR}/../include/*.h
+      ${CMAKE_CURRENT_LIST_DIR}/../include/*.cpp
+      ${CMAKE_CURRENT_LIST_DIR}/../test/*.h
+      ${CMAKE_CURRENT_LIST_DIR}/../test/*.cc
+  )
   add_custom_target(
     fmt
     COMMAND ${CLANG_FORMAT_BIN}
     -i
     -style=file
-    ${SOURCE_LIST_INCLUDES_CPP}
-    ${SOURCE_LIST_INCLUDES_H} 
-    ${SOURCE_LIST_SRC_CPP}
-    ${SOURCE_LIST_SRC_H}
-    ${SOURCE_LIST_TEST_FUNCTIONAL_CC}
-    ${SOURCE_LIST_TEST_PERFORMANCE_CC}
-    ${SOURCE_LIST_TEST_HELPERS_H}
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    ${FMT_SOURCE_LIST}
   )
 else()
   add_custom_target(

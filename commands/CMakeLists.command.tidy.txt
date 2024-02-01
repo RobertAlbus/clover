@@ -12,11 +12,10 @@ if(CLANG_TIDY_BIN)
         -extra-arg=-I/usr/lib/clang/15.0.7/include
         -extra-arg=-I/usr/local/include
         -extra-arg=-I/usr/include
-        ${SOURCE_LIST_INCLUDES_CPP}
-        ${SOURCE_LIST_INCLUDES_H}
-        ${SOURCE_LIST_TEST_FUNCTIONAL_CC}
-        ${SOURCE_LIST_TEST_PERFORMANCE_CC}
-        ${SOURCE_LIST_TEST_HELPERS_H}
+        ${CMAKE_SOURCE_DIR}/includes/*.h
+        ${CMAKE_SOURCE_DIR}/includes/*.cpp
+        ${CMAKE_SOURCE_DIR}/test/*.h
+        ${CMAKE_SOURCE_DIR}/includes/*.cc
     )
 else()
     add_custom_target(tidy
