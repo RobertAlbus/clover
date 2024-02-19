@@ -20,7 +20,7 @@
 
 #include <gtest/gtest.h>
 
-#include "Graph/AudioFrame.h"
+#include "Clover/Graph/AudioFrame.h"
 
 TEST(Graph_Frame, ShouldAdd) {
   Clover::Graph::AudioFrame<3> frame_1{1, 2, 3};

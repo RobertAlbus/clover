@@ -20,21 +20,21 @@
 
 #include <gtest/gtest.h>
 
-#include "_Test/Collector.h"
-#include "_Test/DCN.h"
-#include "_Test/HandCrank.h"
-#include "_Test/Incrementor.h"
+#include "Clover/_Test/Collector.h"
+#include "Clover/_Test/DCN.h"
+#include "Clover/_Test/HandCrank.h"
+#include "Clover/_Test/Incrementor.h"
 
-#include "Nodes/Adapter/NullAdapter.h"
-#include "Nodes/Delay/FractionalDelayLine.h"
-#include "Nodes/Envelope/ADSR.h"
-#include "Nodes/Envelope/BasicEnvelope.h"
-#include "Nodes/Stereo/Difference.h"
-#include "Nodes/Stereo/MidSideBalance.h"
-#include "Nodes/Stereo/Pan.h"
-#include "Nodes/Stereo/Sum.h"
-#include "Nodes/Wavetable/WavetableOsc.h"
-#include "Nodes/Wavetable/WavetableOscStereo.h"
+#include "Clover/Nodes/Adapter/NullAdapter.h"
+#include "Clover/Nodes/Delay/FractionalDelayLine.h"
+#include "Clover/Nodes/Envelope/ADSR.h"
+#include "Clover/Nodes/Envelope/BasicEnvelope.h"
+#include "Clover/Nodes/Stereo/Difference.h"
+#include "Clover/Nodes/Stereo/MidSideBalance.h"
+#include "Clover/Nodes/Stereo/Pan.h"
+#include "Clover/Nodes/Stereo/Sum.h"
+#include "Clover/Nodes/Wavetable/WavetableOsc.h"
+#include "Clover/Nodes/Wavetable/WavetableOscStereo.h"
 
 TEST(Nodes_SmokeTest, Delay_Fractional) {
   float delayTime = 1.f;

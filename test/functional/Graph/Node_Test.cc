@@ -20,9 +20,9 @@
 
 #include <gtest/gtest.h>
 
-#include "Graph/AudioFrame.h"
-#include "Graph/AudioNode.h"
-#include "_Test.h"
+#include "Clover/Graph/AudioFrame.h"
+#include "Clover/Graph/AudioNode.h"
+#include "Clover/_Test.h"
 
 class NodeStub : public Clover::Graph::AudioNode<1, 1> {
 public:

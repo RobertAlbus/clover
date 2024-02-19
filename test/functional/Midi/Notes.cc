@@ -20,7 +20,7 @@
 
 #include <gtest/gtest.h>
 
-#include "Midi/Notes.h"
+#include "Clover/Midi/Notes.h"
 
 TEST(Midi_Notes, NotesShouldExist) {
   EXPECT_EQ(Clover::Midi::Note::B_2, 0);

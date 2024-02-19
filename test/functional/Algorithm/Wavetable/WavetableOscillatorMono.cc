@@ -22,8 +22,8 @@
 
 #include <vector>
 
-#include "Algorithm/Wavetable/OscillatorInterface.h"
-#include "Algorithm/Wavetable/WavetableOscillatorMono.h"
+#include "Clover/Algorithm/Wavetable/OscillatorInterface.h"
+#include "Clover/Algorithm/Wavetable/WavetableOscillatorMono.h"
 
 TEST(Algorithm_Wavetable_Oscillator_Mono, ShouldOutputSine) {
   float sampleRate = 48000.f;

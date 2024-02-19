@@ -22,10 +22,10 @@
 
 #include <gtest/gtest.h>
 
-#include "Algorithm/Wavetable/WavetableOscillatorMono.h"
-#include "IO/AudioFile/AudioFile.h"
-#include "IO/AudioFile/AudioFileWriteSettings.h"
-#include "IO/AudioFile/lib/AudioFileRepository.h"
+#include "Clover/Algorithm/Wavetable/WavetableOscillatorMono.h"
+#include "Clover/IO/AudioFile/AudioFile.h"
+#include "Clover/IO/AudioFile/AudioFileWriteSettings.h"
+#include "Clover/IO/AudioFile/lib/AudioFileRepository.h"
 
 #include "./AudioFileRepository/AudioFileRepository_util.h"
 

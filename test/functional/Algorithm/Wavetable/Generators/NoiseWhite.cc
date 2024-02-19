@@ -22,7 +22,7 @@
 
 #include <vector>
 
-#include "Algorithm/Wavetable/Generators.h"
+#include "Clover/Algorithm/Wavetable/Generators.h"
 
 TEST(Algorithm_Wavetable_Generator_NoiseWhite, ShouldBeCorrectSize) {
   EXPECT_EQ(Clover::Wavetable::NoiseWhite<float>(8).size(), 8);

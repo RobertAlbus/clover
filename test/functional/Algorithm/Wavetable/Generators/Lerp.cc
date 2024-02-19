@@ -22,7 +22,7 @@
 
 #include <vector>
 
-#include "Algorithm/Wavetable/Generators.h"
+#include "Clover/Algorithm/Wavetable/Generators.h"
 
 TEST(Algorithm_Wavetable_Generator_Lerp, ShouldBeCorrectSize) {
   std::vector<float> rawTable{-1, 0, 0, 1};

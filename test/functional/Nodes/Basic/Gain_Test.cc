@@ -20,8 +20,8 @@
 
 #include <gtest/gtest.h>
 
-#include "Nodes/Basic/Gain.h"
-#include "_Test.h"
+#include "Clover/Nodes/Basic/Gain.h"
+#include "Clover/_Test.h"
 
 TEST(Nodes_Basic_Gain, ShouldNotModify) {
   Clover::_Test::HandCrank crank;
