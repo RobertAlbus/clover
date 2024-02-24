@@ -25,7 +25,7 @@
 #include <vector>
 
 #include "Clover/Algorithm/Delay/Fractional.h"
-#include "Clover/Graph.h"
+#include "Clover/Graph/AudioNode.h"
 
 namespace Clover::Nodes::Delay {
 

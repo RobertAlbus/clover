@@ -19,7 +19,6 @@
  */
 
 #include "Clover/Nodes/Envelope/DC.h"
-#include "Clover/Graph.h"
 
 namespace Clover::Nodes::Envelope {
 

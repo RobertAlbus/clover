@@ -21,7 +21,7 @@
  */
 
 #include "Clover/Algorithm/Envelope/DC.h"
-#include "Clover/Graph.h"
+#include "Clover/Graph/AudioNode.h"
 
 namespace Clover::Nodes::Envelope {
 

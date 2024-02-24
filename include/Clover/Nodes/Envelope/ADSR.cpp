@@ -19,7 +19,6 @@
  */
 
 #include "Clover/Nodes/Envelope/ADSR.h"
-#include "Clover/Graph.h"
 
 namespace Clover::Nodes::Envelope {
 

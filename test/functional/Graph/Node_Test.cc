@@ -22,7 +22,8 @@
 
 #include "Clover/Graph/AudioFrame.h"
 #include "Clover/Graph/AudioNode.h"
-#include "Clover/_Test.h"
+#include "Clover/_Test/HandCrank.h"
+#include "Clover/_Test/Collector.h"
 
 class NodeStub : public Clover::Graph::AudioNode<1, 1> {
 public:

@@ -22,7 +22,8 @@
 
 #include "Clover/Nodes/Envelope/AutomationClip.h"
 #include "Clover/Nodes/Envelope/EnvelopeStruct.h"
-#include "Clover/_Test.h"
+#include "Clover/_Test/Collector.h"
+#include "Clover/_Test/HandCrank.h"
 
 TEST(Nodes_Envelope_AutomationClip, ShouldOutputEnvelope) {
 

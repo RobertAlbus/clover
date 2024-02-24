@@ -27,7 +27,7 @@
 #include "portaudio.h"
 
 // internal dependencies
-#include "Clover/Base.h"
+#include "Clover/Base/CloverBase.h"
 #include "Interface.h"
 #include "RootNode.h"
 #include "Clover/Util/SampleClock.h"

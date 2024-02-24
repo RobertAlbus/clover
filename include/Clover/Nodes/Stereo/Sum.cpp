@@ -19,7 +19,6 @@
  */
 
 #include "Clover/Nodes/Stereo/Sum.h"
-#include "Clover/Graph.h"
 
 namespace Clover::Nodes::Stereo {
 

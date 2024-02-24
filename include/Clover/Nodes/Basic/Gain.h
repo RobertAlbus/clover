@@ -20,7 +20,7 @@
  *
  */
 
-#include "Clover/Graph.h"
+#include "Clover/Graph/AudioNode.h"
 
 namespace Clover::Nodes::Basic {
 

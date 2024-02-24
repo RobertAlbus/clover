@@ -22,15 +22,79 @@
 
 #include "Clover/Constants.h"
 
-#include "Clover/Algorithm.h"
-#include "Clover/Base.h"
+#include "Clover/Algorithm/Envelope/ADSR.h"
+#include "Clover/Algorithm/Envelope/Basic.h"
+#include "Clover/Algorithm/Envelope/DC.h"
+
+#include "Clover/Algorithm/Filter_IIR.h"
+
+#include "Clover/Algorithm/Math.h"
+
+#include "Clover/Base/CloverBase.h"
+
+
 #include "Clover/Constants.h"
-#include "Clover/Exception.h"
-#include "Clover/Graph.h"
-#include "Clover/IO.h"
-#include "Clover/Midi.h"
-#include "Clover/Nodes.h"
 
-#include "Clover/Util.h"
+#include "Clover/Exception/NotImplemented.h"
 
-#include "Clover/_Test.h"
+
+#include "Clover/Graph/AudioFrame.h"
+#include "Clover/Graph/FrameHistory.h"
+#include "Clover/Graph/Node.h"
+
+#include "Clover/Graph/AudioNode.h"
+
+#include "Clover/IO/Interface.h"
+#include "Clover/IO/MidiIn.h"
+#include "Clover/IO/RootNode.h"
+
+
+#include "Clover/Midi/Notes.h"
+
+#include "Clover/Nodes/Adapter/NullAdapter.h"
+
+#include "Clover/Nodes/Basic/Gain.h"
+
+#include "Clover/Nodes/Delay/FractionalDelayLine.h"
+
+// clang-format off
+// new envelope ideas
+#include "Clover/Nodes/Envelope/EnvelopeStruct.h" // must come first
+#include "Clover/Nodes/Envelope/AutomationClip.h" 
+
+// old envelope ideas
+#include "Clover/Nodes/Envelope/BasicEnvelope.h"  // must come first
+#include "Clover/Nodes/Envelope/ADSR.h"
+#include "Clover/Nodes/Envelope/DC.h"
+// clang-format on
+
+#include "Clover/Nodes/Filter/EQ.h"
+#include "Clover/Nodes/Filter/Filter.h"
+
+#include "Clover/Nodes/StepSequencer/PatternSettable.h"
+#include "Clover/Nodes/StepSequencer/StepSequencer.h"
+#include "Clover/Nodes/StepSequencer/lib.h"
+
+#include "Clover/Nodes/Stereo/Difference.h"
+#include "Clover/Nodes/Stereo/MidSideBalance.h"
+#include "Clover/Nodes/Stereo/Pan.h"
+#include "Clover/Nodes/Stereo/Sum.h"
+
+#include "Clover/Nodes/Wavetable/WavetableOscInterface.h"
+
+#include "Clover/Nodes/Wavetable/WavetableOsc.h"
+#include "Clover/Nodes/Wavetable/WavetableOscStereo.h"
+
+#include "Clover/Nodes/Synth/OscNx.h"
+
+
+
+#include "Clover/Util/FloatingPointConcept.h"
+#include "Clover/Util/HistoryBuffer.h"
+#include "Clover/Util/MusicTime.h"
+#include "Clover/Util/SampleClock.h"
+
+#include "Clover/_Test/Collector.h"
+#include "Clover/_Test/DCN.h"
+#include "Clover/_Test/HandCrank.h"
+#include "Clover/_Test/Incrementor.h"

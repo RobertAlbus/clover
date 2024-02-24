@@ -21,7 +21,7 @@
 #include <vector>
 
 #include "../StepSequencer.h"
-#include "Clover/Exception.h"
+#include "Clover/Exception/NotImplemented.h"
 #include "Pitchable.h"
 
 void Pitchable::midiNote(float note) {

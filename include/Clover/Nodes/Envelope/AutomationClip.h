@@ -22,7 +22,7 @@
 
 #include <cmath>
 
-#include "Clover/Algorithm.h"
+#include "Clover/Algorithm/Math.h"
 #include "EnvelopeStruct.h"
 #include "Clover/Graph/AudioFrame.h"
 #include "Clover/Graph/AudioNode.h"

@@ -21,7 +21,9 @@
 #include <gtest/gtest.h>
 
 #include "Clover/Nodes/Basic/Gain.h"
-#include "Clover/_Test.h"
+#include "Clover/_Test/Collector.h"
+#include "Clover/_Test/DCN.h"
+#include "Clover/_Test/HandCrank.h"
 
 TEST(Nodes_Basic_Gain, ShouldNotModify) {
   Clover::_Test::HandCrank crank;

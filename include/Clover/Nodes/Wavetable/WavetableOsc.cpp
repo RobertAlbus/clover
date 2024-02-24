@@ -24,11 +24,11 @@
 #include <tgmath.h>
 #include <vector>
 
-#include "Clover/Base.h"
+#include "Clover/Base/CloverBase.h"
+
 #include "Clover/Graph/AudioFrame.h"
 #include "Clover/Graph/AudioNode.h"
 #include "Clover/Graph/NullFrame.h"
-#include "Clover/Util.h"
 
 #include "WavetableOsc.h"
 

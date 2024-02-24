@@ -25,7 +25,8 @@
 
 #include "Clover/Nodes/Filter/Filter.h"
 #include "Clover/Nodes/Wavetable/WavetableOsc.h"
-#include "Clover/_Test.h"
+#include "Clover/_Test/HandCrank.h"
+#include "Clover/_Test/Collector.h"
 
 TEST(Nodes_Filter_Filter, ShouldFilterLowPass) {
 

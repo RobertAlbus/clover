@@ -21,7 +21,7 @@
 #include <vector>
 
 #include "../StepSequencer.h"
-#include "Clover/Exception.h"
+#include "Clover/Exception/NotImplemented.h"
 #include "Triggerable.h"
 
 void Triggerable::triggerOn() {

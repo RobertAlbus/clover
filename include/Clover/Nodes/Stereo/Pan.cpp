@@ -18,9 +18,6 @@
  *
  */
 
-#include <cmath> // lerp
-
-#include "Clover/Graph.h"
 #include "Clover/Nodes/Stereo/Pan.h"
 
 namespace Clover::Nodes::Stereo {

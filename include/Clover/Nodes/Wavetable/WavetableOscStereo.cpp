@@ -25,9 +25,6 @@
 
 #include "Clover/Algorithm/Math.h"
 #include "Clover/Constants.h"
-#include "Clover/Graph.h"
-#include "Clover/Nodes.h"
-#include "Clover/Util.h"
 
 #include "WavetableOscStereo.h"
 
