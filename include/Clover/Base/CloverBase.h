@@ -19,10 +19,14 @@
  *
  */
 
+#ifndef CLOVER_SAMPLE_RATE
+#define CLOVER_SAMPLE_RATE 48000.f
+#endif
+
 namespace Clover {
 
 struct Base {
-  static int sampleRate;
+  inline static int sampleRate = CLOVER_SAMPLE_RATE;
 };
 
 } // namespace Clover
