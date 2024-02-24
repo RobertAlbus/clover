@@ -22,7 +22,7 @@
 
 #include <vector>
 
-#include "Clover.h"
+#include "Clover/Clover.h"
 
 using namespace Clover::Midi::Note;
 

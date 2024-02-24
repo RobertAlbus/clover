@@ -31,7 +31,7 @@
 
 #include "portaudio.h"
 
-#include "Clover.h"
+#include "Clover/Clover.h"
 
 #include "NxOscStsqDemo.h"
 
