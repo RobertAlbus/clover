@@ -21,42 +21,87 @@
  */
 
 // swallow portaudio logging
+#include <cstring>
 #include <fcntl.h>
-#include <thread>
+#include <functional>
+#include <optional>
+#include <string>
+#include <unistd.h>
 
 #include "portaudio.h"
 
 // internal dependencies
 #include "Clover/Base/CloverBase.h"
-#include "RootNode.h"
 #include "Clover/Util/SampleClock.h"
 
 namespace Clover::IO {
 
-class Interface : public Base {
+enum struct AudioCallbackStatus {
+  CONTINUE,
+  COMPLETE,
+  ABORT
+};
+
+struct AudioCallbackArguments {
+  int currentClockSample;
+  const float* input;
+  float* output;
+  const int numChannelsInput;
+  const int numChannelsOutput;
+};
+
+struct StreamSettings{
+  std::string deviceNameIn;
+  std::string deviceNameOut;
+  int numChannelsIn;
+  int numChannelsOut;
+  int sampleRate;
+  double suggestedLatencySeconds;
+};
+
+struct AudioDeviceProperties {
+  std::string name;
+  int maxInputChannels;
+  int maxOutputChannels;
+  double defaultLatencySecondsInputHigh;
+  double defaultLatencySecondsInputLow;
+  double defaultLatencySecondsOutputHigh;
+  double defaultLatencySecondsOutputLow;
+  double defaultSampleRate;
+  // int deviceIndex; this should be based on index in a vector
+};
+
+class InterfaceV2 : public Base {
 public:
-  Interface() : stream(0) {}
-  ~Interface() {
-    if (stream != 0) {
-      stop();
-      close();
-      stream = 0;
-    }
-
-    Pa_Terminate();
-  }
-
-  PaError initialize() {
+  InterfaceV2() : stream(0) {
     int saved_stderr = dup(STDERR_FILENO);
     int devnull = open("/dev/null", O_RDWR);
     dup2(devnull, STDERR_FILENO); // Replace standard out
 
-    return resultValidation(Pa_Initialize());
+    if(resultValidation(Pa_Initialize())) {
+      //some exception or otherwise interupt things
+    } 
 
     dup2(saved_stderr, STDERR_FILENO);
   }
+  ~InterfaceV2() {
+    if (stream != 0) {
+      resultValidation(Pa_StopStream(stream));
+      resultValidation(Pa_CloseStream(stream));
+      stream = 0;
+    }
+
+    resultValidation(Pa_Terminate());
+  }
 
   void hostInfo() {
+    // TODO
+    /*
+    - rename this method
+    - create method to print device details
+    - create format strings
+    - print hosts, print devices with details
+    */
     printf("\n\nHOST INFO");
     int numHostApis = Pa_GetHostApiCount();
     for (PaHostApiIndex i = 0; i < numHostApis; ++i) {
@@ -74,18 +119,25 @@ public:
     printf("\n\n");
   }
 
-  void terminate() {
-    if (stream != 0) {
-      resultValidation(Pa_AbortStream(stream));
-      stream = 0;
-    }
+  void openDevice(std::optional<StreamSettings> streamSettings) {
+    /*
+    - should accept std::optional<StreamSettings> (StreamSettings contract still TBD)
+    - build in and out param objects (PaStreamParameters) from this
+    - Pa_IsFormatSupported for validation
+    - create some abstractions, like std::vector<AudioDeviceProperties> getDevices(); ordered by device index
 
-    resultValidation(Pa_Terminate());
+    */
+    
   }
 
   PaError openDevice(std::string name) {
-    if (name.c_str() == "default")
-      openDefaultDevice();
+
+
+
+
+    if (strcmp(name.c_str(), "default"))
+      return openDefaultDevice();
+
     PaDeviceIndex deviceIndex = paInvalidDevice;
     int numHostApis = Pa_GetDeviceCount();
     for (PaDeviceIndex i = 0; i < numHostApis; ++i) {
@@ -106,7 +158,6 @@ public:
   }
 
   PaError openDefaultDevice() {
-
     return openDevice(Pa_GetDefaultOutputDevice());
   }
 
@@ -139,7 +190,7 @@ public:
         Base::sampleRate,
         paFramesPerBufferUnspecified,
         paNoFlag,
-        &Interface::paCallback,
+        &InterfaceV2::paCallback,
         this
         /* Using 'this' for userData so we can cast to
            Interface* paCallback method */
@@ -150,32 +201,15 @@ public:
       return resultValidation(err);
     }
 
-    err = Pa_SetStreamFinishedCallback(stream, &Interface::paStreamFinished);
-
+    err = Pa_SetStreamFinishedCallback(stream, &InterfaceV2::paStreamFinished);
     if (err != paNoError) {
+      return resultValidation(err);
       Pa_CloseStream(stream);
       stream = 0;
-
-      return resultValidation(err);
     }
 
     return paNoError;
   }
-
-  PaError close() {
-    if (stream == 0)
-      return false;
-
-    PaError err = Pa_CloseStream(stream);
-    stream = 0;
-
-    return resultValidation(err);
-  }
-
-  PaError start() { return resultValidation(Pa_StartStream(stream)); }
-
-  PaError stop() { return resultValidation(Pa_StopStream(stream)); }
-  PaError abort() { return resultValidation(Pa_AbortStream(stream)); }
 
 private:
   PaError resultValidation(PaError error) {
@@ -197,36 +231,42 @@ private:
       PaStreamCallbackFlags statusFlags
   ) {
     float *out = (float *)outputBuffer;
-    unsigned long i;
+    float *in = (float *)inputBuffer;
 
     (void)timeInfo; /* Prevent unused variable warnings. */
     (void)statusFlags;
     (void)inputBuffer;
 
-    for (i = 0; i < framesPerBuffer; i++) {
-      *out++ = 0.f;
+    for (unsigned long i = 0; i < 2ul * framesPerBuffer; i++) {
       *out++ = 0.f;
     }
-
     out -= 2ul * framesPerBuffer;
 
-    for (i = 0; i < framesPerBuffer; i++) {
-      int currentSample = clock.currentSample();
-      rootNode.metaTick(currentSample);
+    for (unsigned long i = 0; i < framesPerBuffer; i++) {
+      AudioCallbackStatus status = audioCallback({
+        clock.currentSample(),
+        (float *)in,
+        (float *)out,
+        streamSettings.numChannelsIn,
+        streamSettings.numChannelsOut,
+      });
 
-      *out++ = rootNode.frames.current[0];
-      *out++ = rootNode.frames.current[1];
-
-      clock.tick();
+      switch (status) {
+        case AudioCallbackStatus::CONTINUE:
+          in += streamSettings.numChannelsIn;
+          out += streamSettings.numChannelsOut;
+          clock.tick();
+          break;
+        case AudioCallbackStatus::COMPLETE:
+          return paComplete;
+        case AudioCallbackStatus::ABORT:
+          return paAbort;
+      }
     }
 
     return paContinue;
   }
 
-  /* This routine will be called by the PortAudio engine when audio is needed.
-  ** It may called at interrupt level on some machines so don't do anything
-  ** that could mess up the system like calling malloc() or free().
-  */
   static int paCallback(
       const void *inputBuffer,
       void *outputBuffer,
@@ -235,23 +275,20 @@ private:
       PaStreamCallbackFlags statusFlags,
       void *userData
   ) {
-    /* Here we cast userData to Interface* type so we can call the instance
-       method paCallbackMethod, we can do that since we called Pa_OpenStream
-       with 'this' for userData */
-    return ((Interface *)userData)
+
+    return ((InterfaceV2 *)userData)
         ->paCallbackMethod(
             inputBuffer, outputBuffer, framesPerBuffer, timeInfo, statusFlags
         );
   }
 
 private:
-  void paStreamFinishedMethod() { printf("Stream Completed: %s\n", message); }
-
-  /*
-   * This routine is called by portaudio when playback is done.
-   */
+  void paStreamFinishedMethod() { 
+    stream = 0;
+    printf("Stream Completed: %s\n", message);
+  }
   static void paStreamFinished(void *userData) {
-    return ((Interface *)userData)->paStreamFinishedMethod();
+    return ((InterfaceV2 *)userData)->paStreamFinishedMethod();
   }
 
   PaStream *stream;
@@ -259,7 +296,8 @@ private:
 
 public:
   Clover::Util::SampleClock clock;
-  RootNode<2> rootNode;
+  StreamSettings streamSettings;
+  std::function<AudioCallbackStatus(AudioCallbackArguments)> audioCallback;
 };
 
 } // namespace Clover::IO
