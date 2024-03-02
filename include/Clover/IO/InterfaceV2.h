@@ -23,6 +23,7 @@
 // swallow portaudio logging
 #include <cstring>
 #include <fcntl.h>
+#include <format>
 #include <functional>
 #include <optional>
 #include <string>
@@ -50,26 +51,54 @@ struct AudioCallbackArguments {
   const int numChannelsOutput;
 };
 
-struct StreamSettings{
+struct StreamSettings {
   std::string deviceNameIn;
   std::string deviceNameOut;
   int numChannelsIn;
   int numChannelsOut;
-  int sampleRate;
-  double suggestedLatencySeconds;
+  int sampleRateHz;
+  double suggestedLatencyMs;
 };
 
 struct AudioDeviceProperties {
   std::string name;
   int maxInputChannels;
   int maxOutputChannels;
-  double defaultLatencySecondsInputHigh;
-  double defaultLatencySecondsInputLow;
-  double defaultLatencySecondsOutputHigh;
-  double defaultLatencySecondsOutputLow;
-  double defaultSampleRate;
-  // int deviceIndex; this should be based on index in a vector
+  float defaultLatencyMsInputHigh;
+  float defaultLatencyMsInputLow;
+  float defaultLatencyMsOutputHigh;
+  float defaultLatencyMsOutputLow;
+  float defaultSampleRate;
+  int deviceIndex;
 };
+
+std::string formatAudioDeviceProperties(const AudioDeviceProperties& props) {
+  size_t borderCount = props.name.size() + 2 ;
+
+  return std::format(""
+      "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓\n"
+      "┃ {:<46} ┃\n"
+      "┣━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━┫\n"
+      "┃ {:<19} ┃ {:<7}    {:<13} ┃\n"
+      "┃ {:<19} ┃ {:<7}    {:<13} ┃\n"
+      "┃ {:<19} ┃ {:<7} ms {:<13} ┃\n"
+      "┃ {:<19} ┃ {:<7} ms {:<13} ┃\n"
+      "┃ {:<19} ┃ {:<7} ms {:<13} ┃\n"
+      "┃ {:<19} ┃ {:<7} ms {:<13} ┃\n"
+      "┃ {:<19} ┃ {:<7} hz {:<13} ┃\n"
+      "┃ {:<19} ┃ {:<7}    {:<13} ┃\n"
+      "┗━━━━━━━━━━━━━━━━━━━━━┻━━━━━━━━━━━━━━━━━━━━━━━━━━┛\n",
+      props.name,
+      "Max Channels In", props.maxInputChannels, "",
+      "Max Channels Out", props.maxOutputChannels, "",
+      "Latency In High", props.defaultLatencyMsInputHigh, "",
+      "Latency In Low", props.defaultLatencyMsInputLow, "",
+      "Latency Out High", props.defaultLatencyMsOutputHigh, "",
+      "Latency Out Low", props.defaultLatencyMsOutputLow, "",
+      "Default Sample Rate", static_cast<int>(props.defaultSampleRate), "",
+      "Device Index", props.deviceIndex, ""
+  );
+}
 
 class InterfaceV2 : public Base {
 public:
@@ -128,33 +157,6 @@ public:
 
     */
     
-  }
-
-  PaError openDevice(std::string name) {
-
-
-
-
-    if (strcmp(name.c_str(), "default"))
-      return openDefaultDevice();
-
-    PaDeviceIndex deviceIndex = paInvalidDevice;
-    int numHostApis = Pa_GetDeviceCount();
-    for (PaDeviceIndex i = 0; i < numHostApis; ++i) {
-      const PaDeviceInfo *deviceInfo = Pa_GetDeviceInfo(i);
-      std::string deviceName{deviceInfo->name};
-      if (deviceName.rfind(name) != std::string::npos) {
-        deviceIndex = i;
-        break;
-      }
-    }
-
-    if (deviceIndex == paInvalidDevice) {
-      printf("\n\nNo device found\n\n");
-      exit(1);
-    }
-
-    return openDevice(deviceIndex);
   }
 
   PaError openDefaultDevice() {
