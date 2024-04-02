@@ -28,7 +28,6 @@
 
 // internal dependencies
 #include "Clover/Base/CloverBase.h"
-#include "Interface.h"
 #include "RootNode.h"
 #include "Clover/Util/SampleClock.h"
 
@@ -176,6 +175,7 @@ public:
   PaError start() { return resultValidation(Pa_StartStream(stream)); }
 
   PaError stop() { return resultValidation(Pa_StopStream(stream)); }
+  PaError abort() { return resultValidation(Pa_AbortStream(stream)); }
 
 private:
   PaError resultValidation(PaError error) {
@@ -208,10 +208,7 @@ private:
       *out++ = 0.f;
     }
 
-    for (i = 0; i < framesPerBuffer; i++) {
-      --out;
-      --out;
-    }
+    out -= 2ul * framesPerBuffer;
 
     for (i = 0; i < framesPerBuffer; i++) {
       int currentSample = clock.currentSample();
