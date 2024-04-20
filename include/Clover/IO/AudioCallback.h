@@ -20,18 +20,19 @@
  *
  */
 
-#include <cstdint> // for std::int32_t
-#include <vector>
+#include <functional>
+namespace Clover::IO {
 
-namespace Clover::IO::AudioFile {
+enum struct AudioCallbackStatus { CONTINUE, END };
 
-struct AudioFile {
-
-  std::vector<float> audioData;
-  std::vector<std::int32_t> cuePoints;
-
-  int channelCount;
-  std::int32_t sampleRateHz;
+struct AudioCallbackArguments {
+  int currentClockSample;
+  const float *input;
+  float *output;
+  const int numChannelsInput;
+  const int numChannelsOutput;
 };
 
-} // namespace Clover::IO::AudioFile
+typedef std::function<AudioCallbackStatus(AudioCallbackArguments)> AudioCallback;
+
+}

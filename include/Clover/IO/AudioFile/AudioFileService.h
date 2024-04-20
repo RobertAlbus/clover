@@ -23,6 +23,8 @@
 #include <memory>
 #include <vector>
 
+// internal dependencies
+#include "Clover/IO/AudioCallback.h"
 #include "lib/AudioFileRepository.h"
 #include "lib/WriteSpecValidator.h"
 
@@ -36,6 +38,8 @@ struct AudioFileService {
   AudioFile Read(const std::string &filePath);
   void Append(const WriteSpec &writeSpec, const AudioFile &audioFile);
   void Delete(const std::string &filePath);
+
+  void Write(const WriteSpec &writeSpec, const std::function<AudioCallbackStatus(AudioCallbackArguments)> &audioCallback, int channelCount, int duration, int sampleRateHz);
 
   // multi op
   void

@@ -37,19 +37,10 @@
 
 // internal dependencies
 #include "Clover/Base/CloverBase.h"
+#include "Clover/IO/AudioCallback.h"
 #include "Clover/Util/SampleClock.h"
 
 namespace Clover::IO {
-
-enum struct AudioCallbackStatus { CONTINUE, END };
-
-struct AudioCallbackArguments {
-  int currentClockSample;
-  const float *input;
-  float *output;
-  const int numChannelsInput;
-  const int numChannelsOutput;
-};
 
 struct StreamSettings {
   int deviceIndexIn;
@@ -287,11 +278,11 @@ private:
 
     // TODO: create a toggle to switch to buffered mode vs single-sample mode.
     for (unsigned long i = 0; i < framesPerBuffer; i++) {
-      float* passedOut = out;
+      float* currentOut = out;
       AudioCallbackStatus status = instance.audioCallback({
           instance.clock.currentSample(),
           (float *)in,
-          passedOut,
+          currentOut,
           instance.currentStreamSettings.numChannelsIn,
           instance.currentStreamSettings.numChannelsOut,
       });
@@ -326,7 +317,7 @@ private:
   std::function<void()> audioCompleteCallback = [&]() {
     printf("STREAM FINISHED\n");
   };
-  std::function<AudioCallbackStatus(AudioCallbackArguments)> audioCallback =
+  AudioCallback audioCallback =
       [](AudioCallbackArguments args) -> AudioCallbackStatus {
     throw Exception(
         "Clover::IO::InterfaceV2::audioCallback invoked without being set."
@@ -340,7 +331,7 @@ private:
 public:
   Clover::Util::SampleClock clock;
   void setAudioCallback(
-      std::function<AudioCallbackStatus(AudioCallbackArguments)> &&callback
+      AudioCallback &&callback
   ) {
     audioCallback = callback;
   }

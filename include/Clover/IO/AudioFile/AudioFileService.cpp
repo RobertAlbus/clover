@@ -17,6 +17,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
 #include <memory>
 
 #include "AudioFileService.h"
@@ -54,6 +55,43 @@ void AudioFileService::Delete(const std::string &filePath) {
     printf(error.what());
   }
 }
+
+
+void AudioFileService::Write(
+    const WriteSpec &writeSpec,
+    const AudioCallback &audioCallback,
+    int channelCount,
+    int duration,
+    int sampleRateHz
+) {
+  int audioDataSize = channelCount * duration;
+
+  std::vector<float> audioData;
+  audioData.resize(audioDataSize, 0.f);
+
+  std::vector<float> in {};
+  in.resize(channelCount, 0.f);
+
+  for (int i = 0; i < duration; i++) {
+    audioCallback({
+        .currentClockSample = i,
+        .input = &(in[0]),
+        .output = &(audioData[ i * channelCount]),
+        .numChannelsInput = 0,
+        .numChannelsOutput = channelCount
+    });
+    
+  }
+  IO::AudioFile::AudioFile audioFile {
+      .audioData = audioData,
+      .channelCount = channelCount,
+      .sampleRateHz = sampleRateHz
+  };
+  auto fileService = IO::AudioFile::AudioFileService::BuildInstance();
+
+  fileService.Write(writeSpec, audioFile);
+}
+
 
 // multi op
 void AudioFileService::Write(

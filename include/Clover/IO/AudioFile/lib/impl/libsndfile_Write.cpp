@@ -18,6 +18,7 @@
  *
  */
 
+#include <filesystem>
 #include <stdexcept>
 #include <vector>
 
@@ -34,6 +35,13 @@ void libsndfile_Write(
     const WriteSettingsPcm &writeSettings,
     const AudioFile &audioFile
 ) {
+
+  std::filesystem::path path_obj(path);
+  std::filesystem::path dir_path = path_obj.parent_path();
+  if (!dir_path.empty() && !std::filesystem::exists(dir_path)) {
+      std::filesystem::create_directories(dir_path);
+  }
+
   SF_INFO sfinfo;
   sfinfo.samplerate = writeSettings.sampleRate;
   sfinfo.channels = audioFile.channelCount;
