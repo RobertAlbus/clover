@@ -151,9 +151,9 @@ private:
   std::string reason;
 };
 
-class InterfaceV2 : public Base {
+class Interface : public Base {
 public:
-  InterfaceV2() : stream(0), streamSignal(0) {
+  Interface() : stream(0), streamSignal(0) {
     int saved_stderr = dup(STDERR_FILENO);
     int devnull = open("/dev/null", O_RDWR);
     dup2(devnull, STDERR_FILENO); // Replace standard out
@@ -162,7 +162,7 @@ public:
 
     dup2(saved_stderr, STDERR_FILENO);
   }
-  ~InterfaceV2() {
+  ~Interface() {
     if (stream != 0) {
       throwIfPaException(Pa_StopStream(stream));
       throwIfPaException(Pa_CloseStream(stream));
@@ -242,7 +242,7 @@ public:
         streamSettings.sampleRateHz,
         paFramesPerBufferUnspecified,
         paNoFlag,
-        &InterfaceV2::paCallback,
+        &Interface::paCallback,
         this
     );
 
@@ -252,7 +252,7 @@ public:
 
     // strange behaviour: returning paBadStreamPtr even when successfull
     // - skipping error validation for this reason
-    Pa_SetStreamFinishedCallback(&stream, &InterfaceV2::paStreamFinished);
+    Pa_SetStreamFinishedCallback(&stream, &Interface::paStreamFinished);
   }
 
 private:
@@ -265,7 +265,7 @@ private:
       void *userData
   ) {
 
-    InterfaceV2 &instance = *(InterfaceV2 *)userData;
+    Interface &instance = *(Interface *)userData;
 
     /* Prevent unused variable warnings. */
     (void)timeInfo;
@@ -304,7 +304,7 @@ private:
   }
 
   static void paStreamFinished(void *userData) {
-    ((InterfaceV2 *)userData)->audioCompleteCallback();
+    ((Interface *)userData)->audioCompleteCallback();
   }
 
   void throwIfPaException(PaError err) {
