@@ -21,6 +21,7 @@
  */
 
 #include "SampleClock.h"
+#include <cstddef>
 
 namespace Clover::Util {
 
