@@ -32,5 +32,5 @@ include(CMakeLists.Clover.txt)
 
 include(commands/CMakeLists.txt)
 include(test/CMakeLists.txt)
-include(examples/CMakeLists.txt)
+# include(examples/CMakeLists.txt)
 
