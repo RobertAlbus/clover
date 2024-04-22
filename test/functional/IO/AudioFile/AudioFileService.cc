@@ -23,9 +23,9 @@
 
 #include <gtest/gtest.h>
 
-#include "IO/AudioFile/AudioFile.h"
-#include "IO/AudioFile/AudioFileService.h"
-#include "IO/AudioFile/AudioFileWriteSettings.h"
+#include "Clover/IO/AudioFile/AudioFile.h"
+#include "Clover/IO/AudioFile/AudioFileService.h"
+#include "Clover/IO/AudioFile/AudioFileWriteSettings.h"
 
 using namespace Clover::IO::AudioFile;
 

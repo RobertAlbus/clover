@@ -22,7 +22,7 @@
 
 #include <vector>
 
-#include "Algorithm/Wavetable/Generators.h"
+#include "Clover/Algorithm/Wavetable/Generators.h"
 
 TEST(Algorithm_Wavetable_Generator_Sine, ShouldBeCorrectSize) {
   EXPECT_EQ(Clover::Wavetable::Sine<float>(8).size(), 8);

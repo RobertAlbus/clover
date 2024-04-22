@@ -22,7 +22,7 @@
 
 #include <vector>
 
-#include "Algorithm/Wavetable/Generators.h"
+#include "Clover/Algorithm/Wavetable/Generators.h"
 
 TEST(Algorithm_Wavetable_Generator_Square, ShouldBeSquare) {
   float size = 4096;

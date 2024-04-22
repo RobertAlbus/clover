@@ -20,7 +20,7 @@
 
 #include <gtest/gtest.h>
 
-#include "Algorithm/Math.h"
+#include "Clover/Algorithm/Math.h"
 
 TEST(Algorithm_Math, ShouldCalculateFreqDifferenceBySemitone) {
   EXPECT_EQ(

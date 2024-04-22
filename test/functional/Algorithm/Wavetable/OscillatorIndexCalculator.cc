@@ -22,7 +22,7 @@
 
 #include <vector>
 
-#include "Algorithm/Wavetable/OscillatorIndexCalculator.h"
+#include "Clover/Algorithm/Wavetable/OscillatorIndexCalculator.h"
 
 TEST(Algorithm_Wavetable_Oscillator_Index_Calculator, ShouldInitialize) {
   float sampleRate = 48000.f;

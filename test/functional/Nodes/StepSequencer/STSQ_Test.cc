@@ -22,8 +22,8 @@
 
 #include <gtest/gtest.h>
 
-#include "Nodes/StepSequencer/StepSequencer.h"
-#include "_Test.h"
+#include "Clover/Nodes/StepSequencer/StepSequencer.h"
+#include "Clover/_Test/HandCrank.h"
 
 struct TestTarget {
   TestTarget() : accumulator(0) {}

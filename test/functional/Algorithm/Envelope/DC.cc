@@ -20,7 +20,7 @@
 
 #include <gtest/gtest.h>
 
-#include "Algorithm/Envelope/DC.h"
+#include "Clover/Algorithm/Envelope/DC.h"
 
 TEST(Algorithm_Envelope_DC, ShouldInitializeAtZero) {
   Clover::Envelope::DC<float> dc;

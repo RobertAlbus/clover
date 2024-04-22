@@ -22,7 +22,7 @@
 
 #include <vector>
 
-#include "Algorithm/Wavetable/Generators.h"
+#include "Clover/Algorithm/Wavetable/Generators.h"
 
 TEST(Algorithm_Wavetable_Generator_Pulse, ShouldBeCorrectSize) {
   EXPECT_EQ(Clover::Wavetable::Pulse<float>(8, 0.25f).size(), 8);

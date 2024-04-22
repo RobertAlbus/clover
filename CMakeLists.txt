@@ -17,20 +17,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_BUILD_PARALLEL_LEVEL 8 STRING)
 
-
-#--------------------------------
-# SIMD detect/enable
-
-if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-    if(CMAKE_SYSTEM_PROCESSOR MATCHES "(x86)|(X86)|(amd64)|(AMD64)")
-        list(APPEND CLOVER_COMPILE_FLAGS "-msse")
-    endif()
-
-    if(CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
-        list(APPEND CLOVER_COMPILE_FLAGS "-mavx")
-    endif()
-endif()
-
+add_compile_options(-Ofast -march=native)
 
 #--------------------------------
 # libraries
@@ -45,5 +32,5 @@ include(CMakeLists.Clover.txt)
 
 include(commands/CMakeLists.txt)
 include(test/CMakeLists.txt)
-include(examples/CMakeLists.txt)
+# include(examples/CMakeLists.txt)
 

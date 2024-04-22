@@ -18,31 +18,30 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #--------------------------------
 # dependencies
 
-# PortAudio
 find_package(portaudio CONFIG REQUIRED)
-list(APPEND EXTRA_LIBS portaudio)
-
-# libsndfile
 find_package(SndFile CONFIG REQUIRED)
-list(APPEND EXTRA_LIBS SndFile::sndfile)
-
-# rtmidi
 find_package(rtmidi CONFIG REQUIRED)
-list(APPEND EXTRA_LIBS RtMidi::rtmidi)
 
+list(APPEND CLOVER_LIB_DEPENDENCIES
+    portaudio
+    SndFile::sndfile
+    RtMidi::rtmidi
+)
 
 #--------------------------------
 # source globs
+
+if(NOT CLOVER_INCLUDE_DIRECTORIES)
+  message(FATAL_ERROR "CLOVER_INCLUDE_DIRECTORIES variable is not populated. Please specify the include directories.")
+endif()
+
 
 file(GLOB_RECURSE SOURCE_LIST_INCLUDES_CPP
     CONFIGURE_DEPENDS
     ${CMAKE_CURRENT_LIST_DIR}/include/*.cpp
 )
 
-list(APPEND CLOVER_INCLUDE_DIRECTORIES
-    ${PROJECT_BINARY_DIR}
-    ${CMAKE_CURRENT_LIST_DIR}/include
-)
+include_directories(${CMAKE_CURRENT_LIST_DIR}/include)
 
 
 #--------------------------------
@@ -50,48 +49,13 @@ list(APPEND CLOVER_INCLUDE_DIRECTORIES
 
 # Clover - optimized
 add_library(Clover STATIC ${SOURCE_LIST_INCLUDES_CPP})
-target_compile_options(Clover PRIVATE -Ofast ${CLOVER_COMPILE_FLAGS})
 target_include_directories(Clover PUBLIC ${CLOVER_INCLUDE_DIRECTORIES})
-target_link_libraries(Clover PUBLIC ${EXTRA_LIBS})
+target_link_libraries(Clover PRIVATE ${CLOVER_LIB_DEPENDENCIES})
 
 
 # Clover - profiling
 add_library(Clover_Profiling STATIC EXCLUDE_FROM_ALL ${SOURCE_LIST_INCLUDES_CPP})
-target_compile_options(Clover_Profiling PRIVATE -Ofast -g ${CLOVER_COMPILE_FLAGS})
-target_link_libraries(Clover_Profiling PRIVATE profiler)
+target_compile_options(Clover_Profiling PRIVATE -g)
+target_link_libraries(Clover_Profiling PRIVATE profiler ${CLOVER_LIB_DEPENDENCIES})
 target_include_directories(Clover_Profiling PUBLIC ${CLOVER_INCLUDE_DIRECTORIES})
-target_link_libraries(Clover_Profiling PUBLIC ${EXTRA_LIBS})
 
-
-# Clover - strict
-add_library(Clover_Strict STATIC EXCLUDE_FROM_ALL ${SOURCE_LIST_INCLUDES_CPP})
-target_compile_options(Clover_Strict PRIVATE -Ofast ${CLOVER_COMPILE_FLAGS})
-target_include_directories(Clover_Strict PUBLIC ${CLOVER_INCLUDE_DIRECTORIES})
-target_link_libraries(Clover_Strict PUBLIC ${EXTRA_LIBS})
-target_compile_options(Clover_Strict PRIVATE ${CLOVER_COMPILE_FLAGS}
-    -Werror # enable this to interpret warnings as errors
-    -pedantic
-    -Wall
-    -Wextra
-    -Wcast-align
-    -Wcast-qual
-    -Wctor-dtor-privacy
-    -Wdisabled-optimization
-    -Wformat=2
-    -Winit-self
-    -Wlogical-op
-    -Wmissing-declarations
-    -Wmissing-include-dirs
-    -Wnoexcept
-    -Wold-style-cast
-    -Woverloaded-virtual
-    -Wredundant-decls
-    -Wshadow
-    -Wsign-conversion
-    -Wsign-promo
-    -Wstrict-null-sentinel
-    -Wstrict-overflow=5
-    -Wswitch-default
-    -Wundef
-    -Wno-unused
-)

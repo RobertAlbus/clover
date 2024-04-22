@@ -23,9 +23,10 @@
 #include <cmath>
 #include <limits>
 
-#include "Nodes/Filter/Filter.h"
-#include "Nodes/Wavetable/WavetableOsc.h"
-#include "_Test.h"
+#include "Clover/Nodes/Filter/Filter.h"
+#include "Clover/Nodes/Wavetable/WavetableOsc.h"
+#include "Clover/_Test/HandCrank.h"
+#include "Clover/_Test/Collector.h"
 
 TEST(Nodes_Filter_Filter, ShouldFilterLowPass) {
 

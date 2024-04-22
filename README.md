@@ -6,6 +6,13 @@ This project is experimental and liable to change drastically. I am working towa
 
 Clover is permissively licensed and depends on open source software. See [LICENSE](./LICENSE) and [THIRD_PARTY.md](./THIRD_PARTY.md).
 
+## Dependencies
+Clover uses `find_package` to look for the following dependencies
+- portaudio
+- SndFile
+- RtMidi
+
+The include paths to these dependencies should be provided to Clover by populating the list variable `CLOVER_INCLUDE_DIRECTORIES`.
 
 ## Graph
 
