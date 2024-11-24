@@ -1,11 +1,11 @@
 #include "benchmark/benchmark.h"
 
-#include "cpp_boilerplate/example.hpp"
+#include "clover/example.hpp"
 
 static void BM_example(benchmark::State& state) {
     long n = state.range(0);
     for (auto _ : state) {
-        benchmark::DoNotOptimize(Cpp_boilerplate::example());
+        benchmark::DoNotOptimize(clover::example());
     }
 }
 
