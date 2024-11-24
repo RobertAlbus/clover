@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Cpp_boilerplate {
+namespace clover {
 
 auto example() -> int;
 

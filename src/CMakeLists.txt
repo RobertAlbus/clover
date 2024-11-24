@@ -1,8 +1,8 @@
-add_subdirectory(cpp_boilerplate_lib)
+add_subdirectory(clover_lib)
 
-if(CPP_BOILERPLATE_BUILD_BENCHMARKS)
-    add_subdirectory(cpp_boilerplate_benchmark)
+if(CLOVER_BUILD_BENCHMARKS)
+    add_subdirectory(clover_benchmark)
 endif()
-if(CPP_BOILERPLATE_BUILD_TESTS)
-    add_subdirectory(cpp_boilerplate_test)
+if(CLOVER_BUILD_TESTS)
+    add_subdirectory(clover_test)
 endif()

@@ -1,0 +1,16 @@
+find_program(clover_CTEST_EXECUTABLE ctest)
+if(NOT clover_CTEST_EXECUTABLE)
+    message(FATAL_ERROR "ctest not found!")
+endif()
+
+# set(CMAKE_CTEST_ARGUMENTS "")
+
+file(GLOB_RECURSE CLOVER_TEST_SOURCE_CPP
+    CONFIGURE_DEPENDS
+    ${CMAKE_CURRENT_LIST_DIR}/*.test.cpp
+)
+
+add_executable(clover_test ${CLOVER_TEST_SOURCE_CPP})
+target_link_libraries(clover_test PRIVATE libclover GTest::gtest GTest::gtest_main)
+
+add_test(NAME clover_test COMMAND clover_test)
