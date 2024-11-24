@@ -1,3 +1,0 @@
-add_custom_target(build
-  COMMAND ${CMAKE_MAKE_PROGRAM} -j8
-)
