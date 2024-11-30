@@ -9,12 +9,12 @@
 namespace clover::io {
 
 class sample_clock {
-public:
-  sample_clock();
-  int_fast64_t current_sample() const;
-  void tick();
+   public:
+    sample_clock();
+    int_fast64_t current_sample() const;
+    void tick();
 
-  int_fast64_t m_current_sample;
+    int_fast64_t m_current_sample;
 };
 
-}
+}  // namespace clover::io

@@ -10,10 +10,12 @@ sample_clock::sample_clock() {
     m_current_sample = 0;
 }
 
-int_fast64_t sample_clock::current_sample() const { return m_current_sample; }
+int_fast64_t sample_clock::current_sample() const {
+    return m_current_sample;
+}
 
 void sample_clock::tick() {
-  ++m_current_sample;
+    ++m_current_sample;
 }
 
-}
+}  // namespace clover::io

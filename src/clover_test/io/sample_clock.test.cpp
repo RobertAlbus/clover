@@ -16,6 +16,6 @@ TEST(sample_clock, monotonically_increasing) {
 
     for (size_t i = 1; i < 10000000; ++i)
         clock.tick();
-    
+
     EXPECT_EQ(clock.current_sample(), 10000000);
 }
