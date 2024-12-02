@@ -8,9 +8,11 @@ endif()
 file(GLOB_RECURSE CLOVER_TEST_SOURCE_CPP
     CONFIGURE_DEPENDS
     ${CMAKE_CURRENT_LIST_DIR}/*.test.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/**/*.test.cpp
 )
 
 add_executable(clover_test ${CLOVER_TEST_SOURCE_CPP})
 target_link_libraries(clover_test PRIVATE libclover GTest::gtest GTest::gtest_main)
 
-add_test(NAME clover_test COMMAND clover_test)
+include(GoogleTest)
+gtest_discover_tests(clover_test)
