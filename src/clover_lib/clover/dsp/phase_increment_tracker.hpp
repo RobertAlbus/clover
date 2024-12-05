@@ -40,38 +40,4 @@ struct phase_increment_tracker {
     clover_float phase_offset() noexcept;             // relative to domain
 };
 
-struct phase_increment_tracker_v1 {
-    clover_float m_current_phase   = 0;
-    clover_float m_phase_offset    = 0;
-    clover_float m_phase_increment = 0;
-    clover_float m_domain          = num::pi_x2;
-    clover_float m_fs              = 0;
-
-    static auto for_freq(
-            clover_float fs,
-            clover_float freq_hz,
-            clover_float phase_offset = 0,
-            clover_float domain       = num::pi_x2) -> phase_increment_tracker_v1;
-
-    static auto for_period(
-            clover_float fs,
-            clover_float num_samples,
-            clover_float phase_offset = 0,
-            clover_float domain       = num::pi_x2) -> phase_increment_tracker_v1;
-
-    void tick();
-
-    void freq(clover_float freq_hz);
-    clover_float freq();
-
-    void period(clover_float num_samples);
-    clover_float period();
-
-    void phase(clover_float phase);
-    clover_float phase();
-
-    void phase_offset(clover_float offset);
-    clover_float phase_offset();
-};
-
 }  // namespace clover::dsp
