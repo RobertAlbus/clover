@@ -13,7 +13,7 @@ if(CLOVER_FETCH_DEPENDENCIES AND CLOVER_FETCH_LIBSNDFILE)
 
     FetchContent_Declare(
         sndfile
-        GIT_REPOSITORY git@github.com:libsndfile/libsndfile.git
+        GIT_REPOSITORY https://github.com/libsndfile/libsndfile.git
         GIT_TAG ${CLOVER_FETCH_LIBSNDFILE_VERSION_TAG}
     )
 

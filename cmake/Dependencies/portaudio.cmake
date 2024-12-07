@@ -23,7 +23,7 @@ if(CLOVER_FETCH_DEPENDENCIES AND CLOVER_FETCH_PORTAUDIO)
 
     FetchContent_Declare(
         portaudio
-        GIT_REPOSITORY git@github.com:PortAudio/portaudio.git
+        GIT_REPOSITORY https://github.com/PortAudio/portaudio.git
         GIT_TAG ${CLOVER_FETCH_PORTAUDIO_VERSION_TAG}
     )
 
