@@ -38,5 +38,29 @@ TEST(minimum_performance, BM_phase_increment_tracker) {
 TEST(ideal_performance, BM_phase_increment_tracker) {
     auto run = InterceptReporter::run_map.at("BM_phase_increment_tracker");
     EXPECT_LE(run, 0.003);  // 3333x faster than playback time
+}
 
+static void BM_phase_increment_tracker_only_tick(benchmark::State& state) {
+    for (auto _ : state) {
+        state.PauseTiming();
+        auto pit = clover::dsp::phase_increment_tracker::for_freq(clover_bm::fs_48k, 100);
+        state.ResumeTiming();
+
+        for (int i = 0; i < clover_bm::samples_10s_48k; ++i) {
+            benchmark::DoNotOptimize(pit.phase());
+            pit.tick();
+        }
+    }
+}
+
+BENCHMARK(BM_phase_increment_tracker_only_tick);
+
+TEST(minimum_performance, BM_phase_increment_tracker_only_tick) {
+    auto run = InterceptReporter::run_map.at("BM_phase_increment_tracker_only_tick");
+    EXPECT_LE(run, 0.0015);  // 6666x faster than playback time
+}
+
+TEST(ideal_performance, BM_phase_increment_tracker_only_tick) {
+    auto run = InterceptReporter::run_map.at("BM_phase_increment_tracker_only_tick");
+    EXPECT_LE(run, 0.001);  // 10000x faster than playback time
 }
