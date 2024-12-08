@@ -14,7 +14,7 @@ class InterceptReporter : public benchmark::BenchmarkReporter {
     std::unique_ptr<benchmark::BenchmarkReporter> default_reporter;
 
    public:
-    static std::unordered_map<std::string, ::benchmark::BenchmarkReporter::Run> run_map;
+    static std::unordered_map<std::string, double> run_map;
 
     InterceptReporter();
 

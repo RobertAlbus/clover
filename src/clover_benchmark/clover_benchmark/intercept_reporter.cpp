@@ -9,7 +9,12 @@
 
 #include "clover_benchmark/intercept_reporter.hpp"
 
-std::unordered_map<std::string, ::benchmark::BenchmarkReporter::Run> InterceptReporter::run_map;
+double GetRunWallTime(const ::benchmark::BenchmarkReporter::Run run) {
+    return run.iterations != 0 ? run.real_accumulated_time / static_cast<double>(run.iterations)
+                               : run.real_accumulated_time;
+}
+
+std::unordered_map<std::string, double> InterceptReporter::run_map;
 
 InterceptReporter::InterceptReporter() : default_reporter(benchmark::CreateDefaultDisplayReporter()) {
 }
@@ -22,7 +27,7 @@ void InterceptReporter::ReportRuns(const std::vector<Run>& runs) {
     run_map.reserve(runs.size());
 
     for (const auto& run : runs) {
-        run_map[run.benchmark_name()] = run;
+        run_map[run.benchmark_name()] = GetRunWallTime(run);
     }
 
     default_reporter->ReportRuns(runs);
