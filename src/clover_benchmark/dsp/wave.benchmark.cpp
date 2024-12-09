@@ -2,7 +2,6 @@
 // Copyright (C) 2023  Rob W. Albus
 // It is licensed under the GPLv3. See LICENSE for details.
 
-#include <algorithm>
 #include <ranges>
 
 #include "benchmark/benchmark.h"
