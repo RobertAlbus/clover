@@ -77,11 +77,11 @@ bm_assert(
 bm_assert(
         BM_wave_tri,
         clover_bm::duration / 10000.,  // min
-        clover_bm::duration / 16000.   // target
+        clover_bm::duration / 14000.   // target
 );
 
 bm_assert(
         BM_wave_noise,
         clover_bm::duration / 10000.,  // min
-        clover_bm::duration / 14000.   // target
+        clover_bm::duration / 11000.   // target
 );

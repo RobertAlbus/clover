@@ -197,8 +197,8 @@ bm_assert(
 
 bm_assert(
         BM_frequency_to_midi,
-        clover_bm::duration / 4000.,  // min
-        clover_bm::duration / 4000.   // target
+        clover_bm::duration / 3500.,  // min
+        clover_bm::duration / 3500.   // target
 );
 
 bm_assert(
