@@ -8,6 +8,7 @@
 
 #include "clover/dsp/wave.hpp"
 #include "clover/float.hpp"
+#include "clover/num.hpp"
 
 namespace clover::dsp {
 

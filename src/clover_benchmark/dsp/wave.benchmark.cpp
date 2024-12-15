@@ -7,6 +7,7 @@
 #include "benchmark/benchmark.h"
 
 #include "clover/dsp/wave.hpp"
+#include "clover/num.hpp"
 
 #include "clover_benchmark/util.hpp"
 
