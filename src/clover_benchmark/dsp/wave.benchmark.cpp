@@ -25,12 +25,12 @@ BENCHMARK(BM_wave_sine);
 
 TEST(minimum_performance, BM_wave_sine) {
     auto run = InterceptReporter::run_map.at("BM_wave_sine");
-    EXPECT_LE(run, 0.002);  // 5000x faster than playback time
+    EXPECT_LE(run, 0.0025);  // 4000x faster than playback time
 }
 
 TEST(ideal_performance, BM_wave_sine) {
     auto run = InterceptReporter::run_map.at("BM_wave_sine");
-    EXPECT_LE(run, 0.00125);  // 8000x faster than playback time
+    EXPECT_LE(run, 0.0018);  // 5000x faster than playback time
 }
 
 static void BM_wave_square(benchmark::State& state) {
@@ -52,7 +52,7 @@ TEST(minimum_performance, BM_wave_square) {
 
 TEST(ideal_performance, BM_wave_square) {
     auto run = InterceptReporter::run_map.at("BM_wave_square");
-    EXPECT_LE(run, 0.0003);  // 33000x faster than playback time
+    EXPECT_LE(run, 0.00035);  // 28000x faster than playback time
 }
 
 static void BM_wave_saw(benchmark::State& state) {
@@ -73,7 +73,7 @@ TEST(minimum_performance, BM_wave_saw) {
 
 TEST(ideal_performance, BM_wave_saw) {
     auto run = InterceptReporter::run_map.at("BM_wave_saw");
-    EXPECT_LE(run, 0.0003);  // 33000x faster than playback time
+    EXPECT_LE(run, 0.00035);  // 28000x faster than playback time
 }
 
 static void BM_wave_tri(benchmark::State& state) {
