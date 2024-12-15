@@ -6,9 +6,9 @@
 
 #include <cstdint>
 
-#include "gtest/gtest.h"  // used in bm_assert
+#include "gtest/gtest.h"  // IWYU pragma: keep
 
-#include "clover_benchmark/intercept_reporter.hpp"  // used in bm_assert
+#include "clover_benchmark/intercept_reporter.hpp"  // IWYU pragma: keep
 
 #define bm_assert(name, min_perf, target_perf)           \
     BENCHMARK(name);                                     \
