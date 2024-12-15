@@ -11,7 +11,7 @@
 using namespace clover;
 using namespace dsp;
 
-TEST(phase_increment_tracker, initializes_by_freq) {
+TEST(dsp_phase_increment_tracker, initializes_by_freq) {
     clover_float freq = 12345.99999f;
     clover_float fs   = 48000.f;
 
@@ -24,7 +24,7 @@ TEST(phase_increment_tracker, initializes_by_freq) {
     EXPECT_FLOAT_EQ(pit.m_domain, num::pi_x2);
 }
 
-TEST(phase_increment_tracker, initializes_by_period) {
+TEST(dsp_phase_increment_tracker, initializes_by_period) {
     clover_float period = 12345.99999f;
     clover_float fs     = 48000.f;
 
@@ -37,7 +37,7 @@ TEST(phase_increment_tracker, initializes_by_period) {
     EXPECT_FLOAT_EQ(pit.m_domain, num::pi_x2);
 }
 
-TEST(phase_increment_tracker, increments_correctly) {
+TEST(dsp_phase_increment_tracker, increments_correctly) {
     clover_float freq = 384.f;
     clover_float fs   = 48000.f;
 
@@ -50,7 +50,7 @@ TEST(phase_increment_tracker, increments_correctly) {
     EXPECT_FLOAT_EQ(pit.phase(), 0.f);
 }
 
-TEST(phase_increment_tracker, frequency_set_correctly) {
+TEST(dsp_phase_increment_tracker, frequency_set_correctly) {
     clover_float freq = 111;
     clover_float fs   = 48000.f;
 
@@ -66,7 +66,7 @@ TEST(phase_increment_tracker, frequency_set_correctly) {
     EXPECT_EQ(pit.freq(), 24000);
 }
 
-TEST(phase_increment_tracker, phase_set_correctly) {
+TEST(dsp_phase_increment_tracker, phase_set_correctly) {
     clover_float freq = 111;
     clover_float fs   = 48000.f;
 
@@ -87,7 +87,7 @@ TEST(phase_increment_tracker, phase_set_correctly) {
     EXPECT_EQ(pit.phase(), 1);
 }
 
-TEST(phase_increment_tracker, phase_offset_set_correctly) {
+TEST(dsp_phase_increment_tracker, phase_offset_set_correctly) {
     clover_float freq = 111;
     clover_float fs   = 48000.f;
 

@@ -15,7 +15,7 @@ using namespace clover;
 using namespace dsp;
 
 // SINE
-TEST(wave_sin, range_is_correct) {
+TEST(dsp_wave_sin, range_is_correct) {
     constexpr clover_float delta_t = num::pi_x2 / 10000;
     for (int i = 0; i < 10000; ++i) {
         clover_float signal = clover::dsp::wave_sine(delta_t * static_cast<clover_float>(i));
@@ -24,7 +24,7 @@ TEST(wave_sin, range_is_correct) {
     }
 }
 
-TEST(wave_sin, value_is_correct) {
+TEST(dsp_wave_sin, value_is_correct) {
     constexpr clover_float delta_t = num::pi_x2 / 10000;
     for (int i = 0; i < 10000; ++i) {
         clover_float theta  = delta_t * static_cast<clover_float>(i);
@@ -34,7 +34,7 @@ TEST(wave_sin, value_is_correct) {
 }
 
 // SQUARE
-TEST(wave_square, range_is_correct) {
+TEST(dsp_wave_square, range_is_correct) {
     constexpr clover_float delta_t = num::pi_x2 / 10000;
     for (int i = 0; i < 10000; ++i) {
         clover_float signal = clover::dsp::wave_square(delta_t * static_cast<clover_float>(i));
@@ -43,7 +43,7 @@ TEST(wave_square, range_is_correct) {
     }
 }
 
-TEST(wave_square, value_is_correct) {
+TEST(dsp_wave_square, value_is_correct) {
     constexpr clover_float delta_t = num::pi_x2 / 10000;
 
     for (int i = 0; i < 10000; ++i) {
@@ -55,7 +55,7 @@ TEST(wave_square, value_is_correct) {
 }
 
 // SAW
-TEST(wave_saw, range_is_correct) {
+TEST(dsp_wave_saw, range_is_correct) {
     constexpr clover_float delta_t = num::pi_x2 / 10000;
     for (int i = 0; i < 10000; ++i) {
         clover_float signal = clover::dsp::wave_saw(delta_t * static_cast<clover_float>(i));
@@ -64,7 +64,7 @@ TEST(wave_saw, range_is_correct) {
     }
 }
 
-TEST(wave_saw, value_is_correct) {
+TEST(dsp_wave_saw, value_is_correct) {
     constexpr clover_float delta_t = num::pi_x2 / 10000;
 
     for (int i = 0; i < 10000; ++i) {
@@ -76,7 +76,7 @@ TEST(wave_saw, value_is_correct) {
 }
 
 // TRI
-TEST(wave_tri, range_is_correct) {
+TEST(dsp_wave_tri, range_is_correct) {
     constexpr clover_float delta_t = num::pi_x2 / 100000;
     for (int i = 0; i < 100000; ++i) {
         clover_float signal = clover::dsp::wave_tri(delta_t * static_cast<clover_float>(i));
@@ -85,7 +85,7 @@ TEST(wave_tri, range_is_correct) {
     }
 }
 
-TEST(wave_tri, value_is_correct) {
+TEST(dsp_wave_tri, value_is_correct) {
     std::unordered_map<clover_float, clover_float> thetas{
             {0.f, 0.f},
             {num::pi * 0.5, 1.f},
@@ -98,7 +98,7 @@ TEST(wave_tri, value_is_correct) {
 }
 
 // NOISE WHITE
-TEST(wave_noise, range_is_correct) {
+TEST(dsp_wave_noise, range_is_correct) {
     for (int i = 0; i < 10000; ++i) {
         clover_float signal = clover::dsp::wave_noise(0);
         EXPECT_LE(signal, 1);
