@@ -12,26 +12,6 @@
 
 using namespace clover;
 
-TEST(math, frequency_by_semitone_difference) {
-    std::vector<clover_float> inputs{1, 2, 10, 20, 200, 200, 1000, 2000, 10000, 20000};
-    std::vector<clover_float> octaves{-3, -2, -1, 0, 1, 2, 3};
-    for (auto input : inputs) {
-        for (auto octave : octaves) {
-            EXPECT_EQ(frequency_by_semitone_difference(input, octave * 12.f), input * std::exp2(octave));
-        }
-    }
-}
-
-TEST(math, frequency_by_octave_difference) {
-    std::vector<clover_float> inputs{1, 2, 10, 20, 200, 200, 1000, 2000, 10000, 20000};
-    std::vector<clover_float> octaves{-3, -2, -1, 0, 1, 2, 3};
-    for (auto input : inputs) {
-        for (auto octave : octaves) {
-            EXPECT_EQ(frequency_by_octave_difference(input, octave), input * std::exp2(octave));
-        }
-    }
-}
-
 struct decibel_conversions {
     clover_float linear;
     clover_float db;
@@ -62,10 +42,41 @@ TEST(math, db_to_linear) {
     }
 }
 
+TEST(math, frequency_by_octave_difference) {
+    std::vector<clover_float> inputs{1, 2, 10, 20, 200, 200, 1000, 2000, 10000, 20000};
+    std::vector<clover_float> octaves{-3, -2, -1, 0, 1, 2, 3};
+    for (auto input : inputs) {
+        for (auto octave : octaves) {
+            EXPECT_EQ(frequency_by_octave_difference(input, octave), input * std::exp2(octave));
+        }
+    }
+}
+
+TEST(math, frequency_by_semitone_difference) {
+    std::vector<clover_float> inputs{1, 2, 10, 20, 200, 200, 1000, 2000, 10000, 20000};
+    std::vector<clover_float> octaves{-3, -2, -1, 0, 1, 2, 3};
+    for (auto input : inputs) {
+        for (auto octave : octaves) {
+            EXPECT_EQ(frequency_by_semitone_difference(input, octave * 12.f), input * std::exp2(octave));
+        }
+    }
+}
+
 struct midi_freq {
     clover_float midi_note;
     clover_float frequency;
 };
+
+TEST(math, frequency_to_midi) {
+    std::vector<midi_freq> fixtures{
+            {0, 8.175798f},
+            {63, 311.126983722f},
+            {127, 12543.8555f},
+    };
+    for (auto fixture : fixtures)
+        EXPECT_FLOAT_EQ(frequency_to_midi(fixture.frequency), fixture.midi_note);
+}
+
 TEST(math, midi_to_frequency) {
     std::vector<midi_freq> fixtures{
             {0, 8.175798f},
@@ -76,12 +87,9 @@ TEST(math, midi_to_frequency) {
         EXPECT_FLOAT_EQ(midi_to_frequency(fixture.midi_note), fixture.frequency);
 }
 
-TEST(math, frequency_to_midi) {
-    std::vector<midi_freq> fixtures{
-            {0, 8.175798f},
-            {63, 311.126983722f},
-            {127, 12543.8555f},
-    };
-    for (auto fixture : fixtures)
-        EXPECT_FLOAT_EQ(frequency_to_midi(fixture.frequency), fixture.midi_note);
+TEST(math, tension) {
+    EXPECT_NEAR(tension(0.5f, 1.f), -tension(-0.5f, 1.f), 0.006f);
+    EXPECT_NEAR(tension(0.5f, 1.f), 1.f - tension(0.5f, -1.f), 0.006f);
+    EXPECT_GT(tension(0.5f, 1.f), tension(0.5f, 0.5f));
+    EXPECT_GT(tension(0.6f, 1.f), tension(0.5f, 1.f));
 }
