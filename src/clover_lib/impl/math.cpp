@@ -26,6 +26,10 @@ auto clover::linear_to_db(clover_float x) -> clover_float {
     return x != 0.f ? std::log10(x) * 20.f : 0.f;
 }
 
+auto clover::is_zero_f(clover_float x) -> bool {
+    return std::abs(x) < 1e-6f;
+}
+
 auto clover::frequency_by_octave_difference(clover_float freq, clover_float octaves) -> clover_float {
     return freq * std::exp2(octaves);
 }
@@ -35,6 +39,8 @@ auto clover::frequency_by_semitone_difference(clover_float freq, clover_float se
 }
 
 auto clover::frequency_to_midi(clover_float x) -> clover_float {
+    if (is_zero_f(x))
+        return 0.f;
     return 12.f * (std::log(x * (1.f / 220.f)) / std::log(2.f)) + 57.f;
 }
 
@@ -50,7 +56,7 @@ auto clover::tension(
         // NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
         clover_float x,
         clover_float a) -> clover_float {
-    if (std::abs(a) < 1e-6f)
+    if (is_zero_f(a))
         return x;
 
     a *= 24.f;

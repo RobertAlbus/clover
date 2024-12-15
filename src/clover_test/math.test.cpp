@@ -42,6 +42,15 @@ TEST(math, db_to_linear) {
     }
 }
 
+TEST(math, is_zero_f) {
+    clover_float threshhold = 1e-6f;
+
+    EXPECT_TRUE(is_zero_f(std::nextafter(threshhold, 0.0f)));
+    EXPECT_TRUE(is_zero_f(std::nextafter(-threshhold, 0.0f)));
+    EXPECT_FALSE(is_zero_f(threshhold));
+    EXPECT_FALSE(is_zero_f(-threshhold));
+}
+
 TEST(math, frequency_by_octave_difference) {
     std::vector<clover_float> inputs{1, 2, 10, 20, 200, 200, 1000, 2000, 10000, 20000};
     std::vector<clover_float> octaves{-3, -2, -1, 0, 1, 2, 3};
