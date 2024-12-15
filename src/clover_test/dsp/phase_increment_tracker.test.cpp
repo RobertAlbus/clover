@@ -88,13 +88,11 @@ TEST(dsp_phase_increment_tracker, phase_set_correctly) {
 }
 
 TEST(dsp_phase_increment_tracker, phase_offset_set_correctly) {
-    clover_float freq = 111;
-    clover_float fs   = 48000.f;
+    clover_float fs = 48000.f;
 
-    auto pit = phase_increment_tracker::for_freq(fs, 1);
+    auto pit = phase_increment_tracker::for_freq(fs, 1.f);
 
     pit.phase_offset(1);
-
     EXPECT_EQ(pit.phase_offset(), 1);
     EXPECT_EQ(pit.phase(), 1);
 
