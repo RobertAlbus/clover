@@ -5,11 +5,9 @@
 #include <ranges>
 
 #include "benchmark/benchmark.h"
-#include "gtest/gtest.h"
 
 #include "clover/dsp/wave.hpp"
 
-#include "clover_benchmark/intercept_reporter.hpp"
 #include "clover_benchmark/util.hpp"
 
 static void BM_wave_sine(benchmark::State& state) {
@@ -21,18 +19,6 @@ static void BM_wave_sine(benchmark::State& state) {
     }
 }
 
-BENCHMARK(BM_wave_sine);
-
-TEST(minimum_performance, BM_wave_sine) {
-    auto run = InterceptReporter::run_map.at("BM_wave_sine");
-    EXPECT_LE(run, 0.0025);  // 4000x faster than playback time
-}
-
-TEST(ideal_performance, BM_wave_sine) {
-    auto run = InterceptReporter::run_map.at("BM_wave_sine");
-    EXPECT_LE(run, 0.0018);  // 5000x faster than playback time
-}
-
 static void BM_wave_square(benchmark::State& state) {
     auto range                       = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));
     constexpr clover_float increment = clover::num::pi_x2 / clover_bm::samples_10s_48k;
@@ -42,19 +28,6 @@ static void BM_wave_square(benchmark::State& state) {
                     clover::dsp::wave_square(static_cast<clover_float>(element) * increment));
     }
 }
-
-BENCHMARK(BM_wave_square);
-
-TEST(minimum_performance, BM_wave_square) {
-    auto run = InterceptReporter::run_map.at("BM_wave_square");
-    EXPECT_LE(run, 0.0004);  // 25000x faster than playback time
-}
-
-TEST(ideal_performance, BM_wave_square) {
-    auto run = InterceptReporter::run_map.at("BM_wave_square");
-    EXPECT_LE(run, 0.00035);  // 28000x faster than playback time
-}
-
 static void BM_wave_saw(benchmark::State& state) {
     auto range                       = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));
     constexpr clover_float increment = clover::num::pi_x2 / clover_bm::samples_10s_48k;
@@ -62,18 +35,6 @@ static void BM_wave_saw(benchmark::State& state) {
         for (const auto& element : range)
             benchmark::DoNotOptimize(clover::dsp::wave_saw(static_cast<clover_float>(element) * increment));
     }
-}
-
-BENCHMARK(BM_wave_saw);
-
-TEST(minimum_performance, BM_wave_saw) {
-    auto run = InterceptReporter::run_map.at("BM_wave_saw");
-    EXPECT_LE(run, 0.0004);  // 25000x faster than playback time
-}
-
-TEST(ideal_performance, BM_wave_saw) {
-    auto run = InterceptReporter::run_map.at("BM_wave_saw");
-    EXPECT_LE(run, 0.00035);  // 28000x faster than playback time
 }
 
 static void BM_wave_tri(benchmark::State& state) {
@@ -85,18 +46,6 @@ static void BM_wave_tri(benchmark::State& state) {
     }
 }
 
-BENCHMARK(BM_wave_tri);
-
-TEST(minimum_performance, BM_wave_tri) {
-    auto run = InterceptReporter::run_map.at("BM_wave_tri");
-    EXPECT_LE(run, 0.001);  // 10000x faster than playback time
-}
-
-TEST(ideal_performance, BM_wave_tri) {
-    auto run = InterceptReporter::run_map.at("BM_wave_tri");
-    EXPECT_LE(run, 0.0006);  // 16000x faster than playback time
-}
-
 static void BM_wave_noise(benchmark::State& state) {
     auto range                       = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));
     constexpr clover_float increment = clover::num::pi_x2 / clover_bm::samples_10s_48k;
@@ -106,14 +55,32 @@ static void BM_wave_noise(benchmark::State& state) {
     }
 }
 
-BENCHMARK(BM_wave_noise);
+bm_assert(
+        BM_wave_sine,
+        clover_bm::duration / 4000.,  // min
+        clover_bm::duration / 5000.   // target
+);
 
-TEST(minimum_performance, BM_wave_noise) {
-    auto run = InterceptReporter::run_map.at("BM_wave_noise");
-    EXPECT_LE(run, 0.001);  // 10000x faster than playback time
-}
+bm_assert(
+        BM_wave_square,
+        clover_bm::duration / 25000.,  // min
+        clover_bm::duration / 28000.   // target
+);
 
-TEST(ideal_performance, BM_wave_noise) {
-    auto run = InterceptReporter::run_map.at("BM_wave_noise");
-    EXPECT_LE(run, 0.0007);  // 14000x faster than playback time
-}
+bm_assert(
+        BM_wave_saw,
+        clover_bm::duration / 25000.,  // min
+        clover_bm::duration / 28000.   // target
+);
+
+bm_assert(
+        BM_wave_tri,
+        clover_bm::duration / 10000.,  // min
+        clover_bm::duration / 16000.   // target
+);
+
+bm_assert(
+        BM_wave_noise,
+        clover_bm::duration / 10000.,  // min
+        clover_bm::duration / 14000.   // target
+);

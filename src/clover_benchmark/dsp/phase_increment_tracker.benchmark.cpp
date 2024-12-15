@@ -3,12 +3,9 @@
 // It is licensed under the GPLv3. See LICENSE for details.
 
 #include "benchmark/benchmark.h"
-#include "gtest/gtest.h"
 
 #include "clover/dsp/phase_increment_tracker.hpp"
-#include "clover/float.hpp"
 
-#include "clover_benchmark/intercept_reporter.hpp"
 #include "clover_benchmark/util.hpp"
 
 static void BM_phase_increment_tracker(benchmark::State& state) {
@@ -28,18 +25,6 @@ static void BM_phase_increment_tracker(benchmark::State& state) {
     }
 }
 
-BENCHMARK(BM_phase_increment_tracker);
-
-TEST(minimum_performance, BM_phase_increment_tracker) {
-    auto run = InterceptReporter::run_map.at("BM_phase_increment_tracker");
-    EXPECT_LE(run, 0.004);  // 2500x faster than playback time
-}
-
-TEST(ideal_performance, BM_phase_increment_tracker) {
-    auto run = InterceptReporter::run_map.at("BM_phase_increment_tracker");
-    EXPECT_LE(run, 0.003);  // 3333x faster than playback time
-}
-
 static void BM_phase_increment_tracker_only_tick(benchmark::State& state) {
     for (auto _ : state) {
         state.PauseTiming();
@@ -53,14 +38,14 @@ static void BM_phase_increment_tracker_only_tick(benchmark::State& state) {
     }
 }
 
-BENCHMARK(BM_phase_increment_tracker_only_tick);
+bm_assert(
+        BM_phase_increment_tracker,
+        clover_bm::duration / 2500.,  // min
+        clover_bm::duration / 3333.   // target
+);
 
-TEST(minimum_performance, BM_phase_increment_tracker_only_tick) {
-    auto run = InterceptReporter::run_map.at("BM_phase_increment_tracker_only_tick");
-    EXPECT_LE(run, 0.0015);  // 6666x faster than playback time
-}
-
-TEST(ideal_performance, BM_phase_increment_tracker_only_tick) {
-    auto run = InterceptReporter::run_map.at("BM_phase_increment_tracker_only_tick");
-    EXPECT_LE(run, 0.001);  // 10000x faster than playback time
-}
+bm_assert(
+        BM_phase_increment_tracker_only_tick,
+        clover_bm::duration / 6666.,  // min
+        clover_bm::duration / 10000.  // target
+);
