@@ -1,3 +1,7 @@
+// Clover Audio Framework
+// Copyright (C) 2023  Rob W. Albus
+// Licensed under the GPLv3. See LICENSE for details.
+
 #include "clover/dsp/oscillator.hpp"
 #include "clover/io/audio_callback.hpp"
 #include "clover/io/stream.hpp"
