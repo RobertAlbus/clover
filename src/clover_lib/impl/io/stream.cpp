@@ -24,12 +24,12 @@ stream::stream() : current_stream(nullptr), completion_signal(0) {
 }
 stream::~stream() {
     if (current_stream != nullptr) {
-        Pa_StopStream(current_stream);
-        Pa_CloseStream(current_stream);
+        print_pa_error(Pa_StopStream(current_stream));
+        print_pa_error(Pa_CloseStream(current_stream));
         current_stream = nullptr;
     }
 
-    Pa_Terminate();
+    print_pa_error(Pa_Terminate());
 }
 
 void stream::start() {
@@ -158,6 +158,16 @@ void stream::handle_pa_error(int err) {
                 "exiting...\n",
                 err,
                 Pa_GetErrorText(err)));
+    }
+}
+
+void stream::print_pa_error(int err) {
+    if (err != paNoError) {
+        std::cout << std::format(
+                "PaErrorCode {} {}\n\n"
+                "exiting...\n",
+                err,
+                Pa_GetErrorText(err));
     }
 }
 

@@ -61,6 +61,7 @@ struct stream {
             void *user_data);
 
     void handle_pa_error(int err);
+    void print_pa_error(int err);
 };
 
 }  // namespace clover::io
