@@ -13,16 +13,17 @@ struct device {
     int max_chan_count_in;
     int max_chan_count_out;
 
-    float default_latency_ms_input_high;
-    float default_latency_ms_input_low;
-    float default_latency_ms_output_high;
-    float default_latency_ms_output_low;
-    float default_sample_rate;
+    double default_latency_ms_input_high;
+    double default_latency_ms_input_low;
+    double default_latency_ms_output_high;
+    double default_latency_ms_output_low;
+    double default_sample_rate;
     int index;
     int host_index;
     std::string host_name;
 
-    std::string to_string();
+    auto to_string() -> std::string;
+    void print();
 };
 
 struct system_audio_config {
@@ -30,10 +31,12 @@ struct system_audio_config {
 
     std::vector<std::string> hosts;
     std::vector<device> devices;
-    device default_input();
-    device default_output();
+    auto default_input() -> device;
+    auto default_output() -> device;
+    auto no_device() -> int;
+    auto get_device(std::string name) -> device;
 
-    void to_string();
+    void print();
 };
 
 }  // namespace clover::io

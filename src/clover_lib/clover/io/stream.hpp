@@ -25,7 +25,7 @@ struct stream {
         int chan_count_out;
 
         int sample_rate;
-        float latency_ms;
+        double latency_ms;
     };
 
     stream();

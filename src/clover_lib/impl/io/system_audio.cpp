@@ -4,6 +4,7 @@
 
 #include <format>  // IWYU pragma: keep
 #include <iostream>
+#include <stdexcept>
 #include <string>
 
 #include "portaudio.h"
@@ -11,6 +12,10 @@
 #include "clover/io/system_audio.hpp"
 
 namespace clover::io {
+
+void device::print() {
+    std::cout << to_string();
+}
 
 auto device::to_string() -> std::string {
     // clang-format off
@@ -52,7 +57,7 @@ system_audio_config::system_audio_config() {
     devices.reserve(device_count);
 
     for (int i = 0; i < device_count; ++i) {
-        const PaDeviceInfo *current_device = Pa_GetDeviceInfo(i);
+        const PaDeviceInfo* current_device = Pa_GetDeviceInfo(i);
         devices.emplace_back(
                 device{.name                           = current_device->name,
                        .max_chan_count_in              = current_device->maxInputChannels,
@@ -68,16 +73,28 @@ system_audio_config::system_audio_config() {
     }
 }
 
-device system_audio_config::default_input() {
+auto system_audio_config::default_input() -> device {
     return devices[Pa_GetDefaultInputDevice()];
 }
-device system_audio_config::default_output() {
+
+auto system_audio_config::default_output() -> device {
     return devices[Pa_GetDefaultOutputDevice()];
 }
 
-void system_audio_config::to_string() {
+auto system_audio_config::no_device() -> int {
+    return paNoDevice;
+}
+
+auto system_audio_config::get_device(std::string name) -> device {
+    for (auto& device : devices)
+        if (device.name.starts_with(name))
+            return device;
+    throw std::invalid_argument(std::format("no audio device available: {}", name.c_str()));
+}
+
+void system_audio_config::print() {
     for (auto device : devices) {
-        std::cout << device.to_string() << std::endl;  // does it need endl?
+        std::cout << device.to_string();
     }
 }
 

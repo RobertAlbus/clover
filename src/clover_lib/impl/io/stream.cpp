@@ -66,36 +66,32 @@ void stream::open(stream::settings settings) {
         return;
     }
 
-    PaStreamParameters *pa_inParams  = nullptr;
-    PaStreamParameters *pa_outParams = nullptr;
+    PaStreamParameters *pa_in_params  = nullptr;
+    PaStreamParameters *pa_out_params = nullptr;
 
     if (has_input) {
-        pa_inParams               = new PaStreamParameters();
-        pa_inParams->channelCount = current_settings.chan_count_in;
-        pa_inParams->device = current_settings.device_index_in, pa_inParams->sampleFormat = paFloat32;
-        pa_inParams->suggestedLatency          = static_cast<double>(current_settings.latency_ms);
-        pa_inParams->hostApiSpecificStreamInfo = nullptr;
+        pa_in_params                            = new PaStreamParameters();
+        pa_in_params->device                    = current_settings.device_index_in;
+        pa_in_params->channelCount              = current_settings.chan_count_in;
+        pa_in_params->sampleFormat              = paFloat32;
+        pa_in_params->suggestedLatency          = current_settings.latency_ms;
+        pa_in_params->hostApiSpecificStreamInfo = nullptr;
     }
     if (has_output) {
-        pa_outParams = new PaStreamParameters();
-
-        pa_outParams->channelCount              = current_settings.chan_count_out;
-        pa_outParams->device                    = current_settings.device_index_out;
-        pa_outParams->sampleFormat              = paFloat32;
-        pa_outParams->suggestedLatency          = static_cast<double>(current_settings.latency_ms);
-        pa_outParams->hostApiSpecificStreamInfo = nullptr;
+        pa_out_params                            = new PaStreamParameters();
+        pa_out_params->device                    = current_settings.device_index_out;
+        pa_out_params->channelCount              = current_settings.chan_count_out;
+        pa_out_params->sampleFormat              = paFloat32;
+        pa_out_params->suggestedLatency          = current_settings.latency_ms;
+        pa_out_params->hostApiSpecificStreamInfo = nullptr;
     }
 
-    handle_pa_error(Pa_IsFormatSupported(pa_inParams, pa_outParams, current_settings.sample_rate));
-
-    // DID I FIX IT YET?
-    // strange behaviour: returning paBadStreamPtr even when successfull
-    // - skipping error validation for this reason
+    handle_pa_error(Pa_IsFormatSupported(pa_in_params, pa_out_params, current_settings.sample_rate));
 
     handle_pa_error(Pa_OpenStream(
             &current_stream,
-            pa_inParams,
-            pa_outParams,
+            pa_in_params,
+            pa_out_params,
             current_settings.sample_rate,
             paFramesPerBufferUnspecified,
             paNoFlag,
@@ -103,6 +99,8 @@ void stream::open(stream::settings settings) {
             this));
 
     handle_pa_error(Pa_SetStreamFinishedCallback(current_stream, &stream::pa_stream_complete_callback));
+    delete pa_in_params;
+    delete pa_out_params;
 }
 
 void stream::pa_stream_complete_callback(void *user_data) {
