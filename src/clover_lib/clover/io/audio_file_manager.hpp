@@ -22,9 +22,10 @@ enum struct audio_file_settings {
 
 auto sample_rate(audio_file_settings settings) -> int;
 struct audio_file_manager {
-    auto read(std::filesystem::path path, int as_sample_rate) -> audio_buffer;
-    void write(std::filesystem::path path, audio_buffer buffer, audio_file_settings settings);
-    void convert_sample_rate(audio_buffer buffer, int sample_rate);
+    audio_file_manager() = delete;
+    static auto read(std::filesystem::path path, int as_sample_rate) -> audio_buffer;
+    static void write(std::filesystem::path path, audio_buffer buffer, audio_file_settings settings);
+    static void convert_sample_rate(audio_buffer buffer, int sample_rate);
 };
 
 }  // namespace clover::io
