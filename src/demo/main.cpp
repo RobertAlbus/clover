@@ -28,7 +28,6 @@ int main(int argc, char *argv[]) {
         osc.phase(0);
         mod.phase(0);
     };
-    audio_state_init();
 
     auto audio_callback = [&](io::callback_args data) {
         float &L = *(data.output);
@@ -52,6 +51,7 @@ int main(int argc, char *argv[]) {
         io::stream stream;
         stream.audio_callback = audio_callback;
 
+        audio_state_init();
         stream.open(io::stream::settings{
                 .device_index_in  = system.no_device(),
                 .chan_count_in    = 0,
@@ -68,7 +68,6 @@ int main(int argc, char *argv[]) {
     if (RENDER) {
         audio_state_init();
         audio_buffer render = io::exec_callback(audio_callback, channel_count_out, fs_i, duration);
-        render.sample_rate  = fs_i;
         io::audio_file::write("test.wav", render, io::audio_file_settings::wav_441_16);
     }
 }
