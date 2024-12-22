@@ -7,6 +7,7 @@
 #include "clover/io/sample_clock.hpp"
 
 using namespace clover;
+
 TEST(io_sample_clock, monotonically_increasing) {
     io::sample_clock clock;
     EXPECT_EQ(clock.current_sample(), 0);
