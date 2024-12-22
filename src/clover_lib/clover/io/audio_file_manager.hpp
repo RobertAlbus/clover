@@ -25,7 +25,6 @@ struct audio_file_manager {
     audio_file_manager() = delete;
     static auto read(std::filesystem::path path, int as_sample_rate) -> audio_buffer;
     static void write(std::filesystem::path path, audio_buffer buffer, audio_file_settings settings);
-    static void convert_sample_rate(audio_buffer buffer, int sample_rate);
 };
 
 }  // namespace clover::io
