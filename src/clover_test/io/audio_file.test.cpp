@@ -7,7 +7,7 @@
 #include <gtest/gtest.h>
 
 #include "clover/audio_buffer.hpp"
-#include "clover/io/audio_file_manager.hpp"
+#include "clover/io/audio_file.hpp"
 
 using namespace clover;
 using namespace clover::io;
@@ -41,7 +41,7 @@ TEST(io_audio_file_manager, writes) {
     for (auto setting : settings) {
         delete_if_exists(path);
 
-        audio_file_manager::write(path, buffer, setting);
+        audio_file::write(path, buffer, setting);
         EXPECT_TRUE(std::filesystem::exists(path));
     }
 
@@ -61,8 +61,8 @@ TEST(io_audio_file_manager, writes_reads_correctly) {
 
     buffer.sample_rate = io::sample_rate(audio_file_settings::wav_48_32);
 
-    audio_file_manager::write(path, buffer, audio_file_settings::wav_48_32);
-    auto read_buffer = audio_file_manager::read(path, buffer.sample_rate);
+    audio_file::write(path, buffer, audio_file_settings::wav_48_32);
+    auto read_buffer = audio_file::read(path, buffer.sample_rate);
 
     for (auto n : std::views::iota(0, (int)buffer.data.size()))
         // 16 bit: within 1e-4

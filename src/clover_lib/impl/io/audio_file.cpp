@@ -12,7 +12,7 @@
 #include <lame/lame.h>  // available transitively via sndfile
 
 #include "clover/audio_buffer.hpp"
-#include "clover/io/audio_file_manager.hpp"
+#include "clover/io/audio_file.hpp"
 
 namespace clover::io {
 
@@ -146,7 +146,7 @@ int sample_rate(audio_file_settings settings) {
     }
 }
 
-auto audio_file_manager::read(std::filesystem::path path, int as_sample_rate) -> audio_buffer {
+auto audio_file::read(std::filesystem::path path, int as_sample_rate) -> audio_buffer {
     audio_buffer buffer;
     SF_INFO sfinfo;
     SNDFILE* file = sf_open(path.c_str(), SFM_READ, &sfinfo);
@@ -170,8 +170,7 @@ auto audio_file_manager::read(std::filesystem::path path, int as_sample_rate) ->
 
     return buffer;
 }
-void audio_file_manager::write(
-        std::filesystem::path path, audio_buffer buffer, audio_file_settings settings) {
+void audio_file::write(std::filesystem::path path, audio_buffer buffer, audio_file_settings settings) {
     std::filesystem::path dir_path = path.parent_path();
     if (!dir_path.empty() && !std::filesystem::exists(dir_path)) {
         std::filesystem::create_directories(dir_path);

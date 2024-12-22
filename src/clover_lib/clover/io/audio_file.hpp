@@ -21,8 +21,8 @@ enum struct audio_file_settings {
 };
 
 auto sample_rate(audio_file_settings settings) -> int;
-struct audio_file_manager {
-    audio_file_manager() = delete;
+struct audio_file {
+    audio_file() = delete;
     static auto read(std::filesystem::path path, int as_sample_rate) -> audio_buffer;
     static void write(std::filesystem::path path, audio_buffer buffer, audio_file_settings settings);
 };
