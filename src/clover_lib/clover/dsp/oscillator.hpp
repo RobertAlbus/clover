@@ -5,7 +5,6 @@
 // Licensed under the GPLv3. See LICENSE for details.
 
 #include <functional>
-#include <memory>
 
 #include "clover/dsp/phase_increment_tracker.hpp"
 #include "clover/float.hpp"
@@ -17,7 +16,7 @@ struct oscillator {
     oscillator() = delete;
 
     phase_increment_tracker phase_tracker;
-    std::unique_ptr<std::function<clover_float(clover_float)>> waveform;
+    std::function<clover_float(clover_float)> waveform;
 
     clover_float tick();
 

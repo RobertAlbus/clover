@@ -6,7 +6,6 @@
 #include <cstdio>
 #include <cstdlib>
 #include <functional>
-#include <memory>
 
 #include "clover/dsp/oscillator.hpp"
 #include "clover/dsp/phase_increment_tracker.hpp"
@@ -21,14 +20,13 @@
 namespace clover::dsp {
 
 oscillator::oscillator(clover_float fs)
-    : waveform(std::make_unique<std::function<clover_float(clover_float)>>(&wave_sine)),
-      phase_tracker(phase_increment_tracker::for_freq(fs, 0)) {
+    : waveform(wave_sine), phase_tracker(phase_increment_tracker::for_freq(fs, 0)) {
 }
 
 auto oscillator::tick() -> clover_float {
-    if (waveform && *waveform) {
+    if (waveform) {
         phase_tracker.tick();
-        return (*waveform)(phase_tracker.phase());
+        return waveform(phase_tracker.phase());
     }
     return 0;
 }
