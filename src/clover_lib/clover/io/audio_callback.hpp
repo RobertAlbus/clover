@@ -24,10 +24,6 @@ using callback          = std::function<callback_status(callback_args)>;
 using complete_callback = std::function<void()>;
 
 audio_buffer exec_callback(
-        // NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
-        io::callback audio_callback,
-        int channels_out,
-        int sample_rate,
-        int_fast64_t duration);
+        io::callback audio_callback, int channels_out, int sample_rate, int_fast64_t duration);
 
 }  // namespace clover::io

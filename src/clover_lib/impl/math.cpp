@@ -52,10 +52,7 @@ auto clover::sign(clover_float x) -> clover_float {
     return x >= 1 ? 1 : -1;
 }
 
-auto clover::tension(
-        // NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
-        clover_float x,
-        clover_float a) -> clover_float {
+auto clover::tension(clover_float x, clover_float a) -> clover_float {
     if (is_zero_f(a))
         return x;
 

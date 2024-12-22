@@ -10,11 +10,7 @@
 namespace clover::io {
 
 audio_buffer exec_callback(
-        callback audio_callback,
-        // NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
-        int channels_out,
-        int sample_rate,
-        int_fast64_t duration) {
+        callback audio_callback, int channels_out, int sample_rate, int_fast64_t duration) {
     audio_buffer buffer;
     buffer.channels    = channels_out;
     buffer.sample_rate = sample_rate;

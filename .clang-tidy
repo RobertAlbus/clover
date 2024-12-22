@@ -6,6 +6,7 @@ Checks: |
    -clang-analyzer-optin.mpi.MPI-Checker,
    -clang-analyzer-security.FloatLoopCounter,
    bugprone-*,
+   -bugprone-easily-swappable-parameters,
    clang-analyzer-alpha.*,
    modernize-deprecated-headers,
    modernize-make-shared,

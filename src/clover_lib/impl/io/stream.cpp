@@ -106,7 +106,6 @@ void stream::pa_stream_complete_callback(void *user_data) {
 }
 
 int stream::pa_audio_callback(
-        // NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
         const void *input_buffer,
         void *output_buffer,
         unsigned long frames_per_buffer,

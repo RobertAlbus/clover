@@ -11,11 +11,8 @@
 
 namespace clover::dsp {
 
-auto phase_increment_tracker::for_freq(
-        // NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
-        clover_float fs,
-        clover_float freq_hz,
-        clover_float domain) noexcept -> phase_increment_tracker {
+auto phase_increment_tracker::for_freq(clover_float fs, clover_float freq_hz, clover_float domain) noexcept
+        -> phase_increment_tracker {
     auto pit = phase_increment_tracker{
             .m_current_phase   = 0,
             .m_phase_increment = 0,
@@ -31,10 +28,7 @@ auto phase_increment_tracker::for_freq(
 }
 
 auto phase_increment_tracker::for_period(
-        // NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
-        clover_float fs,
-        clover_float num_samples,
-        clover_float domain) noexcept -> phase_increment_tracker {
+        clover_float fs, clover_float num_samples, clover_float domain) noexcept -> phase_increment_tracker {
     auto pit = phase_increment_tracker{
             .m_current_phase   = 0,
             .m_phase_increment = 0,
