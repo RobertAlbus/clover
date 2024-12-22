@@ -7,6 +7,7 @@
 #include <stdexcept>
 #include <string>
 
+#include "clover/io/detail/pa_util.hpp"
 #include "portaudio.h"
 
 #include "clover/io/system_audio.hpp"
@@ -46,6 +47,8 @@ auto device::to_string() -> std::string {
 }
 
 system_audio_config::system_audio_config() {
+    pa_util::pa_initialize();
+
     const int host_api_count = Pa_GetHostApiCount();
     hosts.reserve(host_api_count);
 
@@ -71,6 +74,7 @@ system_audio_config::system_audio_config() {
                        .host_index                     = current_device->hostApi,
                        .host_name                      = hosts[current_device->hostApi]});
     }
+    pa_util::pa_terminate();
 }
 
 auto system_audio_config::default_input() -> device {

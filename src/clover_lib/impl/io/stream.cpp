@@ -2,34 +2,28 @@
 // Copyright (C) 2023  Rob W. Albus
 // Licensed under the GPLv3. See LICENSE for details.
 
-#include <cstdio>
-#include <fcntl.h>  // swallow portaudio logging
-#include <format>   // IWYU pragma: keep
-#include <iostream>
+#include <format>  // IWYU pragma: keep
 
 #include "portaudio.h"
 
 #include "clover/io/audio_callback.hpp"
+#include "clover/io/detail/pa_util.hpp"
 #include "clover/io/stream.hpp"
 
 namespace clover::io {
 
 stream::stream() : current_stream(nullptr), completion_signal(0) {
-    int saved_stderr = dup(STDERR_FILENO);
-    int devnull      = ::open("/dev/null", O_RDWR);
-
-    dup2(devnull, STDERR_FILENO);       // swallow port audio logging
-    handle_pa_error(Pa_Initialize());   //
-    dup2(saved_stderr, STDERR_FILENO);  // unswallow port audio logging
+    pa_util::pa_initialize();
 }
+
 stream::~stream() {
     if (current_stream != nullptr) {
-        print_pa_error(Pa_StopStream(current_stream));
-        print_pa_error(Pa_CloseStream(current_stream));
+        pa_util::print_pa_error(Pa_StopStream(current_stream));
+        pa_util::print_pa_error(Pa_CloseStream(current_stream));
         current_stream = nullptr;
     }
 
-    print_pa_error(Pa_Terminate());
+    pa_util::pa_terminate();
 }
 
 void stream::start() {
@@ -39,8 +33,8 @@ void stream::start() {
                             "clover::stream::open(device)\n"
                             "exiting..."));
     }
-    handle_pa_error(Pa_IsStreamActive(current_stream));
-    handle_pa_error(Pa_StartStream(current_stream));
+    pa_util::handle_pa_error(Pa_IsStreamActive(current_stream));
+    pa_util::handle_pa_error(Pa_StartStream(current_stream));
 }
 
 void stream::wait_to_complete() {
@@ -49,7 +43,7 @@ void stream::wait_to_complete() {
 
 void stream::stop() {
     if (current_stream != nullptr) {
-        handle_pa_error(Pa_StopStream(current_stream));
+        pa_util::handle_pa_error(Pa_StopStream(current_stream));
         current_stream = nullptr;
     }
 }
@@ -86,9 +80,9 @@ void stream::open(stream::settings settings) {
         pa_out_params->hostApiSpecificStreamInfo = nullptr;
     }
 
-    handle_pa_error(Pa_IsFormatSupported(pa_in_params, pa_out_params, current_settings.sample_rate));
+    pa_util::handle_pa_error(Pa_IsFormatSupported(pa_in_params, pa_out_params, current_settings.sample_rate));
 
-    handle_pa_error(Pa_OpenStream(
+    pa_util::handle_pa_error(Pa_OpenStream(
             &current_stream,
             pa_in_params,
             pa_out_params,
@@ -98,7 +92,8 @@ void stream::open(stream::settings settings) {
             &stream::pa_audio_callback,
             this));
 
-    handle_pa_error(Pa_SetStreamFinishedCallback(current_stream, &stream::pa_stream_complete_callback));
+    pa_util::handle_pa_error(
+            Pa_SetStreamFinishedCallback(current_stream, &stream::pa_stream_complete_callback));
     delete pa_in_params;
     delete pa_out_params;
 }
@@ -147,26 +142,6 @@ int stream::pa_audio_callback(
     }
 
     return paContinue;
-}
-
-void stream::handle_pa_error(int err) {
-    if (err != paNoError) {
-        throw std::runtime_error(std::format(
-                "PaErrorCode {} {}\n\n"
-                "exiting...\n",
-                err,
-                Pa_GetErrorText(err)));
-    }
-}
-
-void stream::print_pa_error(int err) {
-    if (err != paNoError) {
-        std::cout << std::format(
-                "PaErrorCode {} {}\n\n"
-                "exiting...\n",
-                err,
-                Pa_GetErrorText(err));
-    }
 }
 
 }  // namespace clover::io
