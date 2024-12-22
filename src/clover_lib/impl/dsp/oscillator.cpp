@@ -87,23 +87,11 @@ auto wave_tri(clover_float x) -> clover_float {
     return -2 * std::abs((x / num::pi) - 1) + 1;
 }
 
-// the following code is adapted from
-// https://www.musicdsp.org/en/latest/Synthesis/216-fast-whitenoise-generator.html
-// orgiinally by ed.bew@hcrikdlef.dreg
-
-// NOLINTNEXTLINE(bugprone-integer-division)
-constexpr clover_float _wave_noise_fScale = 2 / 4294967295.f;
-
-int _wave_noise_x1 = 0x70f4f854;
-// NOLINTNEXTLINE(bugprone-narrowing-conversions)
-int _wave_noise_x2 = 0xe1e9f0a7;
+int noise_state = 0x67452301;
 
 auto wave_noise(clover_float x) -> clover_float {
-    _wave_noise_x1 ^= _wave_noise_x2;
-    clover_float signal = static_cast<clover_float>(_wave_noise_x2) * _wave_noise_fScale;
-    _wave_noise_x2 += _wave_noise_x1;
-
-    return signal;
+    noise_state = (noise_state * 196314165) + 907633515;
+    return (float)(noise_state) * 0.0000000004656612873077392578125f;
 }
 
 }  // namespace clover::dsp
