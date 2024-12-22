@@ -7,6 +7,8 @@
 #include <cstdint>
 #include <functional>
 
+#include "clover/audio_buffer.hpp"
+
 namespace clover::io {
 
 struct callback_args {
@@ -20,5 +22,12 @@ struct callback_args {
 enum struct callback_status { cont, end };
 using callback          = std::function<callback_status(callback_args)>;
 using complete_callback = std::function<void()>;
+
+audio_buffer exec_callback(
+        // NOLINTNEXTLINE(bugprone-easily-swappable-parameters)
+        io::callback audio_callback,
+        int channels_out,
+        int sample_rate,
+        int_fast64_t duration);
 
 }  // namespace clover::io
