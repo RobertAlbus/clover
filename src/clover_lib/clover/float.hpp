@@ -9,3 +9,9 @@
 #endif
 
 using clover_float = CLOVER_FLOAT;
+
+namespace clover {
+
+bool float_eq(clover_float a, clover_float b);
+
+}
