@@ -35,6 +35,7 @@ TEST(dsp_env_linear, resets_from_to) {
 
 TEST(dsp_env_linear, resets_to) {
     env_linear env;
+
     // initial conditions: halfway complete
     env.m_current_step = 50;
     env.m_target_step  = 100;
@@ -48,8 +49,45 @@ TEST(dsp_env_linear, resets_to) {
     EXPECT_FLOAT_EQ(env.m_to, 9);
 }
 
+TEST(dsp_env_linear, resets_immediately) {
+    env_linear env;
+
+    // initial conditions: halfway complete
+    env.m_current_step = 50;
+    env.m_target_step  = 100;
+    env.m_from         = 0;
+    env.m_to           = 10;
+
+    env.set(30, 0);
+
+    EXPECT_FLOAT_EQ(env.m_current_step, 0);
+    EXPECT_FLOAT_EQ(env.m_target_step, 0);
+    EXPECT_FLOAT_EQ(env.m_from, 5);
+    EXPECT_FLOAT_EQ(env.m_to, 30);
+}
+
+TEST(dsp_env_linear, negative_duration_handled_as_zero) {
+    env_linear env;
+
+    // initial conditions: halfway complete
+    env.m_current_step = 50;
+    env.m_target_step  = 100;
+    env.m_from         = 0;
+    env.m_to           = 10;
+
+    env.set(30, -100);
+
+    EXPECT_FLOAT_EQ(env.m_current_step, 0);
+    EXPECT_FLOAT_EQ(env.m_target_step, 0);
+    EXPECT_FLOAT_EQ(env.m_from, 5);
+    EXPECT_FLOAT_EQ(env.m_to, 30);
+
+    EXPECT_FLOAT_EQ(env.tick(), 30);
+}
+
 TEST(dsp_env_linear, sets_to) {
     env_linear env;
+
     // initial conditions: halfway complete
     env.m_current_step = 50;
     env.m_target_step  = 100;
@@ -65,6 +103,7 @@ TEST(dsp_env_linear, sets_to) {
 
 TEST(dsp_env_linear, correct_when_reset_from_and_to) {
     env_linear env;
+
     // initial conditions: halfway complete
     env.m_current_step = 123;
     env.m_target_step  = 1234;
@@ -84,6 +123,7 @@ TEST(dsp_env_linear, correct_when_reset_from_and_to) {
 
 TEST(dsp_env_linear, correct_when_reset_to) {
     env_linear env;
+
     // initial conditions: halfway complete
     env.m_current_step = 50;
     env.m_target_step  = 100;
@@ -101,21 +141,39 @@ TEST(dsp_env_linear, correct_when_reset_to) {
 
 TEST(dsp_env_linear, correct_when_set_to) {
     env_linear env;
+
+    // initial conditions: halfway complete
+    env.m_current_step = 5;
+    env.m_target_step  = 10;
+    env.m_from         = 0;
+    env.m_to           = 10;
+
+    env.set(25);
+    EXPECT_FLOAT_EQ(5, env.tick());
+    EXPECT_FLOAT_EQ(9, env.tick());
+    EXPECT_FLOAT_EQ(13, env.tick());
+    EXPECT_FLOAT_EQ(17, env.tick());
+    EXPECT_FLOAT_EQ(21, env.tick());
+    EXPECT_FLOAT_EQ(25, env.tick());
+    EXPECT_FLOAT_EQ(25, env.tick());
+    EXPECT_FLOAT_EQ(25, env.tick());
+
+    env.set(20);
+    EXPECT_FLOAT_EQ(20, env.tick());
+    EXPECT_FLOAT_EQ(20, env.tick());
+    EXPECT_FLOAT_EQ(20, env.tick());
+}
+
+TEST(dsp_env_linear, correct_when_reset_immediately) {
+    env_linear env;
+
     // initial conditions: halfway complete
     env.m_current_step = 50;
     env.m_target_step  = 100;
     env.m_from         = 0;
     env.m_to           = 10;
 
-    clover_float new_to = 100;
-    env.set(new_to);
-    EXPECT_FLOAT_EQ(5, env.m_from);
+    env.set(30, 0);
 
-    clover_float from_midpoint      = env.m_from;
-    clover_float remaining_duration = env.m_target_step - env.m_current_step;
-
-    for (auto n : std::views::iota(0, (int)remaining_duration)) {
-        EXPECT_FLOAT_EQ(env.tick(), from_midpoint + (n / remaining_duration) * (new_to - from_midpoint));
-    }
-    EXPECT_FLOAT_EQ(env.tick(), new_to);
+    EXPECT_FLOAT_EQ(env.tick(), 30);
 }
