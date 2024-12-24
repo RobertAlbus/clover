@@ -20,7 +20,7 @@ struct env_linear {
     // new envelope from current value to b over n samples
     void set(clover_float b, clover_float n);
 
-    // update envelope b without restarting
+    // new envelope from current value to b over remaining duration
     void set(clover_float b);
 
     clover_float tick();

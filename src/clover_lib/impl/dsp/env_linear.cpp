@@ -20,10 +20,13 @@ void env_linear::set(clover_float b, clover_float n) {
     m_to   = b;
 
     m_current_step = 0;
-    m_target_step  = n;
+    m_target_step  = std::max({0}, n);
 }
 
 void env_linear::set(clover_float b) {
+    if (float_eq(m_to, b))
+        return;
+
     m_from         = std::lerp(m_from, m_to, m_current_step / m_target_step);
     m_target_step  = m_target_step - m_current_step;
     m_current_step = 0;
