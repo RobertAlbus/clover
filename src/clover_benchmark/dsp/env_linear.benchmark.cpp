@@ -12,7 +12,7 @@
 
 using namespace clover::dsp;
 
-static void BM_envelope_busy(benchmark::State& state) {
+static void BM_env_linear_busy(benchmark::State& state) {
     auto range = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));
     env_linear env;
 
@@ -41,7 +41,7 @@ static void BM_envelope_busy(benchmark::State& state) {
     }
 }
 
-static void BM_envelope_steady(benchmark::State& state) {
+static void BM_env_linear_steady(benchmark::State& state) {
     auto range = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));
     env_linear env;
     env.set(30, 999, 4800);
@@ -59,13 +59,13 @@ static void BM_envelope_steady(benchmark::State& state) {
 }
 
 bm_assert(
-        BM_envelope_busy,
+        BM_env_linear_busy,
         clover_bm::duration / 9000.,  // min
         clover_bm::duration / 9000.   // target
 );
 
 bm_assert(
-        BM_envelope_steady,
+        BM_env_linear_steady,
         clover_bm::duration / 30000.,  // min
         clover_bm::duration / 30000.   // target
 );
