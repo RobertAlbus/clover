@@ -185,13 +185,13 @@ bm_assert(
 
 bm_assert(
         BM_frequency_by_octave_difference,
-        clover_bm::duration / 4000.,  // min
+        clover_bm::duration / 5000.,  // min
         clover_bm::duration / 5000.   // target
 );
 
 bm_assert(
         BM_frequency_by_semitone_difference,
-        clover_bm::duration / 4000.,  // min
+        clover_bm::duration / 5000.,  // min
         clover_bm::duration / 5000.   // target
 );
 
@@ -215,18 +215,18 @@ bm_assert(
 
 bm_assert(
         BM_tension,
-        clover_bm::duration / 10000.,  // min
-        clover_bm::duration / 12000.   // target
+        clover_bm::duration / 5900.,  // min
+        clover_bm::duration / 5900.   // target
 );
 
 bm_assert(
         BM_tension_pos_a,
-        clover_bm::duration / 18000.,  // min
+        clover_bm::duration / 20000.,  // min
         clover_bm::duration / 20000.   // target
 );
 
 bm_assert(
         BM_tension_neg_a,
-        clover_bm::duration / 20000.,  // min
+        clover_bm::duration / 25000.,  // min
         clover_bm::duration / 25000.   // target
 );

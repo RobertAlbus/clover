@@ -58,30 +58,30 @@ static void BM_wave_noise(benchmark::State& state) {
 
 bm_assert(
         BM_wave_sine,
-        clover_bm::duration / 4000.,  // min
+        clover_bm::duration / 5000.,  // min
         clover_bm::duration / 5000.   // target
 );
 
 bm_assert(
         BM_wave_square,
-        clover_bm::duration / 25000.,  // min
+        clover_bm::duration / 28000.,  // min
         clover_bm::duration / 28000.   // target
 );
 
 bm_assert(
         BM_wave_saw,
-        clover_bm::duration / 25000.,  // min
+        clover_bm::duration / 28000.,  // min
         clover_bm::duration / 28000.   // target
 );
 
 bm_assert(
         BM_wave_tri,
-        clover_bm::duration / 10000.,  // min
+        clover_bm::duration / 14000.,  // min
         clover_bm::duration / 14000.   // target
 );
 
 bm_assert(
         BM_wave_noise,
-        clover_bm::duration / 10000.,  // min
+        clover_bm::duration / 11000.,  // min
         clover_bm::duration / 11000.   // target
 );

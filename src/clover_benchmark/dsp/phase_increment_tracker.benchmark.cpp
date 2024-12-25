@@ -46,6 +46,6 @@ bm_assert(
 
 bm_assert(
         BM_phase_increment_tracker_only_tick,
-        clover_bm::duration / 10000.,  // min
+        clover_bm::duration / 11000.,  // min
         clover_bm::duration / 11000.   // target
 );
