@@ -6,6 +6,7 @@
 
 #include <cmath>
 #include <ranges>
+#include <stdexcept>
 #include <vector>
 
 #include "clover/float.hpp"
@@ -13,63 +14,101 @@
 
 namespace clover::dsp {
 
-std::vector<clover_float> generalized_hann_window(int size, clover_float alpha) {
-    std::vector<clover_float> window;
-    window.resize(size, 0);
-
+// assume even size
+void generalized_hann_window(int size, clover_float alpha, clover_float* out) {
     constexpr clover_float half = 0.5;
     for (auto n : std::views::iota(0, (size - 1) / 2)) {
         clover_float window_value =
                 alpha + (1 - alpha) * half *
                                 (1 - std::cos((2 * num::pi * (clover_float)n) / ((clover_float)size - 1)));
 
+        clover_float* i_front = out + n;
+        clover_float* i_back  = out + (size - 1 - n);
 
-        window[n]            = window_value;
-        window[size - 1 - n] = window_value;
-        
-        window.emplace_back(window_value);
+        *i_front = window_value;
+        *i_back  = window_value;
     }
-
-    return window;
 }
 
-std::vector<clover_float> sinc(int size, clover_float interpolate) {
-    std::vector<clover_float> sinc;
-    sinc.resize(size, 0);
-
-    for (auto x : std::views::iota(0, (size - 1) / 2)) {
-        clover_float sinc_val = 1;
-        if (x != 0) {
-            clover_float pi_x = num::pi * (float)x;
-            sinc_val          = std::sin(pi_x) / pi_x;
+void sinc(int size, clover_float interpolate, clover_float* out) {
+    for (auto n : std::views::iota(0, (size - 1) / 2)) {
+        clover_float sinc_value = 1;
+        if (n != 0) {
+            clover_float pi_x = num::pi * (float)n;
+            sinc_value        = std::sin(pi_x) / pi_x;
         }
 
-        sinc[x]            = sinc_val;
-        sinc[size - 1 - x] = sinc_val;
-    }
+        clover_float* i_front = out + n;
+        clover_float* i_back  = out + (size - 1 - n);
 
-    return sinc;
+        *i_front = sinc_value;
+        *i_back  = sinc_value;
+    }
 }
 
-std::vector<clover_float> kernel(std::vector<clover_float>& window, std::vector<clover_float>& sinc_coefficients) {
-    std::vector<clover_float> kernel;
-    kernel.reserve(window.size());
-
-    for (auto i : std::views::iota(0, (int) window.size() - 1)) {
-        kernel.emplace_back(window[i] * sinc_coefficients[i]);
+void kernel(int size, const clover_float* window, const clover_float* sinc, clover_float* out) {
+    for (auto i : std::views::iota(0, size - 1)) {
+        *(out + i) = *(window + i) * *(sinc + i);
     }
-
-    return kernel;
 }
 
-std::vector<clover_float> windowed_sinc(std::vector<clover_float>& result, std::vector<clover_float>& signal, std::vector<clover_float>& kernel) {
-    for (auto i : std::views::iota(0, (int) signal.size() - 1)) {
-        result[i] = signal[i] * kernel[i];
+void windowed_sinc(int size, const clover_float* signal, const clover_float* kernel, clover_float* out) {
+    for (auto i : std::views::iota(0, size - 1)) {
+        *(out + i) = *(signal + i) * kernel[i];
     }
-
-    return kernel;
 }
 
 struct interpolate {};
+
+#include <iterator>
+#include <ranges>
+
+struct circular_view : std::ranges::view_interface<circular_view> {
+    clover_float* m_data;
+    size_t m_size;
+
+    circular_view(clover_float* data, size_t size)
+        : m_data(data), m_size(size) {
+    }
+
+    struct iterator {
+        using iterator_category = std::forward_iterator_tag;
+        using value_type        = clover_float*;
+        using difference_type   = std::ptrdiff_t;
+        using reference         = clover_float*;
+
+        const circular_view* m_view;
+        size_t m_from;
+
+        reference operator*() const {
+            return m_view->m_data + m_from;
+        }
+
+        iterator& operator++() {
+            ++m_from;
+            if (m_from >= m_view->m_size)
+                ++m_from -= m_view->m_size;
+            return *this;
+        }
+
+        iterator operator++(int) {
+            auto temp = *this;
+            ++(*this);
+            return temp;
+        }
+
+        bool operator==(const iterator& other) const {
+            return m_view == other.m_view && m_from == other.m_from;
+        }
+    };
+
+    iterator begin() const {
+        return iterator{this, 0};
+    }
+
+    iterator end() const {
+        return iterator{this, m_size};
+    }
+};
 
 }  // namespace clover::dsp
