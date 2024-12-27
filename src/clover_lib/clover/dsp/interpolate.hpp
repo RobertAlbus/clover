@@ -14,23 +14,38 @@
 
 namespace clover::dsp {
 
+namespace {
+
+    bool is_odd(int x) {
+        return x % 2;
+    }
+
+}  // namespace
 // assume even size
 void generalized_hann_window(int size, clover_float alpha, clover_float* out) {
-    constexpr clover_float half = 0.5;
+    if (is_odd(size))
+        throw std::invalid_argument("argument size for generalized_hann_window() must be even");
+
+    clover_float* front = out;
+    clover_float* back  = out + size - 1;
+
     for (auto n : std::views::iota(0, (size - 1) / 2)) {
         clover_float window_value =
-                alpha + (1 - alpha) * half *
+                alpha + (1 - alpha) * 0.5f *
                                 (1 - std::cos((2 * num::pi * (clover_float)n) / ((clover_float)size - 1)));
 
-        clover_float* i_front = out + n;
-        clover_float* i_back  = out + (size - 1 - n);
-
-        *i_front = window_value;
-        *i_back  = window_value;
+        *(front + n) = window_value;
+        *(back - n)  = window_value;
     }
 }
 
 void sinc(int size, clover_float interpolate, clover_float* out) {
+    if (is_odd(size))
+        throw std::invalid_argument("argument size for sinc() must be even");
+
+    clover_float* front = out;
+    clover_float* back  = out + size - 1;
+
     for (auto n : std::views::iota(0, (size - 1) / 2)) {
         clover_float sinc_value = 1;
         if (n != 0) {
@@ -38,77 +53,29 @@ void sinc(int size, clover_float interpolate, clover_float* out) {
             sinc_value        = std::sin(pi_x) / pi_x;
         }
 
-        clover_float* i_front = out + n;
-        clover_float* i_back  = out + (size - 1 - n);
-
-        *i_front = sinc_value;
-        *i_back  = sinc_value;
+        *(front + n) = sinc_value;
+        *(back - n)  = sinc_value;
     }
 }
 
 void kernel(int size, const clover_float* window, const clover_float* sinc, clover_float* out) {
+    if (is_odd(size))
+        throw std::invalid_argument("argument size for kernel() must be even");
+
     for (auto i : std::views::iota(0, size - 1)) {
         *(out + i) = *(window + i) * *(sinc + i);
     }
 }
 
 void windowed_sinc(int size, const clover_float* signal, const clover_float* kernel, clover_float* out) {
+    if (is_odd(size))
+        throw std::invalid_argument("argument size for windowed_sinc() must be even");
+
     for (auto i : std::views::iota(0, size - 1)) {
         *(out + i) = *(signal + i) * kernel[i];
     }
 }
 
 struct interpolate {};
-
-#include <iterator>
-#include <ranges>
-
-struct circular_view : std::ranges::view_interface<circular_view> {
-    clover_float* m_data;
-    size_t m_size;
-
-    circular_view(clover_float* data, size_t size)
-        : m_data(data), m_size(size) {
-    }
-
-    struct iterator {
-        using iterator_category = std::forward_iterator_tag;
-        using value_type        = clover_float*;
-        using difference_type   = std::ptrdiff_t;
-        using reference         = clover_float*;
-
-        const circular_view* m_view;
-        size_t m_from;
-
-        reference operator*() const {
-            return m_view->m_data + m_from;
-        }
-
-        iterator& operator++() {
-            ++m_from;
-            if (m_from >= m_view->m_size)
-                ++m_from -= m_view->m_size;
-            return *this;
-        }
-
-        iterator operator++(int) {
-            auto temp = *this;
-            ++(*this);
-            return temp;
-        }
-
-        bool operator==(const iterator& other) const {
-            return m_view == other.m_view && m_from == other.m_from;
-        }
-    };
-
-    iterator begin() const {
-        return iterator{this, 0};
-    }
-
-    iterator end() const {
-        return iterator{this, m_size};
-    }
-};
 
 }  // namespace clover::dsp
