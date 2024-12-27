@@ -114,7 +114,7 @@ circular_view<T>::iterator& circular_view<T>::iterator::operator+=(difference_ty
         return *this;
     }
 
-    m_current = m_begin + (size - n);
+    m_current = m_begin + (n - remaining_before_wrap - 1);
     return *this;
 }
 
