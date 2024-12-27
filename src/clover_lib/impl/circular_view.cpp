@@ -3,6 +3,8 @@
 // Licensed under the GPLv3. See LICENSE for details.
 
 #include "clover/circular_view.hpp"
+#include "clover/float.hpp"
+#include <vector>
 
 namespace clover {
 
@@ -68,17 +70,12 @@ circular_view<T>::iterator
 ;
 
 template <circular_viewable T>
-T::value_type circular_view<T>::iterator::operator*() {
+T::reference circular_view<T>::iterator::operator*() {
     return *m_current;
 }
 
 template <circular_viewable T>
-T::reference circular_view<T>::iterator::operator*() const {
-    return *m_current;
-}
-
-template <circular_viewable T>
-circular_view<T>::iterator& circular_view<T>::iterator::operator[](difference_type n) {
+circular_view<T>::iterator circular_view<T>::iterator::operator[](difference_type n) {
     return *this + n;
 }
 
@@ -167,17 +164,20 @@ bool circular_view<T>::iterator::operator==(const iterator& other) {
 }
 
 template <circular_viewable T>
-bool circular_view<T>::iterator::operator==(const T& other) {
-    bool is_equal = m_current == other.m_current && m_has_moved;
-    if (is_equal) {
-        m_has_moved = false;
-    }
-    return is_equal;
-}
-
-template <circular_viewable T>
 bool circular_view<T>::iterator::operator!=(const iterator& other) {
     return !(*this == other);
 }
+
+template <circular_viewable T>
+bool circular_view<T>::iterator::operator==(const T& other) const {
+    return m_current == other;
+}
+
+template <circular_viewable T>
+bool circular_view<T>::iterator::operator!=(const T& other) const {
+    return m_current != other;
+}
+
+template struct clover::circular_view<std::vector<clover_float>::iterator>;
 
 }  // namespace clover

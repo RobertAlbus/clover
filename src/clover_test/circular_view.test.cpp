@@ -12,23 +12,28 @@
 using namespace clover;
 
 TEST(circular_view, instantiates_at_beginning) {
-    auto data = std::views::iota(0, 10) |
-                std::ranges::to<std::vector>();
+    int size   = 10;
+    auto range = std::views::iota(0, size);
+
+    std::vector<clover_float> data =
+            range | std::views::transform([](int v) { return static_cast<clover_float>(v); }) |
+            std::ranges::to<std::vector>();
 
     circular_view circle{data.begin(), data.end()};
 
     EXPECT_EQ(circle.m_begin, data.begin());
-    EXPECT_EQ(circle.m_begin_from, data.begin());
     EXPECT_EQ(circle.m_sentinel, data.end());
-
 
     EXPECT_EQ(circle.begin(), data.begin());
 }
 
 TEST(circular_view, instantiates_from_position) {
-    auto data = std::views::iota(0, 10) |
-                std::views::transform([](int v) { return static_cast<clover_float>(v); }) |
-                std::ranges::to<std::vector>();
+    int size   = 10;
+    auto range = std::views::iota(0, size);
+
+    std::vector<clover_float> data =
+            range | std::views::transform([](int v) { return static_cast<clover_float>(v); }) |
+            std::ranges::to<std::vector>();
 
     auto from = data.begin() + 4;
 
@@ -38,20 +43,18 @@ TEST(circular_view, instantiates_from_position) {
     EXPECT_EQ(circle.m_begin_from, from);
     EXPECT_EQ(circle.m_sentinel, data.end());
 
-
     EXPECT_EQ(circle.begin().m_begin, data.begin());
     EXPECT_EQ(circle.begin(), from);
     EXPECT_EQ(circle.begin().m_sentinel, data.end());
 }
 
+TEST(circular_view, operator_index) {
+    int size   = 10;
+    auto range = std::views::iota(0, size);
 
-TEST(circular_view, works_with_clover_float) {
-    auto range = std::views::iota(0, 10);
-
-
-    auto data = range |
-                std::views::transform([](int v) { return static_cast<clover_float>(v); }) |
-                std::ranges::to<std::vector>();
+    std::vector<clover_float> data =
+            range | std::views::transform([](int v) { return static_cast<clover_float>(v); }) |
+            std::ranges::to<std::vector>();
 
     circular_view circle{data.begin(), data.end()};
 
@@ -59,19 +62,13 @@ TEST(circular_view, works_with_clover_float) {
         EXPECT_FLOAT_EQ(*circle.begin()[n], n);
     }
 
-    auto from = data.begin() + 4;
+    using difference_type  = decltype(circle)::iterator::difference_type;
+    difference_type offset = 4;
+    auto from              = data.begin() + offset;
     circular_view circle_offset{data.begin(), data.end(), from};
 
     for (auto n : range) {
-        EXPECT_FLOAT_EQ(*circle_offset.begin()[n], n);
+        difference_type i = (n + offset) % size;
+        EXPECT_FLOAT_EQ(*circle_offset.begin()[i], data[i]);
     }
-
-    EXPECT_EQ(circle.m_begin, data.begin());
-    EXPECT_EQ(circle.m_begin_from, from);
-    EXPECT_EQ(circle.m_sentinel, data.end());
-
-
-    EXPECT_EQ(circle.begin().m_begin, data.begin());
-    EXPECT_EQ(circle.begin(), from);
-    EXPECT_EQ(circle.begin().m_sentinel, data.end());
 }

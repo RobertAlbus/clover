@@ -42,10 +42,9 @@ struct circular_view : std::ranges::view_interface<circular_view<T>> {
         */
         bool m_has_moved = false;
 
-        value_type operator*();
-        reference operator*() const;
+        reference operator*();
 
-        iterator& operator[](difference_type n);
+        iterator operator[](difference_type n);
 
         iterator& operator++();
         iterator operator++(int);
@@ -56,14 +55,40 @@ struct circular_view : std::ranges::view_interface<circular_view<T>> {
         iterator& operator-=(difference_type n);
         iterator operator-(difference_type n) const;
 
-        /*
-        internal state is required for iterator based loops.
-        operator== resets this state for LHS.
-        see also: circular_view<T>::iterator::m_has_moved
+        /* internal state is required for iterator based loops.
+        operator== may reset state for LHS.
+        see also: circular_view<T>::iterator::is_same(iterator&).
+        see also: circular_view<T>::iterator::operator==(iterator&).
+        see also: circular_view<T>::iterator::operator!=(iterator&).
+        see also: circular_view<T>::iterator::operator==(T&).
+        see also: circular_view<T>::iterator::operator!=(T&).
+        see also: circular_view<T>::iterator::m_has_moved.
         */
         bool operator==(const iterator& other);
-        bool operator==(const T& other);
+        /*
+        internal state is required for iterator based loops.
+        operator!= may reset this state for LHS.
+        see also: circular_view<T>::iterator::operator==(iterator&).
+        */
         bool operator!=(const iterator& other);
+        /*
+        internal state is required for iterator based loops.
+        is_same() does not reset state for LHS.
+        see also: circular_view<T>::iterator::operator==(iterator&).
+        */
+        bool is_same(const iterator& other) const;
+        /*
+        internal state is required for iterator based loops.
+        operator==(const T&) does not reset state for LHS.
+        see also: circular_view<T>::iterator::operator==(iterator&).
+        */
+        bool operator==(const T& other) const;
+        /*
+        internal state is required for iterator based loops.
+        operator!=(const T&) does not reset state for LHS.
+        see also: circular_view<T>::iterator::operator==(iterator&).
+        */
+        bool operator!=(const T& other) const;
     };
 
     const T m_begin;
