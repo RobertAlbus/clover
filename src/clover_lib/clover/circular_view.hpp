@@ -4,12 +4,8 @@
 // Copyright (C) 2023  Rob W. Albus
 // Licensed under the GPLv3. See LICENSE for details.
 
-#include "clover/float.hpp"
-#include <iostream>
 #include <iterator>
-#include <ostream>
 #include <ranges>
-#include <vector>
 
 namespace clover {
 
@@ -22,6 +18,7 @@ concept circular_viewable = requires {
     typename T::reference;
 
     requires std::contiguous_iterator<T>;
+    requires std::copyable<T>;
 };
 
 template <circular_viewable T>
@@ -36,10 +33,20 @@ struct circular_view : std::ranges::view_interface<circular_view<T>> {
         const T m_begin;
         const T m_sentinel;
         T m_current;
+
+        /*
+        the sentinel for a circular loop is the starting iterator, so we need
+        to handle this as a special case.
+
+        see also: operator==(iterator&)
+        */
         bool m_has_moved = false;
 
         value_type operator*();
         reference operator*() const;
+
+        iterator& operator[](difference_type n);
+
         iterator& operator++();
         iterator operator++(int);
         iterator& operator+=(difference_type n);
@@ -48,7 +55,14 @@ struct circular_view : std::ranges::view_interface<circular_view<T>> {
         iterator operator--(int);
         iterator& operator-=(difference_type n);
         iterator operator-(difference_type n) const;
+
+        /*
+        internal state is required for iterator based loops.
+        operator== resets this state for LHS.
+        see also: circular_view<T>::iterator::m_has_moved
+        */
         bool operator==(const iterator& other);
+        bool operator==(const T& other);
         bool operator!=(const iterator& other);
     };
 
@@ -59,6 +73,7 @@ struct circular_view : std::ranges::view_interface<circular_view<T>> {
     circular_view(T start, T sentinel);
     circular_view(T start, T sentinel, T start_from);
     circular_view(T start, T sentinel, iterator start_from);
+
     iterator begin() const;
     iterator end() const;
     circular_view from(iterator it) const;
