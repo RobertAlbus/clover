@@ -14,6 +14,10 @@ circular_buffer::circular_buffer(reverse_iterator rbegin, reverse_iterator rend)
     : m_rbegin(rbegin), m_current(rbegin), m_rend(rend) {
 }
 
+circular_buffer::circular_buffer(std::vector<clover_float>& underlying)
+    : circular_buffer(underlying.rbegin(), underlying.rend()) {
+}
+
 void circular_buffer::tick(value_type x) {
     m_current[0] = x;
     ++m_current;

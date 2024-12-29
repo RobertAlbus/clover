@@ -21,6 +21,7 @@ struct circular_buffer {
     reverse_iterator m_rend;
 
     circular_buffer(reverse_iterator rbegin, reverse_iterator rend);
+    circular_buffer(std::vector<clover_float>& underlying);
 
     void tick(value_type x);
     reference operator[](int idx);

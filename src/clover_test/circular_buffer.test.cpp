@@ -17,7 +17,13 @@ TEST(circular_buffer, instantiates) {
     std::vector<clover_float> audio_data;
     audio_data.resize(20, 0);
 
-    circular_buffer buffer = {audio_data.rbegin(), audio_data.rend()};
+    circular_buffer buffer{audio_data.rbegin(), audio_data.rend()};
+
+    EXPECT_EQ(audio_data.rbegin(), buffer.m_rbegin);
+    EXPECT_EQ(audio_data.rbegin(), buffer.m_current);
+    EXPECT_EQ(audio_data.rend(), buffer.m_rend);
+
+    buffer = {audio_data};
 
     EXPECT_EQ(audio_data.rbegin(), buffer.m_rbegin);
     EXPECT_EQ(audio_data.rbegin(), buffer.m_current);
