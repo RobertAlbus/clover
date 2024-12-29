@@ -5,9 +5,9 @@
 #include <cmath>
 #include <cstdint>
 #include <cstdio>
+#include <stdexcept>
 
 #include <gtest/gtest.h>
-#include <stdexcept>
 
 #include "clover/dsp/env_automation_clip.hpp"
 using namespace clover;
