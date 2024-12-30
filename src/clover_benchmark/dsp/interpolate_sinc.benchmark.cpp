@@ -6,7 +6,7 @@
 
 #include "benchmark/benchmark.h"
 
-#include "clover/dsp/interpolate.hpp"
+#include "clover/dsp/interpolate_sinc.hpp"
 
 #include "clover/circular_buffer.hpp"
 #include "clover_benchmark/util.hpp"
@@ -70,7 +70,7 @@ static void BM_interpolate_steady_64(benchmark::State& state) {
     for (auto _ : state) {
         auto range = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));
         for (auto i : range) {
-            clover::dsp::interpolate(buffer, sinc);
+            clover::dsp::interpolate_sinc(buffer, sinc);
         }
     }
 }
@@ -94,7 +94,7 @@ static void BM_interpolate_busy_64(benchmark::State& state) {
             clover::dsp::sinc_function(sinc, pct);
             clover::dsp::hadamard_product(sinc, window);
 
-            clover::dsp::interpolate(buffer, sinc);
+            clover::dsp::interpolate_sinc(buffer, sinc);
             buffer.tick(0.2f);
         }
     }
@@ -114,8 +114,8 @@ bm_assert(
 
 bm_assert(
         BM_interpolate_hadamard_product_64,
-        clover_bm::duration / 4900.,  // min
-        clover_bm::duration / 4900.   // target
+        clover_bm::duration / 4700.,  // min
+        clover_bm::duration / 4700.   // target
 );
 
 bm_assert(

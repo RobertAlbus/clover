@@ -7,7 +7,7 @@
 #include <vector>
 
 #include "clover/circular_buffer.hpp"
-#include "clover/dsp/interpolate.hpp"
+#include "clover/dsp/interpolate_sinc.hpp"
 #include "clover/float.hpp"
 #include "clover/num.hpp"
 
@@ -35,7 +35,7 @@ void hann_window_with_corner_control(std::vector<clover_float>& out, clover_floa
         out[(size / 2)] = 1;
 }
 
-clover_float interpolate(circular_buffer buffer, std::vector<clover_float>& kernel) {
+clover_float interpolate_sinc(circular_buffer buffer, std::vector<clover_float>& kernel) {
     int kernel_size = static_cast<int>(kernel.size());
 
     clover_float dot_product = 0;

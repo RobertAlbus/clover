@@ -8,14 +8,14 @@
 
 #include <gtest/gtest.h>
 
-#include "clover/dsp/interpolate.hpp"
+#include "clover/dsp/interpolate_sinc.hpp"
 #include "clover/dsp/oscillator.hpp"
 #include "clover/dsp/wave.hpp"
 
 using namespace clover;
 using namespace dsp;
 
-TEST(dsp_interpolate, hann_window) {
+TEST(dsp_interpolate_sinc, hann_window) {
     clover_float alpha = 0.2;
     std::vector<clover_float> window;
     window.resize(63, 0);
@@ -47,7 +47,7 @@ TEST(dsp_interpolate, hann_window) {
     }
 }
 
-TEST(dsp_interpolate, sinc_function) {
+TEST(dsp_interpolate_sinc, sinc_function) {
     std::vector<clover_float> sinc;
     sinc.resize(8, 0);
 
@@ -69,7 +69,7 @@ TEST(dsp_interpolate, sinc_function) {
     }
 }
 
-TEST(dsp_interpolate, interpolate_16) {
+TEST(dsp_interpolate_sinc, interpolate_16) {
     std::vector<clover_float> window;
     std::vector<clover_float> sinc_kernel;
 
@@ -91,18 +91,18 @@ TEST(dsp_interpolate, interpolate_16) {
     for (auto i : std::views::iota(0, 16))
         buffer.tick(osc.tick());
 
-    clover_float interpolated = interpolate(buffer, sinc_kernel);
+    clover_float interpolated = interpolate_sinc(buffer, sinc_kernel);
     EXPECT_NEAR(interpolated, buffer[7], .000073);
 
     sinc_function(sinc_kernel, 1);
     for (auto i : std::views::iota(0, 16))
         sinc_kernel[i] = sinc_kernel[i] * window[i];
 
-    interpolated = interpolate(buffer, sinc_kernel);
+    interpolated = interpolate_sinc(buffer, sinc_kernel);
     EXPECT_NEAR(interpolated, buffer[8], 0.0066);
 }
 
-TEST(dsp_interpolate, hadamard_product) {
+TEST(dsp_interpolate_sinc, hadamard_product) {
     std::vector<clover_float> a{1, 2, 3};
     std::vector<clover_float> b{4, 5, 6};
 
@@ -113,7 +113,7 @@ TEST(dsp_interpolate, hadamard_product) {
     EXPECT_FLOAT_EQ(a[2], 18);
 }
 
-TEST(dsp_interpolate, interpolate_64) {
+TEST(dsp_interpolate_sinc, interpolate_64) {
     std::vector<clover_float> window;
     std::vector<clover_float> sinc_kernel;
 
@@ -135,12 +135,12 @@ TEST(dsp_interpolate, interpolate_64) {
     for (auto i : std::views::iota(0, 64))
         buffer.tick(osc.tick());
 
-    clover_float interpolated = interpolate(buffer, sinc_kernel);
+    clover_float interpolated = interpolate_sinc(buffer, sinc_kernel);
     EXPECT_NEAR(interpolated, buffer[15], .000073);
 
     sinc_function(sinc_kernel, 1);
     hadamard_product(sinc_kernel, window);
 
-    interpolated = interpolate(buffer, sinc_kernel);
+    interpolated = interpolate_sinc(buffer, sinc_kernel);
     EXPECT_NEAR(interpolated, buffer[16], 0.0016);
 }
