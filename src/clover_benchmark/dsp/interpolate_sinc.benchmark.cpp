@@ -11,6 +11,52 @@
 #include "clover/circular_buffer.hpp"
 #include "clover_benchmark/util.hpp"
 
+void interpolator_benchmark(benchmark::State& state, int kernel_size, const bool act_busy) {
+    std::vector<clover_float> signal =
+            std::views::iota(-96000, 96000 - 1) |
+            std::views::transform([](int x) { return static_cast<clover_float>(x); }) |
+            std::ranges::to<std::vector>();
+    clover::dsp::circular_buffer buffer{signal};
+
+    auto size = static_cast<clover_float>(signal.size());
+
+    clover::dsp::interpolator_sinc interp{kernel_size, 0.2, 0.32};
+
+    for (auto _ : state) {
+        auto range = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));
+        for (auto i : range) {
+            buffer.tick(static_cast<clover_float>(i));
+            if (act_busy)
+                interp.interpolation(static_cast<clover_float>(i) / size);
+            benchmark::DoNotOptimize(interp.tick(buffer));
+        }
+    }
+}
+
+void BM_interpolator_steady_4(benchmark::State& state) {
+    interpolator_benchmark(state, 4, false);
+}
+
+void BM_interpolator_busy_4(benchmark::State& state) {
+    interpolator_benchmark(state, 4, true);
+}
+
+void BM_interpolator_steady_8(benchmark::State& state) {
+    interpolator_benchmark(state, 8, false);
+}
+
+void BM_interpolator_busy_8(benchmark::State& state) {
+    interpolator_benchmark(state, 8, true);
+}
+
+void BM_interpolator_steady_64(benchmark::State& state) {
+    interpolator_benchmark(state, 64, false);
+}
+
+void BM_interpolator_busy_64(benchmark::State& state) {
+    interpolator_benchmark(state, 64, true);
+}
+
 static void BM_interpolate_hann_window_64(benchmark::State& state) {
     std::vector<clover_float> window;
     window.resize(64, 0);
@@ -99,6 +145,42 @@ static void BM_interpolate_busy_64(benchmark::State& state) {
         }
     }
 }
+
+bm_assert(
+        BM_interpolator_steady_4,
+        clover_bm::duration / 1500.,  // min
+        clover_bm::duration / 1500.   // target
+);
+
+bm_assert(
+        BM_interpolator_busy_4,
+        clover_bm::duration / 750.,  // min
+        clover_bm::duration / 750.   // target
+);
+
+bm_assert(
+        BM_interpolator_steady_8,
+        clover_bm::duration / 1000.,  // min
+        clover_bm::duration / 1000.   // target
+);
+
+bm_assert(
+        BM_interpolator_busy_8,
+        clover_bm::duration / 400.,  // min
+        clover_bm::duration / 400.   // target
+);
+
+bm_assert(
+        BM_interpolator_steady_64,
+        clover_bm::duration / 170.,  // min
+        clover_bm::duration / 170.   // target
+);
+
+bm_assert(
+        BM_interpolator_busy_64,
+        clover_bm::duration / 50.,  // min
+        clover_bm::duration / 50.   // target
+);
 
 bm_assert(
         BM_interpolate_hann_window_64,

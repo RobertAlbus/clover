@@ -13,6 +13,29 @@
 
 namespace clover::dsp {
 
+interpolator_sinc::interpolator_sinc(int size, clover_float hann_alpha, clover_float interpolation_amount)
+    : m_sinc_kernel(size, 0), m_window(size, 0) {
+    m_sinc_kernel.resize(size, 0);
+    m_window.resize(size, 0);
+
+    hann_window_with_corner_control(m_window, hann_alpha);
+    interpolation(interpolation_amount);
+    compute_kernel();
+}
+
+void interpolator_sinc::interpolation(clover_float interpolation_amount) {
+    sinc_function(m_sinc_kernel, interpolation_amount);
+    compute_kernel();
+}
+
+void interpolator_sinc::compute_kernel() {
+    hadamard_product(m_sinc_kernel, m_window);
+}
+
+clover_float interpolator_sinc::tick(circular_buffer& buffer) {
+    return interpolate_sinc(buffer, m_sinc_kernel);
+}
+
 void hadamard_product(std::vector<clover_float>& a, std::vector<clover_float>& b) {
     for (auto i : std::views::iota(0, static_cast<int>(a.size())))
         a[i] = a[i] * b[i];
