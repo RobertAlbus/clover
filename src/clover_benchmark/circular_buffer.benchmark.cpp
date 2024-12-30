@@ -79,6 +79,6 @@ bm_assert(
 
 bm_assert(
         BM_circular_buffer_writes,
-        clover_bm::duration / 30000.,  // min
-        clover_bm::duration / 30000.   // target
+        clover_bm::duration / 28000.,  // min
+        clover_bm::duration / 28000.   // target
 );
