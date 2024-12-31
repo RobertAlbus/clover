@@ -5,6 +5,7 @@
 // Licensed under the GPLv3. See LICENSE for details.
 
 #include <cmath>
+#include <cstddef>
 #include <vector>
 
 #include "clover/float.hpp"
@@ -12,19 +13,15 @@
 namespace clover::dsp {
 
 struct circular_buffer {
-    using reverse_iterator = std::vector<clover_float>::reverse_iterator;
-    using value_type       = std::vector<clover_float>::value_type;
-    using reference        = std::vector<clover_float>::reference;
+    std::vector<clover_float>& m_underlying;
+    size_t m_current = 0;
+    size_t m_size;
 
-    reverse_iterator m_rbegin;
-    reverse_iterator m_current;
-    reverse_iterator m_rend;
-
-    circular_buffer(reverse_iterator rbegin, reverse_iterator rend);
     circular_buffer(std::vector<clover_float>& underlying);
 
-    void tick(value_type x);
-    reference operator[](int idx);
+    void tick(clover_float x);
+    size_t size();
+    clover_float& operator[](size_t idx);
 };
 
 }  // namespace clover::dsp

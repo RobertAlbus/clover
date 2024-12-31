@@ -3,39 +3,35 @@
 // Licensed under the GPLv3. See LICENSE for details.
 
 #include <cmath>
-#include <iterator>
+#include <format>
 #include <stdexcept>
 
 #include "clover/circular_buffer.hpp"
 
 namespace clover::dsp {
 
-circular_buffer::circular_buffer(reverse_iterator rbegin, reverse_iterator rend)
-    : m_rbegin(rbegin), m_current(rbegin), m_rend(rend) {
-}
-
 circular_buffer::circular_buffer(std::vector<clover_float>& underlying)
-    : circular_buffer(underlying.rbegin(), underlying.rend()) {
+    : m_underlying(underlying), m_size(underlying.size()), m_current(underlying.size() - 1) {
 }
 
-void circular_buffer::tick(value_type x) {
-    m_current[0] = x;
-    ++m_current;
-    if (m_current == m_rend) {
-        m_current = m_rbegin;
+void circular_buffer::tick(clover_float x) {
+    if (++m_current == m_size) {
+        m_current = 0;
     }
+    m_underlying[m_current] = x;
 }
 
-circular_buffer::reference circular_buffer::operator[](int idx) {
-    int size = static_cast<int>(std::distance(m_rbegin, m_rend));
-    if (idx < 0 || idx >= size)
-        throw std::out_of_range("circular_buffer::operator[]");
+size_t circular_buffer::size() {
+    return m_size;
+}
 
-    int distance = static_cast<int>(std::distance(m_current, m_rend));
-    if (idx >= distance)
-        idx -= distance;
+clover_float& circular_buffer::operator[](size_t idx) {
+    if (idx < 0 || idx >= m_size)
+        throw std::out_of_range(std::format("out of range: circular_buffer::operator[{}]", idx));
 
-    return (m_current + idx)[0];
+    if (m_current < idx)
+        return m_underlying[m_current + m_size - idx];
+    return m_underlying[m_current - idx];
 }
 
 }  // namespace clover::dsp

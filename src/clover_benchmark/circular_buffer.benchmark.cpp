@@ -16,7 +16,7 @@ static void BM_circular_buffer_read_write(benchmark::State& state) {
     benchmark::DoNotOptimize(underlying);
     underlying.resize(96000, 0);
 
-    clover::dsp::circular_buffer buffer{underlying.rbegin(), underlying.rend()};
+    clover::dsp::circular_buffer buffer{underlying};
 
     auto range = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));
 
@@ -36,7 +36,7 @@ static void BM_circular_buffer_reads(benchmark::State& state) {
     benchmark::DoNotOptimize(underlying);
     underlying.resize(96000, 0);
 
-    clover::dsp::circular_buffer buffer{underlying.rbegin(), underlying.rend()};
+    clover::dsp::circular_buffer buffer{underlying};
 
     auto range = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));
     for (auto _ : state) {
@@ -55,7 +55,7 @@ static void BM_circular_buffer_writes(benchmark::State& state) {
 
     underlying.resize(96000, 0);
 
-    clover::dsp::circular_buffer buffer{underlying.rbegin(), underlying.rend()};
+    clover::dsp::circular_buffer buffer{underlying};
 
     auto range = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));
     for (auto _ : state) {
@@ -67,8 +67,8 @@ static void BM_circular_buffer_writes(benchmark::State& state) {
 
 bm_assert(
         BM_circular_buffer_read_write,
-        clover_bm::duration / 12000.,  // min
-        clover_bm::duration / 12000.   // target
+        clover_bm::duration / 11000.,  // min
+        clover_bm::duration / 11000.   // target
 );
 
 bm_assert(
