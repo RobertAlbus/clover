@@ -92,6 +92,7 @@ TEST(dsp_wave_tri, value_is_correct) {
             {num::pi * 0.5, 1.f},
             {num::pi, 0.f},
             {num::pi * 1.5f, -1.f},
+            {num::pi * 2, 0.f},
     };
     for (auto& theta : thetas) {
         EXPECT_FLOAT_EQ(clover::dsp::wave_tri(theta.first), theta.second);
