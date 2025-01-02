@@ -1,6 +1,6 @@
-option(CLOVER_ENABLE_CPPCHECK     "Enable static analysis with cppcheck"   ON)
-option(CLOVER_ENABLE_CLANG_TIDY   "Enable static analysis with clang-tidy" ON)
-option(CLOVER_ENABLE_CLANG_FORMAT "Enable linting with clang-format"       ON)
+option(CLOVER_ENABLE_CPPCHECK     "Enable static analysis with cppcheck"   ${CLOVER_IS_MAIN_PROJECT})
+option(CLOVER_ENABLE_CLANG_TIDY   "Enable static analysis with clang-tidy" ${CLOVER_IS_MAIN_PROJECT})
+option(CLOVER_ENABLE_CLANG_FORMAT "Enable linting with clang-format"       ${CLOVER_IS_MAIN_PROJECT})
 
 message("\n\n== Static Analysis ==\n")
 message("CLOVER_ENABLE_CPPCHECK:     ${CLOVER_ENABLE_CPPCHECK}")
