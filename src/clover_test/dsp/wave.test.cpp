@@ -4,9 +4,9 @@
 
 #include <cmath>
 #include <cstdio>
+#include <unordered_map>
 
 #include <gtest/gtest.h>
-#include <unordered_map>
 
 #include "clover/dsp/wave.hpp"
 #include "clover/float.hpp"
