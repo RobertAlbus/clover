@@ -24,4 +24,17 @@ struct circular_buffer {
     clover_float& operator[](size_t idx);
 };
 
+struct circular_buffer_2 {
+    std::vector<clover_float>& m_underlying;
+    size_t m_current = 0;
+    size_t m_max;
+    size_t m_size;
+
+    circular_buffer_2(std::vector<clover_float>& underlying);
+
+    void tick(clover_float L, clover_float R);
+    size_t size();
+    std::pair<clover_float&, clover_float&> operator[](size_t idx);
+};
+
 }  // namespace clover::dsp

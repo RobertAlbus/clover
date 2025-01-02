@@ -34,4 +34,41 @@ clover_float& circular_buffer::operator[](size_t idx) {
     return m_underlying[m_current - idx];
 }
 
+circular_buffer_2::circular_buffer_2(std::vector<clover_float>& underlying)
+    : m_underlying(underlying),
+      m_size(underlying.size() / 2),
+      m_current((underlying.size() / 2) - 2),
+      m_max() {
+}
+
+void circular_buffer_2::tick(clover_float L, clover_float R) {
+    m_current += 2;
+    if (m_current == 2 * m_size) {
+        m_current = 0;
+    }
+    m_underlying[m_current]     = L;
+    m_underlying[m_current + 1] = R;
+}
+
+size_t circular_buffer_2::size() {
+    return m_size;
+}
+
+std::pair<clover_float&, clover_float&> circular_buffer_2::operator[](size_t idx) {
+    if (idx < 0 || idx >= m_size)
+        throw std::out_of_range(std::format("out of range: circular_buffer_2::operator[{}]", idx));
+
+    size_t interleaved_idx = 2 * idx;
+
+    if (m_current < interleaved_idx)
+        return {
+                m_underlying[m_current + (2 * m_size) - interleaved_idx],     //
+                m_underlying[m_current + (2 * m_size) - interleaved_idx + 1]  //
+        };
+    return {
+            m_underlying[m_current - interleaved_idx],     //
+            m_underlying[m_current - interleaved_idx + 1]  //
+    };
+}
+
 }  // namespace clover::dsp
