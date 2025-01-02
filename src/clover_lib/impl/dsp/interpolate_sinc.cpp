@@ -3,37 +3,39 @@
 // Licensed under the GPLv3. See LICENSE for details.
 
 #include <cmath>
+#include <format>
 #include <ranges>
 #include <vector>
 
-#include "clover/circular_buffer.hpp"
 #include "clover/dsp/interpolate_sinc.hpp"
 #include "clover/float.hpp"
 #include "clover/num.hpp"
 
 namespace clover::dsp {
 
-interpolator_sinc::interpolator_sinc(int size, clover_float hann_alpha, clover_float interpolation_amount)
-    : m_sinc_kernel(size, 0), m_window(size, 0) {
-    m_sinc_kernel.resize(size, 0);
+sinc_kernel::sinc_kernel(size_t size, clover_float hann_alpha, clover_float interpolation_amount) {
     m_window.resize(size, 0);
+    m_sinc_kernel.resize(size, 0);
 
     hann_window_with_corner_control(m_window, hann_alpha);
-    interpolation(interpolation_amount);
-    compute_kernel();
+    set_interpolation(interpolation_amount);
 }
 
-void interpolator_sinc::interpolation(clover_float interpolation_amount) {
+void sinc_kernel::set_interpolation(clover_float interpolation_amount) {
+    interpolation_amount = interpolation_amount - std::floor(interpolation_amount);
     sinc_function(m_sinc_kernel, interpolation_amount);
-    compute_kernel();
-}
-
-void interpolator_sinc::compute_kernel() {
     hadamard_product(m_sinc_kernel, m_window);
 }
 
-clover_float interpolator_sinc::tick(circular_buffer& buffer) {
-    return interpolate_sinc(buffer, m_sinc_kernel);
+size_t sinc_kernel::size() {
+    return m_sinc_kernel.size();
+}
+
+clover_float& sinc_kernel::operator[](size_t idx) {
+    if (idx < 0 || idx >= m_sinc_kernel.size())
+        throw std::out_of_range(std::format("out of range: sinc_kernel::operator[{}]", idx));
+
+    return m_sinc_kernel[idx];
 }
 
 void hadamard_product(std::vector<clover_float>& a, std::vector<clover_float>& b) {
@@ -58,23 +60,10 @@ void hann_window_with_corner_control(std::vector<clover_float>& out, clover_floa
         out[(size / 2)] = 1;
 }
 
-clover_float interpolate_sinc(circular_buffer buffer, std::vector<clover_float>& kernel) {
-    int kernel_size = static_cast<int>(kernel.size());
-
-    clover_float dot_product = 0;
-    for (auto i : std::views::iota(0, kernel_size - 1))
-        dot_product += kernel[i] * buffer[i];
-
-    return dot_product;
-}
-
 // TODO: short circuit in simple cases:
-// - when interpolation_amount is exactly 0 or 1 and size is even:
-//   - all values are 0 except
-//   - when interpolation_amount = 0: left of center is 1
-//   - when interpolation_amount = 1: right of center is 1
-// - when interpolation_amount is exactly 0 and size is odd:
-//   - all values are 0 except center is 1
+// - when interpolation_amount is exactly 0 and
+//   - size is even: all values are 0 except left of center is 1
+//   - size is odd: all values are 0 except center is 1
 void sinc_function(std::vector<clover_float>& out, clover_float interpolation_amount) {
     int size = static_cast<int>(out.size());
 
