@@ -12,7 +12,7 @@ file(GLOB_RECURSE CLOVER_TEST_SOURCE_CPP
 )
 
 add_executable(clover_test ${CLOVER_TEST_SOURCE_CPP})
-target_link_libraries(clover_test PRIVATE libclover GTest::gtest GTest::gtest_main)
+target_link_libraries(clover_test PRIVATE clover GTest::gtest GTest::gtest_main)
 
 include(GoogleTest)
 gtest_discover_tests(clover_test)
