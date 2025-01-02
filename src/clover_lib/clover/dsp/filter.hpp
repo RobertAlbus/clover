@@ -49,7 +49,7 @@ struct filter_2 : public iir {
     std::array<clover_float, 4> m_inputs{0, 0, 0, 0};
     std::array<clover_float, 4> m_outputs{0, 0, 0, 0};
 
-    std::array<clover_float, 2> tick(std::array<clover_float, 2> x);
+    std::pair<clover_float, clover_float> tick(clover_float in_L, clover_float in_R);
 };
 
 }  // namespace clover::dsp
