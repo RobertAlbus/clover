@@ -37,6 +37,34 @@ clover_float fdl_lagrange::at(clover_float idx) {
             interpolation);
 }
 
+fdl_lagrange_2::fdl_lagrange_2(circular_buffer_2& buffer)
+    : m_buffer(buffer), m_max_idx(static_cast<clover_float>(buffer.size()) - 3) {
+}
+
+std::pair<clover_float, clover_float> fdl_lagrange_2::at(clover_float idx) {
+    if (idx < 2)
+        idx = 0;
+    else if (idx > m_max_idx)
+        idx = m_max_idx;
+
+    auto p2   = static_cast<size_t>(std::floor(idx));
+    size_t p1 = p2 - 1;
+    size_t p3 = p1 + 1;
+    size_t p4 = p2 + 2;
+
+    clover_float interpolation = idx - std::floor(idx);
+
+    auto [p1_L, p1_R] = m_buffer[p1];
+    auto [p2_L, p2_R] = m_buffer[p2];
+    auto [p3_L, p3_R] = m_buffer[p3];
+    auto [p4_L, p4_R] = m_buffer[p4];
+
+    return {
+            interpolate_lagrange(p1_L, p2_L, p3_L, p4_L, interpolation),
+            interpolate_lagrange(p1_R, p2_R, p3_R, p4_R, interpolation),
+    };
+}
+
 fdl_sinc::fdl_sinc(circular_buffer& buffer, size_t kernel_size, clover_float window_alpha)
     : m_buffer(buffer), m_kernel(kernel_size, window_alpha, 0) {
     m_min_idx = std::floor(static_cast<clover_float>(kernel_size) / 2) - 1;

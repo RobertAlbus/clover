@@ -137,3 +137,32 @@ TEST(dsp_fractional_delay, langrange) {
     EXPECT_FLOAT_EQ(interpolated, buffer[32]);
     EXPECT_FLOAT_EQ(interpolated, sin_signal(32, 480));
 }
+
+TEST(dsp_fractional_delay, langrange_2) {
+    std::vector<clover_float> buffer_underlying;
+    buffer_underlying.resize(130, 0);
+    circular_buffer_2 buffer{buffer_underlying};
+
+    for (auto i : std::views::iota(0, 65)) {
+        clover_float signal = sin_signal(clover_float(i), 480);
+        buffer.tick(signal, signal);
+    }
+
+    fdl_lagrange_2 lagrange{buffer};
+
+    auto interpolated = lagrange.at(31);
+    EXPECT_FLOAT_EQ(interpolated.first, buffer[31].first);
+    EXPECT_FLOAT_EQ(interpolated.second, buffer[31].second);
+    EXPECT_FLOAT_EQ(interpolated.first, sin_signal(33, 480));
+    EXPECT_FLOAT_EQ(interpolated.second, sin_signal(33, 480));
+
+    interpolated = lagrange.at(31.5);
+    EXPECT_NEAR(interpolated.first, sin_signal(32.5, 480), 0.00671);
+    EXPECT_NEAR(interpolated.second, sin_signal(32.5, 480), 0.00671);
+
+    interpolated = lagrange.at(32);
+    EXPECT_FLOAT_EQ(interpolated.first, buffer[32].first);
+    EXPECT_FLOAT_EQ(interpolated.second, buffer[32].second);
+    EXPECT_FLOAT_EQ(interpolated.first, sin_signal(32, 480));
+    EXPECT_FLOAT_EQ(interpolated.second, sin_signal(32, 480));
+}

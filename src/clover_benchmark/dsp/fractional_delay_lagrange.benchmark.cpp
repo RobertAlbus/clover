@@ -54,10 +54,43 @@ void BM_fdl_lagrange_busy(benchmark::State& state) {
     }
 }
 
-/*
+void BM_fdl_lagrange_2_steady(benchmark::State& state) {
+    std::vector<clover_float> underlying;
+    underlying.resize(284000, 0);
+    clover::dsp::circular_buffer_2 buffer{underlying};
 
+    clover::dsp::fdl_lagrange_2 fdl{buffer};
 
-*/
+    for (auto _ : state) {
+        auto range = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));
+        for (auto i : range) {
+            buffer.tick(static_cast<clover_float>(i), static_cast<clover_float>(i));
+            fdl.at(480.996f);
+        }
+    }
+}
+
+void BM_fdl_lagrange_2_busy(benchmark::State& state) {
+    std::vector<clover_float> underlying;
+    underlying.resize(284000, 0);
+    clover::dsp::circular_buffer_2 buffer{underlying};
+
+    clover::dsp::fdl_lagrange_2 fdl{buffer};
+
+    clover_float max_index = 192000 - 4;
+
+    clover_float index = 2;
+    for (auto _ : state) {
+        auto range = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));
+        for (auto i : range) {
+            if (index >= max_index)
+                index = 2;
+            buffer.tick(static_cast<clover_float>(i), static_cast<clover_float>(i));
+            fdl.at(index);
+            index += 0.13;
+        }
+    }
+}
 
 bm_assert(
         BM_fdl_lagrange_steady,
@@ -67,6 +100,18 @@ bm_assert(
 
 bm_assert(
         BM_fdl_lagrange_busy,
+        clover_bm::duration / 1000.,  // min
+        clover_bm::duration / 1000.   // target
+);
+
+bm_assert(
+        BM_fdl_lagrange_2_steady,
+        clover_bm::duration / 1000.,  // min
+        clover_bm::duration / 1000.   // target
+);
+
+bm_assert(
+        BM_fdl_lagrange_2_busy,
         clover_bm::duration / 1000.,  // min
         clover_bm::duration / 1000.   // target
 );

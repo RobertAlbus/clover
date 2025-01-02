@@ -20,6 +20,14 @@ struct fdl_lagrange {
     clover_float at(clover_float idx);
 };
 
+struct fdl_lagrange_2 {
+    clover_float m_max_idx;
+    circular_buffer_2 m_buffer;
+
+    fdl_lagrange_2(circular_buffer_2& buffer);
+    std::pair<clover_float, clover_float> at(clover_float idx);
+};
+
 struct fdl_sinc {
     sinc_kernel m_kernel;
     circular_buffer& m_buffer;
