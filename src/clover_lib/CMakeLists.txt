@@ -10,3 +10,8 @@ target_link_libraries(libclover PRIVATE
     sndfile
     samplerate
 )
+
+set_target_properties(libclover PROPERTIES
+  OUTPUT_NAME "clover"
+  DEFINE_SYMBOL clover_EXPORTS
+)
