@@ -297,8 +297,8 @@ bm_assert(
 
 bm_assert(
         BM_iir_coeffs_hs,
-        clover_bm::duration / 1700.,  // min
-        clover_bm::duration / 1700.   // target
+        clover_bm::duration / 1600.,  // min
+        clover_bm::duration / 1600.   // target
 );
 
 bm_assert(

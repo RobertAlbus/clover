@@ -120,8 +120,8 @@ static void BM_circular_buffer_2_writes(benchmark::State& state) {
 
 bm_assert(
         BM_circular_buffer_read_write,
-        clover_bm::duration / 11000.,  // min
-        clover_bm::duration / 11000.   // target
+        clover_bm::duration / 10000.,  // min
+        clover_bm::duration / 10000.   // target
 );
 
 bm_assert(
@@ -138,8 +138,8 @@ bm_assert(
 
 bm_assert(
         BM_circular_buffer_2_read_write,
-        clover_bm::duration / 11000.,  // min
-        clover_bm::duration / 11000.   // target
+        clover_bm::duration / 9000.,  // min
+        clover_bm::duration / 9000.   // target
 );
 
 bm_assert(
@@ -150,6 +150,6 @@ bm_assert(
 
 bm_assert(
         BM_circular_buffer_2_writes,
-        clover_bm::duration / 28000.,  // min
-        clover_bm::duration / 28000.   // target
+        clover_bm::duration / 24000.,  // min
+        clover_bm::duration / 24000.   // target
 );

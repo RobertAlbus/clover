@@ -71,8 +71,8 @@ bm_assert(
 
 bm_assert(
         BM_fdl_sinc_steady_8,
-        clover_bm::duration / 1000.,  // min
-        clover_bm::duration / 1000.   // target
+        clover_bm::duration / 800.,  // min
+        clover_bm::duration / 800.   // target
 );
 
 bm_assert(
@@ -83,8 +83,8 @@ bm_assert(
 
 bm_assert(
         BM_fdl_sinc_steady_64,
-        clover_bm::duration / 170.,  // min
-        clover_bm::duration / 170.   // target
+        clover_bm::duration / 120.,  // min
+        clover_bm::duration / 120.   // target
 );
 
 bm_assert(

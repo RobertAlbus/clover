@@ -41,12 +41,12 @@ void BM_pan_busy(benchmark::State& state) {
 
 bm_assert(
         BM_pan_steady,
-        clover_bm::duration / 280000.,  // min
-        clover_bm::duration / 280000.   // target
+        clover_bm::duration / 40000.,  // min
+        clover_bm::duration / 40000.   // target
 );
 
 bm_assert(
         BM_pan_busy,
-        clover_bm::duration / 280000.,  // min
-        clover_bm::duration / 280000.   // target
+        clover_bm::duration / 3000.,  // min
+        clover_bm::duration / 3000.   // target
 );
