@@ -16,7 +16,7 @@ auto wave_sine(clover_float x) -> clover_float {
     return std::sin(x);
 }
 auto wave_square(clover_float x) -> clover_float {
-    return x < num::pi ? 1 : 0;
+    return x < num::pi ? 1 : -1;
 }
 auto wave_saw(clover_float x) -> clover_float {
     return std::lerp(clover_float{1}, clover_float{-1}, x / num::pi_x2);
