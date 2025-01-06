@@ -101,6 +101,7 @@ void env_adsr::key_on() {
     if (m_state <= state::attack) {
         m_state = state::attack;
         m_env.set(0, m_attack_gain, m_attack_samples);
+        m_env.tick();
     }
 }
 

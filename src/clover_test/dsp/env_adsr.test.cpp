@@ -76,7 +76,6 @@ TEST(dsp_env_adsr, runs_correctly) {
 
     env.key_on();
     EXPECT_EQ(env.m_state, env_adsr::state::attack);
-    EXPECT_FLOAT_EQ(env.tick(), 0.0);
     EXPECT_FLOAT_EQ(env.tick(), 0.1);
     EXPECT_FLOAT_EQ(env.tick(), 0.2);
     EXPECT_FLOAT_EQ(env.tick(), 0.3);
@@ -138,14 +137,12 @@ TEST(dsp_env_adsr, reruns_correctly) {
     env.set(a, d, s, r);
 
     env.key_on();
-    EXPECT_FLOAT_EQ(env.tick(), 0.0);
     EXPECT_FLOAT_EQ(env.tick(), 0.1);
     EXPECT_FLOAT_EQ(env.tick(), 0.2);
     EXPECT_FLOAT_EQ(env.tick(), 0.3);
 
     env.key_on();
     EXPECT_EQ(env.m_state, env_adsr::state::attack);
-    EXPECT_FLOAT_EQ(env.tick(), 0.0);
     EXPECT_FLOAT_EQ(env.tick(), 0.1);
     EXPECT_FLOAT_EQ(env.tick(), 0.2);
     EXPECT_FLOAT_EQ(env.tick(), 0.3);
@@ -156,7 +153,6 @@ TEST(dsp_env_adsr, mid_attack_update) {
     env.set(10, 10, 0.5, 10);
 
     env.key_on();
-    EXPECT_FLOAT_EQ(env.tick(), 0);
     EXPECT_FLOAT_EQ(env.tick(), 0.1);
     EXPECT_FLOAT_EQ(env.tick(), 0.2);
     EXPECT_FLOAT_EQ(env.tick(), 0.3);
@@ -183,7 +179,7 @@ TEST(dsp_env_adsr, mid_decay_update) {
 
     // half way through decay
     env.key_on();
-    for (auto _ : std::views::iota(0, 15))
+    for (auto _ : std::views::iota(0, 14))
         env.tick();
 
     env.decay(15);
@@ -287,7 +283,6 @@ TEST(dsp_env_adsr, attack_gain_zero) {
 
     // get to sustain
     env.key_on();
-    EXPECT_FLOAT_EQ(env.tick(), 0);
     EXPECT_FLOAT_EQ(env.tick(), 0);
     EXPECT_FLOAT_EQ(env.tick(), 0);
     EXPECT_FLOAT_EQ(env.tick(), 0);
