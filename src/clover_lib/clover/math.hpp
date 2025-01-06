@@ -20,6 +20,9 @@ auto linear_to_db(clover_float x) -> clover_float;
 auto frequency_by_octave_difference(clover_float freq, clover_float octaves) -> clover_float;
 auto frequency_by_semitone_difference(clover_float freq, clover_float semitones) -> clover_float;
 
+auto octave_difference_by_frequency(clover_float base_freq, clover_float target_freq) -> clover_float;
+auto semitone_difference_by_frequency(clover_float base_freq, clover_float target_freq) -> clover_float;
+
 auto frequency_to_midi(clover_float x) -> clover_float;
 auto midi_to_frequency(clover_float x) -> clover_float;
 

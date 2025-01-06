@@ -34,6 +34,16 @@ auto clover::frequency_by_semitone_difference(clover_float freq, clover_float se
     return frequency_by_octave_difference(freq, semitones * (1.f / 12.f));
 }
 
+auto clover::octave_difference_by_frequency(clover_float base_freq, clover_float target_freq)
+        -> clover_float {
+    return std::log2(target_freq / base_freq);
+}
+
+auto clover::semitone_difference_by_frequency(clover_float base_freq, clover_float target_freq)
+        -> clover_float {
+    return octave_difference_by_frequency(base_freq, target_freq) * 12.f;
+}
+
 auto clover::frequency_to_midi(clover_float x) -> clover_float {
     if (x <= 0)
         return 0;

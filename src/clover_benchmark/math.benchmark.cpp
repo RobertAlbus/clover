@@ -136,25 +136,37 @@ static void BM_tension_neg_a(benchmark::State& state) {
 }
 
 static void BM_frequency_by_octave_difference(benchmark::State& state) {
-    auto range                           = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));
-    constexpr clover_float increment     = clover::num::pi_x2 / clover_bm::samples_10s_48k / 2.f;
-    constexpr clover_float perfect_fifth = 5.f / 12.f;
+    auto range = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));
     for (auto _ : state) {
         for (const auto& element : range) {
-            auto freq = static_cast<clover_float>(element) * increment;
-            benchmark::DoNotOptimize(clover::frequency_by_octave_difference(freq, perfect_fifth));
+            benchmark::DoNotOptimize(clover::frequency_by_octave_difference(456.98f, (7.f / 12.f)));
         }
     }
 }
 
 static void BM_frequency_by_semitone_difference(benchmark::State& state) {
-    auto range                           = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));
-    constexpr clover_float increment     = clover::num::pi_x2 / clover_bm::samples_10s_48k / 2.f;
-    constexpr clover_float perfect_fifth = 5.f / 12.f;
+    auto range = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));
     for (auto _ : state) {
         for (const auto& element : range) {
-            auto freq = static_cast<clover_float>(element) * increment;
-            benchmark::DoNotOptimize(clover::frequency_by_semitone_difference(freq, perfect_fifth));
+            benchmark::DoNotOptimize(clover::frequency_by_semitone_difference(456.98f, (7.f / 12.f)));
+        }
+    }
+}
+
+static void BM_octave_difference_by_frequency(benchmark::State& state) {
+    auto range = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));
+    for (auto _ : state) {
+        for (auto element : range) {
+            benchmark::DoNotOptimize(clover::octave_difference_by_frequency(300.99f, 9872.12f));
+        }
+    }
+}
+
+static void BM_semitone_difference_by_frequency(benchmark::State& state) {
+    auto range = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));
+    for (auto _ : state) {
+        for (auto element : range) {
+            benchmark::DoNotOptimize(clover::semitone_difference_by_frequency(300.99f, 9872.12f));
         }
     }
 }
@@ -191,6 +203,18 @@ bm_assert(
 
 bm_assert(
         BM_frequency_by_semitone_difference,
+        clover_bm::duration / 5000.,  // min
+        clover_bm::duration / 5000.   // target
+);
+
+bm_assert(
+        BM_octave_difference_by_frequency,
+        clover_bm::duration / 5000.,  // min
+        clover_bm::duration / 5000.   // target
+);
+
+bm_assert(
+        BM_semitone_difference_by_frequency,
         clover_bm::duration / 5000.,  // min
         clover_bm::duration / 5000.   // target
 );

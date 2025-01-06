@@ -62,6 +62,21 @@ TEST(math, frequency_by_semitone_difference) {
     }
 }
 
+TEST(math, octave_difference_by_frequency) {
+    EXPECT_EQ(octave_difference_by_frequency(400, 800), 1);
+    EXPECT_EQ(octave_difference_by_frequency(400, 200), -1);
+}
+
+TEST(math, semitone_difference_by_frequency) {
+    EXPECT_EQ(semitone_difference_by_frequency(400, 800), 12);
+    EXPECT_EQ(semitone_difference_by_frequency(400, 1600), 24);
+    EXPECT_EQ(semitone_difference_by_frequency(400, 3200), 36);
+
+    EXPECT_EQ(semitone_difference_by_frequency(400, 200), -12);
+    EXPECT_EQ(semitone_difference_by_frequency(400, 100), -24);
+    EXPECT_EQ(semitone_difference_by_frequency(400, 50), -36);
+}
+
 struct midi_freq {
     clover_float midi_note;
     clover_float frequency;
