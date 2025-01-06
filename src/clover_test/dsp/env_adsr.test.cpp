@@ -280,3 +280,31 @@ TEST(dsp_env_adsr, key_off_only_once) {
     EXPECT_FLOAT_EQ(env.tick(), 0.7);
     EXPECT_FLOAT_EQ(env.tick(), 0.6);
 }
+
+TEST(dsp_env_adsr, attack_gain_zero) {
+    env_adsr env;
+    env.set(5, 0, 5, 1, 5);
+
+    // get to sustain
+    env.key_on();
+    EXPECT_FLOAT_EQ(env.tick(), 0);
+    EXPECT_FLOAT_EQ(env.tick(), 0);
+    EXPECT_FLOAT_EQ(env.tick(), 0);
+    EXPECT_FLOAT_EQ(env.tick(), 0);
+    EXPECT_FLOAT_EQ(env.tick(), 0);
+    EXPECT_FLOAT_EQ(env.tick(), 0);
+
+    EXPECT_FLOAT_EQ(env.tick(), 0.2);
+    EXPECT_FLOAT_EQ(env.tick(), 0.4);
+    EXPECT_FLOAT_EQ(env.tick(), 0.6);
+    EXPECT_FLOAT_EQ(env.tick(), 0.8);
+    EXPECT_FLOAT_EQ(env.tick(), 1.0);
+
+    env.key_off();
+
+    EXPECT_FLOAT_EQ(env.tick(), 0.8);
+    EXPECT_FLOAT_EQ(env.tick(), 0.6);
+    EXPECT_FLOAT_EQ(env.tick(), 0.4);
+    EXPECT_FLOAT_EQ(env.tick(), 0.2);
+    EXPECT_FLOAT_EQ(env.tick(), 0.0);
+}

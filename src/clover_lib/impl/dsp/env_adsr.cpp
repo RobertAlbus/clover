@@ -18,8 +18,20 @@ void env_adsr::set(clover_float a, clover_float d, clover_float s, clover_float 
     release(r);
 }
 
+void env_adsr::set(clover_float a, clover_float a_gain, clover_float d, clover_float s, clover_float r) {
+    attack(a);
+    attack_gain(a_gain);
+    decay(d);
+    sustain(s);
+    release(r);
+}
+
 clover_float env_adsr::attack() {
     return m_attack_samples;
+}
+
+clover_float env_adsr::attack_gain() {
+    return m_attack_gain;
 }
 
 clover_float env_adsr::decay() {
@@ -35,14 +47,18 @@ clover_float env_adsr::release() {
 }
 
 void env_adsr::attack(clover_float duration) {
-    if (float_eq(duration, m_attack_samples))
-        return;
-
     m_attack_samples = std::max(duration, 0.f);
 
     if (m_state == state::attack) {
         // env_linear treats negative durations as zero.
-        m_env.set(1, duration - m_env.m_current_step);
+        m_env.set(m_attack_gain, m_attack_samples - m_env.m_current_step);
+    }
+}
+
+void env_adsr::attack_gain(clover_float a_gain) {
+    m_attack_gain = a_gain;
+    if (m_state == state::attack) {
+        m_env.set(m_attack_gain, m_attack_samples - m_env.m_current_step);
     }
 }
 
@@ -84,7 +100,7 @@ void env_adsr::release(clover_float duration) {
 void env_adsr::key_on() {
     if (m_state <= state::attack) {
         m_state = state::attack;
-        m_env.set(0, 1, m_attack_samples);
+        m_env.set(0, m_attack_gain, m_attack_samples);
     }
 }
 
@@ -110,7 +126,7 @@ clover_float env_adsr::tick() {
 
     switch (m_state) {
         case state::attack: {
-            if (m_env.m_current_step >= m_attack_samples) {
+            if (m_env.m_current_step == m_attack_samples) {
                 m_env.set(m_sustain, m_decay_samples);
                 m_state = state::decay;
             }

@@ -20,6 +20,7 @@ struct env_adsr {
     };
 
     clover_float m_attack_samples  = 0;
+    clover_float m_attack_gain     = 1;
     clover_float m_sustain         = 0;
     clover_float m_decay_samples   = 0;
     clover_float m_release_samples = 0;
@@ -31,12 +32,15 @@ struct env_adsr {
     env_adsr();
 
     void set(clover_float a, clover_float d, clover_float s, clover_float r);
+    void set(clover_float a, clover_float a_gain, clover_float d, clover_float s, clover_float r);
     clover_float attack();
+    clover_float attack_gain();
     clover_float decay();
     clover_float sustain();
     clover_float release();
 
     void attack(clover_float duration);
+    void attack_gain(clover_float duration);
     void decay(clover_float duration);
     void sustain(clover_float value);
     void release(clover_float duration);
