@@ -6,6 +6,7 @@
 
 #include <cmath>
 #include <cstddef>
+#include <memory>
 #include <vector>
 
 #include "clover/float.hpp"
@@ -13,27 +14,28 @@
 namespace clover::dsp {
 
 struct circular_buffer {
-    std::vector<clover_float>& m_underlying;
+    std::shared_ptr<std::vector<clover_float>> m_underlying;
     size_t m_current = 0;
-    size_t m_size;
+    size_t m_length;
 
-    circular_buffer(std::vector<clover_float>& underlying);
+    circular_buffer(size_t length);
+    circular_buffer(std::shared_ptr<std::vector<clover_float>>& underlying);
 
     void tick(clover_float x);
-    size_t size();
+    size_t length();
     clover_float& operator[](size_t idx);
 };
 
 struct circular_buffer_2 {
-    std::vector<clover_float>& m_underlying;
+    std::shared_ptr<std::vector<clover_float>> m_underlying;
     size_t m_current = 0;
-    size_t m_max;
-    size_t m_size;
+    size_t m_length;
 
-    circular_buffer_2(std::vector<clover_float>& underlying);
+    circular_buffer_2(size_t length);
+    circular_buffer_2(std::shared_ptr<std::vector<clover_float>>& underlying);
 
     void tick(clover_float L, clover_float R);
-    size_t size();
+    size_t length();
     std::pair<clover_float&, clover_float&> operator[](size_t idx);
 };
 

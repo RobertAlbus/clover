@@ -10,64 +10,74 @@
 
 namespace clover::dsp {
 
-circular_buffer::circular_buffer(std::vector<clover_float>& underlying)
-    : m_underlying(underlying), m_size(underlying.size()), m_current(underlying.size() - 1) {
+circular_buffer::circular_buffer(std::shared_ptr<std::vector<clover_float>>& underlying)
+    : m_underlying(underlying), m_length(underlying->size()), m_current(underlying->size() - 1) {
+}
+
+circular_buffer::circular_buffer(size_t length)
+    : m_underlying(std::make_shared<std::vector<clover_float>>(length, 0.0f)),
+      m_length(length),
+      m_current(length - 1) {
 }
 
 void circular_buffer::tick(clover_float x) {
-    if (++m_current == m_size) {
+    if (++m_current == m_length) {
         m_current = 0;
     }
-    m_underlying[m_current] = x;
+    (*m_underlying)[m_current] = x;
 }
 
-size_t circular_buffer::size() {
-    return m_size;
+size_t circular_buffer::length() {
+    return m_length;
 }
 
 clover_float& circular_buffer::operator[](size_t idx) {
-    if (idx < 0 || idx >= m_size)
+    if (idx >= m_length) {
         throw std::out_of_range(std::format("out of range: circular_buffer::operator[{}]", idx));
+    }
 
-    if (m_current < idx)
-        return m_underlying[m_current + m_size - idx];
-    return m_underlying[m_current - idx];
+    size_t offset = (m_current + m_length - idx) % m_length;
+    return (*m_underlying)[offset];
 }
 
-circular_buffer_2::circular_buffer_2(std::vector<clover_float>& underlying)
-    : m_underlying(underlying),
-      m_size(underlying.size() / 2),
-      m_current((underlying.size() / 2) - 2),
-      m_max() {
+circular_buffer_2::circular_buffer_2(std::shared_ptr<std::vector<clover_float>>& underlying)
+    : m_underlying(underlying), m_length(underlying->size() / 2), m_current((underlying->size() / 2) - 2) {
+}
+
+circular_buffer_2::circular_buffer_2(size_t length)
+    : m_underlying(std::make_shared<std::vector<clover_float>>(length * 2, 0.0f)),
+      m_length(length),
+      m_current((length * 2) - 2) {
 }
 
 void circular_buffer_2::tick(clover_float L, clover_float R) {
     m_current += 2;
-    if (m_current == 2 * m_size) {
+    if (m_current >= 2 * m_length) {
         m_current = 0;
     }
-    m_underlying[m_current]     = L;
-    m_underlying[m_current + 1] = R;
+
+    (*m_underlying)[m_current]     = L;
+    (*m_underlying)[m_current + 1] = R;
 }
 
-size_t circular_buffer_2::size() {
-    return m_size;
+size_t circular_buffer_2::length() {
+    return m_length;
 }
 
 std::pair<clover_float&, clover_float&> circular_buffer_2::operator[](size_t idx) {
-    if (idx < 0 || idx >= m_size)
+    if (idx < 0 || idx >= m_length)
         throw std::out_of_range(std::format("out of range: circular_buffer_2::operator[{}]", idx));
 
     size_t interleaved_idx = 2 * idx;
 
     if (m_current < interleaved_idx)
         return {
-                m_underlying[m_current + (2 * m_size) - interleaved_idx],     //
-                m_underlying[m_current + (2 * m_size) - interleaved_idx + 1]  //
+                (*m_underlying)[m_current + (2 * m_length) - interleaved_idx],     //
+                (*m_underlying)[m_current + (2 * m_length) - interleaved_idx + 1]  //
         };
     return {
-            m_underlying[m_current - interleaved_idx],     //
-            m_underlying[m_current - interleaved_idx + 1]  //
+            (*m_underlying)[m_current - interleaved_idx],     //
+            (*m_underlying)[m_current - interleaved_idx + 1]  //
     };
 }
 

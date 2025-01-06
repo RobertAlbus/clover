@@ -11,21 +11,20 @@
 
 #include "clover_benchmark/util.hpp"
 
-void interpolator_sinc_benchmark(benchmark::State& state, size_t kernel_size, const bool act_busy) {
-    std::vector<clover_float> signal =
-            std::views::iota(-96000, 96000 - 1) |
-            std::views::transform([](int x) { return static_cast<clover_float>(x); }) |
-            std::ranges::to<std::vector>();
-    clover::dsp::circular_buffer buffer{signal};
+using namespace clover;
+using namespace dsp;
 
-    auto size = static_cast<clover_float>(signal.size());
+void interpolator_sinc_benchmark(benchmark::State& state, size_t kernel_size, const bool act_busy) {
+    std::shared_ptr<circular_buffer> buffer = std::make_shared<circular_buffer>(circular_buffer{192000});
+
+    auto size = static_cast<clover_float>(buffer->length());
 
     clover::dsp::fdl_sinc fdl{buffer, kernel_size};
 
     for (auto _ : state) {
         auto range = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));
         for (auto i : range) {
-            buffer.tick(static_cast<clover_float>(i));
+            buffer->tick(static_cast<clover_float>(i));
             benchmark::DoNotOptimize(fdl.calculate());
             if (act_busy)
                 fdl.delay(static_cast<clover_float>(i) / size);

@@ -12,8 +12,8 @@
 
 namespace clover::dsp {
 
-fdl_lagrange::fdl_lagrange(circular_buffer& buffer)
-    : m_buffer(buffer), m_max_idx(static_cast<clover_float>(buffer.size() - 3)) {
+fdl_lagrange::fdl_lagrange(size_t buffer_length)
+    : m_buffer(buffer_length), m_max_idx(clover_float(buffer_length - 3)) {
 }
 
 clover_float fdl_lagrange::at(clover_float idx) {
@@ -37,8 +37,12 @@ clover_float fdl_lagrange::at(clover_float idx) {
             interpolation);
 }
 
-fdl_lagrange_2::fdl_lagrange_2(circular_buffer_2& buffer)
-    : m_buffer(buffer), m_max_idx(static_cast<clover_float>(buffer.size()) - 3) {
+void fdl_lagrange::tick(clover_float x) {
+    m_buffer.tick(x);
+}
+
+fdl_lagrange_2::fdl_lagrange_2(size_t buffer_length)
+    : m_buffer(buffer_length), m_max_idx(clover_float(buffer_length) - 3) {
 }
 
 std::pair<clover_float, clover_float> fdl_lagrange_2::at(clover_float idx) {
@@ -65,10 +69,14 @@ std::pair<clover_float, clover_float> fdl_lagrange_2::at(clover_float idx) {
     };
 }
 
-fdl_sinc::fdl_sinc(circular_buffer& buffer, size_t kernel_size, clover_float window_alpha)
+void fdl_lagrange_2::tick(clover_float x1, clover_float x2) {
+    m_buffer.tick(x1, x2);
+}
+
+fdl_sinc::fdl_sinc(std::shared_ptr<circular_buffer>& buffer, size_t kernel_size, clover_float window_alpha)
     : m_buffer(buffer), m_kernel(kernel_size, window_alpha, 0) {
     m_min_idx = std::floor(static_cast<clover_float>(kernel_size) / 2) - 1;
-    m_max_idx = static_cast<clover_float>(buffer.size()) - 1 -
+    m_max_idx = static_cast<clover_float>(buffer->length()) - 1 -
                 std::ceil(static_cast<clover_float>(kernel_size) / 2);
     m_start_index = 0;
 }
@@ -87,12 +95,12 @@ void fdl_sinc::delay(clover_float idx) {
 
 clover_float fdl_sinc::calculate() {
     if (m_delay == 0) {
-        return m_buffer[0];
+        return (*m_buffer)[0];
     }
 
     clover_float dot_product = 0;
     for (auto i : std::views::iota(0, static_cast<int>(m_kernel.size()))) {
-        dot_product += m_kernel[i] * m_buffer[m_start_index + i];
+        dot_product += m_kernel[i] * (*m_buffer)[m_start_index + i];
     }
 
     return dot_product;

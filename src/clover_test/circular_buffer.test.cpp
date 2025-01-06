@@ -14,15 +14,10 @@ using namespace clover;
 using namespace dsp;
 
 TEST(circular_buffer, reads_and_writes) {
-    std::vector<clover_float> audio_data;
-    audio_data.resize(10, 0);
-
-    circular_buffer buffer = {audio_data};
+    circular_buffer buffer{10};
 
     for (auto i : std::views::iota(0, 10)) {
         buffer.tick(static_cast<clover_float>(i));
-        for (auto x : audio_data)
-            std::cout << x << std::endl;
     }
 
     EXPECT_FLOAT_EQ(buffer[0], 9);
@@ -53,30 +48,21 @@ TEST(circular_buffer, reads_and_writes) {
 }
 
 TEST(circular_buffer, throw_when_out_of_range) {
-    std::vector<clover_float> audio_data;
-    audio_data.resize(20, 0);
-
-    circular_buffer buffer = {audio_data};
+    circular_buffer buffer{20};
 
     EXPECT_ANY_THROW({ buffer[20]; });
 }
 
-TEST(circular_buffer, size) {
-    std::vector<clover_float> audio_data;
-    audio_data.resize(20, 0);
-
-    circular_buffer buffer = {audio_data};
-    EXPECT_EQ(buffer.size(), audio_data.size());
+TEST(circular_buffer, length) {
+    circular_buffer buffer{20};
+    EXPECT_EQ(buffer.length(), 20);
 }
 
 TEST(circular_buffer_2, reads_and_writes) {
-    std::vector<clover_float> audio_data;
-    audio_data.resize(20, 0);
-
-    circular_buffer_2 buffer = {audio_data};
+    circular_buffer_2 buffer{10};
 
     for (auto i : std::views::iota(0, 10)) {
-        auto i_f = static_cast<clover_float>(i * 2);
+        auto i_f = clover_float(i * 2);
         buffer.tick(i_f, i_f + 1);
     }
 
@@ -129,18 +115,12 @@ TEST(circular_buffer_2, reads_and_writes) {
 }
 
 TEST(circular_buffer_2, throw_when_out_of_range) {
-    std::vector<clover_float> audio_data;
-    audio_data.resize(20, 0);
-
-    circular_buffer_2 buffer = {audio_data};
+    circular_buffer_2 buffer{10};
 
     EXPECT_ANY_THROW({ buffer[10]; });
 }
 
-TEST(circular_buffer_2, size) {
-    std::vector<clover_float> audio_data;
-    audio_data.resize(20, 0);
-
-    circular_buffer_2 buffer = {audio_data};
-    EXPECT_EQ(buffer.size(), audio_data.size() / 2);
+TEST(circular_buffer_2, length) {
+    circular_buffer_2 buffer{20};
+    EXPECT_EQ(buffer.length(), 20);
 }

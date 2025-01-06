@@ -8,38 +8,26 @@
 
 #include "benchmark/benchmark.h"
 
-#include "clover/circular_buffer.hpp"
 #include "clover/dsp/fractional_delay.hpp"
 
 #include "clover_benchmark/util.hpp"
 
 void BM_fdl_lagrange_steady(benchmark::State& state) {
-    std::vector<clover_float> signal;
-    signal.resize(192000, 0);
-    clover::dsp::circular_buffer buffer{signal};
-
-    auto size = static_cast<clover_float>(signal.size());
-
-    clover::dsp::fdl_lagrange fdl{buffer};
+    clover::dsp::fdl_lagrange fdl{192000};
 
     for (auto _ : state) {
         auto range = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));
         for (auto i : range) {
-            buffer.tick(static_cast<clover_float>(i));
+            fdl.tick(static_cast<clover_float>(i));
             fdl.at(480.996f);
         }
     }
 }
 
 void BM_fdl_lagrange_busy(benchmark::State& state) {
-    std::vector<clover_float> signal;
-    signal.resize(192000, 0);
-    clover::dsp::circular_buffer buffer{signal};
-
-    auto size = static_cast<clover_float>(signal.size());
-
-    clover_float max_index = size - 4;
-    clover::dsp::fdl_lagrange fdl{buffer};
+    size_t size    = 192000;
+    auto max_index = clover_float(size - 4);
+    clover::dsp::fdl_lagrange fdl{192000};
 
     clover_float index = 2;
     for (auto _ : state) {
@@ -47,7 +35,7 @@ void BM_fdl_lagrange_busy(benchmark::State& state) {
         for (auto i : range) {
             if (index >= max_index)
                 index = 2;
-            buffer.tick(static_cast<clover_float>(i));
+            fdl.tick(static_cast<clover_float>(i));
             fdl.at(index);
             index += 0.13;
         }
@@ -55,29 +43,20 @@ void BM_fdl_lagrange_busy(benchmark::State& state) {
 }
 
 void BM_fdl_lagrange_2_steady(benchmark::State& state) {
-    std::vector<clover_float> underlying;
-    underlying.resize(284000, 0);
-    clover::dsp::circular_buffer_2 buffer{underlying};
-
-    clover::dsp::fdl_lagrange_2 fdl{buffer};
+    clover::dsp::fdl_lagrange_2 fdl{284000};
 
     for (auto _ : state) {
         auto range = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));
         for (auto i : range) {
-            buffer.tick(static_cast<clover_float>(i), static_cast<clover_float>(i));
+            fdl.tick(static_cast<clover_float>(i), static_cast<clover_float>(i));
             fdl.at(480.996f);
         }
     }
 }
 
 void BM_fdl_lagrange_2_busy(benchmark::State& state) {
-    std::vector<clover_float> underlying;
-    underlying.resize(284000, 0);
-    clover::dsp::circular_buffer_2 buffer{underlying};
-
-    clover::dsp::fdl_lagrange_2 fdl{buffer};
-
-    clover_float max_index = 192000 - 4;
+    clover::dsp::fdl_lagrange_2 fdl{284000};
+    clover_float max_index = fdl.m_max_idx;
 
     clover_float index = 2;
     for (auto _ : state) {
@@ -85,7 +64,7 @@ void BM_fdl_lagrange_2_busy(benchmark::State& state) {
         for (auto i : range) {
             if (index >= max_index)
                 index = 2;
-            buffer.tick(static_cast<clover_float>(i), static_cast<clover_float>(i));
+            fdl.tick(static_cast<clover_float>(i), static_cast<clover_float>(i));
             fdl.at(index);
             index += 0.13;
         }
