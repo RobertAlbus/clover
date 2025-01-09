@@ -2,7 +2,6 @@
 // Copyright (C) 2023  Rob W. Albus
 // Licensed under the GPLv3. See LICENSE for details.
 
-#include <iostream>
 #include <stdexcept>
 
 #include "samplerate.h"
@@ -52,9 +51,7 @@ void convert_sample_rate(audio_buffer buffer, int sample_rate) {
 void normalize_audio_buffer(audio_buffer& buffer) {
     clover_float max_value = 0;
     for (const auto sample : buffer.data) {
-        std::cout << "-   max value " << max_value << " sample " << sample << std::endl;
         max_value = std::max(max_value, std::abs(sample));
-        std::cout << "  - max value " << max_value << std::endl;
     }
 
     if (max_value != 0) {
