@@ -98,11 +98,9 @@ void env_adsr::release(clover_float duration) {
 }
 
 void env_adsr::key_on() {
-    if (m_state <= state::attack) {
-        m_state = state::attack;
-        m_env.set(0, m_attack_gain, m_attack_samples);
-        m_env.tick();
-    }
+    m_state = state::attack;
+    m_env.set(0, m_attack_gain, m_attack_samples);
+    m_env.tick();
 }
 
 void env_adsr::key_off() {

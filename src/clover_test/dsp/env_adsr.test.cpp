@@ -258,6 +258,21 @@ TEST(dsp_env_adsr, mid_release_update) {
     EXPECT_FLOAT_EQ(env.tick(), 0);
 }
 
+TEST(dsp_env_adsr, key_on_retriggers) {
+    env_adsr env;
+    env.set(5, 5, 1, 10);
+
+    env.key_on();
+    EXPECT_FLOAT_EQ(env.tick(), 0.2);
+    EXPECT_FLOAT_EQ(env.tick(), 0.4);
+    EXPECT_FLOAT_EQ(env.tick(), 0.6);
+
+    env.key_on();
+    EXPECT_FLOAT_EQ(env.tick(), 0.2);
+    EXPECT_FLOAT_EQ(env.tick(), 0.4);
+    EXPECT_FLOAT_EQ(env.tick(), 0.6);
+}
+
 TEST(dsp_env_adsr, key_off_only_once) {
     env_adsr env;
     env.set(5, 5, 1, 10);
