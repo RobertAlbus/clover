@@ -21,9 +21,8 @@ struct phase_increment_tracker {
             -> phase_increment_tracker;
 
     static auto for_period(
-            clover_float fs,
-            clover_float num_samples,
-            clover_float domain = num::pi_x2) noexcept -> phase_increment_tracker;
+            clover_float fs, clover_float num_samples, clover_float domain = num::pi_x2) noexcept
+            -> phase_increment_tracker;
 
     void tick() noexcept;
 
