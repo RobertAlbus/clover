@@ -231,28 +231,26 @@ clover_float filter::tick(clover_float x) {
 }
 
 std::pair<clover_float, clover_float> filter_2::tick(clover_float in_L, clover_float in_R) {
-    constexpr int first  = 0;
-    constexpr int second = 2;
-    constexpr int L      = 0;
-    constexpr int R      = 1;
+    constexpr int L0 = 0;
+    constexpr int L1 = 1;
+    constexpr int R0 = 2;
+    constexpr int R1 = 3;
 
-    clover_float yn_L = m_coeffs.b0 * in_L + m_coeffs.b1 * m_inputs[first + L] +
-                        m_coeffs.b2 * m_inputs[second + L] - m_coeffs.a1 * m_outputs[first + L] -
-                        m_coeffs.a2 * m_outputs[second + L];
+    clover_float yn_L = m_coeffs.b0 * in_L + m_coeffs.b1 * m_inputs[L0] + m_coeffs.b2 * m_inputs[L1] -
+                        m_coeffs.a1 * m_outputs[L0] - m_coeffs.a2 * m_outputs[L1];
 
-    m_inputs[second + L]  = m_inputs[first + L];
-    m_inputs[first + L]   = in_L;
-    m_outputs[second + L] = m_outputs[first + L];
-    m_outputs[first + L]  = yn_L;
+    m_inputs[L1]  = m_inputs[L0];
+    m_inputs[L0]  = in_L;
+    m_outputs[L1] = m_outputs[L0];
+    m_outputs[L0] = yn_L;
 
-    clover_float yn_R = m_coeffs.b0 * in_R + m_coeffs.b1 * m_inputs[first + R] +
-                        m_coeffs.b2 * m_inputs[second + R] - m_coeffs.a1 * m_outputs[first + R] -
-                        m_coeffs.a2 * m_outputs[second + R];
+    clover_float yn_R = m_coeffs.b0 * in_R + m_coeffs.b1 * m_inputs[R0] + m_coeffs.b2 * m_inputs[R1] -
+                        m_coeffs.a1 * m_outputs[R0] - m_coeffs.a2 * m_outputs[R1];
 
-    m_inputs[second + R]  = m_inputs[first + R];
-    m_inputs[first + R]   = in_R;
-    m_outputs[second + R] = m_outputs[first + R];
-    m_outputs[first + R]  = yn_L;
+    m_inputs[R1]  = m_inputs[R0];
+    m_inputs[R0]  = in_R;
+    m_outputs[R1] = m_outputs[R0];
+    m_outputs[R0] = yn_R;
 
     return {yn_L, yn_R};
 }
