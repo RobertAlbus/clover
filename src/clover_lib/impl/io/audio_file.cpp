@@ -57,10 +57,9 @@ namespace {
         const int bufferSize  = (frame_count * 5 / 4) + 7200;  // x 1.25 + 7200
         std::vector<unsigned char> mp3_buffer(bufferSize);
 
-        int mp3_bytes = lame_encode_buffer_ieee_float(
+        int mp3_bytes = lame_encode_buffer_interleaved_ieee_float(
                 lame,
                 buffer.data.data(),
-                (buffer.channels == 2) ? buffer.data.data() + 1 : nullptr,
                 frame_count,
                 mp3_buffer.data(),
                 static_cast<int>(mp3_buffer.size()));
