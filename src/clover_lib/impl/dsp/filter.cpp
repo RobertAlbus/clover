@@ -36,7 +36,7 @@ iir_coeffs apf(clover_float fs, clover_float f0, clover_float q) {
 
     clover_float b0 = a2;
     clover_float b1 = a1;
-    clover_float b2 = b0;
+    clover_float b2 = a0;
 
     clover_float normalize = 1 / a0;
 
