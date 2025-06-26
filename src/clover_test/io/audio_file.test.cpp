@@ -2,6 +2,7 @@
 // Copyright (C) 2023  Rob W. Albus
 // Licensed under the GPLv3. See LICENSE for details.
 
+#include <cmath>
 #include <ranges>
 
 #include <gtest/gtest.h>
@@ -20,11 +21,15 @@ void delete_if_exists(std::string path) {
 
 TEST(io_audio_file_manager, writes) {
     audio_buffer buffer;
-    buffer.channels    = 1;
+    buffer.channels    = 2;
     buffer.sample_rate = 48000;
+    buffer.data.reserve(480000);
 
-    for (auto _ : std::views::iota(0, 30))
-        buffer.data.emplace_back(0);
+    for (auto x : std::views::iota(0, 480000)) {
+        float signal = std::sin(float(x)) * 0.8f;
+        buffer.data.emplace_back(signal);
+        buffer.data.emplace_back(signal);
+    }
 
     std::string path = "audio_file_manager_write.wav";
 
