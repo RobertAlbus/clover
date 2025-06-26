@@ -4,8 +4,6 @@
 
 #include <cmath>
 #include <cstdint>
-#include <cstdio>
-#include <cstdlib>
 
 #include "clover/float.hpp"
 #include "clover/math.hpp"
@@ -23,7 +21,7 @@ auto clover::db_to_linear(clover_float x) -> clover_float {
 }
 
 auto clover::linear_to_db(clover_float x) -> clover_float {
-    return x != 0.f ? std::log10(x) * 20.f : 0.f;
+    return 20.0f * std::log10(std::max(x, 1e-6f));
 }
 
 auto clover::frequency_by_octave_difference(clover_float freq, clover_float octaves) -> clover_float {

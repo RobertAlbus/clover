@@ -3,7 +3,6 @@
 // Licensed under the GPLv3. See LICENSE for details.
 
 #include <cmath>
-#include <cstdio>
 #include <gtest/gtest.h>
 #include <vector>
 
@@ -23,6 +22,7 @@ TEST(math, linear_to_db) {
             {1, 0},
             {0.5, -6},
             {0.25, -12},
+            {0, -120},
     };
     for (auto fixture : fixtures) {
         EXPECT_NEAR(linear_to_db(fixture.linear), fixture.db, 0.05);
