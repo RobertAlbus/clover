@@ -132,7 +132,7 @@ clover_float env_adsr::tick() {
             break;
         }
         case state::decay: {
-            if (float_eq(signal, m_sustain)) {
+            if (m_env.m_current_step >= m_decay_samples) {
                 m_state = state::sustain;
                 m_env.set(m_sustain, 0);
             }
