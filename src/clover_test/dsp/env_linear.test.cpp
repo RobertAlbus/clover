@@ -2,8 +2,6 @@
 // Copyright (C) 2023  Rob W. Albus
 // Licensed under the GPLv3. See LICENSE for details.
 
-#include <cmath>
-#include <cstdio>
 #include <ranges>
 
 #include <gtest/gtest.h>
@@ -17,10 +15,10 @@ using namespace dsp;
 TEST(dsp_env_linear, initializes_blank) {
     env_linear env;
 
-    EXPECT_FLOAT_EQ(env.m_current_step, 0.f);
-    EXPECT_FLOAT_EQ(env.m_target_step, 0.f);
-    EXPECT_FLOAT_EQ(env.m_from, 0.f);
-    EXPECT_FLOAT_EQ(env.m_to, 0.f);
+    EXPECT_FLOAT_EQ(env.tick(), 0.f);
+    EXPECT_FLOAT_EQ(env.tick(), 0.f);
+    EXPECT_FLOAT_EQ(env.tick(), 0.f);
+    EXPECT_FLOAT_EQ(env.tick(), 0.f);
 }
 
 TEST(dsp_env_linear, resets_from_to) {
@@ -59,11 +57,14 @@ TEST(dsp_env_linear, resets_immediately) {
     env.m_to           = 10;
 
     env.set(30, 0);
+    EXPECT_FLOAT_EQ(env.tick(), 30.f);
+    EXPECT_FLOAT_EQ(env.tick(), 30.f);
+    EXPECT_FLOAT_EQ(env.tick(), 30.f);
 
-    EXPECT_FLOAT_EQ(env.m_current_step, 0);
-    EXPECT_FLOAT_EQ(env.m_target_step, 0);
-    EXPECT_FLOAT_EQ(env.m_from, 5);
-    EXPECT_FLOAT_EQ(env.m_to, 30);
+    env.set(90, 100, 0);
+    EXPECT_FLOAT_EQ(env.tick(), 100.f);
+    EXPECT_FLOAT_EQ(env.tick(), 100.f);
+    EXPECT_FLOAT_EQ(env.tick(), 100.f);
 }
 
 TEST(dsp_env_linear, negative_duration_handled_as_zero) {
@@ -77,12 +78,15 @@ TEST(dsp_env_linear, negative_duration_handled_as_zero) {
 
     env.set(30, -100);
 
-    EXPECT_FLOAT_EQ(env.m_current_step, 0);
-    EXPECT_FLOAT_EQ(env.m_target_step, 0);
-    EXPECT_FLOAT_EQ(env.m_from, 5);
-    EXPECT_FLOAT_EQ(env.m_to, 30);
-
     EXPECT_FLOAT_EQ(env.tick(), 30);
+    EXPECT_FLOAT_EQ(env.tick(), 30);
+    EXPECT_FLOAT_EQ(env.tick(), 30);
+
+    env.set(90, 100, -100);
+
+    EXPECT_FLOAT_EQ(env.tick(), 100);
+    EXPECT_FLOAT_EQ(env.tick(), 100);
+    EXPECT_FLOAT_EQ(env.tick(), 100);
 }
 
 TEST(dsp_env_linear, sets_to) {
@@ -95,10 +99,14 @@ TEST(dsp_env_linear, sets_to) {
     env.m_to           = 10;
 
     env.set(9);
-    EXPECT_FLOAT_EQ(env.m_current_step, 0);
-    EXPECT_FLOAT_EQ(env.m_target_step, 50);
-    EXPECT_FLOAT_EQ(env.m_from, 5);
-    EXPECT_FLOAT_EQ(env.m_to, 9);
+    EXPECT_FLOAT_EQ(env.tick(), 5);
+
+    for (auto i : std::views::iota(0, 49)) {
+        float signal = env.tick();
+        EXPECT_GT(signal, 5);
+        EXPECT_LT(signal, 9);
+    }
+    EXPECT_FLOAT_EQ(env.tick(), 9);
 }
 
 TEST(dsp_env_linear, correct_when_reset_from_and_to) {

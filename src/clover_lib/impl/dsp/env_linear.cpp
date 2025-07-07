@@ -10,7 +10,7 @@ namespace clover::dsp {
 
 void env_linear::set(clover_float a, clover_float b, clover_float n) {
     m_current_step = 0;
-    m_target_step  = n;
+    m_target_step  = std::max(n, 0.f);
     m_from         = a;
     m_to           = b;
 }
@@ -20,13 +20,10 @@ void env_linear::set(clover_float b, clover_float n) {
     m_to   = b;
 
     m_current_step = 0;
-    m_target_step  = std::max({0}, n);
+    m_target_step  = std::max(n, 0.f);
 }
 
 void env_linear::set(clover_float b) {
-    if (float_eq(m_to, b))
-        return;
-
     m_from         = std::lerp(m_from, m_to, m_current_step / m_target_step);
     m_target_step  = m_target_step - m_current_step;
     m_current_step = 0;
@@ -35,9 +32,10 @@ void env_linear::set(clover_float b) {
 }
 
 clover_float env_linear::tick() {
-    if (m_current_step >= m_target_step)
-        return m_to;
-    return std::lerp(m_from, m_to, m_current_step++ / m_target_step);
+    if (m_current_step < m_target_step) {
+        return std::lerp(m_from, m_to, m_current_step++ / m_target_step);
+    }
+    return m_to;
 }
 
 }  // namespace clover::dsp
