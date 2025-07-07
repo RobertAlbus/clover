@@ -3,7 +3,6 @@
 // Licensed under the GPLv3. See LICENSE for details.
 
 #include <cmath>
-#include <cstdio>
 
 #include "clover/float.hpp"
 #include <gtest/gtest.h>
