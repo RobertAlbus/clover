@@ -125,23 +125,25 @@ clover_float env_adsr::tick() {
 
     switch (m_state) {
         case state::attack: {
-            if (m_env.m_current_step == m_attack_samples) {
+            if (m_env.m_current_step >= m_attack_samples) {
                 m_env.set(m_sustain, m_decay_samples);
                 m_state = state::decay;
             }
             break;
         }
-        case state::decay:
+        case state::decay: {
             if (float_eq(signal, m_sustain)) {
                 m_state = state::sustain;
                 m_env.set(m_sustain, 0);
             }
             break;
-        case state::release:
+        }
+        case state::release: {
             if (m_env.m_current_step >= m_release_samples) {
                 m_state = state::complete;
             }
             break;
+        }
         default:
             break;
     }
