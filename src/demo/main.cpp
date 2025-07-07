@@ -52,13 +52,14 @@ int main(int argc, char *argv[]) {
         stream.audio_callback = audio_callback;
 
         audio_state_init();
-        stream.open(io::stream::settings{
-                .device_index_in  = system.no_device(),
-                .chan_count_in    = 0,
-                .device_index_out = system.default_output().index,
-                .chan_count_out   = channel_count_out,
-                .sample_rate      = fs_i,
-                .latency_ms       = 0});
+        stream.open(
+                io::stream::settings{
+                        .device_index_in  = system.no_device(),
+                        .chan_count_in    = 0,
+                        .device_index_out = system.default_output().index,
+                        .chan_count_out   = channel_count_out,
+                        .sample_rate      = fs_i,
+                        .latency_ms       = 0});
 
         stream.start();
         stream.wait_to_complete();

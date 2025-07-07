@@ -29,9 +29,10 @@ stream::~stream() {
 void stream::start() {
     if (current_stream == nullptr) {
         throw std::runtime_error(
-                std::format("clover::stream::start() called before "
-                            "clover::stream::open(device)\n"
-                            "exiting..."));
+                std::format(
+                        "clover::stream::start() called before "
+                        "clover::stream::open(device)\n"
+                        "exiting..."));
     }
     pa_util::handle_pa_error(Pa_IsStreamActive(current_stream));
     pa_util::handle_pa_error(Pa_StartStream(current_stream));
@@ -121,13 +122,14 @@ int stream::pa_audio_callback(
 
     for (unsigned long i = 0; i < frames_per_buffer; i++) {
         float *current_out     = out;
-        callback_status status = instance.audio_callback(callback_args{
-                .clock_time     = instance.clock.current_sample(),
-                .chan_count_in  = instance.current_settings.chan_count_in,
-                .chan_count_out = instance.current_settings.chan_count_out,
-                .input          = (float *)in,
-                .output         = current_out,
-        });
+        callback_status status = instance.audio_callback(
+                callback_args{
+                        .clock_time     = instance.clock.current_sample(),
+                        .chan_count_in  = instance.current_settings.chan_count_in,
+                        .chan_count_out = instance.current_settings.chan_count_out,
+                        .input          = (float *)in,
+                        .output         = current_out,
+                });
 
         switch (status) {
             case callback_status::cont:

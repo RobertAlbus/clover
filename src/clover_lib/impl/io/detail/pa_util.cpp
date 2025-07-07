@@ -29,11 +29,12 @@ void pa_terminate() {
 
 void handle_pa_error(int err) {
     if (err != paNoError) {
-        throw std::runtime_error(std::format(
-                "PaErrorCode {} {}\n\n"
-                "exiting...\n",
-                err,
-                Pa_GetErrorText(err)));
+        throw std::runtime_error(
+                std::format(
+                        "PaErrorCode {} {}\n\n"
+                        "exiting...\n",
+                        err,
+                        Pa_GetErrorText(err)));
     }
 }
 
