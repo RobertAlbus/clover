@@ -24,6 +24,7 @@ struct env_linear {
     void set(clover_float b);
 
     clover_float tick();
+    clover_float current_value();
 };
 
 }  // namespace clover::dsp

@@ -38,4 +38,11 @@ clover_float env_linear::tick() {
     return m_to;
 }
 
+clover_float env_linear::current_value() {
+    if (m_current_step < m_target_step) {
+        return std::lerp(m_from, m_to, m_current_step / m_target_step);
+    }
+    return m_to;
+}
+
 }  // namespace clover::dsp

@@ -185,3 +185,11 @@ TEST(dsp_env_linear, correct_when_reset_immediately) {
 
     EXPECT_FLOAT_EQ(env.tick(), 30);
 }
+
+TEST(dsp_env_linear, provides_current_value) {
+    env_linear env;
+
+    env.set(30, 0);
+    for (auto i : std::views::iota(0, 30))
+        EXPECT_FLOAT_EQ(env.tick(), env.current_value());
+}
