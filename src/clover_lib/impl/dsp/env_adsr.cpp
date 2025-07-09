@@ -48,52 +48,37 @@ clover_float env_adsr::release() {
 
 void env_adsr::attack(clover_float duration) {
     m_attack_samples = std::max(duration, 0.f);
-
     if (m_state == state::attack) {
-        // env_linear treats negative durations as zero.
-        m_env.set(m_attack_gain, m_attack_samples - m_env.m_current_step);
+        m_env.m_target_step = duration;
     }
 }
 
 void env_adsr::attack_gain(clover_float a_gain) {
     m_attack_gain = a_gain;
     if (m_state == state::attack) {
-        m_env.set(m_attack_gain, m_attack_samples - m_env.m_current_step);
+        m_env.set(m_attack_gain);
     }
 }
 
 void env_adsr::decay(clover_float duration) {
-    if (float_eq(duration, m_decay_samples))
-        return;
-
     m_decay_samples = std::max(duration, 0.f);
-
     if (m_state == state::decay) {
-        // env_linear treats negative durations as zero.
-        m_env.set(m_sustain, duration - m_env.m_current_step);
+        m_env.m_target_step = duration;
     }
 }
 
 void env_adsr::sustain(clover_float value) {
-    if (float_eq(value, m_sustain))
-        return;
-
     m_sustain = value;
 
     if (m_state == state::decay || m_state == state::sustain) {
-        m_env.set(value, 0);
+        m_env.m_to = value;
     }
 }
 
 void env_adsr::release(clover_float duration) {
-    if (float_eq(duration, m_release_samples))
-        return;
-
     m_release_samples = std::max(duration, 0.f);
-
     if (m_state == state::release) {
-        // env_linear treats negative durations as zero.
-        m_env.set(0, duration - m_env.m_current_step);
+        m_env.m_target_step = duration;
     }
 }
 
@@ -106,9 +91,6 @@ void env_adsr::key_on() {
 void env_adsr::key_off() {
     if (m_state < state::release) {
         m_state = state::release;
-
-        // constant time release, not constant rate.
-        // may want to revist this.
         m_env.set(0, m_release_samples);
 
         // churn one tick to begin release on next sample

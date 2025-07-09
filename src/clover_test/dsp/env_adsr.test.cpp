@@ -2,8 +2,6 @@
 // Copyright (C) 2023  Rob W. Albus
 // Licensed under the GPLv3. See LICENSE for details.
 
-#include <cmath>
-#include <cstdio>
 #include <ranges>
 
 #include <gtest/gtest.h>
@@ -158,8 +156,13 @@ TEST(dsp_env_adsr, mid_attack_update) {
     EXPECT_FLOAT_EQ(env.tick(), 0.3);
     EXPECT_FLOAT_EQ(env.tick(), 0.4);
 
-    env.attack(15);
-    EXPECT_FLOAT_EQ(env.tick(), 0.5);
+    env.attack(20);
+    EXPECT_FLOAT_EQ(env.tick(), 0.25);
+    EXPECT_FLOAT_EQ(env.tick(), 0.30);
+    EXPECT_FLOAT_EQ(env.tick(), 0.35);
+    EXPECT_FLOAT_EQ(env.tick(), 0.40);
+    EXPECT_FLOAT_EQ(env.tick(), 0.45);
+    EXPECT_FLOAT_EQ(env.tick(), 0.50);
     EXPECT_FLOAT_EQ(env.tick(), 0.55);
     EXPECT_FLOAT_EQ(env.tick(), 0.60);
     EXPECT_FLOAT_EQ(env.tick(), 0.65);
@@ -175,28 +178,20 @@ TEST(dsp_env_adsr, mid_attack_update) {
 
 TEST(dsp_env_adsr, mid_decay_update) {
     env_adsr env;
-    env.set(10, 10, 0.5, 10);
+    env.set(10, 20, 0.5, 10);
 
     // half way through decay
     env.key_on();
-    for (auto _ : std::views::iota(0, 14))
+    for (auto _ : std::views::iota(0, 15))
         env.tick();
 
-    env.decay(15);
-    EXPECT_FLOAT_EQ(env.tick(), 0.75);
-    EXPECT_FLOAT_EQ(env.tick(), 0.725);
+    env.decay(10);
     EXPECT_FLOAT_EQ(env.tick(), 0.700);
-    EXPECT_FLOAT_EQ(env.tick(), 0.675);
     EXPECT_FLOAT_EQ(env.tick(), 0.650);
-    EXPECT_FLOAT_EQ(env.tick(), 0.625);
     EXPECT_FLOAT_EQ(env.tick(), 0.600);
-    EXPECT_FLOAT_EQ(env.tick(), 0.575);
     EXPECT_FLOAT_EQ(env.tick(), 0.550);
-    EXPECT_FLOAT_EQ(env.tick(), 0.525);
 
     // reached sustain
-    EXPECT_FLOAT_EQ(env.tick(), 0.500);
-    EXPECT_FLOAT_EQ(env.tick(), 0.500);
     EXPECT_FLOAT_EQ(env.tick(), 0.500);
     EXPECT_FLOAT_EQ(env.tick(), 0.500);
 }
@@ -223,33 +218,28 @@ TEST(dsp_env_adsr, mid_sustain_update) {
 
 TEST(dsp_env_adsr, mid_release_update) {
     env_adsr env;
-    env.set(2, 2, 0.5, 10);
+    env.set(2, 2, 0.5, 5);
 
     // get to sustain
     env.key_on();
     for (auto _ : std::views::iota(0, 5))
         env.tick();
 
+    // reached sustain
     EXPECT_FLOAT_EQ(env.tick(), 0.50);
 
     env.key_off();
-    EXPECT_FLOAT_EQ(env.tick(), 0.45);
     EXPECT_FLOAT_EQ(env.tick(), 0.40);
+    EXPECT_FLOAT_EQ(env.tick(), 0.30);
+
+    env.release(10);
     EXPECT_FLOAT_EQ(env.tick(), 0.35);
     EXPECT_FLOAT_EQ(env.tick(), 0.30);
-    // half way through release
-
-    env.release(15);
     EXPECT_FLOAT_EQ(env.tick(), 0.25);
-    EXPECT_FLOAT_EQ(env.tick(), 0.225);
     EXPECT_FLOAT_EQ(env.tick(), 0.200);
-    EXPECT_FLOAT_EQ(env.tick(), 0.175);
     EXPECT_FLOAT_EQ(env.tick(), 0.150);
-    EXPECT_FLOAT_EQ(env.tick(), 0.125);
     EXPECT_FLOAT_EQ(env.tick(), 0.100);
-    EXPECT_FLOAT_EQ(env.tick(), 0.075);
     EXPECT_FLOAT_EQ(env.tick(), 0.050);
-    EXPECT_FLOAT_EQ(env.tick(), 0.025);
 
     // complete
     EXPECT_FLOAT_EQ(env.tick(), 0);
