@@ -47,7 +47,7 @@ clover_float env_adsr::release() {
 }
 
 void env_adsr::attack(clover_float duration) {
-    m_attack_samples = std::max(duration, 0.f);
+    m_attack_samples = std::max(duration, 1.f);
     if (m_state == state::attack) {
         m_env.m_target_step = duration;
     }
@@ -61,7 +61,7 @@ void env_adsr::attack_gain(clover_float a_gain) {
 }
 
 void env_adsr::decay(clover_float duration) {
-    m_decay_samples = std::max(duration, 0.f);
+    m_decay_samples = std::max(duration, 1.f);
     if (m_state == state::decay) {
         m_env.m_target_step = duration;
     }
@@ -76,7 +76,7 @@ void env_adsr::sustain(clover_float value) {
 }
 
 void env_adsr::release(clover_float duration) {
-    m_release_samples = std::max(duration, 0.f);
+    m_release_samples = std::max(duration, 1.f);
     if (m_state == state::release) {
         m_env.m_target_step = duration;
     }
