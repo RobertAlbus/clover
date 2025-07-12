@@ -202,10 +202,10 @@ iir_coeffs hs(clover_float fs, clover_float f0, clover_float q, clover_float gai
 
     clover_float a0 = (A + 1) - (A - 1) * cos_omega + sqrt_A_alpha;
     clover_float a1 = 2 * ((A - 1) - (A + 1) * cos_omega);
-    clover_float a2 = (A + 1) + (A - 1) * cos_omega - sqrt_A_alpha;
+    clover_float a2 = (A + 1) - (A - 1) * cos_omega - sqrt_A_alpha;
 
     clover_float b0 = A * ((A + 1) + (A - 1) * cos_omega + sqrt_A_alpha);
-    clover_float b1 = A * -2 * ((A - 1) - (A + 1) * cos_omega);
+    clover_float b1 = A * -2 * ((A - 1) + (A + 1) * cos_omega);
     clover_float b2 = A * ((A + 1) + (A - 1) * cos_omega - sqrt_A_alpha);
 
     clover_float normalize = 1 / a0;
