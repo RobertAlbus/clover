@@ -6,13 +6,12 @@
 
 #include <numbers>
 
-#include "clover/float.hpp"
 
 namespace clover {
 
 struct num {
-    static constexpr clover_float pi    = std::numbers::pi_v<clover_float>;
-    static constexpr clover_float pi_x2 = pi * 2;
+    static constexpr float pi    = std::numbers::pi_v<float>;
+    static constexpr float pi_x2 = pi * 2;
 };
 
 }  // namespace clover

@@ -6,7 +6,6 @@
 #include <cstdio>
 
 #include "clover/circular_buffer.hpp"
-#include "clover/float.hpp"
 #include <gtest/gtest.h>
 #include <ranges>
 
@@ -17,7 +16,7 @@ TEST(circular_buffer, reads_and_writes) {
     circular_buffer buffer{10};
 
     for (auto i : std::views::iota(0, 10)) {
-        buffer.tick(static_cast<clover_float>(i));
+        buffer.tick(static_cast<float>(i));
     }
 
     EXPECT_FLOAT_EQ(buffer[0], 9);
@@ -32,7 +31,7 @@ TEST(circular_buffer, reads_and_writes) {
     EXPECT_FLOAT_EQ(buffer[9], 0);
 
     for (auto i : std::views::iota(100, 105)) {
-        buffer.tick(static_cast<clover_float>(i));
+        buffer.tick(static_cast<float>(i));
     }
 
     EXPECT_FLOAT_EQ(buffer[0], 104);
@@ -62,7 +61,7 @@ TEST(circular_buffer_2, reads_and_writes) {
     circular_buffer_2 buffer{10};
 
     for (auto i : std::views::iota(0, 10)) {
-        auto i_f = clover_float(i * 2);
+        auto i_f = float(i * 2);
         buffer.tick(i_f, i_f + 1);
     }
 
@@ -88,7 +87,7 @@ TEST(circular_buffer_2, reads_and_writes) {
     EXPECT_FLOAT_EQ(buffer[9].first, 0);
 
     for (auto i : std::views::iota(0, 5)) {
-        auto i_f = 100 + static_cast<clover_float>(i * 2);
+        auto i_f = 100 + static_cast<float>(i * 2);
         buffer.tick(i_f, i_f + 1);
     }
 

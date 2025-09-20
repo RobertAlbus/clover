@@ -6,17 +6,16 @@
 #include <cmath>
 #include <utility>
 
-#include "clover/float.hpp"
 
 namespace clover::dsp {
 
 struct pan {
-    clover_float m_pan_L = std::sqrt(clover_float(2));
-    clover_float m_pan_R = std::sqrt(clover_float(2));
+    float m_pan_L = std::sqrt(float(2));
+    float m_pan_R = std::sqrt(float(2));
 
-    std::pair<clover_float, clover_float> process(clover_float in);
-    std::pair<clover_float, clover_float> process(clover_float L, clover_float R);
-    void set(clover_float pan);
+    std::pair<float, float> process(float in);
+    std::pair<float, float> process(float L, float R);
+    void set(float pan);
 };
 
 }  // namespace clover::dsp

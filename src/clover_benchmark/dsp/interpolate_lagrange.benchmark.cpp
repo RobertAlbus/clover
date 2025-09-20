@@ -13,12 +13,12 @@
 #include "clover_benchmark/util.hpp"
 
 void BM_interpolate_lagrange(benchmark::State& state) {
-    clover_float p0 = -0.0809f;
-    clover_float p1 = -0.12345f;
-    clover_float p2 = 0.9834f;
-    clover_float p3 = -0.1f;
+    float p0 = -0.0809f;
+    float p1 = -0.12345f;
+    float p2 = 0.9834f;
+    float p3 = -0.1f;
 
-    clover_float s = 0.2345f;
+    float s = 0.2345f;
 
     auto range = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));
     for (auto _ : state) {

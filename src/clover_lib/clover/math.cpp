@@ -8,55 +8,53 @@
 #include "clover/float.hpp"
 #include "clover/math.hpp"
 
-auto clover::db_curve(clover_float x, clover_float n) -> clover_float {
+auto clover::db_curve(float x, float n) -> float {
     return std::max(0.f, 0.5f * std::log(x / n) + n);
 }
 
-auto clover::db_curve_inverse(clover_float x, clover_float n) -> clover_float {
+auto clover::db_curve_inverse(float x, float n) -> float {
     return n - clover::db_curve(n - x, n);
 }
 
-auto clover::db_to_linear(clover_float x) -> clover_float {
+auto clover::db_to_linear(float x) -> float {
     return std::pow(10.f, x * 0.05f);
 }
 
-auto clover::linear_to_db(clover_float x) -> clover_float {
+auto clover::linear_to_db(float x) -> float {
     return 20.0f * std::log10(std::max(x, 1e-6f));
 }
 
-auto clover::frequency_by_octave_difference(clover_float freq, clover_float octaves) -> clover_float {
+auto clover::frequency_by_octave_difference(float freq, float octaves) -> float {
     return freq * std::exp2(octaves);
 }
 
-auto clover::frequency_by_semitone_difference(clover_float freq, clover_float semitones) -> clover_float {
+auto clover::frequency_by_semitone_difference(float freq, float semitones) -> float {
     return frequency_by_octave_difference(freq, semitones * (1.f / 12.f));
 }
 
-auto clover::octave_difference_by_frequency(clover_float base_freq, clover_float target_freq)
-        -> clover_float {
+auto clover::octave_difference_by_frequency(float base_freq, float target_freq) -> float {
     return std::log2(target_freq / base_freq);
 }
 
-auto clover::semitone_difference_by_frequency(clover_float base_freq, clover_float target_freq)
-        -> clover_float {
+auto clover::semitone_difference_by_frequency(float base_freq, float target_freq) -> float {
     return octave_difference_by_frequency(base_freq, target_freq) * 12.f;
 }
 
-auto clover::frequency_to_midi(clover_float x) -> clover_float {
+auto clover::frequency_to_midi(float x) -> float {
     if (x <= 0)
         return 0;
     return 12.f * (std::log(x * (1.f / 220.f)) / std::log(2.f)) + 57.f;
 }
 
-auto clover::midi_to_frequency(clover_float x) -> clover_float {
+auto clover::midi_to_frequency(float x) -> float {
     return 440.f * std::exp2((x - 69.f) * (1.f / 12.f));
 }
 
-auto clover::sign(clover_float x) -> clover_float {
+auto clover::sign(float x) -> float {
     return x >= 1 ? 1 : -1;
 }
 
-auto clover::tension(clover_float x, clover_float a) -> clover_float {
+auto clover::tension(float x, float a) -> float {
     if (float_eq(a, 0))
         return x;
 
@@ -87,10 +85,10 @@ auto clover::tension(clover_float x, clover_float a) -> clover_float {
     }
 }
 
-auto clover::tension_pos_a(clover_float x, clover_float a) -> clover_float {
+auto clover::tension_pos_a(float x, float a) -> float {
     return 1.f - ((1.f - x) / (1.f + (40 * a * x)));
 }
 
-auto clover::tension_neg_a(clover_float x, clover_float a) -> clover_float {
+auto clover::tension_neg_a(float x, float a) -> float {
     return (x / (1.f + (40 * -a * (1.f - x))));
 }

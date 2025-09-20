@@ -6,14 +6,13 @@
 #include <gtest/gtest.h>
 
 #include "clover/dsp/phase_increment_tracker.hpp"
-#include "clover/float.hpp"
 
 using namespace clover;
 using namespace dsp;
 
 TEST(dsp_phase_increment_tracker, initializes_by_freq) {
-    clover_float freq = 12345.99999f;
-    clover_float fs   = 48000.f;
+    float freq = 12345.99999f;
+    float fs   = 48000.f;
 
     auto pit = phase_increment_tracker::for_freq(fs, freq);
 
@@ -25,8 +24,8 @@ TEST(dsp_phase_increment_tracker, initializes_by_freq) {
 }
 
 TEST(dsp_phase_increment_tracker, initializes_by_period) {
-    clover_float period = 12345.99999f;
-    clover_float fs     = 48000.f;
+    float period = 12345.99999f;
+    float fs     = 48000.f;
 
     auto pit = phase_increment_tracker::for_period(fs, period);
 
@@ -38,8 +37,8 @@ TEST(dsp_phase_increment_tracker, initializes_by_period) {
 }
 
 TEST(dsp_phase_increment_tracker, increments_correctly) {
-    clover_float freq = 384.f;
-    clover_float fs   = 48000.f;
+    float freq = 384.f;
+    float fs   = 48000.f;
 
     auto pit = phase_increment_tracker::for_freq(fs, freq);
 
@@ -51,8 +50,8 @@ TEST(dsp_phase_increment_tracker, increments_correctly) {
 }
 
 TEST(dsp_phase_increment_tracker, frequency_set_correctly) {
-    clover_float freq = 111;
-    clover_float fs   = 48000.f;
+    float freq = 111;
+    float fs   = 48000.f;
 
     auto pit = phase_increment_tracker::for_freq(fs, 1);
 
@@ -67,8 +66,8 @@ TEST(dsp_phase_increment_tracker, frequency_set_correctly) {
 }
 
 TEST(dsp_phase_increment_tracker, phase_set_correctly) {
-    clover_float freq = 111;
-    clover_float fs   = 48000.f;
+    float freq = 111;
+    float fs   = 48000.f;
 
     auto pit = phase_increment_tracker::for_freq(fs, 1);
 
@@ -88,7 +87,7 @@ TEST(dsp_phase_increment_tracker, phase_set_correctly) {
 }
 
 TEST(dsp_phase_increment_tracker, phase_offset_set_correctly) {
-    clover_float fs = 48000.f;
+    float fs = 48000.f;
 
     auto pit = phase_increment_tracker::for_freq(fs, 1.f);
 

@@ -6,12 +6,11 @@
 
 #include <vector>
 
-#include "clover/float.hpp"
 
 namespace clover {
 
 struct audio_buffer {
-    std::vector<clover_float> data;
+    std::vector<float> data;
 
     int channels;
     int sample_rate;

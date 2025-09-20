@@ -8,13 +8,12 @@
 #include <gtest/gtest.h>
 
 #include "clover/dsp/oscillator.hpp"
-#include "clover/float.hpp"
 
 using namespace clover;
 using namespace dsp;
 
 TEST(dsp_oscillator, initializes_blank) {
-    clover_float fs = 48000.f;
+    float fs = 48000.f;
 
     oscillator osc(fs);
     EXPECT_FLOAT_EQ(osc.freq(), 0.f);
@@ -25,13 +24,13 @@ TEST(dsp_oscillator, initializes_blank) {
 }
 
 TEST(dsp_oscillator, sets_correctly) {
-    clover_float fs = 48000.f;
+    float fs = 48000.f;
 
     oscillator osc(fs);
 
-    clover_float freq          = 100.f;
-    clover_float initial_phase = 0.5f;
-    clover_float phase_offset  = 0.25f;
+    float freq          = 100.f;
+    float initial_phase = 0.5f;
+    float phase_offset  = 0.25f;
 
     osc.freq(freq);
     osc.phase(initial_phase);

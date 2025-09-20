@@ -18,7 +18,7 @@ void BM_fdl_lagrange_steady(benchmark::State& state) {
     for (auto _ : state) {
         auto range = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));
         for (auto i : range) {
-            fdl.tick(static_cast<clover_float>(i));
+            fdl.tick(static_cast<float>(i));
             fdl.at(480.996f);
         }
     }
@@ -26,16 +26,16 @@ void BM_fdl_lagrange_steady(benchmark::State& state) {
 
 void BM_fdl_lagrange_busy(benchmark::State& state) {
     size_t size    = 192000;
-    auto max_index = clover_float(size - 4);
+    auto max_index = float(size - 4);
     clover::dsp::fdl_lagrange fdl{192000};
 
-    clover_float index = 2;
+    float index = 2;
     for (auto _ : state) {
         auto range = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));
         for (auto i : range) {
             if (index >= max_index)
                 index = 2;
-            fdl.tick(static_cast<clover_float>(i));
+            fdl.tick(static_cast<float>(i));
             fdl.at(index);
             index += 0.13;
         }
@@ -48,7 +48,7 @@ void BM_fdl_lagrange_2_steady(benchmark::State& state) {
     for (auto _ : state) {
         auto range = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));
         for (auto i : range) {
-            fdl.tick(static_cast<clover_float>(i), static_cast<clover_float>(i));
+            fdl.tick(static_cast<float>(i), static_cast<float>(i));
             fdl.at(480.996f);
         }
     }
@@ -56,15 +56,15 @@ void BM_fdl_lagrange_2_steady(benchmark::State& state) {
 
 void BM_fdl_lagrange_2_busy(benchmark::State& state) {
     clover::dsp::fdl_lagrange_2 fdl{284000};
-    clover_float max_index = fdl.m_max_idx;
+    float max_index = fdl.m_max_idx;
 
-    clover_float index = 2;
+    float index = 2;
     for (auto _ : state) {
         auto range = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));
         for (auto i : range) {
             if (index >= max_index)
                 index = 2;
-            fdl.tick(static_cast<clover_float>(i), static_cast<clover_float>(i));
+            fdl.tick(static_cast<float>(i), static_cast<float>(i));
             fdl.at(index);
             index += 0.13;
         }

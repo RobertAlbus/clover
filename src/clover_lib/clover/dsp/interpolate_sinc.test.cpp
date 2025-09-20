@@ -14,8 +14,8 @@ using namespace clover;
 using namespace dsp;
 
 TEST(dsp_interpolate_sinc, hann_window) {
-    clover_float alpha = 0.2;
-    std::vector<clover_float> window;
+    float alpha = 0.2;
+    std::vector<float> window;
     window.resize(63, 0);
 
     hann_window_with_corner_control(window, alpha);
@@ -43,8 +43,8 @@ TEST(dsp_interpolate_sinc, hann_window) {
 }
 
 TEST(dsp_interpolate_sinc, hann_window_to_rectangle) {
-    clover_float alpha = 1;
-    std::vector<clover_float> window;
+    float alpha = 1;
+    std::vector<float> window;
     window.resize(64, 0);
     hann_window_with_corner_control(window, alpha);
 
@@ -54,7 +54,7 @@ TEST(dsp_interpolate_sinc, hann_window_to_rectangle) {
 }
 
 TEST(dsp_interpolate_sinc, sinc_function) {
-    std::vector<clover_float> sinc;
+    std::vector<float> sinc;
 
     sinc.resize(4, 0);
     sinc_function(sinc, 0);
@@ -92,8 +92,8 @@ TEST(dsp_interpolate_sinc, sinc_function) {
 }
 
 TEST(dsp_interpolate_sinc, hadamard_product) {
-    std::vector<clover_float> a{1, 2, 3};
-    std::vector<clover_float> b{4, 5, 6};
+    std::vector<float> a{1, 2, 3};
+    std::vector<float> b{4, 5, 6};
 
     hadamard_product(a, b);
 

@@ -7,7 +7,6 @@
 #include <gtest/gtest.h>
 
 #include "clover/dsp/env_linear.hpp"
-#include "clover/float.hpp"
 
 using namespace clover;
 using namespace dsp;
@@ -118,9 +117,9 @@ TEST(dsp_env_linear, correct_when_reset_from_and_to) {
     env.m_from         = 12345;
     env.m_to           = 123456;
 
-    clover_float from     = 0;
-    clover_float to       = 10;
-    clover_float duration = 100;
+    float from     = 0;
+    float to       = 10;
+    float duration = 100;
 
     env.set(from, to, duration);
     for (auto n : std::views::iota(0, (int)duration)) {
@@ -138,8 +137,8 @@ TEST(dsp_env_linear, correct_when_reset_to) {
     env.m_from         = 0;
     env.m_to           = 10;
 
-    clover_float to       = 10;
-    clover_float duration = 100;
+    float to       = 10;
+    float duration = 100;
     env.set(to, duration);
 
     for (auto n : std::views::iota(0, (int)duration)) {

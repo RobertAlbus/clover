@@ -7,33 +7,32 @@
 #include <functional>
 
 #include "clover/dsp/phase_increment_tracker.hpp"
-#include "clover/float.hpp"
 
 namespace clover::dsp {
 
 struct oscillator {
-    oscillator(clover_float fs);
+    oscillator(float fs);
     oscillator() = delete;
 
     phase_increment_tracker phase_tracker;
-    std::function<clover_float(clover_float)> waveform;
+    std::function<float(float)> waveform;
 
-    clover_float tick();
+    float tick();
 
-    void freq(clover_float freq_hz);
-    clover_float freq();
+    void freq(float freq_hz);
+    float freq();
 
-    void note(clover_float midi_note);
-    clover_float note();
+    void note(float midi_note);
+    float note();
 
-    void period(clover_float num_samples);
-    clover_float period();  // in samples
+    void period(float num_samples);
+    float period();  // in samples
 
-    void phase(clover_float phase);  // relative to domain
-    clover_float phase();            // relative to domain
+    void phase(float phase);  // relative to domain
+    float phase();            // relative to domain
 
-    void phase_offset(clover_float offset);  // relative to domain
-    clover_float phase_offset();             // relative to domain
+    void phase_offset(float offset);  // relative to domain
+    float phase_offset();             // relative to domain
 };
 
 }  // namespace clover::dsp

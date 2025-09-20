@@ -4,27 +4,26 @@
 // Copyright (C) 2023  Rob W. Albus
 // Licensed under the GPLv3. See LICENSE for details.
 
-#include "clover/float.hpp"
 
 namespace clover::dsp {
 
 struct env_linear {
-    clover_float m_current_step = 0;
-    clover_float m_target_step  = 0;
-    clover_float m_from         = 0;
-    clover_float m_to           = 0;
+    float m_current_step = 0;
+    float m_target_step  = 0;
+    float m_from         = 0;
+    float m_to           = 0;
 
     // new envelope from a to b over n samples
-    void set(clover_float a, clover_float b, clover_float n);
+    void set(float a, float b, float n);
 
     // new envelope from current value to b over n samples
-    void set(clover_float b, clover_float n);
+    void set(float b, float n);
 
     // new envelope from current value to b over remaining duration
-    void set(clover_float b);
+    void set(float b);
 
-    clover_float tick();
-    clover_float current_value();
+    float tick();
+    float current_value();
 };
 
 }  // namespace clover::dsp

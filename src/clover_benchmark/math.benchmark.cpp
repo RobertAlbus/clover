@@ -13,22 +13,22 @@
 #include "clover_benchmark/util.hpp"
 
 static void BM_db_curve(benchmark::State& state) {
-    auto range                       = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));
-    constexpr clover_float increment = clover::num::pi_x2 / clover_bm::samples_10s_48k;
+    auto range                = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));
+    constexpr float increment = clover::num::pi_x2 / clover_bm::samples_10s_48k;
     for (auto _ : state) {
         for (const auto& element : range) {
-            auto x = static_cast<clover_float>(element) * increment;
+            auto x = static_cast<float>(element) * increment;
             benchmark::DoNotOptimize(clover::db_curve(x, 1));
         }
     }
 }
 
 static void BM_db_curve_inverse(benchmark::State& state) {
-    auto range                       = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));
-    constexpr clover_float increment = clover::num::pi_x2 / clover_bm::samples_10s_48k;
+    auto range                = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));
+    constexpr float increment = clover::num::pi_x2 / clover_bm::samples_10s_48k;
     for (auto _ : state) {
         for (const auto& element : range) {
-            auto x = static_cast<clover_float>(element) * increment;
+            auto x = static_cast<float>(element) * increment;
             benchmark::DoNotOptimize(clover::db_curve(x, 1));
         }
     }
@@ -37,7 +37,7 @@ static void BM_db_curve_inverse(benchmark::State& state) {
 static void BM_db_to_linear(benchmark::State& state) {
     auto range = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));
 
-    clover_float db = -80.f;
+    float db = -80.f;
 
     for (auto _ : state) {
         for (const auto& _ : range) {
@@ -49,23 +49,23 @@ static void BM_db_to_linear(benchmark::State& state) {
 }
 
 static void BM_linear_to_db(benchmark::State& state) {
-    auto range                       = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));
-    constexpr clover_float increment = clover::num::pi_x2 / clover_bm::samples_10s_48k;
+    auto range                = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));
+    constexpr float increment = clover::num::pi_x2 / clover_bm::samples_10s_48k;
 
     for (auto _ : state) {
         for (const auto& x : range) {
-            benchmark::DoNotOptimize(clover::db_to_linear(static_cast<clover_float>(x) * increment));
+            benchmark::DoNotOptimize(clover::db_to_linear(static_cast<float>(x) * increment));
         }
     }
 }
 
 static void BM_frequency_to_midi(benchmark::State& state) {
-    auto range                       = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));
-    constexpr clover_float increment = clover::num::pi_x2 / clover_bm::samples_10s_48k / 2;
+    auto range                = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));
+    constexpr float increment = clover::num::pi_x2 / clover_bm::samples_10s_48k / 2;
 
     for (auto _ : state) {
         for (const auto& x : range) {
-            benchmark::DoNotOptimize(clover::frequency_to_midi(static_cast<clover_float>(x) * increment));
+            benchmark::DoNotOptimize(clover::frequency_to_midi(static_cast<float>(x) * increment));
         }
     }
 }
@@ -85,51 +85,51 @@ static void BM_midi_to_frequency(benchmark::State& state) {
 }
 
 static void bm_sign(benchmark::State& state) {
-    int magnitude                    = static_cast<int>(clover_bm::samples_10s_48k / 2.f);
-    auto range                       = std::views::iota(-magnitude, magnitude);
-    constexpr clover_float increment = clover::num::pi_x2 / clover_bm::samples_10s_48k / 2.f;
+    int magnitude             = static_cast<int>(clover_bm::samples_10s_48k / 2.f);
+    auto range                = std::views::iota(-magnitude, magnitude);
+    constexpr float increment = clover::num::pi_x2 / clover_bm::samples_10s_48k / 2.f;
 
     for (auto _ : state) {
         for (const auto& x : range) {
-            benchmark::DoNotOptimize(clover::sign(static_cast<clover_float>(x) * increment));
+            benchmark::DoNotOptimize(clover::sign(static_cast<float>(x) * increment));
         }
     }
 }
 
 static void BM_tension(benchmark::State& state) {
-    int magnitude                    = static_cast<int>(clover_bm::samples_10s_48k / 2.f);
-    auto range                       = std::views::iota(-magnitude, magnitude);
-    constexpr clover_float increment = clover::num::pi_x2 / clover_bm::samples_10s_48k / 2.f;
+    int magnitude             = static_cast<int>(clover_bm::samples_10s_48k / 2.f);
+    auto range                = std::views::iota(-magnitude, magnitude);
+    constexpr float increment = clover::num::pi_x2 / clover_bm::samples_10s_48k / 2.f;
 
     for (auto _ : state) {
         for (const auto& x : range) {
-            clover_float arg = static_cast<clover_float>(x) * increment;
+            float arg = static_cast<float>(x) * increment;
             benchmark::DoNotOptimize(clover::tension(arg, arg));
         }
     }
 }
 
 static void BM_tension_pos_a(benchmark::State& state) {
-    int magnitude                    = static_cast<int>(clover_bm::samples_10s_48k / 2.f);
-    auto range                       = std::views::iota(-magnitude, magnitude);
-    constexpr clover_float increment = clover::num::pi_x2 / clover_bm::samples_10s_48k / 2.f;
+    int magnitude             = static_cast<int>(clover_bm::samples_10s_48k / 2.f);
+    auto range                = std::views::iota(-magnitude, magnitude);
+    constexpr float increment = clover::num::pi_x2 / clover_bm::samples_10s_48k / 2.f;
 
     for (auto _ : state) {
         for (const auto& x : range) {
-            clover_float arg = static_cast<clover_float>(x) * increment;
+            float arg = static_cast<float>(x) * increment;
             benchmark::DoNotOptimize(clover::tension_pos_a(arg, 0.2345));
         }
     }
 }
 
 static void BM_tension_neg_a(benchmark::State& state) {
-    int magnitude                    = static_cast<int>(clover_bm::samples_10s_48k / 2.f);
-    auto range                       = std::views::iota(-magnitude, magnitude);
-    constexpr clover_float increment = clover::num::pi_x2 / clover_bm::samples_10s_48k / 2.f;
+    int magnitude             = static_cast<int>(clover_bm::samples_10s_48k / 2.f);
+    auto range                = std::views::iota(-magnitude, magnitude);
+    constexpr float increment = clover::num::pi_x2 / clover_bm::samples_10s_48k / 2.f;
 
     for (auto _ : state) {
         for (const auto& x : range) {
-            clover_float arg = static_cast<clover_float>(x) * increment;
+            float arg = static_cast<float>(x) * increment;
             benchmark::DoNotOptimize(clover::tension_neg_a(arg, 0.2345));
         }
     }

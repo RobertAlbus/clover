@@ -16,8 +16,8 @@ static void BM_phase_increment_tracker(benchmark::State& state) {
         auto pit   = clover::dsp::phase_increment_tracker::for_freq(clover_bm::fs_48k, 100);
 
         for (const auto& i : range) {
-            pit.phase(static_cast<clover_float>(i % 6));
-            pit.freq(100 + static_cast<clover_float>(i % 6) * 100);
+            pit.phase(static_cast<float>(i % 6));
+            pit.freq(100 + static_cast<float>(i % 6) * 100);
             benchmark::DoNotOptimize(pit.phase());
             benchmark::DoNotOptimize(pit.phase_offset());
             benchmark::DoNotOptimize(pit.freq());

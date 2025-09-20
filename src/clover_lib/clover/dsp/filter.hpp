@@ -6,26 +6,25 @@
 
 #include <array>
 
-#include "clover/float.hpp"
 
 namespace clover::dsp {
 
 struct iir_coeffs {
-    clover_float b0 = 0;
-    clover_float b1 = 0;
-    clover_float b2 = 0;
-    clover_float a1 = 0;
-    clover_float a2 = 0;
+    float b0 = 0;
+    float b1 = 0;
+    float b2 = 0;
+    float a1 = 0;
+    float a2 = 0;
 };
 
-iir_coeffs apf(clover_float fs, clover_float f0, clover_float bw);
-iir_coeffs lpf(clover_float fs, clover_float f0, clover_float q);
-iir_coeffs hpf(clover_float fs, clover_float f0, clover_float q);
-iir_coeffs bpf(clover_float fs, clover_float f0, clover_float q);
-iir_coeffs notch(clover_float fs, clover_float f0, clover_float q);
-iir_coeffs eq(clover_float fs, clover_float f0, clover_float q, clover_float gain);
-iir_coeffs ls(clover_float fs, clover_float f0, clover_float q, clover_float gain);
-iir_coeffs hs(clover_float fs, clover_float f0, clover_float q, clover_float gain);
+iir_coeffs apf(float fs, float f0, float bw);
+iir_coeffs lpf(float fs, float f0, float q);
+iir_coeffs hpf(float fs, float f0, float q);
+iir_coeffs bpf(float fs, float f0, float q);
+iir_coeffs notch(float fs, float f0, float q);
+iir_coeffs eq(float fs, float f0, float q, float gain);
+iir_coeffs ls(float fs, float f0, float q, float gain);
+iir_coeffs hs(float fs, float f0, float q, float gain);
 
 struct iir {
     iir_coeffs m_coeffs = {0, 0, 0, 0, 0};
@@ -37,19 +36,19 @@ struct iir {
 struct filter : public iir {
     using iir::iir;
 
-    std::array<clover_float, 2> m_inputs{0, 0};
-    std::array<clover_float, 2> m_outputs{0, 0};
+    std::array<float, 2> m_inputs{0, 0};
+    std::array<float, 2> m_outputs{0, 0};
 
-    clover_float tick(clover_float x);
+    float tick(float x);
 };
 
 struct filter_2 : public iir {
     using iir::iir;
 
-    std::array<clover_float, 4> m_inputs{0, 0, 0, 0};
-    std::array<clover_float, 4> m_outputs{0, 0, 0, 0};
+    std::array<float, 4> m_inputs{0, 0, 0, 0};
+    std::array<float, 4> m_outputs{0, 0, 0, 0};
 
-    std::pair<clover_float, clover_float> tick(clover_float in_L, clover_float in_R);
+    std::pair<float, float> tick(float in_L, float in_R);
 };
 
 }  // namespace clover::dsp

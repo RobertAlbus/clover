@@ -10,7 +10,6 @@
 
 #include "clover/dsp/filter.hpp"
 #include "clover/dsp/oscillator.hpp"
-#include "clover/float.hpp"
 #include "clover/math.hpp"
 
 using namespace clover;
@@ -78,20 +77,20 @@ TEST(dsp_filter, initializes_with_empty_state) {
 }
 
 TEST(dsp_filter, filters_signal) {
-    clover_float attenuation = db_to_linear(-55);
+    float attenuation = db_to_linear(-55);
 
-    clover_float fs     = 48000;
-    clover_float cutoff = 500;
+    float fs     = 48000;
+    float cutoff = 500;
     filter filt{lpf(fs, cutoff, 1)};
 
-    clover_float pitch = 10800;
+    float pitch = 10800;
     oscillator osc(fs);
     osc.freq(pitch);
 
-    clover_float fade_duration = 500;
+    float fade_duration = 500;
     for (auto n : std::views::iota(0, (int)fs)) {
-        clover_float fade   = ((clover_float)n < fade_duration) ? (((clover_float)n) / fade_duration) : 1;
-        clover_float sample = osc.tick() * fade;
+        float fade   = ((float)n < fade_duration) ? (((float)n) / fade_duration) : 1;
+        float sample = osc.tick() * fade;
 
         sample = filt.tick(sample);
 

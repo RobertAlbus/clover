@@ -9,15 +9,15 @@
 
 namespace clover::dsp {
 
-std::pair<clover_float, clover_float> pan::process(clover_float in) {
+std::pair<float, float> pan::process(float in) {
     return {m_pan_L * in, m_pan_R * in};
 }
 
-std::pair<clover_float, clover_float> pan::process(clover_float L, clover_float R) {
+std::pair<float, float> pan::process(float L, float R) {
     return {m_pan_L * L, m_pan_R * R};
 }
 
-void pan::set(clover_float pan) {
+void pan::set(float pan) {
     m_pan_L = std::cos(0.25f * num::pi * (pan + 1));
     m_pan_R = std::sin(0.25f * num::pi * (pan + 1));
 }

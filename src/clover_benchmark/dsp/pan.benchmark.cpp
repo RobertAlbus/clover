@@ -14,12 +14,12 @@ void BM_pan_steady(benchmark::State& state) {
     auto limit = static_cast<int>(clover_bm::samples_10s_48k) / 2;
     auto range = std::views::iota(-limit, limit);
 
-    auto limit_recip = 1.f / static_cast<clover_float>(limit);
+    auto limit_recip = 1.f / static_cast<float>(limit);
     clover::dsp::pan p;
 
     for (const auto& i : state) {
         for (const auto& i : range) {
-            benchmark::DoNotOptimize(p.process(static_cast<clover_float>(i)));
+            benchmark::DoNotOptimize(p.process(static_cast<float>(i)));
         }
     }
 }
@@ -28,13 +28,13 @@ void BM_pan_busy(benchmark::State& state) {
     auto limit = static_cast<int>(clover_bm::samples_10s_48k) / 2;
     auto range = std::views::iota(-limit, limit);
 
-    auto limit_recip = 1.f / static_cast<clover_float>(limit);
+    auto limit_recip = 1.f / static_cast<float>(limit);
     clover::dsp::pan p;
 
     for (const auto& i : state) {
         for (const auto& i : range) {
-            p.set(limit_recip * static_cast<clover_float>(i));
-            benchmark::DoNotOptimize(p.process(static_cast<clover_float>(i)));
+            p.set(limit_recip * static_cast<float>(i));
+            benchmark::DoNotOptimize(p.process(static_cast<float>(i)));
         }
     }
 }

@@ -7,7 +7,6 @@
 #include "samplerate.h"
 
 #include "clover/audio_buffer.hpp"
-#include "clover/float.hpp"
 
 namespace clover {
 
@@ -49,13 +48,13 @@ void convert_sample_rate(audio_buffer buffer, int sample_rate) {
 }
 
 void normalize_audio_buffer(audio_buffer& buffer) {
-    clover_float max_value = 0;
+    float max_value = 0;
     for (const auto sample : buffer.data) {
         max_value = std::max(max_value, std::abs(sample));
     }
 
     if (max_value != 0) {
-        clover_float normalization = 1 / max_value;
+        float normalization = 1 / max_value;
         for (auto& sample : buffer.data)
             sample *= normalization;
     }

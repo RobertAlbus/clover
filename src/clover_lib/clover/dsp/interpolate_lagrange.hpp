@@ -6,11 +6,9 @@
 
 #include <cmath>
 
-#include "clover/float.hpp"
 
 namespace clover::dsp {
 
-clover_float interpolate_lagrange(
-        clover_float p0, clover_float p1, clover_float p2, clover_float p3, clover_float s);
+float interpolate_lagrange(float p0, float p1, float p2, float p3, float s);
 
 }  // namespace clover::dsp

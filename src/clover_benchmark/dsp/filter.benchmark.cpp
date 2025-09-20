@@ -19,7 +19,7 @@ static void BM_filter_steady(benchmark::State& state) {
 
     filter filt{lpf(clover_bm::fs_48k, 9000, 0.8)};
 
-    std::vector<clover_float> signal;
+    std::vector<float> signal;
     signal.reserve(clover_bm::samples_10s_48k);
     oscillator osc(clover_bm::fs_48k);
     osc.waveform = wave_square;
@@ -41,7 +41,7 @@ static void BM_filter_busy(benchmark::State& state) {
 
     filter filt{lpf(clover_bm::fs_48k, 9000, 0.8)};
 
-    std::vector<clover_float> signal;
+    std::vector<float> signal;
     signal.reserve(clover_bm::samples_10s_48k);
     oscillator osc(clover_bm::fs_48k);
     osc.waveform = wave_square;
@@ -64,7 +64,7 @@ static void BM_filter_2_steady(benchmark::State& state) {
 
     filter_2 filt{lpf(clover_bm::fs_48k, 9000, 0.8)};
 
-    std::vector<clover_float> signal;
+    std::vector<float> signal;
     signal.reserve(clover_bm::samples_10s_48k);
     oscillator osc(clover_bm::fs_48k);
     osc.waveform = wave_square;
@@ -86,7 +86,7 @@ static void BM_filter_2_busy(benchmark::State& state) {
 
     filter_2 filt{lpf(clover_bm::fs_48k, 9000, 0.8)};
 
-    std::vector<clover_float> signal;
+    std::vector<float> signal;
     signal.reserve(clover_bm::samples_10s_48k);
     oscillator osc(clover_bm::fs_48k);
     osc.waveform = wave_square;
@@ -109,7 +109,7 @@ static void BM_filter_eq_steady(benchmark::State& state) {
 
     filter filt{eq(clover_bm::fs_48k, 9000, 0.8, -3)};
 
-    std::vector<clover_float> signal;
+    std::vector<float> signal;
     signal.reserve(clover_bm::samples_10s_48k);
     oscillator osc(clover_bm::fs_48k);
     osc.waveform = wave_square;
@@ -131,7 +131,7 @@ static void BM_filter_eq_busy(benchmark::State& state) {
 
     filter filt{eq(clover_bm::fs_48k, 9000, 0.8, -3)};
 
-    std::vector<clover_float> signal;
+    std::vector<float> signal;
     signal.reserve(clover_bm::samples_10s_48k);
     oscillator osc(clover_bm::fs_48k);
     osc.waveform = wave_square;

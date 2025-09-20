@@ -7,7 +7,6 @@
 #include <gtest/gtest.h>
 
 #include "clover/dsp/env_adsr.hpp"
-#include "clover/float.hpp"
 
 using namespace clover;
 using namespace dsp;
@@ -49,10 +48,10 @@ TEST(dsp_env_adsr, sets_correctly) {
 }
 
 TEST(dsp_env_adsr, key_must_be_on) {
-    clover_float a = 10;
-    clover_float d = 10;
-    clover_float s = 0.5;
-    clover_float r = 10;
+    float a = 10;
+    float d = 10;
+    float s = 0.5;
+    float r = 10;
 
     env_adsr env;
     env.set(a, d, s, r);
@@ -62,10 +61,10 @@ TEST(dsp_env_adsr, key_must_be_on) {
 }
 
 TEST(dsp_env_adsr, runs_correctly) {
-    clover_float a = 10;
-    clover_float d = 10;
-    clover_float s = 0.5;
-    clover_float r = 10;
+    float a = 10;
+    float d = 10;
+    float s = 0.5;
+    float r = 10;
 
     env_adsr env;
     env.set(a, d, s, r);
@@ -126,10 +125,10 @@ TEST(dsp_env_adsr, runs_correctly) {
 }
 
 TEST(dsp_env_adsr, reruns_correctly) {
-    clover_float a = 10;
-    clover_float d = 10;
-    clover_float s = 0.5;
-    clover_float r = 10;
+    float a = 10;
+    float d = 10;
+    float s = 0.5;
+    float r = 10;
 
     env_adsr env;
     env.set(a, d, s, r);

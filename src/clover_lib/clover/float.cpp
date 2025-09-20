@@ -9,8 +9,8 @@
 
 namespace clover {
 
-bool float_eq(clover_float a, clover_float b) {
-    return std::abs(a - b) <= std::numeric_limits<clover_float>::epsilon() * std::abs(a);
+bool float_eq(float a, float b) {
+    return std::abs(a - b) <= std::numeric_limits<float>::epsilon() * std::abs(a);
 }
 
 }  // namespace clover

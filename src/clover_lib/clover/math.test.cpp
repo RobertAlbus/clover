@@ -6,14 +6,13 @@
 #include <gtest/gtest.h>
 #include <vector>
 
-#include "clover/float.hpp"
 #include "clover/math.hpp"
 
 using namespace clover;
 
 struct decibel_conversions {
-    clover_float linear;
-    clover_float db;
+    float linear;
+    float db;
 };
 TEST(math, linear_to_db) {
     std::vector<decibel_conversions> fixtures{
@@ -43,8 +42,8 @@ TEST(math, db_to_linear) {
 }
 
 TEST(math, frequency_by_octave_difference) {
-    std::vector<clover_float> inputs{1, 2, 10, 20, 200, 200, 1000, 2000, 10000, 20000};
-    std::vector<clover_float> octaves{-3, -2, -1, 0, 1, 2, 3};
+    std::vector<float> inputs{1, 2, 10, 20, 200, 200, 1000, 2000, 10000, 20000};
+    std::vector<float> octaves{-3, -2, -1, 0, 1, 2, 3};
     for (auto input : inputs) {
         for (auto octave : octaves) {
             EXPECT_EQ(frequency_by_octave_difference(input, octave), input * std::exp2(octave));
@@ -53,8 +52,8 @@ TEST(math, frequency_by_octave_difference) {
 }
 
 TEST(math, frequency_by_semitone_difference) {
-    std::vector<clover_float> inputs{1, 2, 10, 20, 200, 200, 1000, 2000, 10000, 20000};
-    std::vector<clover_float> octaves{-3, -2, -1, 0, 1, 2, 3};
+    std::vector<float> inputs{1, 2, 10, 20, 200, 200, 1000, 2000, 10000, 20000};
+    std::vector<float> octaves{-3, -2, -1, 0, 1, 2, 3};
     for (auto input : inputs) {
         for (auto octave : octaves) {
             EXPECT_EQ(frequency_by_semitone_difference(input, octave * 12.f), input * std::exp2(octave));
@@ -78,8 +77,8 @@ TEST(math, semitone_difference_by_frequency) {
 }
 
 struct midi_freq {
-    clover_float midi_note;
-    clover_float frequency;
+    float midi_note;
+    float frequency;
 };
 
 TEST(math, frequency_to_midi) {

@@ -7,21 +7,20 @@
 #include <cstdlib>
 
 #include "clover/dsp/wave.hpp"
-#include "clover/float.hpp"
 #include "clover/num.hpp"
 
 namespace clover::dsp {
 
-auto wave_sine(clover_float x) -> clover_float {
+auto wave_sine(float x) -> float {
     return std::sin(x);
 }
-auto wave_square(clover_float x) -> clover_float {
+auto wave_square(float x) -> float {
     return x < num::pi ? 1 : -1;
 }
-auto wave_saw(clover_float x) -> clover_float {
-    return std::lerp(clover_float{1}, clover_float{-1}, x / num::pi_x2);
+auto wave_saw(float x) -> float {
+    return std::lerp(float{1}, float{-1}, x / num::pi_x2);
 }
-auto wave_tri(clover_float x) -> clover_float {
+auto wave_tri(float x) -> float {
     x += num::pi / 2;
     if (x > num::pi_x2)
         x -= num::pi_x2;
@@ -33,15 +32,15 @@ auto wave_tri(clover_float x) -> clover_float {
 // orgiinally by ed.bew@hcrikdlef.dreg
 
 // NOLINTNEXTLINE(bugprone-integer-division)
-constexpr clover_float _wave_noise_fScale = 2 / 4294967295.f;
+constexpr float _wave_noise_fScale = 2 / 4294967295.f;
 
 int _wave_noise_x1 = 0x70f4f854;
 // NOLINTNEXTLINE(bugprone-narrowing-conversions)
 int _wave_noise_x2 = 0xe1e9f0a7;
 
-auto wave_noise(clover_float x) -> clover_float {
+auto wave_noise(float x) -> float {
     _wave_noise_x1 ^= _wave_noise_x2;
-    clover_float signal = static_cast<clover_float>(_wave_noise_x2) * _wave_noise_fScale;
+    float signal = static_cast<float>(_wave_noise_x2) * _wave_noise_fScale;
     _wave_noise_x2 += _wave_noise_x1;
 
     return signal;

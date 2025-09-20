@@ -15,8 +15,8 @@
 using namespace clover;
 using namespace dsp;
 
-clover_float sin_signal(clover_float position, clover_float size) {
-    clover_float delta = position / size;
+float sin_signal(float position, float size) {
+    float delta = position / size;
     return std::sin(2 * (position / size) * num::pi);
 }
 
@@ -24,12 +24,12 @@ TEST(dsp_fractional_delay, fdl_sinc_4) {
     std::shared_ptr<circular_buffer> buffer = std::make_shared<circular_buffer>(circular_buffer{5});
 
     for (auto i : std::views::iota(0, 5))
-        buffer->tick(sin_signal(clover_float(i), 480));
+        buffer->tick(sin_signal(float(i), 480));
 
     fdl_sinc sinc{buffer, 4, 1};
 
     sinc.delay(1);
-    clover_float interpolated = sinc.calculate();
+    float interpolated = sinc.calculate();
     EXPECT_FLOAT_EQ(interpolated, (*buffer)[1]);
     EXPECT_FLOAT_EQ(interpolated, sin_signal(3, 480));
 
@@ -49,7 +49,7 @@ TEST(dsp_fractional_delay, fdl_sinc_16) {
     std::shared_ptr<circular_buffer> buffer = std::make_shared<circular_buffer>(circular_buffer{17});
 
     for (auto i : std::views::iota(0, 17))
-        buffer->tick(sin_signal(clover_float(i), 480));
+        buffer->tick(sin_signal(float(i), 480));
 
     fdl_sinc sinc{buffer, 16};
 
@@ -74,7 +74,7 @@ TEST(dsp_fractional_delay, fdl_sinc_16) {
     */
 
     sinc.delay(7);
-    clover_float interpolated = sinc.calculate();
+    float interpolated = sinc.calculate();
     EXPECT_NEAR(interpolated, (*buffer)[7], 0.00065);
     EXPECT_NEAR(interpolated, sin_signal(9, 480), 0.00065);
 
@@ -92,12 +92,12 @@ TEST(dsp_fractional_delay, fdl_sinc_64) {
     std::shared_ptr<circular_buffer> buffer = std::make_shared<circular_buffer>(circular_buffer{65});
 
     for (auto i : std::views::iota(0, 65))
-        buffer->tick(sin_signal(clover_float(i), 480));
+        buffer->tick(sin_signal(float(i), 480));
 
     fdl_sinc sinc{buffer, 64};
 
     sinc.delay(31);
-    clover_float interpolated = sinc.calculate();
+    float interpolated = sinc.calculate();
     EXPECT_NEAR(interpolated, (*buffer)[31], 0.00014);
     EXPECT_NEAR(interpolated, sin_signal(33, 480), 0.00014);
 
@@ -114,9 +114,9 @@ TEST(dsp_fractional_delay, fdl_sinc_64) {
 TEST(dsp_fractional_delay, langrange) {
     fdl_lagrange lagrange{65};
     for (auto i : std::views::iota(0, 65))
-        lagrange.tick(sin_signal(clover_float(i), 480));
+        lagrange.tick(sin_signal(float(i), 480));
 
-    clover_float interpolated = lagrange.at(31);
+    float interpolated = lagrange.at(31);
     EXPECT_FLOAT_EQ(interpolated, lagrange.m_buffer[31]);
     EXPECT_FLOAT_EQ(interpolated, sin_signal(33, 480));
 
@@ -131,7 +131,7 @@ TEST(dsp_fractional_delay, langrange) {
 TEST(dsp_fractional_delay, langrange_2) {
     fdl_lagrange_2 lagrange{130};
     for (auto i : std::views::iota(0, 65)) {
-        clover_float signal = sin_signal(clover_float(i), 480);
+        float signal = sin_signal(float(i), 480);
         lagrange.tick(signal, signal);
     }
 

@@ -16,13 +16,13 @@ static void BM_oscillator(benchmark::State& state) {
     osc.freq(20.965f);
 
     for (const auto& i : state) {
-        clover_float new_freq = osc.freq() * 3.86f;
+        float new_freq = osc.freq() * 3.86f;
         if (new_freq > clover_bm::nyquist_48k)
             new_freq -= clover_bm::nyquist_48k;
         osc.freq(new_freq);
 
         // using a state variable to simulate an external modulator
-        clover_float freq_state = new_freq;
+        float freq_state = new_freq;
         for (const auto& i : range) {
             freq_state *= 3.9f;
             if (freq_state > clover_bm::nyquist_48k)
@@ -39,7 +39,7 @@ static void BM_oscillator_steady(benchmark::State& state) {
     osc.freq(546.965f);
 
     for (const auto& i : state) {
-        clover_float new_freq = osc.freq() * 3.86f;
+        float new_freq = osc.freq() * 3.86f;
         if (new_freq > clover_bm::nyquist_48k)
             new_freq -= clover_bm::nyquist_48k;
         osc.freq(new_freq);
