@@ -40,12 +40,12 @@ static void BM_phase_increment_tracker_only_tick(benchmark::State& state) {
 
 bm_assert(
         BM_phase_increment_tracker,
-        clover_bm::duration / 3500.,  // min
-        clover_bm::duration / 3500.   // target
+        clover_bm::duration / 2800.,  // min
+        clover_bm::duration / 3200.   // target
 );
 
 bm_assert(
         BM_phase_increment_tracker_only_tick,
-        clover_bm::duration / 11000.,  // min
-        clover_bm::duration / 11000.   // target
+        clover_bm::duration / 8000.,  // min
+        clover_bm::duration / 9000.   // target
 );

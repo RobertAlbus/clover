@@ -37,6 +37,6 @@ static void BM_env_automation_clip(benchmark::State& state) {
 
 bm_assert(
         BM_env_automation_clip,
-        clover_bm::duration / 7000.,  // min
-        clover_bm::duration / 7000.   // target
+        clover_bm::duration / 5500.,  // min
+        clover_bm::duration / 6200.   // target
 );

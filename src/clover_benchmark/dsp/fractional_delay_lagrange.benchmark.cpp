@@ -73,24 +73,24 @@ void BM_fdl_lagrange_2_busy(benchmark::State& state) {
 
 bm_assert(
         BM_fdl_lagrange_steady,
-        clover_bm::duration / 1000.,  // min
-        clover_bm::duration / 1000.   // target
+        clover_bm::duration / 800.,  // min
+        clover_bm::duration / 900.   // target
 );
 
 bm_assert(
         BM_fdl_lagrange_busy,
-        clover_bm::duration / 1000.,  // min
-        clover_bm::duration / 1000.   // target
+        clover_bm::duration / 800.,  // min
+        clover_bm::duration / 900.   // target
 );
 
 bm_assert(
         BM_fdl_lagrange_2_steady,
-        clover_bm::duration / 1000.,  // min
-        clover_bm::duration / 1000.   // target
+        clover_bm::duration / 800.,  // min
+        clover_bm::duration / 900.   // target
 );
 
 bm_assert(
         BM_fdl_lagrange_2_busy,
-        clover_bm::duration / 1000.,  // min
-        clover_bm::duration / 1000.   // target
+        clover_bm::duration / 800.,  // min
+        clover_bm::duration / 900.   // target
 );

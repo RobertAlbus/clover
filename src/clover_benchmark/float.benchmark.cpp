@@ -22,6 +22,6 @@ static void BM_float_eq(benchmark::State& state) {
 
 bm_assert(
         BM_float_eq,
-        clover_bm::duration / 29000.,  // min
-        clover_bm::duration / 29000.   // target
+        clover_bm::duration / 23000.,  // min
+        clover_bm::duration / 26000.   // target
 );

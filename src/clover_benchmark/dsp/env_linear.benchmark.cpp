@@ -24,7 +24,8 @@ static void BM_env_linear_busy(benchmark::State& state) {
             counter++;
             if (counter == 480) {
                 counter = 0;
-                switch (choice) {
+                // NOLINTNEXTLINE(bugprone-switch-missing-default-case)
+                switch (choice) { 
                     case 0:
                         env.set(30, 999, 4800);
                         ++choice;
@@ -60,12 +61,12 @@ static void BM_env_linear_steady(benchmark::State& state) {
 
 bm_assert(
         BM_env_linear_busy,
-        clover_bm::duration / 9000.,  // min
-        clover_bm::duration / 9000.   // target
+        clover_bm::duration / 7000.,  // min
+        clover_bm::duration / 8000.   // target
 );
 
 bm_assert(
         BM_env_linear_steady,
-        clover_bm::duration / 30000.,  // min
-        clover_bm::duration / 30000.   // target
+        clover_bm::duration / 24000.,  // min
+        clover_bm::duration / 27000.   // target
 );

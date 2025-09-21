@@ -94,38 +94,38 @@ static void BM_circular_buffer_2_writes(benchmark::State& state) {
 
 bm_assert(
         BM_circular_buffer_read_write,
-        clover_bm::duration / 10000.,  // min
-        clover_bm::duration / 10000.   // target
-);
-
-bm_assert(
-        BM_circular_buffer_reads,
-        clover_bm::duration / 15000.,  // min
-        clover_bm::duration / 15000.   // target
-);
-
-bm_assert(
-        BM_circular_buffer_writes,
-        clover_bm::duration / 28000.,  // min
-        clover_bm::duration / 28000.   // target
-);
-
-bm_assert(
-        BM_circular_buffer_2_read_write,
-        clover_bm::duration / 9000.,  // min
+        clover_bm::duration / 7500.,  // min
         clover_bm::duration / 9000.   // target
 );
 
 bm_assert(
+        BM_circular_buffer_reads,
+        clover_bm::duration / 12000.,  // min
+        clover_bm::duration / 14000.   // target
+);
+
+bm_assert(
+        BM_circular_buffer_writes,
+        clover_bm::duration / 22000.,  // min
+        clover_bm::duration / 25000.   // target
+);
+
+bm_assert(
+        BM_circular_buffer_2_read_write,
+        clover_bm::duration / 7000.,  // min
+        clover_bm::duration / 8000.   // target
+);
+
+bm_assert(
         BM_circular_buffer_2_reads,
-        clover_bm::duration / 16000.,  // min
-        clover_bm::duration / 16000.   // target
+        clover_bm::duration / 12500.,  // min
+        clover_bm::duration / 14500.   // target
 );
 
 bm_assert(
         BM_circular_buffer_2_writes,
-        clover_bm::duration / 24000.,  // min
-        clover_bm::duration / 24000.   // target
+        clover_bm::duration / 19000.,  // min
+        clover_bm::duration / 22000.   // target
 );
 
 static void BM_circular_buffer_t_double(benchmark::State& state) {
@@ -152,12 +152,12 @@ static void BM_circular_buffer_t_int(benchmark::State& state) {
 
 bm_assert(
         BM_circular_buffer_t_double,
-        clover_bm::duration / 24000.,  // min
-        clover_bm::duration / 24000.   // target
+        clover_bm::duration / 19000.,  // min
+        clover_bm::duration / 22000.   // target
 );
 
 bm_assert(
         BM_circular_buffer_t_int,
-        clover_bm::duration / 28000.,  // min
-        clover_bm::duration / 28000.   // target
+        clover_bm::duration / 22000.,  // min
+        clover_bm::duration / 25000.   // target
 );

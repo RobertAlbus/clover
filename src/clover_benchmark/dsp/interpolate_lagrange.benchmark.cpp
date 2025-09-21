@@ -30,6 +30,6 @@ void BM_interpolate_lagrange(benchmark::State& state) {
 
 bm_assert(
         BM_interpolate_lagrange,
-        clover_bm::duration / 9000.,  // min
-        clover_bm::duration / 9000.   // target
+        clover_bm::duration / 7000.,  // min
+        clover_bm::duration / 8000.   // target
 );

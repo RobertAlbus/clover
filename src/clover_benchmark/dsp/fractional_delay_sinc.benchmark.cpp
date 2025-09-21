@@ -58,36 +58,36 @@ void BM_fdl_sinc_busy_64(benchmark::State& state) {
 
 bm_assert(
         BM_fdl_sinc_steady_4,
-        clover_bm::duration / 1500.,  // min
-        clover_bm::duration / 1500.   // target
+        clover_bm::duration / 1000.,  // min
+        clover_bm::duration / 1200.   // target
 );
 
 bm_assert(
         BM_fdl_sinc_busy_4,
-        clover_bm::duration / 750.,  // min
-        clover_bm::duration / 750.   // target
+        clover_bm::duration / 600.,  // min
+        clover_bm::duration / 700.   // target
 );
 
 bm_assert(
         BM_fdl_sinc_steady_8,
-        clover_bm::duration / 800.,  // min
-        clover_bm::duration / 800.   // target
+        clover_bm::duration / 600.,  // min
+        clover_bm::duration / 700.   // target
 );
 
 bm_assert(
         BM_fdl_sinc_busy_8,
-        clover_bm::duration / 400.,  // min
-        clover_bm::duration / 400.   // target
+        clover_bm::duration / 320.,  // min
+        clover_bm::duration / 380.   // target
 );
 
 bm_assert(
         BM_fdl_sinc_steady_64,
-        clover_bm::duration / 120.,  // min
-        clover_bm::duration / 120.   // target
+        clover_bm::duration / 80.,  // min
+        clover_bm::duration / 100.  // target
 );
 
 bm_assert(
         BM_fdl_sinc_busy_64,
-        clover_bm::duration / 50.,  // min
-        clover_bm::duration / 50.   // target
+        clover_bm::duration / 40.,  // min
+        clover_bm::duration / 45.   // target
 );

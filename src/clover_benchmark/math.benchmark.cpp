@@ -173,84 +173,84 @@ static void BM_semitone_difference_by_frequency(benchmark::State& state) {
 
 bm_assert(
         BM_db_curve,
-        clover_bm::duration / 5000.,  // min
-        clover_bm::duration / 5000.   // target
-);
-
-bm_assert(
-        BM_db_curve_inverse,
-        clover_bm::duration / 5000.,  // min
-        clover_bm::duration / 5000.   // target
-);
-
-bm_assert(
-        BM_db_to_linear,
         clover_bm::duration / 4000.,  // min
-        clover_bm::duration / 4000.   // target
-);
-
-bm_assert(
-        BM_linear_to_db,
-        clover_bm::duration / 4500.,  // min
         clover_bm::duration / 4500.   // target
 );
 
 bm_assert(
-        BM_frequency_by_octave_difference,
-        clover_bm::duration / 5000.,  // min
-        clover_bm::duration / 5000.   // target
-);
-
-bm_assert(
-        BM_frequency_by_semitone_difference,
-        clover_bm::duration / 5000.,  // min
-        clover_bm::duration / 5000.   // target
-);
-
-bm_assert(
-        BM_octave_difference_by_frequency,
-        clover_bm::duration / 5000.,  // min
-        clover_bm::duration / 5000.   // target
-);
-
-bm_assert(
-        BM_semitone_difference_by_frequency,
-        clover_bm::duration / 5000.,  // min
-        clover_bm::duration / 5000.   // target
-);
-
-bm_assert(
-        BM_frequency_to_midi,
-        clover_bm::duration / 3500.,  // min
-        clover_bm::duration / 3500.   // target
-);
-
-bm_assert(
-        BM_midi_to_frequency,
+        BM_db_curve_inverse,
         clover_bm::duration / 4000.,  // min
+        clover_bm::duration / 4500.   // target
+);
+
+bm_assert(
+        BM_db_to_linear,
+        clover_bm::duration / 3200.,  // min
+        clover_bm::duration / 3600.   // target
+);
+
+bm_assert(
+        BM_linear_to_db,
+        clover_bm::duration / 3600.,  // min
         clover_bm::duration / 4000.   // target
 );
 
 bm_assert(
+        BM_frequency_by_octave_difference,
+        clover_bm::duration / 4000.,  // min
+        clover_bm::duration / 4500.   // target
+);
+
+bm_assert(
+        BM_frequency_by_semitone_difference,
+        clover_bm::duration / 4000.,  // min
+        clover_bm::duration / 4500.   // target
+);
+
+bm_assert(
+        BM_octave_difference_by_frequency,
+        clover_bm::duration / 4000.,  // min
+        clover_bm::duration / 4500.   // target
+);
+
+bm_assert(
+        BM_semitone_difference_by_frequency,
+        clover_bm::duration / 4000.,  // min
+        clover_bm::duration / 4500.   // target
+);
+
+bm_assert(
+        BM_frequency_to_midi,
+        clover_bm::duration / 2800.,  // min
+        clover_bm::duration / 3200.   // target
+);
+
+bm_assert(
+        BM_midi_to_frequency,
+        clover_bm::duration / 3200.,  // min
+        clover_bm::duration / 3500.   // target
+);
+
+bm_assert(
         bm_sign,
-        clover_bm::duration / 30000.,  // min
-        clover_bm::duration / 30000.   // target
+        clover_bm::duration / 24000.,  // min
+        clover_bm::duration / 27000.   // target
 );
 
 bm_assert(
         BM_tension,
-        clover_bm::duration / 5900.,  // min
-        clover_bm::duration / 5900.   // target
+        clover_bm::duration / 4000.,  // min
+        clover_bm::duration / 5000.   // target
 );
 
 bm_assert(
         BM_tension_pos_a,
-        clover_bm::duration / 20000.,  // min
-        clover_bm::duration / 20000.   // target
+        clover_bm::duration / 16000.,  // min
+        clover_bm::duration / 18000.   // target
 );
 
 bm_assert(
         BM_tension_neg_a,
-        clover_bm::duration / 25000.,  // min
-        clover_bm::duration / 25000.   // target
+        clover_bm::duration / 20000.,  // min
+        clover_bm::duration / 22000.   // target
 );

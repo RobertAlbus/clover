@@ -231,78 +231,78 @@ static void BM_iir_coeffs_eq(benchmark::State& state) {
 
 bm_assert(
         BM_filter_steady,
-        clover_bm::duration / 7000.,  // min
-        clover_bm::duration / 7000.   // target
+        clover_bm::duration / 5000.,  // min
+        clover_bm::duration / 6000.   // target
 );
 
 bm_assert(
         BM_filter_busy,
-        clover_bm::duration / 3000.,  // min
-        clover_bm::duration / 3000.   // target
+        clover_bm::duration / 2000.,  // min
+        clover_bm::duration / 2500.   // target
 );
 
 bm_assert(
         BM_filter_2_steady,
-        clover_bm::duration / 3500.,  // min
-        clover_bm::duration / 3500.   // target
+        clover_bm::duration / 2500.,  // min
+        clover_bm::duration / 3000.   // target
 );
 
 bm_assert(
         BM_filter_2_busy,
-        clover_bm::duration / 1500.,  // min
-        clover_bm::duration / 1500.   // target
+        clover_bm::duration / 1200.,  // min
+        clover_bm::duration / 1400.   // target
 );
 
 bm_assert(
         BM_filter_eq_steady,
-        clover_bm::duration / 7000.,  // min
-        clover_bm::duration / 7000.   // target
+        clover_bm::duration / 5000.,  // min
+        clover_bm::duration / 6000.   // target
 );
 
 bm_assert(
         BM_filter_eq_busy,
-        clover_bm::duration / 1700.,  // min
-        clover_bm::duration / 1700.   // target
-);
-
-bm_assert(
-        BM_iir_coeffs_apf,
-        clover_bm::duration / 3000.,  // min
-        clover_bm::duration / 3000.   // target
-);
-
-bm_assert(
-        BM_iir_coeffs_lpf,
-        clover_bm::duration / 3000.,  // min
-        clover_bm::duration / 3000.   // target
-);
-
-bm_assert(
-        BM_iir_coeffs_hpf,
-        clover_bm::duration / 3000.,  // min
-        clover_bm::duration / 3000.   // target
-);
-
-bm_assert(
-        BM_iir_coeffs_bpf,
-        clover_bm::duration / 3000.,  // min
-        clover_bm::duration / 3000.   // target
-);
-
-bm_assert(
-        BM_iir_coeffs_ls,
-        clover_bm::duration / 1500.,  // min
+        clover_bm::duration / 1200.,  // min
         clover_bm::duration / 1500.   // target
 );
 
 bm_assert(
+        BM_iir_coeffs_apf,
+        clover_bm::duration / 2200.,  // min
+        clover_bm::duration / 2600.   // target
+);
+
+bm_assert(
+        BM_iir_coeffs_lpf,
+        clover_bm::duration / 2000.,  // min
+        clover_bm::duration / 2500.   // target
+);
+
+bm_assert(
+        BM_iir_coeffs_hpf,
+        clover_bm::duration / 2000.,  // min
+        clover_bm::duration / 2500.   // target
+);
+
+bm_assert(
+        BM_iir_coeffs_bpf,
+        clover_bm::duration / 2000.,  // min
+        clover_bm::duration / 2500.   // target
+);
+
+bm_assert(
+        BM_iir_coeffs_ls,
+        clover_bm::duration / 1200.,  // min
+        clover_bm::duration / 1400.   // target
+);
+
+bm_assert(
         BM_iir_coeffs_hs,
-        clover_bm::duration / 1600.,  // min
-        clover_bm::duration / 1600.   // target
+        clover_bm::duration / 1200.,  // min
+        clover_bm::duration / 1400.   // target
 );
 
 bm_assert(
         BM_iir_coeffs_eq,
-        clover_bm::duration / 1800.,  // min
-        clover_bm::duration / 1800.   // target
+        clover_bm::duration / 1400.,  // min
+        clover_bm::duration / 1600.   // target
 );

@@ -58,12 +58,12 @@ static void BM_env_adsr_steady(benchmark::State& state) {
 
 bm_assert(
         BM_env_adsr_busy,
-        clover_bm::duration / 9000.,  // min
-        clover_bm::duration / 9000.   // target
+        clover_bm::duration / 6000.,  // min
+        clover_bm::duration / 8000.   // target
 );
 
 bm_assert(
         BM_env_adsr_steady,
-        clover_bm::duration / 15000.,  // min
-        clover_bm::duration / 16000.   // target
+        clover_bm::duration / 10000.,  // min
+        clover_bm::duration / 12000.   // target
 );

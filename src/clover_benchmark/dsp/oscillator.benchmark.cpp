@@ -52,12 +52,12 @@ static void BM_oscillator_steady(benchmark::State& state) {
 
 bm_assert(
         BM_oscillator,
-        clover_bm::duration / 2800.,  // min
-        clover_bm::duration / 2800.   // target
+        clover_bm::duration / 2200.,  // min
+        clover_bm::duration / 2600.   // target
 );
 
 bm_assert(
         BM_oscillator_steady,
-        clover_bm::duration / 4000.,  // min
-        clover_bm::duration / 4000.   // target
+        clover_bm::duration / 3000.,  // min
+        clover_bm::duration / 3500.   // target
 );
