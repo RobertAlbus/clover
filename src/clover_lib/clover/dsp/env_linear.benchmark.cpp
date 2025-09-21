@@ -8,7 +8,7 @@
 
 #include "clover/dsp/env_linear.hpp"
 
-#include "clover_benchmark/util.hpp"
+#include "clover/clover_benchmark/util.hpp"
 
 using namespace clover::dsp;
 
@@ -25,7 +25,7 @@ static void BM_env_linear_busy(benchmark::State& state) {
             if (counter == 480) {
                 counter = 0;
                 // NOLINTNEXTLINE(bugprone-switch-missing-default-case)
-                switch (choice) { 
+                switch (choice) {
                     case 0:
                         env.set(30, 999, 4800);
                         ++choice;

@@ -8,7 +8,7 @@
 
 #include "gtest/gtest.h"  // IWYU pragma: keep
 
-#include "clover_benchmark/intercept_reporter.hpp"  // IWYU pragma: keep
+#include "clover/clover_benchmark/intercept_reporter.hpp"  // IWYU pragma: keep
 
 #define bm_assert(name, min_perf, target_perf)           \
     BENCHMARK(name);                                     \

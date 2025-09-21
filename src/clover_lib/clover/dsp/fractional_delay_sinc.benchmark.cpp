@@ -9,7 +9,7 @@
 #include "clover/circular_buffer.hpp"
 #include "clover/dsp/fractional_delay.hpp"
 
-#include "clover_benchmark/util.hpp"
+#include "clover/clover_benchmark/util.hpp"
 
 using namespace clover;
 using namespace dsp;

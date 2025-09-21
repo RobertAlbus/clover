@@ -8,7 +8,7 @@
 
 #include "clover/dsp/env_adsr.hpp"
 
-#include "clover_benchmark/util.hpp"
+#include "clover/clover_benchmark/util.hpp"
 
 using namespace clover::dsp;
 

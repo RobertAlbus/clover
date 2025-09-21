@@ -8,7 +8,7 @@
 
 #include "clover/dsp/pan.hpp"
 
-#include "clover_benchmark/util.hpp"
+#include "clover/clover_benchmark/util.hpp"
 
 void BM_pan_steady(benchmark::State& state) {
     auto limit = static_cast<int>(clover_bm::samples_10s_48k) / 2;

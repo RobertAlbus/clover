@@ -10,7 +10,7 @@
 
 #include "clover/dsp/interpolate_lagrange.hpp"
 
-#include "clover_benchmark/util.hpp"
+#include "clover/clover_benchmark/util.hpp"
 
 void BM_interpolate_lagrange(benchmark::State& state) {
     float p0 = -0.0809f;

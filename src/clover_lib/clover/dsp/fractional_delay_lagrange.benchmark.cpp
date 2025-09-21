@@ -10,7 +10,7 @@
 
 #include "clover/dsp/fractional_delay.hpp"
 
-#include "clover_benchmark/util.hpp"
+#include "clover/clover_benchmark/util.hpp"
 
 void BM_fdl_lagrange_steady(benchmark::State& state) {
     clover::dsp::fdl_lagrange fdl{192000};

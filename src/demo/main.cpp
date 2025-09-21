@@ -9,7 +9,7 @@
 #include "clover/io/system_audio.hpp"
 #include "clover/math.hpp"
 
-bool PLAYBACK = false;
+bool PLAYBACK = true;
 bool RENDER   = true;
 
 using namespace clover;

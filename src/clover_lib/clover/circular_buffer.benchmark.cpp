@@ -8,7 +8,7 @@
 
 #include "clover/circular_buffer.hpp"
 
-#include "clover_benchmark/util.hpp"
+#include "clover/clover_benchmark/util.hpp"
 
 static void BM_circular_buffer_read_write(benchmark::State& state) {
     clover::dsp::circular_buffer buffer{96000};

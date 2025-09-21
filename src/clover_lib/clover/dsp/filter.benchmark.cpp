@@ -8,9 +8,9 @@
 
 #include "clover/dsp/filter.hpp"
 
+#include "clover/clover_benchmark/util.hpp"
 #include "clover/dsp/oscillator.hpp"
 #include "clover/dsp/wave.hpp"
-#include "clover_benchmark/util.hpp"
 
 using namespace clover::dsp;
 
