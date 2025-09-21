@@ -62,7 +62,7 @@ TEST(circular_buffer_2, reads_and_writes) {
 
     for (auto i : std::views::iota(0, 10)) {
         auto i_f = float(i * 2);
-        buffer.tick(i_f, i_f + 1);
+        buffer.tick({i_f, i_f + 1});
     }
 
     EXPECT_FLOAT_EQ(buffer[0].second, 19);
@@ -88,7 +88,7 @@ TEST(circular_buffer_2, reads_and_writes) {
 
     for (auto i : std::views::iota(0, 5)) {
         auto i_f = 100 + static_cast<float>(i * 2);
-        buffer.tick(i_f, i_f + 1);
+        buffer.tick({i_f, i_f + 1});
     }
 
     EXPECT_FLOAT_EQ(buffer[0].second, 109);

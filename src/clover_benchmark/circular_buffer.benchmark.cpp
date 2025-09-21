@@ -7,7 +7,6 @@
 #include "benchmark/benchmark.h"
 
 #include "clover/circular_buffer.hpp"
-#include "clover/float.hpp"
 
 #include "clover_benchmark/util.hpp"
 
@@ -60,7 +59,7 @@ static void BM_circular_buffer_2_read_write(benchmark::State& state) {
     for (auto _ : state) {
         int ii = 0;
         for (auto i : range) {
-            buffer.tick(float(i), float(i));
+            buffer.tick({float(i), float(i)});
             benchmark::DoNotOptimize(buffer[ii]);
             if (++ii == 96000)
                 ii -= 96000;
@@ -88,7 +87,7 @@ static void BM_circular_buffer_2_writes(benchmark::State& state) {
     auto range = std::views::iota(0, int(clover_bm::samples_10s_48k));
     for (auto _ : state) {
         for (auto i : range) {
-            buffer.tick(float(i), float(i));
+            buffer.tick({float(i), float(i)});
         }
     }
 }
@@ -127,4 +126,38 @@ bm_assert(
         BM_circular_buffer_2_writes,
         clover_bm::duration / 24000.,  // min
         clover_bm::duration / 24000.   // target
+);
+
+static void BM_circular_buffer_t_double(benchmark::State& state) {
+    clover::dsp::circular_buffer_t<double> buffer{96000};
+
+    auto range = std::views::iota(0, int(clover_bm::samples_10s_48k));
+    for (auto _ : state) {
+        for (auto i : range) {
+            buffer.tick(double(i) + 0.5);
+        }
+    }
+}
+
+static void BM_circular_buffer_t_int(benchmark::State& state) {
+    clover::dsp::circular_buffer_t<int> buffer{96000};
+
+    auto range = std::views::iota(0, int(clover_bm::samples_10s_48k));
+    for (auto _ : state) {
+        for (auto i : range) {
+            buffer.tick(i);
+        }
+    }
+}
+
+bm_assert(
+        BM_circular_buffer_t_double,
+        clover_bm::duration / 24000.,  // min
+        clover_bm::duration / 24000.   // target
+);
+
+bm_assert(
+        BM_circular_buffer_t_int,
+        clover_bm::duration / 28000.,  // min
+        clover_bm::duration / 28000.   // target
 );

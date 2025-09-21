@@ -69,7 +69,7 @@ std::pair<float, float> fdl_lagrange_2::at(float idx) {
 }
 
 void fdl_lagrange_2::tick(float x1, float x2) {
-    m_buffer.tick(x1, x2);
+    m_buffer.tick({x1, x2});
 }
 
 fdl_sinc::fdl_sinc(std::shared_ptr<circular_buffer>& buffer, size_t kernel_size, float window_alpha)
