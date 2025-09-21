@@ -8,7 +8,7 @@
 
 #include "clover/dsp/phase_increment_tracker.hpp"
 
-#include "clover_benchmark/util.hpp"
+#include "clover/clover_benchmark/util.hpp"
 
 static void BM_phase_increment_tracker(benchmark::State& state) {
     for (auto _ : state) {

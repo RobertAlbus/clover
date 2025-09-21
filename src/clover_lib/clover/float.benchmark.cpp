@@ -9,7 +9,7 @@
 
 #include "clover/float.hpp"
 
-#include "clover_benchmark/util.hpp"
+#include "clover/clover_benchmark/util.hpp"
 
 static void BM_float_eq(benchmark::State& state) {
     auto range = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));

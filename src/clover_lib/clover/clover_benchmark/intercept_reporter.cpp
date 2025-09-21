@@ -7,7 +7,7 @@
 
 #include <benchmark/benchmark.h>
 
-#include "clover_benchmark/intercept_reporter.hpp"
+#include "clover/clover_benchmark/intercept_reporter.hpp"
 
 double GetRunWallTime(const ::benchmark::BenchmarkReporter::Run run) {
     return run.iterations != 0 ? run.real_accumulated_time / static_cast<double>(run.iterations)

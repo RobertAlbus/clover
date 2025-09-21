@@ -2,7 +2,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-#include "clover_benchmark/intercept_reporter.hpp"
+#include "clover/clover_benchmark/intercept_reporter.hpp"
 
 int main(int argc, char** argv) {
     // benchmark calls exit(0) after printing --help, so initialize it second
