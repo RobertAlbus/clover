@@ -2,6 +2,7 @@
 // Copyright (C) 2023  Rob W. Albus
 // Licensed under the GPLv3. See LICENSE for details.
 
+#include <algorithm>
 #include <cmath>
 
 #include "clover/dsp/filter.hpp"
@@ -217,9 +218,12 @@ iir_coeffs hs(float fs, float f0, float q, float gain) {
 }
 
 float filter::tick(float x) {
-    // x *= 0.5;
+    x = std::clamp(x, -2.f, 2.f);
+
     float yn = m_coeffs.b0 * x + m_coeffs.b1 * m_inputs[0] + m_coeffs.b2 * m_inputs[1] -
                m_coeffs.a1 * m_outputs[0] - m_coeffs.a2 * m_outputs[1];
+
+    yn = std::clamp(yn, -2.f, 2.f);
 
     m_inputs[1]  = m_inputs[0];
     m_inputs[0]  = x;
@@ -230,6 +234,9 @@ float filter::tick(float x) {
 }
 
 std::pair<float, float> filter_2::tick(float in_L, float in_R) {
+    in_L = std::clamp(in_L, -2.f, 2.f);
+    in_R = std::clamp(in_R, -2.f, 2.f);
+
     constexpr int L0 = 0;
     constexpr int L1 = 1;
     constexpr int R0 = 2;
@@ -238,6 +245,8 @@ std::pair<float, float> filter_2::tick(float in_L, float in_R) {
     float yn_L = m_coeffs.b0 * in_L + m_coeffs.b1 * m_inputs[L0] + m_coeffs.b2 * m_inputs[L1] -
                  m_coeffs.a1 * m_outputs[L0] - m_coeffs.a2 * m_outputs[L1];
 
+    yn_L = std::clamp(yn_L, -2.f, 2.f);
+
     m_inputs[L1]  = m_inputs[L0];
     m_inputs[L0]  = in_L;
     m_outputs[L1] = m_outputs[L0];
@@ -245,6 +254,8 @@ std::pair<float, float> filter_2::tick(float in_L, float in_R) {
 
     float yn_R = m_coeffs.b0 * in_R + m_coeffs.b1 * m_inputs[R0] + m_coeffs.b2 * m_inputs[R1] -
                  m_coeffs.a1 * m_outputs[R0] - m_coeffs.a2 * m_outputs[R1];
+
+    yn_R = std::clamp(yn_R, -2.f, 2.f);
 
     m_inputs[R1]  = m_inputs[R0];
     m_inputs[R0]  = in_R;
