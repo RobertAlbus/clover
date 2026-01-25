@@ -4,7 +4,6 @@
 
 #include "clover/dsp/interpolate_lagrange.hpp"
 #include <cmath>
-#include <cstdio>
 #include <ranges>
 
 #include <gtest/gtest.h>

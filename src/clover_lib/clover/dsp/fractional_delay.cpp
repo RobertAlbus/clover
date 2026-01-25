@@ -16,9 +16,13 @@ fdl_lagrange::fdl_lagrange(size_t buffer_length)
 }
 
 float fdl_lagrange::at(float idx) {
-    if (idx < 2)
-        idx = 0;
-    else if (idx > m_max_idx)
+    if (!std::isfinite(idx) || idx < 1) {
+        if (!std::isfinite(idx) || idx < 0)
+            idx = 0.f;
+        float lerp_amount = idx - std::floor(idx);
+        return std::lerp(m_buffer[0], m_buffer[1], lerp_amount);
+    }
+    if (idx > m_max_idx)
         idx = m_max_idx;
 
     auto p2   = static_cast<size_t>(std::floor(idx));
@@ -45,9 +49,15 @@ fdl_lagrange_2::fdl_lagrange_2(size_t buffer_length)
 }
 
 std::pair<float, float> fdl_lagrange_2::at(float idx) {
-    if (idx < 2)
-        idx = 0;
-    else if (idx > m_max_idx)
+    if (!std::isfinite(idx) || idx < 1) {
+        if (!std::isfinite(idx) || idx < 0)
+            idx = 0.f;
+        float lerp_amount = idx - std::floor(idx);
+        auto [s0_L, s0_R] = m_buffer[0];
+        auto [s1_L, s1_R] = m_buffer[1];
+        return {std::lerp(s0_L, s1_L, lerp_amount), std::lerp(s0_R, s1_R, lerp_amount)};
+    }
+    if (idx > m_max_idx)
         idx = m_max_idx;
 
     auto p2   = static_cast<size_t>(std::floor(idx));
