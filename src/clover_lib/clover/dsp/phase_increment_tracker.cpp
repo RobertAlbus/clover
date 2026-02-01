@@ -4,7 +4,6 @@
 
 #include <algorithm>
 #include <cmath>
-#include <cstdio>
 
 #include "clover/dsp/phase_increment_tracker.hpp"
 
@@ -47,25 +46,28 @@ auto phase_increment_tracker::tick() noexcept -> void {
     m_current_phase += m_phase_increment;
     if (m_current_phase >= m_max_phase) {
         m_current_phase -= m_max_phase;
+    } else if (m_current_phase < 0) {
+        m_current_phase += m_max_phase;
     }
 }
 
 auto phase_increment_tracker::freq(float freq_hz) noexcept -> void {
-    freq_hz = std::clamp(freq_hz, float{0}, m_fs / 2.f);
+    freq_hz = std::clamp(freq_hz, -m_fs / 2.f, m_fs / 2.f);
     freq_hz != 0 ? period(m_fs / freq_hz) : period(0);
 }
 
 auto phase_increment_tracker::freq() noexcept -> float {
-    return m_phase_increment != 0 ? m_fs / m_max_phase : 0;
+    return m_phase_increment != 0 ? (m_fs / m_max_phase) * m_phase_increment : 0;
 }
 
 auto phase_increment_tracker::period(float num_samples) noexcept -> void {
-    m_max_phase       = std::max(num_samples, float{1});
-    m_phase_increment = num_samples != 0 ? 1 : 0;
+    float abs_samples = std::abs(num_samples);
+    m_max_phase       = std::max(abs_samples, 1.f);
+    m_phase_increment = num_samples != 0 ? std::copysign(1.f, num_samples) : 0;
 }
 
 auto phase_increment_tracker::period() noexcept -> float {
-    return m_phase_increment != 0 ? m_max_phase : 0;
+    return m_phase_increment != 0 ? m_max_phase * m_phase_increment : 0;
 }
 
 auto phase_increment_tracker::phase(float phase) noexcept -> void {
