@@ -9,10 +9,11 @@ list(FILTER CLOVER_SOURCE_CPP EXCLUDE REGEX ".*/clover_benchmark/.*\\.cpp$")
 
 add_library(clover STATIC ${CLOVER_SOURCE_CPP})
 target_include_directories(clover PUBLIC ${CMAKE_CURRENT_LIST_DIR})
+target_include_directories(clover PRIVATE ${PIPEWIRE_INCLUDE_DIRS})
 target_link_libraries(clover PRIVATE
-    portaudio
     sndfile
     samplerate
+    ${PIPEWIRE_LIBRARIES}
 )
 
 set_target_properties(clover PROPERTIES

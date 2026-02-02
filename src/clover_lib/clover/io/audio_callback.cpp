@@ -9,23 +9,19 @@
 
 namespace clover::io {
 
-audio_buffer exec_callback(
-        callback audio_callback, int channels_out, int sample_rate, int_fast64_t duration) {
+audio_buffer exec_callback(callback audio_callback, int channels_out, int sample_rate, int64_t duration) {
     audio_buffer buffer;
     buffer.channels    = channels_out;
     buffer.sample_rate = sample_rate;
-    buffer.data.resize(duration * channels_out, 0.f);
+    buffer.data.resize(static_cast<size_t>(duration) * channels_out, 0.f);
 
-    std::vector<float> dummy_input{};
-    dummy_input.resize(channels_out, 0.f);
-
-    for (auto frame : std::views::iota(0, duration)) {
-        auto result = audio_callback({
-                .clock_time     = frame,
-                .chan_count_in  = 0,
-                .chan_count_out = channels_out,
-                .input          = &(dummy_input[0]),
-                .output         = &(buffer.data[static_cast<size_t>(frame) * channels_out]),
+    for (auto frame : std::views::iota(int64_t{0}, duration)) {
+        audio_callback({
+                .clock_time   = frame,
+                .channels_in  = 0,
+                .channels_out = channels_out,
+                .input        = nullptr,
+                .output       = &(buffer.data[static_cast<size_t>(frame) * channels_out]),
         });
     }
     return buffer;

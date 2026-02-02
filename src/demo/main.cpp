@@ -6,18 +6,19 @@
 #include "clover/io/audio_callback.hpp"
 #include "clover/io/audio_file.hpp"
 #include "clover/io/stream.hpp"
-#include "clover/io/system_audio.hpp"
 #include "clover/math.hpp"
+
+#include <iostream>
 
 bool PLAYBACK = true;
 bool RENDER   = true;
 
 using namespace clover;
-int main(int argc, char *argv[]) {
-    float fs              = 48000;
-    int fs_i              = static_cast<int>(fs);
-    int duration          = 5 * fs_i;
-    int channel_count_out = 2;
+
+int main(int argc, char* argv[]) {
+    float fs     = 48000;
+    int fs_i     = static_cast<int>(fs);
+    int duration = 5 * fs_i;
 
     dsp::oscillator osc(fs);
     dsp::oscillator mod(fs);
@@ -29,9 +30,9 @@ int main(int argc, char *argv[]) {
         mod.phase(0);
     };
 
-    auto audio_callback = [&](io::callback_args data) {
-        float &L = *(data.output);
-        float &R = *(data.output + 1);
+    auto audio_callback = [&](io::callback_args args) {
+        float& L = args.output[0];
+        float& R = args.output[1];
 
         L = osc.tick();
         R = L;
@@ -39,36 +40,33 @@ int main(int argc, char *argv[]) {
         float freq = frequency_by_octave_difference(400, (7.f / 12.f) * mod.tick());
         osc.freq(freq);
 
-        if (data.clock_time == duration) {
+        if (args.clock_time >= duration) {
             return io::callback_status::end;
         }
         return io::callback_status::cont;
     };
 
     if (PLAYBACK) {
-        io::system_audio_config system;
-        system.print();
-        io::stream stream;
-        stream.audio_callback = audio_callback;
-
         audio_state_init();
-        stream.open(
-                io::stream::settings{
-                        .device_index_in  = system.no_device(),
-                        .chan_count_in    = 0,
-                        .device_index_out = system.default_output().index,
-                        .chan_count_out   = channel_count_out,
-                        .sample_rate      = fs_i,
-                        .latency_ms       = 0});
 
+        io::stream stream({
+                .sample_rate  = fs_i,
+                .channels_in  = 0,
+                .channels_out = 2,
+        });
+
+        stream.audio_callback          = audio_callback;
+        stream.audio_complete_callback = []() { std::cout << "Playback complete" << std::endl; };
+
+        std::cout << "Starting playback..." << std::endl;
         stream.start();
         stream.wait_to_complete();
-        stream.stop();
+        std::cout << "Done" << std::endl;
     }
 
     if (RENDER) {
         audio_state_init();
-        audio_buffer render = io::exec_callback(audio_callback, channel_count_out, fs_i, duration);
+        audio_buffer render = io::exec_callback(audio_callback, 2, fs_i, duration);
         io::audio_file::write("test.wav", render, io::audio_file_settings::wav_441_16);
     }
 }
