@@ -70,14 +70,14 @@ TEST(dsp_phase_increment_tracker, frequency_set_correctly) {
     EXPECT_EQ(pit.freq(), freq);
 
     pit.freq(24001);
-    EXPECT_EQ(pit.freq(), 24000);
+    EXPECT_EQ(pit.freq(), 24001);
 
     pit.freq(-111.f);
     EXPECT_FLOAT_EQ(pit.freq(), -111.f);
     EXPECT_FLOAT_EQ(pit.period(), fs / -111.f);
 
     pit.freq(-30000.f);
-    EXPECT_FLOAT_EQ(pit.freq(), -24000.f);
+    EXPECT_FLOAT_EQ(pit.freq(), -30000.f);
 }
 
 TEST(dsp_phase_increment_tracker, period_set_correctly) {
@@ -133,6 +133,46 @@ TEST(dsp_phase_increment_tracker, phase_offset_set_correctly) {
     pit.phase_offset(-1);
     pit.phase(0);
     EXPECT_EQ(pit.phase(), pit.m_domain - 1);
+}
+
+TEST(dsp_phase_increment_tracker, freq_zero_freezes_phase) {
+    float fs = 48000.f;
+
+    auto pit = phase_increment_tracker::for_freq(fs, 384.f);
+    pit.phase(1.f);
+    float phase_before = pit.phase();
+
+    pit.freq(0.f);
+    for (int i = 0; i < 100; ++i) {
+        pit.tick();
+    }
+    EXPECT_FLOAT_EQ(pit.phase(), phase_before);
+}
+
+TEST(dsp_phase_increment_tracker, completes_forward_cycle_above_nyquist) {
+    float fs   = 48000.f;
+    float freq = 64000.f;
+
+    auto pit = phase_increment_tracker::for_freq(fs, freq);
+
+    // period is 0.75 samples, so cycle completes in 3 ticks
+    for (int i = 0; i < 3; ++i) {
+        pit.tick();
+    }
+    EXPECT_FLOAT_EQ(pit.phase(), 0.f);
+}
+
+TEST(dsp_phase_increment_tracker, completes_backward_cycle_above_nyquist) {
+    float fs   = 48000.f;
+    float freq = -64000.f;
+
+    auto pit = phase_increment_tracker::for_freq(fs, freq);
+
+    // period is 0.75 samples, so cycle completes in 3 ticks
+    for (int i = 0; i < 3; ++i) {
+        pit.tick();
+    }
+    EXPECT_FLOAT_EQ(pit.phase(), 0.f);
 }
 
 TEST(dsp_phase_increment_tracker, decrements_correctly_with_negative_freq) {
