@@ -3,7 +3,6 @@
 // Licensed under the GPLv3. See LICENSE for details.
 
 #include <cmath>
-#include <cstdio>
 #include <cstdlib>
 #include <functional>
 
@@ -11,10 +10,6 @@
 #include "clover/dsp/phase_increment_tracker.hpp"
 #include "clover/dsp/wave.hpp"
 #include "clover/math.hpp"
-
-#include <experimental/simd>
-
-#include <dlfcn.h>
 
 namespace clover::dsp {
 
