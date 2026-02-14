@@ -94,6 +94,43 @@ static void BM_oscillator_x8(benchmark::State& state) {
     }
 }
 
+static void BM_oscillator_x8_steady(benchmark::State& state) {
+    using namespace clover::dsp;
+    auto range = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));
+
+    oscillator oscs[] = {
+            oscillator(clover_bm::fs_48k),
+            oscillator(clover_bm::fs_48k),
+            oscillator(clover_bm::fs_48k),
+            oscillator(clover_bm::fs_48k),
+            oscillator(clover_bm::fs_48k),
+            oscillator(clover_bm::fs_48k),
+            oscillator(clover_bm::fs_48k),
+            oscillator(clover_bm::fs_48k),
+    };
+
+    oscs[0].waveform = wave_sine;
+    oscs[1].waveform = wave_square;
+    oscs[2].waveform = wave_saw;
+    oscs[3].waveform = wave_tri;
+    oscs[4].waveform = wave_noise;
+    oscs[5].waveform = wave_square;
+    oscs[6].waveform = wave_saw;
+    oscs[7].waveform = wave_tri;
+
+    for (size_t i = 0; i < 8; ++i) {
+        oscs[i].freq(546.965f * static_cast<float>(i + 1));
+    }
+
+    for (const auto& _ : state) {
+        for (const auto& i : range) {
+            for (auto& osc : oscs) {
+                benchmark::DoNotOptimize(osc.tick());
+            }
+        }
+    }
+}
+
 bm_assert(
         BM_oscillator,
         clover_bm::duration / 2200.,  // min
@@ -110,4 +147,10 @@ bm_assert(
         BM_oscillator_x8,
         clover_bm::duration / 2200.,  // min
         clover_bm::duration / 2600.   // target
+);
+
+bm_assert(
+        BM_oscillator_x8_steady,
+        clover_bm::duration / 3000.,  // min
+        clover_bm::duration / 3500.   // target
 );

@@ -55,13 +55,13 @@ static void BM_wavetable_oscillator_x8(benchmark::State& state) {
 
     clover::dsp::wavetable_oscillator oscs[] = {
             clover::dsp::wavetable_oscillator(clover_bm::fs_48k, clover::dsp::wavetable::sine),
-            clover::dsp::wavetable_oscillator(clover_bm::fs_48k, clover::dsp::wavetable::sine),
-            clover::dsp::wavetable_oscillator(clover_bm::fs_48k, clover::dsp::wavetable::sine),
-            clover::dsp::wavetable_oscillator(clover_bm::fs_48k, clover::dsp::wavetable::sine),
-            clover::dsp::wavetable_oscillator(clover_bm::fs_48k, clover::dsp::wavetable::sine),
-            clover::dsp::wavetable_oscillator(clover_bm::fs_48k, clover::dsp::wavetable::sine),
-            clover::dsp::wavetable_oscillator(clover_bm::fs_48k, clover::dsp::wavetable::sine),
-            clover::dsp::wavetable_oscillator(clover_bm::fs_48k, clover::dsp::wavetable::sine),
+            clover::dsp::wavetable_oscillator(clover_bm::fs_48k, clover::dsp::wavetable::square),
+            clover::dsp::wavetable_oscillator(clover_bm::fs_48k, clover::dsp::wavetable::saw),
+            clover::dsp::wavetable_oscillator(clover_bm::fs_48k, clover::dsp::wavetable::tri),
+            clover::dsp::wavetable_oscillator(clover_bm::fs_48k, clover::dsp::wavetable::noise),
+            clover::dsp::wavetable_oscillator(clover_bm::fs_48k, clover::dsp::wavetable::square),
+            clover::dsp::wavetable_oscillator(clover_bm::fs_48k, clover::dsp::wavetable::saw),
+            clover::dsp::wavetable_oscillator(clover_bm::fs_48k, clover::dsp::wavetable::tri),
     };
 
     float base_freq = 20.965f;
@@ -83,7 +83,7 @@ static void BM_wavetable_oscillator_x8(benchmark::State& state) {
     }
 }
 
-static void BM_wavetable_oscillator_x8_mixed(benchmark::State& state) {
+static void BM_wavetable_oscillator_x8_steady(benchmark::State& state) {
     auto range = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));
 
     clover::dsp::wavetable_oscillator oscs[] = {
@@ -129,7 +129,7 @@ bm_assert(
 );
 
 bm_assert(
-        BM_wavetable_oscillator_x8_mixed,
+        BM_wavetable_oscillator_x8_steady,
         clover_bm::duration / 3000.,  // min
         clover_bm::duration / 3500.   // target
 );
