@@ -7,6 +7,8 @@
 
 namespace clover::dsp {
 
+enum class wave_type : int { sine = 0, square = 1, saw = 2, tri = 3, noise = 4 };
+
 // y = wave_sine(x) for x = [0,2pi)
 float wave_sine(float);
 // y = wave_square(x) for x = [0,2pi)
