@@ -2,9 +2,11 @@
 // Copyright (C) 2023  Rob W. Albus
 // Licensed under the GPLv3. See LICENSE for details.
 
+#include <algorithm>
 #include <cmath>
 #include <cstdio>
 #include <ranges>
+#include <vector>
 
 #include <gtest/gtest.h>
 
@@ -74,6 +76,41 @@ TEST(dsp_filter, initializes_with_empty_state) {
         for (auto x : filt.m_outputs)
             EXPECT_FLOAT_EQ(x, 0.f);
     }
+}
+
+// res2p is tuned so an impulse decays to -60 dB after t60_seconds.
+TEST(dsp_filter, res2p_rings_out_to_t60) {
+    float fs  = 48000;
+    float f0  = 1000;
+    float t60 = 1.f;
+
+    filter filt{res2p(fs, f0, t60)};
+
+    int num_samples = static_cast<int>(2 * t60 * fs);
+
+    std::vector<float> response;
+    response.reserve(num_samples);
+    for (auto n : std::views::iota(0, num_samples)) {
+        float x = (n == 0) ? 1.f : 0.f;
+        response.emplace_back(filt.tick(x));
+    }
+
+    // peak of the impulse response
+    float peak = 0.f;
+    for (float y : response)
+        peak = std::max(peak, std::abs(y));
+
+    // last sample that is still above -60 dB relative to the peak
+    float threshold = peak * db_to_linear(-60);
+    int last_above  = 0;
+    for (auto n : std::views::iota(0, num_samples)) {
+        if (std::abs(response[n]) >= threshold)
+            last_above = n;
+    }
+
+    float ring_out_seconds = static_cast<float>(last_above) / fs;
+
+    EXPECT_NEAR(ring_out_seconds, t60, t60 * 0.05f);
 }
 
 TEST(dsp_filter, filters_signal) {

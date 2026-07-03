@@ -18,6 +18,7 @@ struct iir_coeffs {
 };
 
 iir_coeffs apf(float fs, float f0, float bw);
+iir_coeffs res2p(float fs, float f0, float t60_seconds);
 iir_coeffs lpf(float fs, float f0, float q);
 iir_coeffs hpf(float fs, float f0, float q);
 iir_coeffs bpf(float fs, float f0, float q);

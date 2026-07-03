@@ -47,6 +47,15 @@ iir_coeffs apf(float fs, float f0, float q) {
             .a2 = a2 * normalize};
 }
 
+iir_coeffs res2p(float fs, float f0, float t60_seconds) {
+    float omega = 2 * num::pi * (f0 / fs);
+    float r     = std::exp(-6.9078f / (t60_seconds * fs));  // ln(1000): -60 dB after t60_seconds
+    float a1    = -2 * r * std::cos(omega);
+    float a2    = r * r;
+    float b0    = (1 - r) * std::sqrt(1 - 2 * r * std::cos(2 * omega) + r * r);
+    return {.b0 = b0, .b1 = 0, .b2 = 0, .a1 = a1, .a2 = a2};
+}
+
 iir_coeffs lpf(float fs, float f0, float q) {
     float omega     = 2 * num::pi * (f0 / fs);
     float cos_omega = std::cos(omega);

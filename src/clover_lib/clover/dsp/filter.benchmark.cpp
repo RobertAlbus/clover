@@ -59,6 +59,28 @@ static void BM_filter_busy(benchmark::State& state) {
     }
 }
 
+static void BM_filter_res2p_steady(benchmark::State& state) {
+    auto range = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));
+
+    filter filt{res2p(clover_bm::fs_48k, 500, 1.0)};
+
+    std::vector<float> signal;
+    signal.reserve(clover_bm::samples_10s_48k);
+    oscillator osc(clover_bm::fs_48k);
+    osc.waveform = wave_square;
+    osc.freq(500);
+
+    for (const auto& i : range) {
+        signal.emplace_back(osc.tick() * 0.7);
+    }
+
+    for (const auto& i : state) {
+        for (auto x : signal) {
+            benchmark::DoNotOptimize(filt.tick(x));
+        }
+    }
+}
+
 static void BM_filter_2_steady(benchmark::State& state) {
     auto range = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));
 
@@ -159,6 +181,16 @@ static void BM_iir_coeffs_apf(benchmark::State& state) {
     }
 }
 
+static void BM_iir_coeffs_res2p(benchmark::State& state) {
+    auto range = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));
+
+    for (const auto& i : state) {
+        for (auto x : range) {
+            benchmark::DoNotOptimize(res2p(clover_bm::fs_48k, 9000, 1.0));
+        }
+    }
+}
+
 static void BM_iir_coeffs_lpf(benchmark::State& state) {
     auto range = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));
 
@@ -242,6 +274,12 @@ bm_assert(
 );
 
 bm_assert(
+        BM_filter_res2p_steady,
+        clover_bm::duration / 5000.,  // min
+        clover_bm::duration / 6000.   // target
+);
+
+bm_assert(
         BM_filter_2_steady,
         clover_bm::duration / 2500.,  // min
         clover_bm::duration / 3000.   // target
@@ -269,6 +307,12 @@ bm_assert(
         BM_iir_coeffs_apf,
         clover_bm::duration / 2200.,  // min
         clover_bm::duration / 2600.   // target
+);
+
+bm_assert(
+        BM_iir_coeffs_res2p,
+        clover_bm::duration / 1200.,  // min
+        clover_bm::duration / 1400.   // target
 );
 
 bm_assert(
