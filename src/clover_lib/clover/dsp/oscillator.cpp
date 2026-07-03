@@ -2,8 +2,6 @@
 // Copyright (C) 2023  Rob W. Albus
 // Licensed under the GPLv3. See LICENSE for details.
 
-#include <cmath>
-#include <cstdlib>
 #include <functional>
 
 #include "clover/dsp/oscillator.hpp"
@@ -63,29 +61,6 @@ auto oscillator::phase_offset(float offset) -> void {
 // relative to domain
 auto oscillator::phase_offset() -> float {
     return phase_tracker.phase_offset();
-}
-
-auto wave_sine(float x) -> float {
-    return std::sin(x);
-}
-auto wave_square(float x) -> float {
-    return x < num::pi ? 1 : 0;
-}
-auto wave_saw(float x) -> float {
-    return std::lerp(float{1}, float{-1}, x / num::pi_x2);
-}
-auto wave_tri(float x) -> float {
-    x += num::pi / 2;
-    if (x > num::pi_x2)
-        x -= num::pi_x2;
-    return -2 * std::abs((x / num::pi) - 1) + 1;
-}
-
-int noise_state = 0x67452301;
-
-auto wave_noise(float x) -> float {
-    noise_state = (noise_state * 196314165) + 907633515;
-    return (float)(noise_state) * 0.0000000004656612873077392578125f;
 }
 
 }  // namespace clover::dsp

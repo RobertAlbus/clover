@@ -23,6 +23,7 @@ static std::vector<float> generate_table(float (*wave_fn)(float)) {
 const std::vector<float> sine   = generate_table(wave_sine);
 const std::vector<float> square = generate_table(wave_square);
 const std::vector<float> saw    = generate_table(wave_saw);
+const std::vector<float> ramp   = generate_table(wave_ramp);
 const std::vector<float> tri    = generate_table(wave_tri);
 const std::vector<float> noise  = generate_table(wave_noise);
 

@@ -3,7 +3,6 @@
 // Licensed under the GPLv3. See LICENSE for details.
 
 #include <cmath>
-#include <cstdio>
 #include <cstdlib>
 
 #include "clover/dsp/wave.hpp"
@@ -19,6 +18,9 @@ auto wave_square(float x) -> float {
 }
 auto wave_saw(float x) -> float {
     return std::lerp(float{1}, float{-1}, x / num::pi_x2);
+}
+auto wave_ramp(float x) -> float {
+    return std::lerp(float{-1}, float{1}, x / num::pi_x2);
 }
 auto wave_tri(float x) -> float {
     x += num::pi / 2;

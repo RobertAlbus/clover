@@ -15,6 +15,8 @@ float wave_sine(float);
 float wave_square(float);
 // y = wave_saw(x) for x = [0,2pi)
 float wave_saw(float);
+// y = wave_ramp(x) for x = [0,2pi)
+float wave_ramp(float);
 // y = wave_tri(x) for x = [0,2pi)
 float wave_tri(float);
 float wave_noise(float);

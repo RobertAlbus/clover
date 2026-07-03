@@ -3,7 +3,6 @@
 // Licensed under the GPLv3. See LICENSE for details.
 
 #include <cmath>
-#include <cstdio>
 #include <unordered_map>
 
 #include <gtest/gtest.h>
@@ -49,7 +48,7 @@ TEST(dsp_wave_square, value_is_correct) {
     for (int i = 0; i < 10000; ++i) {
         float theta    = delta_t * static_cast<float>(i);
         float signal   = clover::dsp::wave_square(theta);
-        float expected = theta < num::pi ? 1.f : 0.f;
+        float expected = theta < num::pi ? 1.f : -1.f;
         EXPECT_FLOAT_EQ(signal, expected);
     }
 }
@@ -71,6 +70,27 @@ TEST(dsp_wave_saw, value_is_correct) {
         float theta    = delta_t * static_cast<float>(i);
         float signal   = clover::dsp::wave_saw(theta);
         float expected = std::lerp(1.f, -1.f, theta / num::pi_x2);
+        EXPECT_FLOAT_EQ(signal, expected);
+    }
+}
+
+// RAMP
+TEST(dsp_wave_ramp, range_is_correct) {
+    constexpr float delta_t = num::pi_x2 / 10000;
+    for (int i = 0; i < 10000; ++i) {
+        float signal = clover::dsp::wave_ramp(delta_t * static_cast<float>(i));
+        EXPECT_LE(signal, 1);
+        EXPECT_GE(signal, -1);
+    }
+}
+
+TEST(dsp_wave_ramp, value_is_correct) {
+    constexpr float delta_t = num::pi_x2 / 10000;
+
+    for (int i = 0; i < 10000; ++i) {
+        float theta    = delta_t * static_cast<float>(i);
+        float signal   = clover::dsp::wave_ramp(theta);
+        float expected = std::lerp(-1.f, 1.f, theta / num::pi_x2);
         EXPECT_FLOAT_EQ(signal, expected);
     }
 }

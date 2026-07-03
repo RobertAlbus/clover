@@ -37,6 +37,15 @@ static void BM_wave_saw(benchmark::State& state) {
     }
 }
 
+static void BM_wave_ramp(benchmark::State& state) {
+    auto range                = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));
+    constexpr float increment = clover::num::pi_x2 / clover_bm::samples_10s_48k;
+    for (auto _ : state) {
+        for (const auto& element : range)
+            benchmark::DoNotOptimize(clover::dsp::wave_ramp(static_cast<float>(element) * increment));
+    }
+}
+
 static void BM_wave_tri(benchmark::State& state) {
     auto range                = std::views::iota(0, static_cast<int>(clover_bm::samples_10s_48k));
     constexpr float increment = clover::num::pi_x2 / clover_bm::samples_10s_48k;
@@ -69,6 +78,12 @@ bm_assert(
 
 bm_assert(
         BM_wave_saw,
+        clover_bm::duration / 22000.,  // min
+        clover_bm::duration / 25000.   // target
+);
+
+bm_assert(
+        BM_wave_ramp,
         clover_bm::duration / 22000.,  // min
         clover_bm::duration / 25000.   // target
 );
