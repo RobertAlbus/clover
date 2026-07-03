@@ -4,7 +4,6 @@
 // Copyright (C) 2023  Rob W. Albus
 // Licensed under the GPLv3. See LICENSE for details.
 
-#include <cmath>
 #include <vector>
 
 #include "clover/circular_buffer.hpp"

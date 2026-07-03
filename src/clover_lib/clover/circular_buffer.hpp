@@ -4,8 +4,6 @@
 // Copyright (C) 2023  Rob W. Albus
 // Licensed under the GPLv3. See LICENSE for details.
 
-#include <cstddef>
-#include <format>
 #include <memory>
 #include <stdexcept>
 #include <utility>
@@ -18,8 +16,8 @@ template <typename T>
 class circular_buffer_t {
    public:
     std::shared_ptr<std::vector<T>> m_underlying;
-    size_t m_current = 0;
-    size_t m_length;
+    std::size_t m_current = 0;
+    std::size_t m_length;
 
     explicit circular_buffer_t(size_t length)
         : m_underlying(std::make_shared<std::vector<T>>(length, T{})),
@@ -44,7 +42,7 @@ class circular_buffer_t {
 
     T& operator[](size_t idx) {
         if (idx >= m_length) {
-            throw std::out_of_range(std::format("out of range: circular_buffer_t::operator[{}]", idx));
+            throw std::out_of_range("circular_buffer_t::operator[] out of range");
         }
 
         size_t offset = (m_current + m_length - idx) % m_length;
@@ -53,7 +51,7 @@ class circular_buffer_t {
 
     const T& operator[](size_t idx) const {
         if (idx >= m_length) {
-            throw std::out_of_range(std::format("out of range: circular_buffer_t::operator[{}]", idx));
+            throw std::out_of_range("circular_buffer_t::operator[] out of range");
         }
 
         size_t offset = (m_current + m_length - idx) % m_length;
