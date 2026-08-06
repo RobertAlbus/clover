@@ -3,6 +3,7 @@
 // Licensed under the GPLv3. See LICENSE for details.
 
 #include <cmath>
+#include <numbers>
 #include <ranges>
 
 #include <gtest/gtest.h>
@@ -77,6 +78,49 @@ TEST(io_audio_file_manager, writes_reads_correctly) {
 
     EXPECT_EQ(buffer.channels, read_buffer.channels);
     EXPECT_EQ(buffer.sample_rate, read_buffer.sample_rate);
+
+    delete_if_exists(path);
+}
+
+TEST(io_audio_file_manager, reads_at_new_sample_rate) {
+    std::string path = "audio_file_manager_read_resampled.wav";
+
+    int original_rate  = 48000;
+    int requested_rate = 44100;
+    int frames         = 48000;
+
+    audio_buffer buffer;
+    buffer.channels    = 2;
+    buffer.sample_rate = original_rate;
+    buffer.data.reserve(static_cast<size_t>(frames) * 2);
+
+    for (auto x : std::views::iota(0, frames)) {
+        float signal =
+                std::sin(2.f * std::numbers::pi_v<float> * 440.f * float(x) / float(original_rate)) * 0.8f;
+        buffer.data.emplace_back(signal);
+        buffer.data.emplace_back(signal);
+    }
+
+    delete_if_exists(path);
+    audio_file::write(path, buffer, audio_file_settings::wav_48_32);
+
+    auto read_buffer = audio_file::read(path, requested_rate);
+
+    EXPECT_EQ(read_buffer.sample_rate, requested_rate);
+    EXPECT_EQ(read_buffer.channels, buffer.channels);
+
+    int read_frames     = (int)read_buffer.data.size() / read_buffer.channels;
+    int expected_frames = frames * requested_rate / original_rate;
+    EXPECT_NEAR(read_frames, expected_frames, 2);
+
+    // resampled data should still be the same sine: RMS of a mid-buffer chunk is 0.8/sqrt(2)
+    double sum_squares = 0;
+    for (auto n : std::views::iota(10000, 30000)) {
+        double sample = read_buffer.data[static_cast<size_t>(n) * 2];
+        sum_squares += sample * sample;
+    }
+    double rms = std::sqrt(sum_squares / 20000.0);
+    EXPECT_NEAR(rms, 0.8 / std::numbers::sqrt2, 0.01);
 
     delete_if_exists(path);
 }

@@ -10,7 +10,7 @@
 
 namespace clover {
 
-void convert_sample_rate(audio_buffer buffer, int sample_rate) {
+void convert_sample_rate(audio_buffer& buffer, int sample_rate) {
     if (buffer.sample_rate == sample_rate) {
         return;
     }
@@ -35,16 +35,20 @@ void convert_sample_rate(audio_buffer buffer, int sample_rate) {
             .data_out      = data_out_start,
             .input_frames  = input_frames_count,
             .output_frames = output_frames_count,
+            .end_of_input  = 1,
             .src_ratio     = ratio,
     };
 
     error = src_process(libsamplerate_src_state, &libsampelrate_src_data);
     src_delete(libsamplerate_src_state);
-    output.resize(libsampelrate_src_data.output_frames_gen * buffer.channels);
 
     if (error) {
         throw std::runtime_error(src_strerror(error));
     }
+
+    output.resize(static_cast<size_t>(libsampelrate_src_data.output_frames_gen) * buffer.channels);
+    buffer.data.swap(output);
+    buffer.sample_rate = sample_rate;
 }
 
 void normalize_audio_buffer(audio_buffer& buffer) {

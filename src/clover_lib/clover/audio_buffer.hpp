@@ -16,7 +16,7 @@ struct audio_buffer {
     int sample_rate;
 };
 
-void convert_sample_rate(audio_buffer buffer, int sample_rate);
+void convert_sample_rate(audio_buffer& buffer, int sample_rate);
 void normalize_audio_buffer(audio_buffer& buffer);
 
 }  // namespace clover
