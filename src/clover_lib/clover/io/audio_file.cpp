@@ -148,7 +148,7 @@ int sample_rate(audio_file_settings settings) {
 
 auto audio_file::read(std::filesystem::path path, int as_sample_rate) -> audio_buffer {
     audio_buffer buffer;
-    SF_INFO sfinfo;
+    SF_INFO sfinfo{};
     SNDFILE* file = sf_open(path.c_str(), SFM_READ, &sfinfo);
     sndfile_throw_if_error(file);
 
