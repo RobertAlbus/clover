@@ -103,6 +103,7 @@ namespace {
                 break;
             case audio_file_settings::flac_441_16:
                 sfinfo.format = (SF_FORMAT_FLAC | SF_FORMAT_PCM_16);
+                break;
             case audio_file_settings::flac_48_24:
                 sfinfo.format = (SF_FORMAT_FLAC | SF_FORMAT_PCM_24);
                 break;
